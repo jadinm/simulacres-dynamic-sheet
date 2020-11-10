@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <title>Simulacres Character</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="js/FileSaver.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <script>
+        function saveDynamicDataToFile() {
+            var userInput = (new XMLSerializer).serializeToString(document);
+            var blob = new Blob([userInput], {type: "text/plain;charset=utf-8"});
+            saveAs(blob, "dynamic.txt");
+        }
+    </script>
+</head>
+
+<body>
+
+<div class="container">
+    <p id="result">Hello world</p>
+    <textarea id="myText" rows="4" cols="50">
+		We love to share our experiments, ideas, and knowledge with everyone by writing articles on the latest technology trends.
+        </textarea>
+
+    <button type="button" onclick="saveDynamicDataToFile();">Click to Save</button>
+</div>
+
+<script>
+    let x = 0
+    if (localStorage.getItem("lastname") == null) {
+        console.log("Not found !")
+        localStorage.setItem("lastname", 0);
+    } else {
+        console.log("Found !")
+        localStorage.setItem("lastname", localStorage.getItem("lastname") + 1);
+    }
+    document.getElementById("result").innerHTML = localStorage.getItem("lastname");
+</script>
+
+</body>
+</html>
