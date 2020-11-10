@@ -13,9 +13,14 @@
 
     <script>
         function saveDynamicDataToFile() {
-            var userInput = (new XMLSerializer).serializeToString(document);
-            var blob = new Blob([userInput], {type: "text/plain;charset=utf-8"});
-            saveAs(blob, "dynamic.txt");
+            const userInput = (new XMLSerializer).serializeToString(document)
+            const blob = new Blob([userInput], {type: "text/html;charset=utf-8"})
+
+            // Use the name of the character as the name of the file
+            let character_name = $("input#character-name")[0].value
+            if (character_name === null || character_name.length === 0)
+                character_name = "Anonyme"
+            saveAs(blob, character_name + ".html");
         }
     </script>
 </head>
