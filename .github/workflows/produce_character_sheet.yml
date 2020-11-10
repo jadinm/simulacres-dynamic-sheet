@@ -1,0 +1,23 @@
+name: Merge JS and CSS libraries
+on: [push, pull_request]
+env:
+  PYTHON_SCRIPT: merge_external_files.py
+  HTML_FILE: base.html
+  FINAL_FILENAME: simulacres_fiche_perso.html
+
+jobs:
+  merge_css_js:
+    name: Merge JS and CSS libraries
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout event commit
+        uses: actions/checkout@v2
+      - name: Merge JS and CSS
+        run: |
+          mkdir -p target
+          python3 ${{ env.PYTHON_SCRIPT }} ${{ env.HTML_FILE }} target/${{ env.FINAL_FILENAME }}
+      - name: Upload result file
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.FINAL_FILENAME }}
+          path: target/${{ env.FINAL_FILENAME }}
