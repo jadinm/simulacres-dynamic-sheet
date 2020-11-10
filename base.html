@@ -4,8 +4,13 @@
     <meta charset="utf-8">
     <title>Simulacres Character</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="js/FileSaver.js"></script>
-    <link rel="stylesheet" href="css/bootstrap.css">
+
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="node_modules/file-saver/dist/FileSaver.min.js"></script>
+
     <script>
         function saveDynamicDataToFile() {
             var userInput = (new XMLSerializer).serializeToString(document);

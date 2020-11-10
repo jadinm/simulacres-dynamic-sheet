@@ -10,13 +10,17 @@ jobs:
     name: Merge JS and CSS libraries
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout event commit
+      - name: Checkout the event commit
         uses: actions/checkout@v2
-      - name: Merge JS and CSS
+      - name: Load the JS and CSS libraries
+        uses: borales/actions-yarn@v2.0.0
+        with:
+          cmd: install  # yarn install
+      - name: Merge JS and CSS to the HTML file
         run: |
           mkdir -p target
           python3 ${{ env.PYTHON_SCRIPT }} ${{ env.HTML_FILE }} target/${{ env.FINAL_FILENAME }}
-      - name: Upload result file
+      - name: Upload the result file
         uses: actions/upload-artifact@v2
         with:
           name: ${{ env.FINAL_FILENAME }}
