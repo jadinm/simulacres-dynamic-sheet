@@ -36,15 +36,10 @@
 </div>
 
 <script>
-    let x = 0
-    if (localStorage.getItem("lastname") == null) {
-        console.log("Not found !")
-        localStorage.setItem("lastname", 0);
-    } else {
-        console.log("Found !")
-        localStorage.setItem("lastname", localStorage.getItem("lastname") + 1);
-    }
-    document.getElementById("result").innerHTML = localStorage.getItem("lastname");
+    // Update field value attributes as the user writes so that it will be saved in the HTML
+    $("input").on("change", function(event) {
+        event.target.setAttribute("value", event.target.value)
+    })
 </script>
 
 </body>
