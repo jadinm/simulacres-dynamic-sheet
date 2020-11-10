@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="utf-8">
-    <title>Simulacres Character</title>
+    <title>Simulacres Heldor</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
@@ -23,12 +23,16 @@
 <body>
 
 <div class="container">
-    <p id="result">Hello world</p>
-    <textarea id="myText" rows="4" cols="50">
-		We love to share our experiments, ideas, and knowledge with everyone by writing articles on the latest technology trends.
-        </textarea>
+    <form class="form" role="form">
+        <div class="form-group">
+            <div>
+                <label for="character-name" class="control-label">Nom du personnage</label>
+            </div>
+            <input class="form-control" id="character-name" name="character-name" type="text" value="">
+        </div>
+    </form>
 
-    <button type="button" onclick="saveDynamicDataToFile();">Click to Save</button>
+    <button type="submit" class="btn btn-primary form-control" onclick="saveDynamicDataToFile();">Sauvegarder</button>
 </div>
 
 <script>
