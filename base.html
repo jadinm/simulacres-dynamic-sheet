@@ -21,19 +21,6 @@
     <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="node_modules/mdbootstrap/js/mdb.min.js"></script>
     <script src="node_modules/file-saver/dist/FileSaver.min.js"></script>
-
-    <script>
-        function saveDynamicDataToFile() {
-            const userInput = (new XMLSerializer).serializeToString(document)
-            const blob = new Blob([userInput], {type: "text/html;charset=utf-8"})
-
-            // Use the name of the character as the name of the file
-            let character_name = $("input#character-name")[0].value
-            if (character_name === null || character_name.length === 0)
-                character_name = "Anonyme"
-            saveAs(blob, character_name + ".html");
-        }
-    </script>
 </head>
 
 <body>
@@ -298,16 +285,56 @@
     </div>
 
     <div class="md-form row form-row my-1">
-        <button type="submit" class="btn btn-primary form-control rounded" onclick="saveDynamicDataToFile();">
+        <button id="save-page" type="submit" class="btn btn-primary form-control rounded">
             Sauvegarder
         </button>
     </div>
 </div>
 
 <script>
-    // Update field value attributes as the user writes so that it will be saved in the HTML
+    const components = ["body", "instincts", "heart", "mind"]
+    const means = ["perception", "action", "desire", "resistance"]
+
+    /* Update field value attributes as the user writes so that it will be saved in the HTML */
     $("input").on("change", function (event) {
         event.target.setAttribute("value", event.target.value)
+    })
+
+    /* Update sum of means and component when one of them changes */
+    function update_sum(event) {
+        const id = event.target.id
+        const value = event.target.value
+        const others = components.includes(id) ? means : components
+
+        for (let i = 0; i < others.length; i++) {
+            const sum_id = components.includes(id) ? "#" + id + "-" + others[i] : "#" + others[i] + "-" + id
+            $(sum_id)[0].innerText = parseInt(value) + parseInt($("#" + others[i])[0].value)
+        }
+    }
+
+    $(".means").on("change", update_sum)
+    $(".component").on("change", update_sum)
+    $(document).ready(function () {
+        // Update the sum of components and means on load
+        for (let i = 0; i < means.length; i++) {
+            update_sum({target: $("#" + means[i])[0]})
+        }
+    })
+
+    /* Tooltip initializations */
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+
+    $("#save-page").on("click", function (event) {
+        const userInput = (new XMLSerializer).serializeToString(document)
+        const blob = new Blob([userInput], {type: "text/html;charset=utf-8"})
+
+        // Use the name of the character as the name of the file
+        let character_name = $("input#character-name")[0].value
+        if (character_name === null || character_name.length === 0)
+            character_name = "Anonyme"
+        saveAs(blob, character_name + ".html");
     })
 </script>
 
@@ -442,35 +469,4 @@ q5 35 30 61t60 33v-94zM455 568q-50 -7 -85.5 -43.5t-40.5 -86.5h-162q6 116 88.5 19
 <!-- End SVG images -->
 
 </body>
-
-<script>
-    const components = ["body", "instincts", "heart", "mind"]
-    const means = ["perception", "action", "desire", "resistance"]
-
-    /* Update sum of means and component when one of them changes */
-    function update_sum(event) {
-        const id = event.target.id
-        const value = event.target.value
-        const others = components.includes(id) ? means : components
-
-        for (let i = 0; i < others.length; i++) {
-            const sum_id = components.includes(id) ? "#" + id + "-" + others[i] : "#" + others[i] + "-" + id
-            $(sum_id)[0].innerText = parseInt(value) + parseInt($("#" + others[i])[0].value)
-        }
-    }
-
-    $(".means").on("change", update_sum)
-    $(".component").on("change", update_sum)
-    $(document).ready(function () {
-        // Update the sum of components and means on load
-        for (let i = 0; i < means.length; i++) {
-            update_sum({target: $("#" + means[i])[0]})
-        }
-    })
-
-    // Tooltip initializations
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip()
-    })
-</script>
 </html>
