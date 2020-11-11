@@ -86,29 +86,29 @@
                         <svg height="3em" width="2em" class="input-prefix">
                             <use xlink:href="#svg-perception"></use>
                         </svg>
-                        <input class="form-control" id="perception" name="perception" type="number" value="1" min="1"
-                               max="5">
+                        <input class="form-control means" id="perception" name="perception" type="number" value="1"
+                               min="1" max="5">
                     </th>
                     <th scope="col" class="align-middle md-form input-with-pre-icon">
                         <svg height="3em" width="2em" class="input-prefix">
                             <use xlink:href="#svg-action"></use>
                         </svg>
-                        <input class="form-control" id="action" name="action" type="number" value="1" min="1"
+                        <input class="form-control means" id="action" name="action" type="number" value="1" min="1"
                                max="5">
                     </th>
                     <th scope="col" class="align-middle md-form input-with-pre-icon">
                         <svg height="3em" width="2em" class="input-prefix">
                             <use xlink:href="#svg-desire"></use>
                         </svg>
-                        <input class="form-control" id="desire" name="desire" type="number" value="1" min="1"
+                        <input class="form-control means" id="desire" name="desire" type="number" value="1" min="1"
                                max="5">
                     </th>
                     <th scope="col" class="align-middle md-form input-with-pre-icon">
                         <svg height="3em" width="2em" class="input-prefix">
                             <use xlink:href="#svg-resistance"></use>
                         </svg>
-                        <input class="form-control" id="resistance" name="resistance" type="number" value="1" min="1"
-                               max="5">
+                        <input class="form-control means" id="resistance" name="resistance" type="number" value="1"
+                               min="1" max="5">
                     </th>
                 </tr>
                 </thead>
@@ -118,49 +118,52 @@
                         <svg height="3em" width="2em" class="input-prefix">
                             <use xlink:href="#svg-body"></use>
                         </svg>
-                        <input class="form-control" id="body" name="body" type="number" value="3" min="3" max="7">
+                        <input class="form-control component" id="body" name="body" type="number" value="3" min="3"
+                               max="7">
                     </th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td class="align-middle text-center" id="body-perception"></td>
+                    <td class="align-middle text-center" id="body-action"></td>
+                    <td class="align-middle text-center" id="body-desire"></td>
+                    <td class="align-middle text-center" id="body-resistance"></td>
                 </tr>
                 <tr>
                     <th scope="row" class="align-middle md-form input-with-pre-icon">
                         <svg height="3em" width="2em" class="input-prefix">
                             <use xlink:href="#svg-instincts"></use>
                         </svg>
-                        <input class="form-control" id="instincts" name="instincts" type="number" value="3" min="3"
-                               max="7">
+                        <input class="form-control component" id="instincts" name="instincts" type="number" value="3"
+                               min="3" max="7">
                     </th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td class="align-middle text-center" id="instincts-perception"></td>
+                    <td class="align-middle text-center" id="instincts-action"></td>
+                    <td class="align-middle text-center" id="instincts-desire"></td>
+                    <td class="align-middle text-center" id="instincts-resistance"></td>
                 </tr>
                 <tr>
                     <th scope="row" class="align-middle md-form input-with-pre-icon">
                         <svg height="3em" width="2em" class="input-prefix">
                             <use xlink:href="#svg-heart"></use>
                         </svg>
-                        <input class="form-control" id="heart" name="heart" type="number" value="3" min="3" max="7">
+                        <input class="form-control component" id="heart" name="heart" type="number" value="3" min="3"
+                               max="7">
                     </th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td class="align-middle text-center" id="heart-perception"></td>
+                    <td class="align-middle text-center" id="heart-action"></td>
+                    <td class="align-middle text-center" id="heart-desire"></td>
+                    <td class="align-middle text-center" id="heart-resistance"></td>
                 </tr>
                 <tr>
                     <th scope="row" class="align-middle md-form input-with-pre-icon">
                         <svg height="3em" width="2em" class="input-prefix">
                             <use xlink:href="#svg-mind"></use>
                         </svg>
-                        <input class="form-control" id="mind" name="mind" type="number" value="3" min="3" max="7">
+                        <input class="form-control component" id="mind" name="mind" type="number" value="3" min="3"
+                               max="7">
                     </th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td class="align-middle text-center" id="mind-perception"></td>
+                    <td class="align-middle text-center" id="mind-action"></td>
+                    <td class="align-middle text-center" id="mind-desire"></td>
+                    <td class="align-middle text-center" id="mind-resistance"></td>
                 </tr>
                 </tbody>
             </table>
@@ -242,4 +245,30 @@ M322 410l-285 -21v-27l285 -21v69zM497 517l-20 319h-28l-21 -319h69zM376 479l-171 
 <!-- End SVG images -->
 
 </body>
+
+<script>
+    const components = ["body", "instincts", "heart", "mind"]
+    const means = ["perception", "action", "desire", "resistance"]
+
+    /* Update sum of means and component when one of them changes */
+    function update_sum(event) {
+        const id = event.target.id
+        const value = event.target.value
+        const others = components.includes(id) ? means : components
+
+        for (let i = 0; i < others.length; i++) {
+            const sum_id = components.includes(id) ? "#" + id + "-" + others[i] : "#" + others[i] + "-" + id
+            $(sum_id)[0].innerText = parseInt(value) + parseInt($("#" + others[i])[0].value)
+        }
+    }
+
+    $(".means").on("change", update_sum)
+    $(".component").on("change", update_sum)
+    $(document).ready(function () {
+        // Update the sum of components and means on load
+        for (let i = 0; i < means.length; i++) {
+            update_sum({target: $("#" + means[i])[0]})
+        }
+    })
+</script>
 </html>
