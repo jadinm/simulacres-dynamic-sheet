@@ -6,9 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="node_modules/mdbootstrap/css/mdb.min.css">
 
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
     <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="node_modules/mdbootstrap/js/mdb.min.js"></script>
     <script src="node_modules/file-saver/dist/FileSaver.min.js"></script>
 
     <script>
@@ -27,22 +29,53 @@
 
 <body>
 
-<div class="container">
-    <form class="form" role="form">
-        <div class="form-group">
-            <div>
-                <label for="character-name" class="control-label">Nom du personnage</label>
-            </div>
+<div class="container-fluid">
+    <div class="row form-row my-1 mt-2 md-form">
+        <div class="col-sm-7">
             <input class="form-control" id="character-name" name="character-name" type="text" value="">
+            <label for="character-name">Nom du personnage</label>
         </div>
-    </form>
+        <div class="col-sm-5">
+            <input class="form-control" id="race" name="race" type="text" value="">
+            <label for="race">Race/Peuple</label>
+        </div>
+    </div>
+    <div class="row form-row my-1 md-form">
+        <div class="col-sm-2">
+            <label for="age"> Âge</label>
+            <input class="form-control" id="age" name="age" type="number" value="" min="0">
+        </div>
 
-    <button type="submit" class="btn btn-primary form-control" onclick="saveDynamicDataToFile();">Sauvegarder</button>
+        <div class="col-sm-2">
+            <label for="gender">Sexe</label>
+            <input class="form-control" id="gender" name="gender" type="text" value="">
+        </div>
+
+        <div class="col-sm-2">
+            <label for="height">Taille (cm)</label>
+            <input class="form-control" id="height" name="height" type="number" value="" min="1">
+        </div>
+
+        <div class="col-sm-2">
+            <label for="weight">Poids (kg)</label>
+            <input class="form-control" id="weight" name="weight" type="number" value="" min="1">
+        </div>
+
+        <div class="col-sm-4">
+            <label for="work">Métier</label>
+            <input class="form-control" id="work" name="work" type="text" value="">
+        </div>
+    </div>
+    <div class="md-form row form-row my-1">
+        <button type="submit" class="btn btn-primary form-control rounded" onclick="saveDynamicDataToFile();">
+            Sauvegarder
+        </button>
+    </div>
 </div>
 
 <script>
     // Update field value attributes as the user writes so that it will be saved in the HTML
-    $("input").on("change", function(event) {
+    $("input").on("change", function (event) {
         event.target.setAttribute("value", event.target.value)
     })
 </script>
