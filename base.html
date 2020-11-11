@@ -8,6 +8,13 @@
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="node_modules/mdbootstrap/css/mdb.min.css">
 
+    <style>
+        /* Fix mdbootstrap that activates the icon when value attribute is set at loading */
+        .md-form .input-prefix.active {
+            color: black
+        }
+    </style>
+
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
     <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="node_modules/mdbootstrap/js/mdb.min.js"></script>
@@ -30,6 +37,7 @@
 <body>
 
 <div class="container-fluid">
+    <!-- Basic information -->
     <div class="row form-row my-1 mt-2 md-form">
         <div class="col-sm-7">
             <input class="form-control" id="character-name" name="character-name" type="text" value="">
@@ -66,6 +74,99 @@
             <input class="form-control" id="work" name="work" type="text" value="">
         </div>
     </div>
+
+    <!-- Components and means -->
+    <div class="row my-1">
+        <div class="table-responsive col-6">
+            <table class="table table-hover my-1">
+                <thead>
+                <tr>
+                    <th scope="col" class="align-middle col-2"></th>
+                    <th scope="col" class="align-middle md-form input-with-pre-icon col-2">
+                        <svg height="3em" width="2em" class="input-prefix">
+                            <use xlink:href="#svg-perception"></use>
+                        </svg>
+                        <input class="form-control" id="perception" name="perception" type="number" value="1" min="1"
+                               max="5">
+                    </th>
+                    <th scope="col" class="align-middle md-form input-with-pre-icon col-2">
+                        <svg height="3em" width="2em" class="input-prefix">
+                            <use xlink:href="#svg-action"></use>
+                        </svg>
+                        <input class="form-control" id="action" name="action" type="number" value="1" min="1"
+                               max="5">
+                    </th>
+                    <th scope="col" class="align-middle md-form input-with-pre-icon col-2">
+                        <svg height="3em" width="2em" class="input-prefix">
+                            <use xlink:href="#svg-desire"></use>
+                        </svg>
+                        <input class="form-control" id="desire" name="desire" type="number" value="1" min="1"
+                               max="5">
+                    </th>
+                    <th scope="col" class="align-middle md-form input-with-pre-icon col-2">
+                        <svg height="3em" width="2em" class="input-prefix">
+                            <use xlink:href="#svg-resistance"></use>
+                        </svg>
+                        <input class="form-control" id="resistance" name="resistance" type="number" value="1" min="1"
+                               max="5">
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th scope="row" class="align-middle md-form input-with-pre-icon">
+                        <svg height="3em" width="2em" class="input-prefix">
+                            <use xlink:href="#svg-body"></use>
+                        </svg>
+                        <input class="form-control" id="body" name="body" type="number" value="3" min="3" max="7">
+                    </th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th scope="row" class="align-middle md-form input-with-pre-icon">
+                        <svg height="3em" width="2em" class="input-prefix">
+                            <use xlink:href="#svg-instincts"></use>
+                        </svg>
+                        <input class="form-control" id="instincts" name="instincts" type="number" value="3" min="3"
+                               max="7">
+                    </th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th scope="row" class="align-middle md-form input-with-pre-icon">
+                        <svg height="3em" width="2em" class="input-prefix">
+                            <use xlink:href="#svg-heart"></use>
+                        </svg>
+                        <input class="form-control" id="heart" name="heart" type="number" value="3" min="3" max="7">
+                    </th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th scope="row" class="align-middle md-form input-with-pre-icon">
+                        <svg height="3em" width="2em" class="input-prefix">
+                            <use xlink:href="#svg-mind"></use>
+                        </svg>
+                        <input class="form-control" id="mind" name="mind" type="number" value="3" min="3" max="7">
+                    </th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
     <div class="md-form row form-row my-1">
         <button type="submit" class="btn btn-primary form-control rounded" onclick="saveDynamicDataToFile();">
             Sauvegarder
@@ -79,6 +180,66 @@
         event.target.setAttribute("value", event.target.value)
     })
 </script>
+
+<!-- Begin SVG images -->
+<div hidden>
+    <!-- images/perception.svg -->
+    <svg id="svg-perception" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+         viewBox="-10 0 996 1000">
+        <path fill="currentColor"
+              d="M855 772l-1 1q-106 -92 -251 -165q-102 -52 -273 -115q-69 -26 -242 -72q53 -15 128 -47q62 -28 125 -55q257 -105 497 -291v70l-34 27q94 106 94 268q0 111 -46 205q-11 24 -39 71q14 10 42 34v69zM846 264q0 -23 -8 -38t-19 -15t-18.5 16t-7.5 38t7.5 38t18.5 16
+t18.5 -16t7.5 -38zM794 656v-1q-28 -28 -57 -90q-40 -86 -40 -184q0 -153 94 -247q-190 130 -462 229q-53 18 -146 51q391 101 608 242h3z"/>
+    </svg>
+    <!-- images/action.svg -->
+    <svg id="svg-action" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+         viewBox="-10 0 1065 1000">
+        <path fill="currentColor"
+              d="M969 400l-350 348v-144h-276v-408h276v-144zM116 604h-31v-407l31 -1v408zM187 604h-43v-407l43 -1v408zM295 604h-72v-408h72v408z"/>
+    </svg>
+    <!-- images/desire.svg -->
+    <svg id="svg-desire" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+         viewBox="-10 0 883 1000">
+        <path fill="currentColor"
+              d="M806 386q7 35 7 68q0 84 -52 181q-55 103 -126 152q-77 55 -190 57q-72 1 -120 -9q-58 -13 -114 -50q-52 -35 -74 -58q-31 -32 -51 -83q-27 -69 -27 -114q0 -50 42 -109q19 -21 39 -44t20 -45q0 -8 -3 -17q-2 -20 -24.5 -55.5t-23.5 -36.5q26 8 77 37q41 33 50 44
+q19 26 17 67q-1 26 -19 60q-15 30 -12 51q7 27 25 38q13 8 27 8q21 0 44 -18q16 -12 27 -59q5 -20 5 -38q0 -47 -46 -119q-54 -86 -67 -132q-3 -12 -3 -23q0 -28 26 -70q74 -117 208 -170l12 2q2 1 -33 28q-41 30 -53 43q-33 45 -33 97t35 91q18 26 106 87q79 54 104 113
+q11 23 21 46q4 13 5 54q53 -83 53 -116q0 -31 -53 -129q-12 -17 -20 -33q-21 -39 -22 -71q0 -22 31 -56q28 -31 36 -30q2 0 2 2l-13 30t-14 53q0 30 26 52.5t52 44.5q88 96 95 179h1z"/>
+    </svg>
+    <!-- images/resistance.svg -->
+    <svg id="svg-resistance" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+         viewBox="-10 0 1009 1000">
+        <path fill="currentColor"
+              d="M505 5q104 65 297 65l9 4q8 -4 12 -4t4 4l21 -4h17q8 1 8 8v233q0 285 -289 483l-75 34q-174 -60 -294 -245q-75 -146 -75 -241v-264q1 -8 8 -8h59q201 0 298 -65z"/>
+    </svg>
+    <!-- images/body.svg -->
+    <svg id="svg-body" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+         viewBox="-10 0 826 1000">
+        <path fill="currentColor"
+              d="M733 489q0 133 -95 228.5t-229 95.5t-230 -94.5t-96 -229.5t95.5 -229t230.5 -94q134 0 229 94.5t95 228.5zM668 489q0 -107 -76 -182.5t-183 -75.5q-108 0 -184.5 75t-76.5 183t77 183.5t184 75.5t183 -76t76 -183z"/>
+    </svg>
+    <!-- images/instincts.svg -->
+    <svg id="svg-instincts" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+         viewBox="-10 0 1011 1000">
+        <path fill="currentColor"
+              d="M918 584l-1 1q-42 62 -106.5 95t-140.5 28l-49 -9l-275 -76q-16 -5 -33 -5q-44 0 -89.5 29t-71.5 68l-67 -41q89 -127 231 -127q34 0 67 9l278 74q121 11 197 -85q21 13 60 39zM917 355l-1 1q-42 62 -107 95t-140 27l-49 -9l-275 -76q-16 -5 -33 -5q-44 0 -91 31
+q-44 27 -70 67l-67 -41q41 -59 102 -93.5t130 -34.5q33 0 66 9l278 75q121 11 197 -85q21 13 60 39zM916 126h-1q-42 62 -106.5 95t-140.5 28l-49 -9l-275 -76q-16 -5 -33 -5q-44 0 -91 31q-44 27 -70 67l-67 -41q41 -59 102 -93.5t130 -34.5q33 0 66 9l278 75
+q121 11 197 -85q21 13 60 39z"/>
+    </svg>
+    <!-- images/heart.svg -->
+    <svg id="svg-heart" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+         viewBox="-10 0 1049 1000">
+        <path fill="currentColor"
+              d="M950 372q-10 17 -99 95q-80 69 -111 92q-64 46 -69 51q-31 27 -89 83q-17 17 -64 70q-23 -26 -62 -71q-9 -9 -89 -84l-68 -49q-33 -23 -113 -93q-89 -78 -98 -97q-24 -49 -24 -109q0 -89 50 -149q61 -74 170 -74q28 0 56 6q62 13 113 68q46 51 65 116q18 -65 65 -116
+q51 -54 113 -67q28 -6 57 -6q108 0 171 74q51 61 51 151q0 60 -25 108v1z"/>
+    </svg>
+    <!-- images/mind.svg -->
+    <svg id="svg-mind" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+         viewBox="-10 0 936 1000">
+        <path fill="currentColor"
+              d="M737 119l-171 170l-17 -17l171 -170zM889 389l-285 21v-69l285 21v27zM497 235h-69l21 -319h28zM532 376q0 29 -20.5 49t-49.5 20t-49 -20.5t-20 -49.5t20.5 -49t49.5 -20q28 0 48.5 20.5t20.5 49.5zM376 272l-17 17l-171 -170l17 -17zM735 634l-17 17l-170 -171l17 -17z
+M322 410l-285 -21v-27l285 -21v69zM497 517l-20 319h-28l-21 -319h69zM376 479l-171 171l-17 -17l171 -171z"/>
+    </svg>
+</div>
+<!-- End SVG images -->
 
 </body>
 </html>
