@@ -16,6 +16,8 @@
     </style>
 
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="node_modules/popper.js/dist/umd/popper.min.js"></script>
+    <script src="node_modules/popper.js/dist/umd/popper-utils.min.js"></script>
     <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="node_modules/mdbootstrap/js/mdb.min.js"></script>
     <script src="node_modules/file-saver/dist/FileSaver.min.js"></script>
@@ -87,28 +89,28 @@
                             <use xlink:href="#svg-perception"></use>
                         </svg>
                         <input class="form-control means" id="perception" name="perception" type="number" value="1"
-                               min="1" max="5">
+                               min="1" max="5" data-toggle="tooltip" data-placement="top" title="Perception">
                     </th>
                     <th scope="col" class="align-middle md-form input-with-pre-icon">
                         <svg height="3em" width="2em" class="input-prefix">
                             <use xlink:href="#svg-action"></use>
                         </svg>
                         <input class="form-control means" id="action" name="action" type="number" value="1" min="1"
-                               max="5">
+                               max="5" data-toggle="tooltip" data-placement="top" title="Action">
                     </th>
                     <th scope="col" class="align-middle md-form input-with-pre-icon">
                         <svg height="3em" width="2em" class="input-prefix">
                             <use xlink:href="#svg-desire"></use>
                         </svg>
                         <input class="form-control means" id="desire" name="desire" type="number" value="1" min="1"
-                               max="5">
+                               max="5" data-toggle="tooltip" data-placement="top" title="Désir">
                     </th>
                     <th scope="col" class="align-middle md-form input-with-pre-icon">
                         <svg height="3em" width="2em" class="input-prefix">
                             <use xlink:href="#svg-resistance"></use>
                         </svg>
                         <input class="form-control means" id="resistance" name="resistance" type="number" value="1"
-                               min="1" max="5">
+                               min="1" max="5" data-toggle="tooltip" data-placement="top" title="Résistance">
                     </th>
                 </tr>
                 </thead>
@@ -119,12 +121,20 @@
                             <use xlink:href="#svg-body"></use>
                         </svg>
                         <input class="form-control component" id="body" name="body" type="number" value="3" min="3"
-                               max="7">
+                               max="7" data-toggle="tooltip" data-placement="top" title="Corps">
                     </th>
-                    <td class="align-middle text-center" id="body-perception"></td>
-                    <td class="align-middle text-center" id="body-action"></td>
-                    <td class="align-middle text-center" id="body-desire"></td>
-                    <td class="align-middle text-center" id="body-resistance"></td>
+                    <td class="align-middle text-center" id="body-perception" data-toggle="tooltip" data-html="true"
+                        data-placement="right"
+                        title="Voir, sentir, écouter;<br/>équilibre corporel;<br/>combat à distance"></td>
+                    <td class="align-middle text-center" id="body-action" data-toggle="tooltip" data-html="true"
+                        data-placement="right"
+                        title="Action physique;<br/>dépense corporelle;<br/>combat au contact"></td>
+                    <td class="align-middle text-center" id="body-desire" data-toggle="tooltip" data-html="true"
+                        data-placement="right"
+                        title="Surmonter la faim,<br/>le sommeil, les blessures;<br/>survivre"></td>
+                    <td class="align-middle text-center" id="body-resistance" data-toggle="tooltip" data-html="true"
+                        data-placement="right"
+                        title="Résister à la faim, à la soif,<br/>aux maladies, à l'asphyxie"></td>
                 </tr>
                 <tr>
                     <th scope="row" class="align-middle md-form input-with-pre-icon">
@@ -132,12 +142,20 @@
                             <use xlink:href="#svg-instincts"></use>
                         </svg>
                         <input class="form-control component" id="instincts" name="instincts" type="number" value="3"
-                               min="3" max="7">
+                               min="3" max="7" data-toggle="tooltip" data-placement="top" title="Instincts">
                     </th>
-                    <td class="align-middle text-center" id="instincts-perception"></td>
-                    <td class="align-middle text-center" id="instincts-action"></td>
-                    <td class="align-middle text-center" id="instincts-desire"></td>
-                    <td class="align-middle text-center" id="instincts-resistance"></td>
+                    <td class="align-middle text-center" id="instincts-perception" data-toggle="tooltip"
+                        data-html="true" data-placement="right"
+                        title="Deviner une réaction;<br/>6e sens;<br/>se laisser guider par l'intuition"></td>
+                    <td class="align-middle text-center" id="instincts-action" data-toggle="tooltip"
+                        data-html="true" data-placement="right"
+                        title="Réagir d'instinct;<br/>convaincre par la convoitise"></td>
+                    <td class="align-middle text-center" id="instincts-desire" data-toggle="tooltip"
+                        data-html="true" data-placement="right"
+                        title="Imposer sa personalité;<br/>exorciser, réaliser ses rêves"></td>
+                    <td class="align-middle text-center" id="instincts-resistance" data-toggle="tooltip"
+                        data-html="true" data-placement="right"
+                        title="Laisser la 'bête' (violence, plaisir) au fond de soi"></td>
                 </tr>
                 <tr>
                     <th scope="row" class="align-middle md-form input-with-pre-icon">
@@ -145,12 +163,17 @@
                             <use xlink:href="#svg-heart"></use>
                         </svg>
                         <input class="form-control component" id="heart" name="heart" type="number" value="3" min="3"
-                               max="7">
+                               max="7" data-toggle="tooltip" data-placement="top" title="Cœur">
                     </th>
-                    <td class="align-middle text-center" id="heart-perception"></td>
-                    <td class="align-middle text-center" id="heart-action"></td>
-                    <td class="align-middle text-center" id="heart-desire"></td>
-                    <td class="align-middle text-center" id="heart-resistance"></td>
+                    <td class="align-middle text-center" id="heart-perception" data-toggle="tooltip" data-html="true"
+                        data-placement="right" title="Connaître les sentiments;<br/>psychologie"></td>
+                    <td class="align-middle text-center" id="heart-action" data-toggle="tooltip" data-html="true"
+                        data-placement="right" title="Se faire aimer;<br/>convaincre par la passion"></td>
+                    <td class="align-middle text-center" id="heart-desire" data-toggle="tooltip" data-html="true"
+                        data-placement="right"
+                        title="Avoir la foi;<br/>créer la paix, la confiance et les miracles"></td>
+                    <td class="align-middle text-center" id="heart-resistance" data-toggle="tooltip" data-html="true"
+                        data-placement="right" title="Résister à la séduction, à la pitié, à la misère"></td>
                 </tr>
                 <tr>
                     <th scope="row" class="align-middle md-form input-with-pre-icon">
@@ -158,12 +181,16 @@
                             <use xlink:href="#svg-mind"></use>
                         </svg>
                         <input class="form-control component" id="mind" name="mind" type="number" value="3" min="3"
-                               max="7">
+                               max="7" data-toggle="tooltip" data-placement="top" title="Esprit">
                     </th>
-                    <td class="align-middle text-center" id="mind-perception"></td>
-                    <td class="align-middle text-center" id="mind-action"></td>
-                    <td class="align-middle text-center" id="mind-desire"></td>
-                    <td class="align-middle text-center" id="mind-resistance"></td>
+                    <td class="align-middle text-center" id="mind-perception" data-toggle="tooltip" data-html="true"
+                        data-placement="right" title="Comprendre un problème;<br/>analyser une situation"></td>
+                    <td class="align-middle text-center" id="mind-action" data-toggle="tooltip" data-html="true"
+                        data-placement="right" title="Raisonner, calculer, résoudre;<br/>Agir par la réflexion"></td>
+                    <td class="align-middle text-center" id="mind-desire" data-toggle="tooltip" data-html="true"
+                        data-placement="right" title="Se raisonner, se détacher des sentiments, inventer"></td>
+                    <td class="align-middle text-center" id="mind-resistance" data-toggle="tooltip" data-html="true"
+                        data-placement="right" title="Rester logique, d'esprit libre;<br/>résister à l'hypnotisme"></td>
                 </tr>
                 </tbody>
             </table>
@@ -269,6 +296,11 @@ M322 410l-285 -21v-27l285 -21v69zM497 517l-20 319h-28l-21 -319h69zM376 479l-171 
         for (let i = 0; i < means.length; i++) {
             update_sum({target: $("#" + means[i])[0]})
         }
+    })
+
+    // Tooltip initializations
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
     })
 </script>
 </html>
