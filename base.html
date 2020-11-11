@@ -83,34 +83,34 @@
             <table class="table table-hover my-1">
                 <thead>
                 <tr>
-                    <th scope="col" class="align-middle"></th>
+                    <th scope="col" class="align-middle"><div class="text-right">Moyens</div>Composantes</th>
                     <th scope="col" class="align-middle md-form input-with-pre-icon">
                         <svg height="3em" width="2em" class="input-prefix">
                             <use xlink:href="#svg-perception"></use>
                         </svg>
-                        <input class="form-control means" id="perception" name="perception" type="number" value="1"
-                               min="1" max="5" data-toggle="tooltip" data-placement="top" title="Perception">
+                        <input class="form-control means text-center" id="perception" name="perception" type="number"
+                               value="1" min="1" max="5" data-toggle="tooltip" data-placement="top" title="Perception">
                     </th>
                     <th scope="col" class="align-middle md-form input-with-pre-icon">
                         <svg height="3em" width="2em" class="input-prefix">
                             <use xlink:href="#svg-action"></use>
                         </svg>
-                        <input class="form-control means" id="action" name="action" type="number" value="1" min="1"
-                               max="5" data-toggle="tooltip" data-placement="top" title="Action">
+                        <input class="form-control means text-center" id="action" name="action" type="number" value="1"
+                               min="1" max="5" data-toggle="tooltip" data-placement="top" title="Action">
                     </th>
                     <th scope="col" class="align-middle md-form input-with-pre-icon">
                         <svg height="3em" width="2em" class="input-prefix">
                             <use xlink:href="#svg-desire"></use>
                         </svg>
-                        <input class="form-control means" id="desire" name="desire" type="number" value="1" min="1"
-                               max="5" data-toggle="tooltip" data-placement="top" title="Désir">
+                        <input class="form-control means text-center" id="desire" name="desire" type="number" value="1"
+                               min="1" max="5" data-toggle="tooltip" data-placement="top" title="Désir">
                     </th>
                     <th scope="col" class="align-middle md-form input-with-pre-icon">
                         <svg height="3em" width="2em" class="input-prefix">
                             <use xlink:href="#svg-resistance"></use>
                         </svg>
-                        <input class="form-control means" id="resistance" name="resistance" type="number" value="1"
-                               min="1" max="5" data-toggle="tooltip" data-placement="top" title="Résistance">
+                        <input class="form-control means text-center" id="resistance" name="resistance" type="number"
+                               value="1" min="1" max="5" data-toggle="tooltip" data-placement="top" title="Résistance">
                     </th>
                 </tr>
                 </thead>
@@ -120,8 +120,8 @@
                         <svg height="3em" width="2em" class="input-prefix">
                             <use xlink:href="#svg-body"></use>
                         </svg>
-                        <input class="form-control component" id="body" name="body" type="number" value="3" min="3"
-                               max="7" data-toggle="tooltip" data-placement="top" title="Corps">
+                        <input class="form-control component text-center" id="body" name="body" type="number" value="3"
+                               min="3" max="7" data-toggle="tooltip" data-placement="top" title="Corps">
                     </th>
                     <td class="align-middle text-center" id="body-perception" data-toggle="tooltip" data-html="true"
                         data-placement="right"
@@ -141,8 +141,8 @@
                         <svg height="3em" width="2em" class="input-prefix">
                             <use xlink:href="#svg-instincts"></use>
                         </svg>
-                        <input class="form-control component" id="instincts" name="instincts" type="number" value="3"
-                               min="3" max="7" data-toggle="tooltip" data-placement="top" title="Instincts">
+                        <input class="form-control component text-center" id="instincts" name="instincts" type="number"
+                               value="3" min="3" max="7" data-toggle="tooltip" data-placement="top" title="Instincts">
                     </th>
                     <td class="align-middle text-center" id="instincts-perception" data-toggle="tooltip"
                         data-html="true" data-placement="right"
@@ -162,8 +162,8 @@
                         <svg height="3em" width="2em" class="input-prefix">
                             <use xlink:href="#svg-heart"></use>
                         </svg>
-                        <input class="form-control component" id="heart" name="heart" type="number" value="3" min="3"
-                               max="7" data-toggle="tooltip" data-placement="top" title="Cœur">
+                        <input class="form-control component text-center" id="heart" name="heart" type="number"
+                               value="3" min="3" max="7" data-toggle="tooltip" data-placement="top" title="Cœur">
                     </th>
                     <td class="align-middle text-center" id="heart-perception" data-toggle="tooltip" data-html="true"
                         data-placement="right" title="Connaître les sentiments;<br/>psychologie"></td>
@@ -180,8 +180,8 @@
                         <svg height="3em" width="2em" class="input-prefix">
                             <use xlink:href="#svg-mind"></use>
                         </svg>
-                        <input class="form-control component" id="mind" name="mind" type="number" value="3" min="3"
-                               max="7" data-toggle="tooltip" data-placement="top" title="Esprit">
+                        <input class="form-control component text-center" id="mind" name="mind" type="number" value="3"
+                               min="3" max="7" data-toggle="tooltip" data-placement="top" title="Esprit">
                     </th>
                     <td class="align-middle text-center" id="mind-perception" data-toggle="tooltip" data-html="true"
                         data-placement="right" title="Comprendre un problème;<br/>analyser une situation"></td>
@@ -194,6 +194,106 @@
                 </tr>
                 </tbody>
             </table>
+        </div>
+
+        <!-- Realms -->
+        <div class="col-2 mt-4 offset-lg-1">
+            <div class="row m-0"><b>Règnes</b></div>
+            <div class="row m-0">
+                <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
+                     data-placement="right" title="Minéral">
+                    <svg height="3em" width="2em" class="input-prefix">
+                        <use xlink:href="#svg-mineral"></use>
+                    </svg>
+                    <input class="form-control realm text-center" id="mineral" name="mineral" type="number" value="0"
+                           min="0" max="3">
+                </div>
+            </div>
+            <div class="row m-0">
+                <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
+                     data-placement="right" title="Végétal">
+                    <svg height="3em" width="2em" class="input-prefix">
+                        <use xlink:href="#svg-vegetal"></use>
+                    </svg>
+                    <input class="form-control realm text-center" id="vegetal" name="vegetal" type="number" value="0"
+                           min="0" max="3">
+                </div>
+            </div>
+            <div class="row m-0">
+                <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
+                     data-placement="right" title="Animal">
+                    <svg height="3em" width="2em" class="input-prefix">
+                        <use xlink:href="#svg-animal"></use>
+                    </svg>
+                    <input class="form-control realm text-center" id="animal" name="animal" type="number" value="0"
+                           min="0" max="3">
+                </div>
+            </div>
+            <div class="row m-0">
+                <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
+                     data-placement="right" title="Humanoïde">
+                    <svg height="3em" width="2em" class="input-prefix">
+                        <use xlink:href="#svg-humanoid"></use>
+                    </svg>
+                    <input class="form-control realm text-center" id="humanoid" name="humanoid" type="number" value="0"
+                           min="0" max="3">
+                </div>
+            </div>
+            <div class="row m-0">
+                <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
+                     data-placement="right" title="Mécanique">
+                    <svg height="3em" width="2em" class="input-prefix">
+                        <use xlink:href="#svg-mechanical"></use>
+                    </svg>
+                    <input class="form-control realm text-center" id="mecanic" name="mecanic" type="number" value="0"
+                           min="0" max="3">
+                </div>
+            </div>
+            <div class="row m-0">
+                <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
+                     data-placement="right" title="Néant">
+                    <svg height="3em" width="2em" class="input-prefix">
+                        <use xlink:href="#svg-void"></use>
+                    </svg>
+                    <input class="form-control realm text-center" id="void" name="void" type="number" value="-1"
+                           min="-1" max="-1" disabled>
+                </div>
+            </div>
+        </div>
+
+        <!-- Energies -->
+        <div class="col-2 mt-4 offset-1">
+            <div class="row m-0"><b>Énergies</b></div>
+            <div class="row m-0">
+                <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
+                     data-placement="left" title="Puissance">
+                    <svg height="3em" width="2em" class="input-prefix">
+                        <use xlink:href="#svg-power"></use>
+                    </svg>
+                    <input class="form-control realm text-center" id="power" name="power" type="number" value="0"
+                           min="0" max="3">
+                </div>
+            </div>
+            <div class="row m-0">
+                <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
+                     data-placement="left" title="Rapidité">
+                    <svg height="3em" width="2em" class="input-prefix">
+                        <use xlink:href="#svg-speed"></use>
+                    </svg>
+                    <input class="form-control realm text-center" id="speed" name="speed" type="number" value="0"
+                           min="0" max="3">
+                </div>
+            </div>
+            <div class="row m-0">
+                <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
+                     data-placement="left" title="Précision">
+                    <svg height="3em" width="2em" class="input-prefix">
+                        <use xlink:href="#svg-precision"></use>
+                    </svg>
+                    <input class="form-control realm text-center" id="precision" name="precision" type="number"
+                           value="0" min="0" max="3">
+                </div>
+            </div>
         </div>
     </div>
 
@@ -267,6 +367,76 @@ q51 -54 113 -67q28 -6 57 -6q108 0 171 74q51 61 51 151q0 60 -25 108v1z"/>
         <path fill="currentColor"
               d="M737 119l-171 170l-17 -17l171 -170zM889 389l-285 21v-69l285 21v27zM497 235h-69l21 -319h28zM532 376q0 29 -20.5 49t-49.5 20t-49 -20.5t-20 -49.5t20.5 -49t49.5 -20q28 0 48.5 20.5t20.5 49.5zM376 272l-17 17l-171 -170l17 -17zM735 634l-17 17l-170 -171l17 -17z
 M322 410l-285 -21v-27l285 -21v69zM497 517l-20 319h-28l-21 -319h69zM376 479l-171 171l-17 -17l171 -171z"/>
+    </svg>
+    <!-- images/mineral.svg -->
+    <svg id="svg-mineral" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+         viewBox="-10 0 887 1000">
+        <path fill="currentColor"
+              d="M821 551l-215 251h-351q-201 -225 -199 -228l355 -589q8 6 410 566zM782 549l-155 108l-26 109zM767 539l-327 -458l187 551zM593 635l-181 -559q-10 38 -161 559h342zM604 657h-353l31 111h298zM387 82l-286 481l127 65zM262 766l-33 -113l-128 -68z"/>
+    </svg>
+    <!-- images/vegetal.svg -->
+    <svg id="svg-vegetal" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+         viewBox="-10 0 922 1000">
+        <path fill="currentColor"
+              d="M831 157q25 38 25 87q0 59 -34 112q-20 58 -57 71q-25 9 -59 9q-14 0 -42.5 -2t-43.5 -2q-3 10 -16 29.5t-16 31.5q-6 4 -5 12q2 7 3 14q19 61 51 187q13 29 18 79q5 5 7 24q-7 14 -34 7q-44 -6 -132 -16q-167 -15 -272 -14q-5 -3 -5 -7q0 -3 3.5 -9t3.5 -8
+q11 -24 39 -70q2 -14 32 -61q6 -10 14 -33q16 -28 51 -84q-14 -52 -29 -76q-9 4 -30 11q-12 4 -26 4q-20 0 -48 -11l-46 -18q-66 -24 -79 -31q-42 -25 -44 -69q-4 -15 -4 -33q0 -10 4 -45q2 -28 0 -46q23 -40 106 -70q11 -1 44 -8q27 -5 45 -5q11 0 22 1.5t30 6.5
+q8 -12 14 -52q6 -34 25 -48q34 -36 107 -41q84 -6 170 86q6 15 8 54q10 0 30 -6t31 -6q5 0 10 1q48 0 71 5q39 10 57 39h1zM614 383h-5q-6 -2 -11 -2q-18 0 -30 24q-19 38 -21 40q-16 20 -41 12q-16 -7 -17.5 -25.5t-1.5 -35.5q-45 0 -49 -1q-49 -24 -106 -35q23 47 43 80
+q0 2 11 26q21 35 21 46q-39 80 -126 236h25q58 4 114 5q119 1 185 10q1 -27 -7 -62q-8 -30 -16 -59q-14 -61 -33 -116q-2 -6 -2 -11q0 -7 6 -19.5t7 -17.5q19 -38 47 -78q3 -6 7 -17z"/>
+    </svg>
+    <!-- images/animal.svg -->
+    <svg id="svg-animal" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+         viewBox="-10 0 1010 1000">
+        <path fill="currentColor"
+              d="M940 384v-1q-1 1 -19 1q-38 -10 -76 -39q-3 26 -14 75q-6 34 -16 50q0 15 -8 36q-12 28 -14 33q-11 23 -41 60q0 1 -11 9q-19 27 -43 26q-27 -1 -45 -30q-7 -11 -23 -51q-7 -11 -16 -23.5t-21 -13.5q-15 -9 -43 6q-23 22 -40 84q-5 12 -10 39t-11 39q-1 6 -6 17
+q-13 36 -42 64q-5 4 -16 11q-32 17 -57 11q-2 2 -5 2t-9 -4t-11 -4q-52 -33 -72 -105q-13 -43 -18 -134q-25 -8 -52 -17.5t-45 -25.5q-72 -49 -65 -159q3 -6 3 -13q0 -9 -12.5 -28t-12.5 -32q-9 -31 -9 -66q0 -84 47 -161q21 -25 36 -29l5 6q1 5 -4.5 9.5t-6.5 7.5
+q-7 23 -7 50q0 44 17 83q3 6 17 25q43 -32 123 -43q89 0 140 58q19 -22 24 -30q12 -19 12 -37q15 -28 2 -65q-6 -16 -24 -42l6 -9l2 2h2q84 60 84 176q0 92 -52 145q0 80 -67 151l-1 -2q-39 34 -110 52q-3 74 15 131q6 32 24 50h1q29 20 39 18q50 -29 64 -103q4 -12 11 -34
+t10 -34t26 -59q7 -13 24 -26q25 -18 28 -22q24 -16 54 -8q46 5 66 71q7 14 14 29t21 15q22 -14 39 -48q26 -54 27 -56q11 -31 30 -94q6 -19 4 -41q-18 14 -52 35t-37 20q-2 -1 52.5 -122t55.5 -120q44 94 116 231z"/>
+    </svg>
+    <!-- images/humanoid.svg -->
+    <svg id="svg-humanoid" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+         viewBox="-10 0 698 1000">
+        <path fill="currentColor"
+              d="M617 273h-238v168q91 16 140 110.5t49 249.5l-72 -1q0 -127 -37 -206q-41 -85 -115 -85q-75 0 -115 86q-37 78 -37 206l-72 -1q0 -155 49 -249t140 -110v-168h-237v-70h237l-1 -22q-32 -11 -52 -39t-20 -63q0 -45 31.5 -76.5t76.5 -31.5t76.5 31.5t31.5 76.5
+q0 35 -20.5 63t-52.5 39v22h238v70z"/>
+    </svg>
+    <!-- images/mechanical.svg -->
+    <svg id="svg-mechanical" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+         viewBox="-10 0 800 1000">
+        <path fill="currentColor"
+              d="M749 188l-120 161l-90 -68q-123 148 -185 232q-96 131 -157 250q-8 17 -34 34t-46 17q-17 0 -33 -12l-19 -14q-25 -19 -25 -47q0 -15 8 -32q10 -30 22 -44q182 -192 367 -461l-194 -148l39 -53q14 -18 41 -6l48 24q28 13 53 13q40 0 84 -29l51 39q13 -6 24 -6q16 0 35 13
+l19 12q28 22 28 41q0 8 -4 18zM692 196l-188 -141q-40 22 -76 22q-26 0 -50 -12t-47 -24q-14 -7 -22 -5l-10 14l321 241zM482 286q0 -29 -29 -29t-29 29t29 29t29 -29z"/>
+    </svg>
+    <!-- images/void.svg -->
+    <svg id="svg-void" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+         viewBox="-10 0 902 1000">
+        <path fill="currentColor"
+              d="M803 608q-34 104 -128 159q-85 50 -197 50q-89 0 -170 -33q-113 -45 -178 -151q-62 -100 -62 -223q0 -105 48 -198q57 -105 156 -163q92 -52 204 -52q146 0 278 91l-45 66q-112 -77 -233 -77q-90 0 -164 42q-79 45 -124 131q-40 74 -40 160q0 99 51 180q51 85 140 120
+q75 31 145 31q116 0 191 -80q69 -73 69 -173q0 -65 -32 -119q-37 -57 -104 -89q-63 -30 -127 -30q-117 0 -156 87q-16 34 -16 74q0 66 38 117q38 53 92 57q77 5 118 -31q35 -30 35 -77q0 -36 -20 -59t-54 -23q-25 0 -42.5 8.5t-17.5 19.5q0 9 11 19q46 47 73 88l-67 44
+l-21 -33q-3 -4 -45 -46q-30 -30 -30 -65q0 -10 2 -20q8 -45 47 -72q37 -24 85 -24q64 0 108 40q50 45 50 123q0 18 -2 35q-12 82 -89 124q-65 34 -147 29q-91 -7 -150 -87q-53 -73 -53 -168q0 -58 22 -106q62 -135 227 -135q131 0 232 86q113 94 113 235q0 58 -21 118z"/>
+    </svg>
+    <!-- images/power.svg -->
+    <svg id="svg-power" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+         viewBox="-10 0 911 1000">
+        <path fill="currentColor"
+              d="M701 126q-33 -37 -45 -49q-29 -27 -55 -35q3 -23 44 -23q32 0 45 11.5t14 43.5v41zM542 286q-1 7 -11 16t-26 9q-11 0 -33 -5q-7 -23 -20 -121q-13 -94 -13 -116q0 -48 26 -61q60 -5 49 -5q28 0 38 16v9q-11 -2 -19 -2q-34 0 -56.5 22.5t-21.5 59.5q2 44 76 108l21 18z
+M602 566q-61 33 -96 31q-58 -3 -77 -30q-7 -9 -11 -22q-7 -18 -7 -61q0 -60 45 -109.5t104 -49.5q12 -7 24 -65q3 -13 7 -25q-8 -7 -29 -27q-25 -24 -51 -48q-29 -29 -29 -60t25 -43q8 -4 32 -4q27 0 75 30q35 21 70 68q69 92 69 175q0 12 -1 25q-12 142 -150 215zM433 360
+q-18 13 -35 13q-14 0 -25 -7.5t-12 -13.5q0 -157 -57 -238q7 -35 65 -52h22q14 0 17 8q19 67 34 250q2 17 -9 40zM320 384q-29 3 -54 -42q-11 -24 -28.5 -59.5t-37.5 -42.5q-9 -3 -31 -10q60 -94 115 -91q49 75 49 239q-6 6 -13 6zM289 636q-73 0 -111 -108
+q-29 -80 -29 -177q0 -42 9 -96q43 12 61 54q45 107 92 104h11q23 -3 36 -22q19 19 44 17q-12 27 -16 54q-5 36 -5 52q0 41 25 70q20 25 45 34q-76 18 -162 18zM542 776q-67 50 -169 48q-33 -1 -75 -17l-70 -28q0 -76 -7 -134q8 7 12 8q35 13 84 13q106 0 248 -51
+q-14 34 -20 89q-6 49 -3 72z"/>
+    </svg>
+    <!-- images/speed.svg -->
+    <svg id="svg-speed" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+         viewBox="-10 0 1010 1000">
+        <path fill="currentColor"
+              d="M897 2l-476 369h448l-695 525l305 -395l-376 9l346 -508h448z"/>
+    </svg>
+    <!-- images/precision.svg -->
+    <svg id="svg-precision" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+         viewBox="-10 0 945 1000">
+        <path fill="currentColor"
+              d="M815 438q-7 131 -100 224.5t-224 100.5v88h-36v-88q-132 -7 -225 -100.5t-99 -224.5h-79v-36h79q7 -131 100 -223.5t224 -98.5v-71h36v71q130 6 223 98.5t100 223.5h70v36h-69zM491 116v159q50 5 87 40.5t44 86.5h156q-7 -116 -89.5 -198t-197.5 -88zM491 311v91h95
+q-7 -36 -33 -61t-62 -30zM491 438v95q37 -5 63.5 -31.5t31.5 -63.5h-95zM455 312q-34 7 -58.5 31.5t-30.5 58.5h89v-90zM455 116q-116 6 -198.5 88t-89.5 198h163q6 -49 41 -84t84 -42v-160zM622 438q-5 52 -42 89t-89 42v158q116 -7 198.5 -90t88.5 -199h-156zM455 438h-90
+q5 35 30 61t60 33v-94zM455 568q-50 -7 -85.5 -43.5t-40.5 -86.5h-162q6 116 88.5 199t199.5 90v-159z"/>
     </svg>
 </div>
 <!-- End SVG images -->
