@@ -7,11 +7,38 @@
 
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="node_modules/mdbootstrap/css/mdb.min.css">
+    <link rel="stylesheet" href="node_modules/bootstrap-slider/dist/css/bootstrap-slider.min.css">
 
     <style>
         /* Fix mdbootstrap that activates the icon when value attribute is set at loading */
         .md-form .input-prefix.active {
             color: black
+        }
+
+        .slider-handle.custom.full::before {
+            line-height: 20px;
+            font-size: 20px;
+            content: '\1F49A';
+        }
+
+        .slider-handle.custom.unease::before {
+            line-height: 20px;
+            font-size: 20px;
+            content: '\1F9E1';
+        }
+
+        .slider-handle.custom.dead::before {
+            line-height: 20px;
+            font-size: 20px;
+            content: '\1F5A4';
+        }
+
+        .slider-selection.full {
+            background: green;
+        }
+
+        .slider-selection.unease {
+            background: orange;
         }
     </style>
 
@@ -20,6 +47,7 @@
     <script src="node_modules/popper.js/dist/umd/popper-utils.min.js"></script>
     <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="node_modules/mdbootstrap/js/mdb.min.js"></script>
+    <script src="node_modules/bootstrap-slider/dist/bootstrap-slider.js"></script>
     <script src="node_modules/file-saver/dist/FileSaver.min.js"></script>
 </head>
 
@@ -70,7 +98,10 @@
             <table class="table table-hover my-1">
                 <thead>
                 <tr>
-                    <th scope="col" class="align-middle"><div class="text-right">Moyens</div>Composantes</th>
+                    <th scope="col" class="align-middle">
+                        <div class="text-right">Moyens</div>
+                        Composantes
+                    </th>
                     <th scope="col" class="align-middle md-form input-with-pre-icon">
                         <svg height="3em" width="2em" class="input-prefix">
                             <use xlink:href="#svg-perception"></use>
@@ -284,6 +315,24 @@
         </div>
     </div>
 
+    <!-- Localized HP -->
+    <input id="hp-head" class="hp" data-slider-id="hp-head-slider" type="text" data-slider-min="0" data-slider-max="3"
+           data-slider-step="1" data-slider-value="3" data-slider-handle="custom"/>
+    <input id="hp-trunk" class="hp" data-slider-id="hp-trunc-slider" type="text" data-slider-min="0" data-slider-max="3"
+           data-slider-step="1" data-slider-value="3" data-slider-handle="custom"/>
+    <input id="hp-right-arm" class="hp" data-slider-id="hp-right-arm-slider" type="text" data-slider-min="0"
+           data-slider-max="3" data-slider-step="1" data-slider-value="3" data-slider-handle="custom"
+           data-slider-orientation="vertical" data-slider-reversed="true"/>
+    <input id="hp-left-arm" class="hp" data-slider-id="hp-left-arm-slider" type="text" data-slider-min="0"
+           data-slider-max="3" data-slider-step="1" data-slider-value="3" data-slider-handle="custom"
+           data-slider-orientation="vertical" data-slider-reversed="true"/>
+    <input id="hp-right-leg" class="hp" data-slider-id="hp-right-leg-slider" type="text" data-slider-min="0"
+           data-slider-max="3" data-slider-step="1" data-slider-value="3" data-slider-handle="custom"
+           data-slider-orientation="vertical" data-slider-reversed="true"/>
+    <input id="hp-left-leg" class="hp" data-slider-id="hp-left-leg-slider" type="text" data-slider-min="0"
+           data-slider-max="3" data-slider-step="1" data-slider-value="3" data-slider-handle="custom"
+           data-slider-orientation="vertical" data-slider-reversed="true"/>
+
     <div class="md-form row form-row my-1">
         <button id="save-page" type="submit" class="btn btn-primary form-control rounded">
             Sauvegarder
@@ -326,6 +375,37 @@
         $('[data-toggle="tooltip"]').tooltip()
     })
 
+    /* HP sliders */
+    function update_color(event) {
+        const value = parseInt(event.target.value)
+        const slider = $("#" + event.target.getAttribute("data-slider-id"))
+        const handle = slider.find(".slider-handle.custom:visible")
+        const selection = slider.find(".slider-selection")
+        if (value === 0) {
+            handle.removeClass('full').removeClass('unease').addClass('dead')
+            selection.removeClass('full').removeClass('unease')
+        } else if (value <= 1) {
+            handle.removeClass('full').addClass('unease').removeClass('dead')
+            selection.removeClass('full').addClass('unease')
+        } else {
+            handle.addClass('full').removeClass('unease').removeClass('dead')
+            selection.addClass('full').removeClass('unease')
+        }
+    }
+
+    $('.hp').each((i, hp_input) => {
+        const opts = {}
+        const orientation = hp_input.getAttribute("data-slider-orientation")
+        if (orientation != null && orientation === "vertical") {
+            // We need to manually change the orientation of the active selection bar because vertically,
+            // it would not make sense if the green bar is from top to bottom
+            opts["selection"] = "after"
+        }
+        $(hp_input).slider(opts).on("change", update_color)
+        update_color({target: hp_input})
+    })
+
+    /* Save Character page */
     $("#save-page").on("click", function (event) {
         const userInput = (new XMLSerializer).serializeToString(document)
         const blob = new Blob([userInput], {type: "text/html;charset=utf-8"})
