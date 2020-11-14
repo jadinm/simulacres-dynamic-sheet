@@ -231,6 +231,7 @@
                     <svg height="3em" width="2em" class="input-prefix">
                         <use xlink:href="#svg-mineral"></use>
                     </svg>
+                    <label for="mineral" hidden></label>
                     <input class="form-control realm text-center" id="mineral" name="mineral" type="number" value="0"
                            min="0" max="3">
                 </div>
@@ -241,6 +242,7 @@
                     <svg height="3em" width="2em" class="input-prefix">
                         <use xlink:href="#svg-vegetal"></use>
                     </svg>
+                    <label for="vegetal" hidden></label>
                     <input class="form-control realm text-center" id="vegetal" name="vegetal" type="number" value="0"
                            min="0" max="3">
                 </div>
@@ -251,6 +253,7 @@
                     <svg height="3em" width="2em" class="input-prefix">
                         <use xlink:href="#svg-animal"></use>
                     </svg>
+                    <label for="animal" hidden></label>
                     <input class="form-control realm text-center" id="animal" name="animal" type="number" value="0"
                            min="0" max="3">
                 </div>
@@ -261,6 +264,7 @@
                     <svg height="3em" width="2em" class="input-prefix">
                         <use xlink:href="#svg-humanoid"></use>
                     </svg>
+                    <label for="humanoid" hidden></label>
                     <input class="form-control realm text-center" id="humanoid" name="humanoid" type="number" value="0"
                            min="0" max="3">
                 </div>
@@ -271,7 +275,8 @@
                     <svg height="3em" width="2em" class="input-prefix">
                         <use xlink:href="#svg-mechanical"></use>
                     </svg>
-                    <input class="form-control realm text-center" id="mecanic" name="mecanic" type="number" value="0"
+                    <label for="mechanic" hidden></label>
+                    <input class="form-control realm text-center" id="mechanic" name="mechanic" type="number" value="0"
                            min="0" max="3">
                 </div>
             </div>
@@ -281,6 +286,7 @@
                     <svg height="3em" width="2em" class="input-prefix">
                         <use xlink:href="#svg-void"></use>
                     </svg>
+                    <label for="void" hidden></label>
                     <input class="form-control realm text-center" id="void" name="void" type="number" value="-1"
                            min="-1" max="-1" disabled>
                 </div>
@@ -296,6 +302,7 @@
                     <svg height="3em" width="2em" class="input-prefix">
                         <use xlink:href="#svg-power"></use>
                     </svg>
+                    <label for="power" hidden></label>
                     <input class="form-control realm text-center" id="power" name="power" type="number" value="0"
                            min="0" max="3">
                 </div>
@@ -306,6 +313,7 @@
                     <svg height="3em" width="2em" class="input-prefix">
                         <use xlink:href="#svg-speed"></use>
                     </svg>
+                    <label for="speed" hidden></label>
                     <input class="form-control realm text-center" id="speed" name="speed" type="number" value="0"
                            min="0" max="3">
                 </div>
@@ -316,6 +324,7 @@
                     <svg height="3em" width="2em" class="input-prefix">
                         <use xlink:href="#svg-precision"></use>
                     </svg>
+                    <label for="precision" hidden></label>
                     <input class="form-control realm text-center" id="precision" name="precision" type="number"
                            value="0" min="0" max="3">
                 </div>
@@ -332,6 +341,7 @@
                         <use xlink:href="#svg-head"></use>
                     </svg>
                     <div>
+                        <label for="hp-head" hidden></label>
                         <input id="hp-head" class="hp" data-slider-id="hp-head-slider" type="text" data-slider-min="0"
                                data-slider-max="3" data-slider-step="1" data-slider-value="3"
                                data-slider-handle="custom"/>
@@ -343,6 +353,7 @@
                     <svg height="5em" width="5em">
                         <use xlink:href="#svg-right-hand"></use>
                     </svg>
+                    <label for="hp-right-arm" hidden></label>
                     <input id="hp-right-arm" class="hp" data-slider-id="hp-right-arm-slider" type="text"
                            data-slider-min="0" data-slider-max="3" data-slider-step="1" data-slider-value="3"
                            data-slider-handle="custom" data-slider-orientation="vertical" data-slider-reversed="true"/>
@@ -353,10 +364,12 @@
                             <use xlink:href="#svg-chest"></use>
                         </svg>
                     </div>
+                    <label for="hp-trunk" hidden></label>
                     <input id="hp-trunk" class="hp" data-slider-id="hp-trunc-slider" type="text" data-slider-min="0"
                            data-slider-max="3" data-slider-step="1" data-slider-value="3" data-slider-handle="custom"/>
                 </div>
                 <div class="col-lg-2 col-md-3 col-sm-4 col-xs-4 align-middle text-center pl-0">
+                    <label for="hp-left-arm" hidden></label>
                     <input id="hp-left-arm" class="hp" data-slider-id="hp-left-arm-slider" type="text"
                            data-slider-min="0" data-slider-max="3" data-slider-step="1" data-slider-value="3"
                            data-slider-handle="custom" data-slider-orientation="vertical" data-slider-reversed="true"/>
@@ -367,6 +380,7 @@
             </div>
             <div class="row mt-3">
                 <div class="offset-md-1 offset-sm-2 offset-xs-2 col-lg-2 col-md-3 col-sm-4 col-xs-4 align-middle text-center px-0">
+                    <label for="hp-right-leg" hidden></label>
                     <input id="hp-right-leg" class="hp" data-slider-id="hp-right-leg-slider" type="text"
                            data-slider-min="0" data-slider-max="3" data-slider-step="1" data-slider-value="3"
                            data-slider-handle="custom" data-slider-orientation="vertical" data-slider-reversed="true"/>
@@ -378,6 +392,7 @@
                     <svg height="5em" width="5em">
                         <use xlink:href="#svg-left-foot"></use>
                     </svg>
+                    <label for="hp-left-leg" hidden></label>
                     <input id="hp-left-leg" class="hp" data-slider-id="hp-left-leg-slider" type="text"
                            data-slider-min="0" data-slider-max="3" data-slider-step="1" data-slider-value="3"
                            data-slider-handle="custom" data-slider-orientation="vertical" data-slider-reversed="true"/>
@@ -459,7 +474,7 @@
     })
 
     /* Save Character page */
-    $("#save-page").on("click", function (event) {
+    $("#save-page").on("click", function (_) {
         const userInput = "<!DOCTYPE html><html lang=\"fr\">" + $("html").html() + "</html>"
         const blob = new Blob([userInput], {type: "text/html;charset=utf-8"})
 
@@ -474,20 +489,20 @@
 <!-- Begin SVG images -->
 <div hidden>
     <!-- images/perception.svg -->
-    <svg id="svg-perception" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+    <svg id="svg-perception" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
          viewBox="-10 0 996 1000">
         <path fill="currentColor"
               d="M855 772l-1 1q-106 -92 -251 -165q-102 -52 -273 -115q-69 -26 -242 -72q53 -15 128 -47q62 -28 125 -55q257 -105 497 -291v70l-34 27q94 106 94 268q0 111 -46 205q-11 24 -39 71q14 10 42 34v69zM846 264q0 -23 -8 -38t-19 -15t-18.5 16t-7.5 38t7.5 38t18.5 16
 t18.5 -16t7.5 -38zM794 656v-1q-28 -28 -57 -90q-40 -86 -40 -184q0 -153 94 -247q-190 130 -462 229q-53 18 -146 51q391 101 608 242h3z"/>
     </svg>
     <!-- images/action.svg -->
-    <svg id="svg-action" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+    <svg id="svg-action" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
          viewBox="-10 0 1065 1000">
         <path fill="currentColor"
               d="M969 400l-350 348v-144h-276v-408h276v-144zM116 604h-31v-407l31 -1v408zM187 604h-43v-407l43 -1v408zM295 604h-72v-408h72v408z"/>
     </svg>
     <!-- images/desire.svg -->
-    <svg id="svg-desire" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+    <svg id="svg-desire" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
          viewBox="-10 0 883 1000">
         <path fill="currentColor"
               d="M806 386q7 35 7 68q0 84 -52 181q-55 103 -126 152q-77 55 -190 57q-72 1 -120 -9q-58 -13 -114 -50q-52 -35 -74 -58q-31 -32 -51 -83q-27 -69 -27 -114q0 -50 42 -109q19 -21 39 -44t20 -45q0 -8 -3 -17q-2 -20 -24.5 -55.5t-23.5 -36.5q26 8 77 37q41 33 50 44
@@ -495,19 +510,19 @@ q19 26 17 67q-1 26 -19 60q-15 30 -12 51q7 27 25 38q13 8 27 8q21 0 44 -18q16 -12 
 q11 23 21 46q4 13 5 54q53 -83 53 -116q0 -31 -53 -129q-12 -17 -20 -33q-21 -39 -22 -71q0 -22 31 -56q28 -31 36 -30q2 0 2 2l-13 30t-14 53q0 30 26 52.5t52 44.5q88 96 95 179h1z"/>
     </svg>
     <!-- images/resistance.svg -->
-    <svg id="svg-resistance" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+    <svg id="svg-resistance" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
          viewBox="-10 0 1009 1000">
         <path fill="currentColor"
               d="M505 5q104 65 297 65l9 4q8 -4 12 -4t4 4l21 -4h17q8 1 8 8v233q0 285 -289 483l-75 34q-174 -60 -294 -245q-75 -146 -75 -241v-264q1 -8 8 -8h59q201 0 298 -65z"/>
     </svg>
     <!-- images/body.svg -->
-    <svg id="svg-body" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+    <svg id="svg-body" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
          viewBox="-10 0 826 1000">
         <path fill="currentColor"
               d="M733 489q0 133 -95 228.5t-229 95.5t-230 -94.5t-96 -229.5t95.5 -229t230.5 -94q134 0 229 94.5t95 228.5zM668 489q0 -107 -76 -182.5t-183 -75.5q-108 0 -184.5 75t-76.5 183t77 183.5t184 75.5t183 -76t76 -183z"/>
     </svg>
     <!-- images/instincts.svg -->
-    <svg id="svg-instincts" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+    <svg id="svg-instincts" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
          viewBox="-10 0 1011 1000">
         <path fill="currentColor"
               d="M918 584l-1 1q-42 62 -106.5 95t-140.5 28l-49 -9l-275 -76q-16 -5 -33 -5q-44 0 -89.5 29t-71.5 68l-67 -41q89 -127 231 -127q34 0 67 9l278 74q121 11 197 -85q21 13 60 39zM917 355l-1 1q-42 62 -107 95t-140 27l-49 -9l-275 -76q-16 -5 -33 -5q-44 0 -91 31
@@ -515,27 +530,27 @@ q-44 27 -70 67l-67 -41q41 -59 102 -93.5t130 -34.5q33 0 66 9l278 75q121 11 197 -8
 q121 11 197 -85q21 13 60 39z"/>
     </svg>
     <!-- images/heart.svg -->
-    <svg id="svg-heart" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+    <svg id="svg-heart" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
          viewBox="-10 0 1049 1000">
         <path fill="currentColor"
               d="M950 372q-10 17 -99 95q-80 69 -111 92q-64 46 -69 51q-31 27 -89 83q-17 17 -64 70q-23 -26 -62 -71q-9 -9 -89 -84l-68 -49q-33 -23 -113 -93q-89 -78 -98 -97q-24 -49 -24 -109q0 -89 50 -149q61 -74 170 -74q28 0 56 6q62 13 113 68q46 51 65 116q18 -65 65 -116
 q51 -54 113 -67q28 -6 57 -6q108 0 171 74q51 61 51 151q0 60 -25 108v1z"/>
     </svg>
     <!-- images/mind.svg -->
-    <svg id="svg-mind" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+    <svg id="svg-mind" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
          viewBox="-10 0 936 1000">
         <path fill="currentColor"
               d="M737 119l-171 170l-17 -17l171 -170zM889 389l-285 21v-69l285 21v27zM497 235h-69l21 -319h28zM532 376q0 29 -20.5 49t-49.5 20t-49 -20.5t-20 -49.5t20.5 -49t49.5 -20q28 0 48.5 20.5t20.5 49.5zM376 272l-17 17l-171 -170l17 -17zM735 634l-17 17l-170 -171l17 -17z
 M322 410l-285 -21v-27l285 -21v69zM497 517l-20 319h-28l-21 -319h69zM376 479l-171 171l-17 -17l171 -171z"/>
     </svg>
     <!-- images/mineral.svg -->
-    <svg id="svg-mineral" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+    <svg id="svg-mineral" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
          viewBox="-10 0 887 1000">
         <path fill="currentColor"
               d="M821 551l-215 251h-351q-201 -225 -199 -228l355 -589q8 6 410 566zM782 549l-155 108l-26 109zM767 539l-327 -458l187 551zM593 635l-181 -559q-10 38 -161 559h342zM604 657h-353l31 111h298zM387 82l-286 481l127 65zM262 766l-33 -113l-128 -68z"/>
     </svg>
     <!-- images/vegetal.svg -->
-    <svg id="svg-vegetal" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+    <svg id="svg-vegetal" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
          viewBox="-10 0 922 1000">
         <path fill="currentColor"
               d="M831 157q25 38 25 87q0 59 -34 112q-20 58 -57 71q-25 9 -59 9q-14 0 -42.5 -2t-43.5 -2q-3 10 -16 29.5t-16 31.5q-6 4 -5 12q2 7 3 14q19 61 51 187q13 29 18 79q5 5 7 24q-7 14 -34 7q-44 -6 -132 -16q-167 -15 -272 -14q-5 -3 -5 -7q0 -3 3.5 -9t3.5 -8
@@ -544,7 +559,7 @@ q8 -12 14 -52q6 -34 25 -48q34 -36 107 -41q84 -6 170 86q6 15 8 54q10 0 30 -6t31 -
 q0 2 11 26q21 35 21 46q-39 80 -126 236h25q58 4 114 5q119 1 185 10q1 -27 -7 -62q-8 -30 -16 -59q-14 -61 -33 -116q-2 -6 -2 -11q0 -7 6 -19.5t7 -17.5q19 -38 47 -78q3 -6 7 -17z"/>
     </svg>
     <!-- images/animal.svg -->
-    <svg id="svg-animal" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+    <svg id="svg-animal" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
          viewBox="-10 0 1010 1000">
         <path fill="currentColor"
               d="M940 384v-1q-1 1 -19 1q-38 -10 -76 -39q-3 26 -14 75q-6 34 -16 50q0 15 -8 36q-12 28 -14 33q-11 23 -41 60q0 1 -11 9q-19 27 -43 26q-27 -1 -45 -30q-7 -11 -23 -51q-7 -11 -16 -23.5t-21 -13.5q-15 -9 -43 6q-23 22 -40 84q-5 12 -10 39t-11 39q-1 6 -6 17
@@ -553,21 +568,21 @@ q-7 23 -7 50q0 44 17 83q3 6 17 25q43 -32 123 -43q89 0 140 58q19 -22 24 -30q12 -1
 t10 -34t26 -59q7 -13 24 -26q25 -18 28 -22q24 -16 54 -8q46 5 66 71q7 14 14 29t21 15q22 -14 39 -48q26 -54 27 -56q11 -31 30 -94q6 -19 4 -41q-18 14 -52 35t-37 20q-2 -1 52.5 -122t55.5 -120q44 94 116 231z"/>
     </svg>
     <!-- images/humanoid.svg -->
-    <svg id="svg-humanoid" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+    <svg id="svg-humanoid" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
          viewBox="-10 0 698 1000">
         <path fill="currentColor"
               d="M617 273h-238v168q91 16 140 110.5t49 249.5l-72 -1q0 -127 -37 -206q-41 -85 -115 -85q-75 0 -115 86q-37 78 -37 206l-72 -1q0 -155 49 -249t140 -110v-168h-237v-70h237l-1 -22q-32 -11 -52 -39t-20 -63q0 -45 31.5 -76.5t76.5 -31.5t76.5 31.5t31.5 76.5
 q0 35 -20.5 63t-52.5 39v22h238v70z"/>
     </svg>
     <!-- images/mechanical.svg -->
-    <svg id="svg-mechanical" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+    <svg id="svg-mechanical" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
          viewBox="-10 0 800 1000">
         <path fill="currentColor"
               d="M749 188l-120 161l-90 -68q-123 148 -185 232q-96 131 -157 250q-8 17 -34 34t-46 17q-17 0 -33 -12l-19 -14q-25 -19 -25 -47q0 -15 8 -32q10 -30 22 -44q182 -192 367 -461l-194 -148l39 -53q14 -18 41 -6l48 24q28 13 53 13q40 0 84 -29l51 39q13 -6 24 -6q16 0 35 13
 l19 12q28 22 28 41q0 8 -4 18zM692 196l-188 -141q-40 22 -76 22q-26 0 -50 -12t-47 -24q-14 -7 -22 -5l-10 14l321 241zM482 286q0 -29 -29 -29t-29 29t29 29t29 -29z"/>
     </svg>
     <!-- images/void.svg -->
-    <svg id="svg-void" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+    <svg id="svg-void" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
          viewBox="-10 0 902 1000">
         <path fill="currentColor"
               d="M803 608q-34 104 -128 159q-85 50 -197 50q-89 0 -170 -33q-113 -45 -178 -151q-62 -100 -62 -223q0 -105 48 -198q57 -105 156 -163q92 -52 204 -52q146 0 278 91l-45 66q-112 -77 -233 -77q-90 0 -164 42q-79 45 -124 131q-40 74 -40 160q0 99 51 180q51 85 140 120
@@ -575,7 +590,7 @@ q75 31 145 31q116 0 191 -80q69 -73 69 -173q0 -65 -32 -119q-37 -57 -104 -89q-63 -
 l-21 -33q-3 -4 -45 -46q-30 -30 -30 -65q0 -10 2 -20q8 -45 47 -72q37 -24 85 -24q64 0 108 40q50 45 50 123q0 18 -2 35q-12 82 -89 124q-65 34 -147 29q-91 -7 -150 -87q-53 -73 -53 -168q0 -58 22 -106q62 -135 227 -135q131 0 232 86q113 94 113 235q0 58 -21 118z"/>
     </svg>
     <!-- images/power.svg -->
-    <svg id="svg-power" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+    <svg id="svg-power" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
          viewBox="-10 0 911 1000">
         <path fill="currentColor"
               d="M701 126q-33 -37 -45 -49q-29 -27 -55 -35q3 -23 44 -23q32 0 45 11.5t14 43.5v41zM542 286q-1 7 -11 16t-26 9q-11 0 -33 -5q-7 -23 -20 -121q-13 -94 -13 -116q0 -48 26 -61q60 -5 49 -5q28 0 38 16v9q-11 -2 -19 -2q-34 0 -56.5 22.5t-21.5 59.5q2 44 76 108l21 18z
@@ -585,13 +600,13 @@ q-29 -80 -29 -177q0 -42 9 -96q43 12 61 54q45 107 92 104h11q23 -3 36 -22q19 19 44
 q-14 34 -20 89q-6 49 -3 72z"/>
     </svg>
     <!-- images/speed.svg -->
-    <svg id="svg-speed" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+    <svg id="svg-speed" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
          viewBox="-10 0 1010 1000">
         <path fill="currentColor"
               d="M897 2l-476 369h448l-695 525l305 -395l-376 9l346 -508h448z"/>
     </svg>
     <!-- images/precision.svg -->
-    <svg id="svg-precision" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+    <svg id="svg-precision" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
          viewBox="-10 0 945 1000">
         <path fill="currentColor"
               d="M815 438q-7 131 -100 224.5t-224 100.5v88h-36v-88q-132 -7 -225 -100.5t-99 -224.5h-79v-36h79q7 -131 100 -223.5t224 -98.5v-71h36v71q130 6 223 98.5t100 223.5h70v36h-69zM491 116v159q50 5 87 40.5t44 86.5h156q-7 -116 -89.5 -198t-197.5 -88zM491 311v91h95
@@ -599,8 +614,8 @@ q-7 -36 -33 -61t-62 -30zM491 438v95q37 -5 63.5 -31.5t31.5 -63.5h-95zM455 312q-34
 q5 35 30 61t60 33v-94zM455 568q-50 -7 -85.5 -43.5t-40.5 -86.5h-162q6 116 88.5 199t199.5 90v-159z"/>
     </svg>
     <!-- images/head.svg -->
-    <svg id="svg-head" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-         x="0px" y="0px" viewBox="0 0 490.2 490.2" style="enable-background:new 0 0 490.2 490.2;" xml:space="preserve">
+    <svg id="svg-head" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+         x="0px" y="0px" viewBox="0 0 490.2 490.2" enable-background="new 0 0 490.2 490.2;" xml:space="preserve">
         <path d="M69.503,391.6c0,30.1,24.5,54.5,54.5,54.5c0.8,0,1.7-0.1,2.5-0.2l31.7-4.7v31.9c0,9.5,7.7,17.1,17.2,17.1h210.3
             c9.5,0,17.2-7.7,17.2-17.2V333.5c36.8-36.5,57.7-86.5,57.7-138.4c0-107.6-87.5-195.1-195-195.1c-29.1,0-57.2,6.3-83.2,18.6
             c-68.6,31.8-112.9,101.2-112.9,176.7v25.3l-34.3,65.5c-7.2,13.8-7.5,28.1-0.7,39.3c6.7,11.1,19.5,17.6,35,17.6
@@ -610,13 +625,13 @@ q5 35 30 61t60 33v-94zM455 568q-50 -7 -85.5 -43.5t-40.5 -86.5h-162q6 116 88.5 19
             v-65.8c0-9.5-7.7-17.1-17.2-17.1h-17C65.903,308.6,64.103,307.8,63.903,307.8z"/>
     </svg>
     <!-- images/right-hand.svg -->
-    <svg id="svg-right-hand" enable-background="new 0 0 512 512" viewBox="0 0 512 512" version="1.1">
+    <svg id="svg-right-hand" enable-background="new 0 0 512 512" viewBox="0 0 512 512">
         <g transform="translate(512, 0) scale (-1, 1)">
             <use xlink:href="#svg-left-hand"></use>
         </g>
     </svg>
     <!-- images/left-hand.svg -->
-    <svg id="svg-left-hand" enable-background="new 0 0 512 512" viewBox="0 0 512 512" version="1.1">
+    <svg id="svg-left-hand" enable-background="new 0 0 512 512" viewBox="0 0 512 512">
         <g transform="rotate(180,256,256)">
             <path d="m 376.007,90 c -5.261,0 -10.31,0.916 -15.007,2.581 V 74.994 C 361,50.184 340.811,30 315.994,30 310.14,30 304.549,31.136 299.414,33.179 294.21,14.084 276.721,0 255.994,0 235.272,0 217.787,14.085 212.584,33.182 207.447,31.137 201.852,30 195.994,30 171.185,30 151,50.184 151,74.994 V 195.041 C 138.457,185.603 122.872,180 106.001,180 c -8.284,0 -15,6.716 -15,15 L 91,307.918 c 0,43.443 22.821,83.658 60,105.949 V 497 c 0,8.284 6.716,15 15,15 h 210 c 8.284,0 15,-6.716 15,-15 v -86.026 c 19.394,-21.572 30,-49.17 30,-78.4 V 134.994 C 421,110.184 400.816,90 376.007,90 Z M 391,332.574 c 0,23.353 -9.094,45.307 -25.606,61.82 C 362.58,397.206 361,401.022 361,405 v 77 H 181 c 0,0 0,-77.066 0,-77.068 -0.026,-5.861 -3.435,-11.043 -8.562,-13.484 C 140.701,375.455 121,343.477 121,307.918 l 0.001,-95.348 C 138.462,218.761 151,235.444 151,255 v 30 c 0,8.284 6.716,15 15,15 8.284,0 15,-6.716 15,-15 0,-10.51 0,-198.98 0,-210.006 C 181,66.726 187.727,60 195.994,60 204.269,60 211,66.726 211,74.994 V 225 c 0,8.284 6.716,15 15,15 8.284,0 15,-6.716 15,-15 V 44.994 C 241,36.726 247.727,30 255.994,30 264.269,30 271,36.726 271,44.994 V 225 c 0,8.284 6.716,15 15,15 8.284,0 15,-6.716 15,-15 V 74.994 C 301,66.726 307.727,60 315.994,60 324.269,60 331,66.726 331,74.994 V 225 c 0,8.284 6.716,15 15,15 8.284,0 15,-6.716 15,-15 V 134.994 C 361,126.726 367.732,120 376.007,120 384.275,120 391,126.726 391,134.994 Z"/>
         </g>
@@ -631,7 +646,7 @@ q5 35 30 61t60 33v-94zM455 568q-50 -7 -85.5 -43.5t-40.5 -86.5h-162q6 116 88.5 19
         </g>
     </svg>
     <!-- images/right-foot.svg -->
-    <svg id="svg-right-foot" enable-background="new 0 0 512 512" viewBox="0 0 512 512" version="1.1">
+    <svg id="svg-right-foot" enable-background="new 0 0 512 512" viewBox="0 0 512 512">
         <g transform="translate(512, 0) scale (-1, 1)">
             <use xlink:href="#svg-left-foot"></use>
         </g>
