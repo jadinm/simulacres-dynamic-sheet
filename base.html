@@ -462,7 +462,10 @@
     }
 
     $('.hp').each((i, hp_input) => {
-        const opts = {}
+        const opts = {formatter: value => { // Show remaining HP over maximum HP
+            const max = hp_input.getAttribute("data-slider-max")
+            return value + "/" + max
+        }}
         const orientation = hp_input.getAttribute("data-slider-orientation")
         if (orientation != null && orientation === "vertical") {
             // We need to manually change the orientation of the active selection bar because vertically,
