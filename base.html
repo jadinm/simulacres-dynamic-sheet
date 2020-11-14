@@ -15,11 +15,13 @@
             color: black
         }
 
-        .slider.slider-vertical {
+        /* Sliders styling */
+
+        .slider.slider-vertical.hp-slider {
             height: 5em;
         }
 
-        .slider.slider-horizontal {
+        .slider.slider-horizontal.hp-slider {
             width: 5em;
         }
 
@@ -332,17 +334,18 @@
         </div>
     </div>
 
-    <!-- Localized HP -->
     <div class="row container">
-        <div class="col-xl-8 col-lg-12 col-md-9 col-sm-10 col-xs-12 align-right">
+        <!-- Localized HP and protection -->
+        <div class="col-xl-5 col-lg-5 col-md-7 col-sm-12 col-xs-12 align-right">
+            <div class="row"><b>Statut</b></div>
             <div class="row mt-1">
-                <div class="offset-lg-2 offset-md-3 offset-sm-4 offset-xs-4 col-lg-2 col-md-3 col-sm-4 col-xs-4 align-middle text-center">
+                <div class="offset-4 col-4 align-middle text-center">
                     <div class="md-form form-sm m-0 align-middle input-with-pre-icon">
                         <svg height="2em" width="2em" class="input-prefix">
                             <use xlink:href="#svg-helmet"></use>
                         </svg>
                         <input type="number" id="armor-head" class="armor form-control form-control-sm text-center"
-                               min="0">
+                               min="0" value="0">
                         <label for="armor-head" hidden></label>
                     </div>
                     <div data-toggle="tooltip" data-html="true" data-placement="right" title="Touché sur 1">
@@ -352,24 +355,24 @@
                     </div>
                     <div>
                         <label for="hp-head" hidden></label>
-                        <input id="hp-head" class="hp" data-slider-id="hp-head-slider" type="text" data-slider-min="0"
-                               data-slider-max="3" data-slider-step="1" data-slider-value="3"
+                        <input id="hp-head" class="hp input-slider" data-slider-id="hp-head-slider" type="text"
+                               data-slider-min="0" data-slider-max="3" data-slider-step="1" data-slider-value="3"
                                data-slider-handle="custom"/>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-2 col-md-3 col-sm-4 col-xs-4 align-middle text-center pr-0">
+                <div class="col-4 align-middle text-center pr-0">
                     <div class="md-form form-sm m-0 align-middle input-with-pre-icon">
                         <svg height="2em" width="2em" class="input-prefix">
                             <use xlink:href="#svg-right-gauntlet"></use>
                         </svg>
                         <input type="number" id="armor-right-arm" class="armor form-control form-control-sm text-center"
-                               min="0">
+                               min="0" value="0">
                         <label for="armor-right-arm" hidden></label>
                     </div>
                     <label for="hp-right-arm" hidden></label>
-                    <input id="hp-right-arm" class="hp" data-slider-id="hp-right-arm-slider" type="text"
+                    <input id="hp-right-arm" class="hp input-slider" data-slider-id="hp-right-arm-slider" type="text"
                            data-slider-min="0" data-slider-max="3" data-slider-step="1" data-slider-value="3"
                            data-slider-handle="custom" data-slider-orientation="vertical" data-slider-reversed="true"/>
                     <svg height="5em" width="5em" data-toggle="tooltip" data-html="true" data-placement="top"
@@ -377,13 +380,13 @@
                         <use xlink:href="#svg-right-hand"></use>
                     </svg>
                 </div>
-                <div class="col-lg-2 col-md-3 col-sm-4 col-xs-4 align-middle text-center">
+                <div class="col-4 align-middle text-center">
                     <div class="md-form form-sm m-0 align-middle input-with-pre-icon">
                         <svg height="2em" width="2em" class="input-prefix">
                             <use xlink:href="#svg-chest-armor"></use>
                         </svg>
                         <input type="number" id="armor-trunk" class="armor form-control form-control-sm text-center"
-                               min="0">
+                               min="0" value="0">
                         <label for="armor-trunk" hidden></label>
                     </div>
                     <div data-toggle="tooltip" data-html="true" data-placement="top"
@@ -393,16 +396,17 @@
                         </svg>
                     </div>
                     <label for="hp-trunk" hidden></label>
-                    <input id="hp-trunk" class="hp" data-slider-id="hp-trunk-slider" type="text" data-slider-min="0"
-                           data-slider-max="3" data-slider-step="1" data-slider-value="3" data-slider-handle="custom"/>
+                    <input id="hp-trunk" class="hp input-slider" data-slider-id="hp-trunk-slider" type="text"
+                           data-slider-min="0" data-slider-max="3" data-slider-step="1" data-slider-value="3"
+                           data-slider-handle="custom"/>
                 </div>
-                <div class="col-lg-2 col-md-3 col-sm-4 col-xs-4 align-middle text-center pl-0">
+                <div class="col-4 align-middle text-center pl-0">
                     <div class="md-form form-sm m-0 align-middle input-with-pre-icon">
                         <svg height="2em" width="2em" class="input-prefix">
                             <use xlink:href="#svg-left-gauntlet"></use>
                         </svg>
                         <input type="number" id="armor-left-arm" class="armor form-control form-control-sm text-center"
-                               min="0">
+                               min="0" value="0">
                         <label for="armor-left-arm" hidden></label>
                     </div>
                     <svg height="5em" width="5em" data-toggle="tooltip" data-html="true" data-placement="top"
@@ -410,15 +414,15 @@
                         <use xlink:href="#svg-left-hand"></use>
                     </svg>
                     <label for="hp-left-arm" hidden></label>
-                    <input id="hp-left-arm" class="hp" data-slider-id="hp-left-arm-slider" type="text"
+                    <input id="hp-left-arm" class="hp input-slider" data-slider-id="hp-left-arm-slider" type="text"
                            data-slider-min="0" data-slider-max="3" data-slider-step="1" data-slider-value="3"
                            data-slider-handle="custom" data-slider-orientation="vertical" data-slider-reversed="true"/>
                 </div>
             </div>
             <div class="row mt-3">
-                <div class="offset-md-1 offset-sm-2 offset-xs-2 col-lg-2 col-md-3 col-sm-4 col-xs-4 align-middle text-center px-0">
+                <div class="offset-2 col-4 align-middle text-center px-0">
                     <label for="hp-right-leg" hidden></label>
-                    <input id="hp-right-leg" class="hp" data-slider-id="hp-right-leg-slider" type="text"
+                    <input id="hp-right-leg" class="hp input-slider" data-slider-id="hp-right-leg-slider" type="text"
                            data-slider-min="0" data-slider-max="3" data-slider-step="1" data-slider-value="3"
                            data-slider-handle="custom" data-slider-orientation="vertical" data-slider-reversed="true"/>
                     <svg height="5em" width="5em" data-toggle="tooltip" data-html="true" data-placement="top"
@@ -430,17 +434,17 @@
                             <use xlink:href="#svg-right-leg-armor"></use>
                         </svg>
                         <input type="number" id="armor-right-leg" class="armor form-control form-control-sm text-center"
-                               min="0">
+                               min="0" value="0">
                         <label for="armor-right-leg" hidden></label>
                     </div>
                 </div>
-                <div class="offset-lg-0 offset-md-1 col-2 col-lg-2 col-md-3 col-sm-4 col-xs-4 align-middle text-center px-0">
+                <div class="offset-lg-0 offset-md-1 col-4 align-middle text-center px-0">
                     <svg height="5em" width="5em" data-toggle="tooltip" data-html="true" data-placement="top"
                          title="Touché sur 6i au contact<br/>Touché sur 6 à distance">
                         <use xlink:href="#svg-left-foot"></use>
                     </svg>
                     <label for="hp-left-leg" hidden></label>
-                    <input id="hp-left-leg" class="hp" data-slider-id="hp-left-leg-slider" type="text"
+                    <input id="hp-left-leg" class="hp input-slider" data-slider-id="hp-left-leg-slider" type="text"
                            data-slider-min="0" data-slider-max="3" data-slider-step="1" data-slider-value="3"
                            data-slider-handle="custom" data-slider-orientation="vertical" data-slider-reversed="true"/>
                     <div class="md-form form-sm m-0 align-middle input-with-pre-icon">
@@ -448,7 +452,7 @@
                             <use xlink:href="#svg-left-leg-armor"></use>
                         </svg>
                         <input type="number" id="armor-left-leg" class="armor form-control form-control-sm text-center"
-                               min="0">
+                               min="0" value="0">
                         <label for="armor-left-leg" hidden></label>
                     </div>
                 </div>
@@ -471,11 +475,12 @@
     $("input").on("change", function (event) {
         event.target.setAttribute("value", event.target.value)
     })
-    $("input.hp").on("change", function (event) {
+    $("input.input-slider").on("change", function (event) {
         event.target.setAttribute("data-slider-value", event.target.value)
     })
 
     /* Update sum of means and component when one of them changes */
+
     function update_sum(event) {
         const id = event.target.id
         const value = event.target.value
