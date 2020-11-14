@@ -50,6 +50,40 @@
         .slider-selection.unease {
             background: orange;
         }
+
+        #unease-slider .slider-selection {
+            background: red;
+        }
+
+        #unease-slider .slider-handle {
+            background: red;
+        }
+
+        #breath-slider .slider-selection {
+            background: dodgerblue;
+        }
+
+        #breath-slider .slider-handle.custom::before {
+            content: '\1F4AA';
+        }
+
+        #psychic-slider .slider-selection {
+            background: pink;
+        }
+
+        #psychic-slider .slider-handle.custom::before {
+            content: '\1F9E0';
+        }
+
+        #rest-slider .slider-selection {
+            background: darkgray;
+        }
+
+        #rest-slider .slider-handle.custom::before {
+            content: '\1F6CF';
+            background-color: white;
+            border-radius: 50%;
+        }
     </style>
 
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
@@ -458,6 +492,45 @@
                 </div>
             </div>
         </div>
+
+        <!-- Protection summary, unease, breath and psychic balance -->
+        <div class="offset-1 col-5 mt-5">
+            <div class="row mb-5">
+                Malus de protection:<span id="armor-penalty">0</span>
+            </div>
+            <div class="row">
+                <label for="unease">Malaise (M)</label>
+            </div>
+            <div class="row mb-5">
+                <input id="unease" data-slider-id="unease-slider" type="text" data-slider-min="0" data-slider-max="4"
+                       data-slider-step="1" data-slider-value="0" class="input-slider"
+                       data-slider-tooltip-position="bottom"/>
+            </div>
+            <div class="row">
+                <label for="breath">Souffle (PS)</label>
+            </div>
+            <div class="row mb-5">
+                <input id="breath" data-slider-id="breath-slider" type="text" data-slider-min="0" data-slider-max="4"
+                       data-slider-step="1" data-slider-value="4" data-slider-reversed="true" class="input-slider"
+                       data-slider-handle="custom" data-slider-tooltip-position="bottom"/>
+            </div>
+            <div class="row">
+                <label for="psychic">Équilibre Psychique (EP)</label>
+            </div>
+            <div class="row">
+                <input id="psychic" data-slider-id="psychic-slider" type="text" data-slider-min="0" data-slider-max="4"
+                       data-slider-step="1" data-slider-value="4" data-slider-reversed="true" class="input-slider"
+                       data-slider-handle="custom" data-slider-tooltip-position="bottom"/>
+            </div>
+            <div class="row">
+                <label for="rest">Jours de repos</label>
+            </div>
+            <div class="row">
+                <input id="rest" data-slider-id="rest-slider" type="text" data-slider-min="0" data-slider-max="7"
+                       data-slider-step="1" data-slider-value="0" class="input-slider"
+                       data-slider-handle="custom" data-slider-tooltip-position="bottom"/>
+            </div>
+        </div>
     </div>
 
     <div class="md-form row form-row my-1">
@@ -507,7 +580,8 @@
     })
 
     /* HP sliders */
-    function update_color(event) {
+
+    function hp_update_color(event) {
         const value = parseInt(event.target.value)
         const slider = $("#" + event.target.getAttribute("data-slider-id"))
         const handle = slider.find(".slider-handle.custom:visible")
@@ -524,27 +598,68 @@
         }
     }
 
-    $('.hp').each((i, hp_input) => {
+    $('.input-slider').each((i, input) => {
         // Remove pre-existing sliders (this happens after a save of the html page)
-        $("#" + hp_input.getAttribute("data-slider-id")).remove();
-        hp_input.setAttribute("style", {})
+        $("#" + input.getAttribute("data-slider-id")).remove();
+        input.setAttribute("style", {})
         const opts = {
             formatter: value => { // Show remaining HP over maximum HP
-                const max = hp_input.getAttribute("data-slider-max")
+                const max = parseInt(input.getAttribute("data-slider-max"))
+                if (input.id === "breath" && value === 0)
+                    return "K.O."
+                if (input.id === "psychic" && value === 0)
+                    return "Fou"
                 return value + "/" + max
             }
         }
-        const orientation = hp_input.getAttribute("data-slider-orientation")
-        if (orientation != null && orientation === "vertical") {
+        if (input.id === "unease") {
+            opts["formatter"] = value => {
+                const max = parseInt(input.getAttribute("data-slider-max"))
+                const initial_malus = -1 + max - 4
+                if (value === 0)
+                    return "Pas de malus"
+                if (value === max)
+                    return "Coma"
+                return "Malus de " + (initial_malus - value)
+            }
+        }
+
+        const orientation = input.getAttribute("data-slider-reversed")
+        if (orientation != null && orientation === "true") {
             // We need to manually change the orientation of the active selection bar because vertically,
             // it would not make sense if the green bar is from top to bottom
             opts["selection"] = "after"
         }
-        $(hp_input).slider(opts).on("change", update_color)
-        update_color({target: hp_input})
+        const slider = $(input).slider(opts)
+        if (slider.hasClass("hp")) {
+            slider.on("change", hp_update_color)
+            $("#" + input.getAttribute("data-slider-id")).addClass("hp-slider")
+            hp_update_color({target: input})
+        }
     })
 
-    /* Update HP max values depending on the resistance */
+    /* Update armor penalty */
+    $(".armor").on("change", event => {
+        const armors = $.map($(".armor"), element => parseInt(element.value))
+        let armor_sum = 0;
+        for (let i = 0; i < armors.length; i++) {
+            armor_sum += armors[i] << 0;
+        }
+
+        let penalty = 0
+        if (armor_sum >= 12 && armor_sum <= 23) {
+            console.log(armor_sum >= 12 && armor_sum <= 23)
+            penalty = 1
+        } else if (armor_sum >= 24 && armor_sum <= 30) {
+            penalty = 2
+        } else if (armor_sum >= 31) {
+            penalty = 3
+        }
+        $("#armor-penalty").text(penalty)
+    })
+
+    /* Update HP and unease max values depending on the resistance */
+
     function set_slider_max(slider, value) {
         slider.slider("setAttribute", "max", value)
         slider[0].setAttribute("data-slider-max", value.toString())
@@ -556,19 +671,44 @@
         const trunk = $("#hp-trunk")
         const right_leg = $("#hp-right-leg")
         const left_leg = $("#hp-left-leg")
+        const unease = $("#unease")
         if (value <= 2) { // Weak constitution
             set_slider_max(trunk, 3)
             set_slider_max(right_leg, 3)
             set_slider_max(left_leg, 3)
+            set_slider_max(unease, 4)
         } else if (value === 3) { // Normal constitution
             set_slider_max(trunk, 4)
             set_slider_max(right_leg, 3)
             set_slider_max(left_leg, 3)
+            set_slider_max(unease, 5)
         } else { // Strong constitution
             set_slider_max(trunk, 5)
             set_slider_max(right_leg, 4)
             set_slider_max(left_leg, 4)
+            set_slider_max(unease, 6)
         }
+    })
+
+    /* Update PS and EP max values depending on respectively heart and mind values */
+
+    function update_body_energy(component, body_energy) {
+        const value = parseInt(component.value)
+        const current_max = parseInt(body_energy[0].getAttribute("data-slider-max"))
+        if (value >= 5 && !$(component).hasClass("bonus-applied")) { // Higher value to update
+            set_slider_max(body_energy, current_max + 1)
+            $(component).addClass("bonus-applied")
+        } else if (value < 5 && $(component).hasClass("bonus-applied")) { // Lower value to update
+            set_slider_max(body_energy, current_max - 1)
+            $(component).removeClass("bonus-applied")
+        }
+    }
+
+    $("#mind").on("change", event => {
+        update_body_energy(event.target, $("#psychic"))
+    })
+    $("#heart").on("change", event => {
+        update_body_energy(event.target, $("#breath"))
     })
 
     /* Save Character page */
