@@ -460,7 +460,7 @@
 
     /* Save Character page */
     $("#save-page").on("click", function (event) {
-        const userInput = (new XMLSerializer).serializeToString(document)
+        const userInput = "<!DOCTYPE html><html lang=\"fr\">" + $("html").html() + "</html>"
         const blob = new Blob([userInput], {type: "text/html;charset=utf-8"})
 
         // Use the name of the character as the name of the file
