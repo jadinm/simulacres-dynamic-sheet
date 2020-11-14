@@ -104,13 +104,21 @@
 <div class="container-fluid main-container">
     <!-- Basic information -->
     <div class="row form-row my-1 mt-2 md-form">
-        <div class="col-sm-7">
+        <div class="col-sm-4">
             <input class="form-control" id="character-name" name="character-name" type="text" value="">
             <label for="character-name">Nom du personnage</label>
         </div>
-        <div class="col-sm-5">
+        <div class="col-sm-4">
             <input class="form-control" id="race" name="race" type="text" value="">
             <label for="race">Race/Peuple</label>
+        </div>
+        <div class="col-sm-2">
+            <input class="form-control" id="adventure-points" name="character-name" type="number" value="0" min="0">
+            <label for="adventure-points">PA</label>
+        </div>
+        <div class="col-sm-2">
+            <input class="form-control" id="luck-points" name="character-name" type="number" value="0" min="0" max="3">
+            <label for="luck-points">PC</label>
         </div>
     </div>
     <div class="row form-row my-1 md-form">
