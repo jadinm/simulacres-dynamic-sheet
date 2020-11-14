@@ -581,11 +581,26 @@
 
     /* HP sliders */
 
-    function hp_update_color(event) {
+    function set_slider_min(slider, new_min) {
+        // Update current value by the difference between old min and new min
+        const old_min = parseInt(slider.slider("getAttribute", "min"))
+        const old_value = parseInt(slider[0].value)
+        const new_value = old_value + new_min - old_min
+        slider[0].value = new_value
+        slider.slider("setAttribute", "value", new_value)
+
+        // Update the minimum
+        slider.slider("setAttribute", "min", new_min)
+        slider[0].setAttribute("data-slider-min", new_min.toString())
+        slider.slider("refresh")
+    }
+
+    function hp_update(event) {
         const value = parseInt(event.target.value)
         const slider = $("#" + event.target.getAttribute("data-slider-id"))
         const handle = slider.find(".slider-handle.custom:visible")
         const selection = slider.find(".slider-selection")
+        // Update color
         if (value === 0) {
             handle.removeClass('full').removeClass('unease').addClass('dead')
             selection.removeClass('full').removeClass('unease')
@@ -596,6 +611,13 @@
             handle.addClass('full').removeClass('unease').removeClass('dead')
             selection.addClass('full').removeClass('unease')
         }
+        // Recompute minimum unease
+        let unease_sum = 0
+        const hp_sliders = $(".hp.input-slider")
+        for (let i = 0; i < hp_sliders.length; i++)
+            if (hp_sliders[i].value <= 1)
+                unease_sum += 1
+        set_slider_min($("#unease"), unease_sum)
     }
 
     $('.input-slider').each((i, input) => {
@@ -632,10 +654,13 @@
         }
         const slider = $(input).slider(opts)
         if (slider.hasClass("hp")) {
-            slider.on("change", hp_update_color)
+            slider.on("change", hp_update)
             $("#" + input.getAttribute("data-slider-id")).addClass("hp-slider")
-            hp_update_color({target: input})
         }
+    })
+
+    $(".hp").each((i, input) => {
+        hp_update({target: input})
     })
 
     /* Update armor penalty */
