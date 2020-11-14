@@ -12,7 +12,11 @@
     <style>
         /* Fix mdbootstrap that activates the icon when value attribute is set at loading */
         .md-form .input-prefix.active {
-            color: black
+            color: black;
+        }
+
+        .clickable {
+            cursor: pointer;
         }
 
         /* Sliders styling */
@@ -97,7 +101,7 @@
 
 <body>
 
-<div class="container-fluid">
+<div class="container-fluid main-container">
     <!-- Basic information -->
     <div class="row form-row my-1 mt-2 md-form">
         <div class="col-sm-7">
@@ -368,9 +372,9 @@
         </div>
     </div>
 
-    <div class="row container">
+    <div class="row container offset-xl-3 offset-lg-2 offset-md-1">
         <!-- Localized HP and protection -->
-        <div class="col-xl-5 col-lg-5 col-md-7 col-sm-12 col-xs-12 align-right">
+        <div class="col-xl-5 col-lg-5 col-md-7 col-sm-12 col-xs-12">
             <div class="row"><b>Statut</b></div>
             <div class="row mt-1">
                 <div class="offset-4 col-4 align-middle text-center">
@@ -494,7 +498,7 @@
         </div>
 
         <!-- Protection summary, unease, breath and psychic balance -->
-        <div class="offset-1 col-5 mt-5">
+        <div class="offset-1 col-lg-3 col-md-4 mt-5 align-middle">
             <div class="row mb-5">
                 Malus de protection:<span id="armor-penalty">0</span>
             </div>
@@ -506,16 +510,16 @@
                        data-slider-step="1" data-slider-value="0" class="input-slider"
                        data-slider-tooltip-position="bottom"/>
             </div>
-            <div class="row">
-                <label for="breath">Souffle (PS)</label>
+            <div class="row clickable btn-link" data-toggle="modal" data-target="#breath-max-update">
+                <label class="clickable" for="breath">Souffle (PS)</label>
             </div>
             <div class="row mb-5">
                 <input id="breath" data-slider-id="breath-slider" type="text" data-slider-min="0" data-slider-max="4"
                        data-slider-step="1" data-slider-value="4" data-slider-reversed="true" class="input-slider"
                        data-slider-handle="custom" data-slider-tooltip-position="bottom"/>
             </div>
-            <div class="row">
-                <label for="psychic">Équilibre Psychique (EP)</label>
+            <div class="row clickable btn-link" data-toggle="modal" data-target="#psychic-max-update">
+                <label class="clickable" for="psychic">Équilibre Psychique (EP)</label>
             </div>
             <div class="row">
                 <input id="psychic" data-slider-id="psychic-slider" type="text" data-slider-min="0" data-slider-max="4"
@@ -539,6 +543,50 @@
         </button>
     </div>
 </div>
+
+<!-- Modals -->
+
+<!-- Increase Breath -->
+<div class="container">
+    <div class="modal fade bd-modal-lg" id="breath-max-update" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-body align-middle">
+                    <div class="row">
+                        <button id="increment-breath" class="btn btn-success col-6 mx-0 px-0">
+                            Augmenter de 1 le maximum des PS
+                        </button>
+                        <button id="decrement-breath" class="btn btn-danger col-6 mx-0 px-0">
+                            Diminuer de 1 le maximum des PS
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Increase Psychic Balance -->
+<div class="container">
+    <div class="modal fade bd-modal-lg" id="psychic-max-update" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-body align-middle">
+                    <div class="row">
+                        <button id="increment-psychic" class="btn btn-success col-6 mx-0 px-0">
+                            Augmenter de 1 le maximum des EP
+                        </button>
+                        <button id="decrement-psychic" class="btn btn-danger col-6 mx-0 px-0">
+                            Diminuer de 1 le maximum des EP
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Javascript -->
 
 <script>
     const components = ["body", "instincts", "heart", "mind"]
@@ -734,6 +782,32 @@
     })
     $("#heart").on("change", event => {
         update_body_energy(event.target, $("#breath"))
+    })
+
+    /* Update PS and EP if users click on the button */
+    $("#increment-breath").on("click", _ => {
+        const breath = $("#breath")
+        const current_max = parseInt(breath[0].getAttribute("data-slider-max"))
+        if (current_max < 8)
+            set_slider_max(breath, current_max + 1)
+    })
+    $("#decrement-breath").on("click", _ => {
+        const breath = $("#breath")
+        const current_max = parseInt(breath[0].getAttribute("data-slider-max"))
+        if (current_max > 1)
+            set_slider_max(breath, current_max - 1)
+    })
+    $("#increment-psychic").on("click", _ => {
+        const psychic = $("#psychic")
+        const current_max = parseInt(psychic[0].getAttribute("data-slider-max"))
+        if (current_max < 8)
+            set_slider_max(psychic, current_max + 1)
+    })
+    $("#decrement-psychic").on("click", _ => {
+        const psychic = $("#psychic")
+        const current_max = parseInt(psychic[0].getAttribute("data-slider-max"))
+        if (current_max > 1)
+            set_slider_max(psychic, current_max - 1)
     })
 
     /* Save Character page */
