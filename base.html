@@ -416,6 +416,9 @@
     $("input").on("change", function (event) {
         event.target.setAttribute("value", event.target.value)
     })
+    $("input.hp").on("change", function (event) {
+        event.target.setAttribute("data-slider-value", event.target.value)
+    })
 
     /* Update sum of means and component when one of them changes */
     function update_sum(event) {
@@ -462,10 +465,15 @@
     }
 
     $('.hp').each((i, hp_input) => {
-        const opts = {formatter: value => { // Show remaining HP over maximum HP
-            const max = hp_input.getAttribute("data-slider-max")
-            return value + "/" + max
-        }}
+        // Remove pre-existing sliders (this happens after a save of the html page)
+        $("#" + hp_input.getAttribute("data-slider-id")).remove();
+        hp_input.setAttribute("style", {})
+        const opts = {
+            formatter: value => { // Show remaining HP over maximum HP
+                const max = hp_input.getAttribute("data-slider-max")
+                return value + "/" + max
+            }
+        }
         const orientation = hp_input.getAttribute("data-slider-orientation")
         if (orientation != null && orientation === "vertical") {
             // We need to manually change the orientation of the active selection bar because vertically,
