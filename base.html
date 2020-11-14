@@ -484,6 +484,33 @@
         update_color({target: hp_input})
     })
 
+    /* Update HP max values depending on the resistance */
+    function set_slider_max(slider, value) {
+        slider.slider("setAttribute", "max", value)
+        slider[0].setAttribute("data-slider-max", value.toString())
+        slider.slider("refresh", {useCurrentValue: true})
+    }
+
+    $("#resistance").on("change", event => {
+        const value = parseInt(event.target.value)
+        const trunk = $("#hp-trunk")
+        const right_leg = $("#hp-right-leg")
+        const left_leg = $("#hp-left-leg")
+        if (value <= 2) { // Weak constitution
+            set_slider_max(trunk, 3)
+            set_slider_max(right_leg, 3)
+            set_slider_max(left_leg, 3)
+        } else if (value === 3) { // Normal constitution
+            set_slider_max(trunk, 4)
+            set_slider_max(right_leg, 3)
+            set_slider_max(left_leg, 3)
+        } else { // Strong constitution
+            set_slider_max(trunk, 5)
+            set_slider_max(right_leg, 4)
+            set_slider_max(left_leg, 4)
+        }
+    })
+
     /* Save Character page */
     $("#save-page").on("click", function (_) {
         const userInput = "<!DOCTYPE html><html lang=\"fr\">" + $("html").html() + "</html>"
