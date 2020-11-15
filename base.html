@@ -516,7 +516,7 @@
                 Malus de protection:<span id="armor-penalty">0</span>
             </div>
             <div class="row">
-                <label for="unease">Malaise (M)</label>
+                <label for="unease">Malaise (M):<span id="unease-text">pas de malus</span></label>
             </div>
             <div class="row mb-5">
                 <input id="unease" data-slider-id="unease-slider" type="text" data-slider-min="0" data-slider-max="4"
@@ -1669,11 +1669,15 @@
             opts["formatter"] = value => {
                 const max = parseInt(input.getAttribute("data-slider-max"))
                 const initial_malus = -1 + max - 4
-                if (value === 0)
-                    return "Pas de malus"
-                if (value === max)
-                    return "Coma"
-                return "Malus de " + (initial_malus - value)
+                let text = ""
+                if (value === 0 || initial_malus - value === 0)
+                    text = "\u2205"
+                else if (value === max)
+                    text = "coma"
+                else
+                    text = "malus de " + (initial_malus - value)
+                $("#unease-text").text(text)
+                return text
             }
         }
 
