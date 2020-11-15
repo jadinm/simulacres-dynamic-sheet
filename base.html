@@ -1761,7 +1761,7 @@
                     </tr>
                     </thead>
                     <tbody id="spell-table">
-                    <tr>
+                    <tr id="spell-0">
                         <td class="md-form my-0 py-0 align-middle">
                             <label for="spell-0-name"></label>
                             <input id="spell-0-name" class="spell-name form-control" type="text" value="">
@@ -1943,6 +1943,7 @@
                     </tbody>
                 </table>
             </div>
+            <button id="add-spell" class="btn btn-success">+</button>
         </div>
     </div>
 
@@ -2082,12 +2083,15 @@
         set_slider_min($("#unease"), unease_sum)
     }
 
-    $('.input-slider').each((i, input) => {
+    function activate_slider(input) {
         // Remove pre-existing sliders (this happens after a save of the html page)
-        $("#" + input.getAttribute("data-slider-id")).remove();
+        const elem = "#" + input.getAttribute("data-slider-id")
+        const input_id = input.id
+        $(elem).remove();
         input.setAttribute("style", {})
         const opts = {
             formatter: value => { // Show remaining HP over maximum HP
+                const input = $("#" + input_id)[0]
                 const max = parseInt(input.getAttribute("data-slider-max"))
                 if (input.id === "breath" && value === 0)
                     return "K.O."
@@ -2142,6 +2146,10 @@
             slider.on("change", hp_update)
             $("#" + input.getAttribute("data-slider-id")).addClass("hp-slider")
         }
+    }
+
+    $('.input-slider').each((i, input) => {
+        activate_slider(input)
     })
 
     $(".hp").each((i, input) => {
@@ -2273,15 +2281,16 @@
         value_div.text(sum)
     }
 
-    $(".spell-formula-elem").on("click", event => {
+    function formula_changed(event) {
         // Trigger update of the spell difficulty
         const target_id = event.target.id
         const value_array = target_id.split("-")
         value_array.pop()
         const value_id = value_array.join("-") + "-value"
         update_spell_value($("#" + value_id))
-    })
-    $(".spell-difficulty-input").on("change", event => {
+    }
+
+    function casting_count_changed(event) {
         // Trigger update of the spell difficulty
         const target_id = event.target.id
         const value_array = target_id.split("-")
@@ -2289,12 +2298,46 @@
         value_array.pop()
         const value_id = value_array.join("-") + "-value"
         update_spell_value($("#" + value_id))
-    })
+    }
+
+    $(".spell-formula-elem").on("click", formula_changed)
+    $(".spell-difficulty-input").on("change", casting_count_changed)
     $(".realm").on("change", _ => {
         // Update all of the spell values
         $(".spell-value").each((i, elem) => {
             update_spell_value($(elem))
         })
+    })
+
+    /* Add new spell row */
+    $("#add-spell").on("click", _ => {
+        const table = $("#spell-table")
+
+        // We have to reset listeners because of the slider
+        const new_spell = $("#spell-0").clone(true, false)
+        new_spell.find(".spell-formula-elem").on("click", formula_changed)
+        new_spell.find(".spell-difficulty-input").on("change", casting_count_changed)
+
+        // Increment the spell id
+        const last_tr_id = table.children().last()[0].id
+        const new_id = parseInt(last_tr_id.split("-").pop()) + 1
+
+        // Find all elements that have id containing old value
+        new_spell.find("*[id*=spell-0-]").each((i, elem) => {
+            elem.id = elem.id.replace("-0-", "-" + new_id + "-")
+        })
+        new_spell.find("*[name*=spell-0-]").each((i, elem) => {
+            elem.setAttribute("name", elem.getAttribute("name").replace("-0-", "-" + new_id + "-"))
+        })
+        new_spell.find("*[for*=spell-0-]").each((i, elem) => {
+            elem.setAttribute("for", elem.getAttribute("for").replace("-0-", "-" + new_id + "-"))
+        })
+        new_spell.find("*[data-slider-id*=spell-0-]").each((i, elem) => {
+            elem.setAttribute("data-slider-id", elem.getAttribute("data-slider-id").replace("-0-", "-" + new_id + "-"))
+        })
+        new_spell[0].id = new_spell[0].id.replace("-0", "-" + new_id)
+        table.append(new_spell)
+        activate_slider(new_spell.find("#spell-" + new_id + "-difficulty-input")[0])
     })
 
     /* Save Character page */
