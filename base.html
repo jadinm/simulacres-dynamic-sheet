@@ -89,9 +89,34 @@
             border-radius: 50%;
         }
 
+        .spell-difficulty .slider-selection {
+            background: black;
+        }
+
+        .spell-difficulty .slider-handle {
+            background: black;
+        }
+
         /* Force the talent table to use a scrollbar */
         .talent {
             min-width: 300px;
+        }
+
+        /* Spell table */
+        .spell-name {
+            min-width: 300px;
+        }
+
+        .spell-list {
+            min-width: 100px;
+        }
+
+        .spell-effect {
+            min-width: 300px;
+        }
+
+        .spell-formula {
+            min-width: 250px;
         }
     </style>
 
@@ -128,7 +153,7 @@
     </div>
     <div class="row form-row my-1 md-form">
         <div class="col-sm-2">
-            <label for="age"> Âge</label>
+            <label for="age">Âge</label>
             <input class="form-control" id="age" name="age" type="number" value="" min="0">
         </div>
 
@@ -328,9 +353,9 @@
                     <svg height="3em" width="2em" class="input-prefix">
                         <use xlink:href="#svg-mechanical"></use>
                     </svg>
-                    <label for="mechanic" hidden></label>
-                    <input class="form-control realm text-center" id="mechanic" name="mechanic" type="number" value="0"
-                           min="0" max="3">
+                    <label for="mechanical" hidden></label>
+                    <input class="form-control realm text-center" id="mechanical" name="mechanic" type="number"
+                           value="0" min="0" max="3">
                 </div>
             </div>
             <div class="row m-0">
@@ -398,176 +423,190 @@
                 Talents
             </a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#magic-tab" role="tab" aria-controls="profile"
+               aria-selected="false">
+                Magie/Ki
+            </a>
+        </li>
     </ul>
 
     <div class="tab-content">
         <div id="status-tab" class="tab-pane fade show active row">
             <div class="row container offset-xl-3 offset-lg-2 offset-md-1">
-            <!-- Localized HP and protection -->
-            <div class="col-lg-5 col-md-7 col-sm-12 col-xs-12">
-                <div class="row mt-1">
-                    <div class="offset-4 col-4 align-middle text-center">
-                        <div class="md-form form-sm m-0 align-middle input-with-pre-icon">
-                            <svg height="2em" width="2em" class="input-prefix">
-                                <use xlink:href="#svg-helmet"></use>
-                            </svg>
-                            <input type="number" id="armor-head" class="armor form-control form-control-sm text-center"
-                                   min="0" value="0">
-                            <label for="armor-head" hidden></label>
+                <!-- Localized HP and protection -->
+                <div class="col-lg-5 col-md-7 col-sm-12 col-xs-12">
+                    <div class="row mt-1">
+                        <div class="offset-4 col-4 align-middle text-center">
+                            <div class="md-form form-sm m-0 align-middle input-with-pre-icon">
+                                <svg height="2em" width="2em" class="input-prefix">
+                                    <use xlink:href="#svg-helmet"></use>
+                                </svg>
+                                <input type="number" id="armor-head"
+                                       class="armor form-control form-control-sm text-center"
+                                       min="0" value="0">
+                                <label for="armor-head" hidden></label>
+                            </div>
+                            <div data-toggle="tooltip" data-html="true" data-placement="right" title="Touché sur 1">
+                                <svg height="5em" width="5em">
+                                    <use xlink:href="#svg-head"></use>
+                                </svg>
+                            </div>
+                            <div>
+                                <label for="hp-head" hidden></label>
+                                <input id="hp-head" class="hp input-slider" data-slider-id="hp-head-slider" type="text"
+                                       data-slider-min="0" data-slider-max="3" data-slider-step="1"
+                                       data-slider-value="3"
+                                       data-slider-handle="custom"/>
+                            </div>
                         </div>
-                        <div data-toggle="tooltip" data-html="true" data-placement="right" title="Touché sur 1">
-                            <svg height="5em" width="5em">
-                                <use xlink:href="#svg-head"></use>
+                    </div>
+                    <div class="row">
+                        <div class="col-4 align-middle text-center pr-0">
+                            <div class="md-form form-sm m-0 align-middle input-with-pre-icon">
+                                <svg height="2em" width="2em" class="input-prefix">
+                                    <use xlink:href="#svg-right-gauntlet"></use>
+                                </svg>
+                                <input type="number" id="armor-right-arm"
+                                       class="armor form-control form-control-sm text-center" min="0" value="0">
+                                <label for="armor-right-arm" hidden></label>
+                            </div>
+                            <label for="hp-right-arm" hidden></label>
+                            <input id="hp-right-arm" class="hp input-slider" data-slider-id="hp-right-arm-slider"
+                                   type="text" data-slider-min="0" data-slider-max="3" data-slider-step="1"
+                                   data-slider-value="3" data-slider-handle="custom" data-slider-orientation="vertical"
+                                   data-slider-reversed="true"/>
+                            <svg height="5em" width="5em" data-toggle="tooltip" data-html="true" data-placement="top"
+                                 title="Touché sur 4 au contact<br/>Touché sur 3 à distance">
+                                <use xlink:href="#svg-right-hand"></use>
                             </svg>
                         </div>
-                        <div>
-                            <label for="hp-head" hidden></label>
-                            <input id="hp-head" class="hp input-slider" data-slider-id="hp-head-slider" type="text"
+                        <div class="col-4 align-middle text-center">
+                            <div class="md-form form-sm m-0 align-middle input-with-pre-icon">
+                                <svg height="2em" width="2em" class="input-prefix">
+                                    <use xlink:href="#svg-chest-armor"></use>
+                                </svg>
+                                <input type="number" id="armor-trunk"
+                                       class="armor form-control form-control-sm text-center"
+                                       min="0" value="0">
+                                <label for="armor-trunk" hidden></label>
+                            </div>
+                            <div data-toggle="tooltip" data-html="true" data-placement="top"
+                                 title="Touché sur 2 ou 3 au contact<br/>Touché sur 2 à distance">
+                                <svg height="5em" width="5em">
+                                    <use xlink:href="#svg-chest"></use>
+                                </svg>
+                            </div>
+                            <label for="hp-trunk" hidden></label>
+                            <input id="hp-trunk" class="hp input-slider" data-slider-id="hp-trunk-slider" type="text"
                                    data-slider-min="0" data-slider-max="3" data-slider-step="1" data-slider-value="3"
                                    data-slider-handle="custom"/>
                         </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-4 align-middle text-center pr-0">
-                        <div class="md-form form-sm m-0 align-middle input-with-pre-icon">
-                            <svg height="2em" width="2em" class="input-prefix">
-                                <use xlink:href="#svg-right-gauntlet"></use>
+                        <div class="col-4 align-middle text-center pl-0">
+                            <div class="md-form form-sm m-0 align-middle input-with-pre-icon">
+                                <svg height="2em" width="2em" class="input-prefix">
+                                    <use xlink:href="#svg-left-gauntlet"></use>
+                                </svg>
+                                <input type="number" id="armor-left-arm"
+                                       class="armor form-control form-control-sm text-center" min="0" value="0">
+                                <label for="armor-left-arm" hidden></label>
+                            </div>
+                            <svg height="5em" width="5em" data-toggle="tooltip" data-html="true" data-placement="top"
+                                 title="Touché sur 5 au contact<br/>Touché sur 4 à distance">
+                                <use xlink:href="#svg-left-hand"></use>
                             </svg>
-                            <input type="number" id="armor-right-arm"
-                                   class="armor form-control form-control-sm text-center" min="0" value="0">
-                            <label for="armor-right-arm" hidden></label>
-                        </div>
-                        <label for="hp-right-arm" hidden></label>
-                        <input id="hp-right-arm" class="hp input-slider" data-slider-id="hp-right-arm-slider"
-                               type="text" data-slider-min="0" data-slider-max="3" data-slider-step="1"
-                               data-slider-value="3" data-slider-handle="custom" data-slider-orientation="vertical"
-                               data-slider-reversed="true"/>
-                        <svg height="5em" width="5em" data-toggle="tooltip" data-html="true" data-placement="top"
-                             title="Touché sur 4 au contact<br/>Touché sur 3 à distance">
-                            <use xlink:href="#svg-right-hand"></use>
-                        </svg>
-                    </div>
-                    <div class="col-4 align-middle text-center">
-                        <div class="md-form form-sm m-0 align-middle input-with-pre-icon">
-                            <svg height="2em" width="2em" class="input-prefix">
-                                <use xlink:href="#svg-chest-armor"></use>
-                            </svg>
-                            <input type="number" id="armor-trunk" class="armor form-control form-control-sm text-center"
-                                   min="0" value="0">
-                            <label for="armor-trunk" hidden></label>
-                        </div>
-                        <div data-toggle="tooltip" data-html="true" data-placement="top"
-                             title="Touché sur 2 ou 3 au contact<br/>Touché sur 2 à distance">
-                            <svg height="5em" width="5em">
-                                <use xlink:href="#svg-chest"></use>
-                            </svg>
-                        </div>
-                        <label for="hp-trunk" hidden></label>
-                        <input id="hp-trunk" class="hp input-slider" data-slider-id="hp-trunk-slider" type="text"
-                               data-slider-min="0" data-slider-max="3" data-slider-step="1" data-slider-value="3"
-                               data-slider-handle="custom"/>
-                    </div>
-                    <div class="col-4 align-middle text-center pl-0">
-                        <div class="md-form form-sm m-0 align-middle input-with-pre-icon">
-                            <svg height="2em" width="2em" class="input-prefix">
-                                <use xlink:href="#svg-left-gauntlet"></use>
-                            </svg>
-                            <input type="number" id="armor-left-arm"
-                                   class="armor form-control form-control-sm text-center" min="0" value="0">
-                            <label for="armor-left-arm" hidden></label>
-                        </div>
-                        <svg height="5em" width="5em" data-toggle="tooltip" data-html="true" data-placement="top"
-                             title="Touché sur 5 au contact<br/>Touché sur 4 à distance">
-                            <use xlink:href="#svg-left-hand"></use>
-                        </svg>
-                        <label for="hp-left-arm" hidden></label>
-                        <input id="hp-left-arm" class="hp input-slider" data-slider-id="hp-left-arm-slider" type="text"
-                               data-slider-min="0" data-slider-max="3" data-slider-step="1" data-slider-value="3"
-                               data-slider-handle="custom" data-slider-orientation="vertical"
-                               data-slider-reversed="true"/>
-                    </div>
-                </div>
-                <div class="row mt-3">
-                    <div class="offset-2 col-4 align-middle text-center px-0">
-                        <label for="hp-right-leg" hidden></label>
-                        <input id="hp-right-leg" class="hp input-slider" data-slider-id="hp-right-leg-slider"
-                               type="text" data-slider-min="0" data-slider-max="3" data-slider-step="1"
-                               data-slider-value="3" data-slider-handle="custom" data-slider-orientation="vertical"
-                               data-slider-reversed="true"/>
-                        <svg height="5em" width="5em" data-toggle="tooltip" data-html="true" data-placement="top"
-                             title="Touché sur 6p au contact<br/>Touché sur 5 à distance">
-                            <use xlink:href="#svg-right-foot"></use>
-                        </svg>
-                        <div class="md-form form-sm m-0 align-middle input-with-pre-icon">
-                            <svg height="2em" width="2em" class="input-prefix">
-                                <use xlink:href="#svg-right-leg-armor"></use>
-                            </svg>
-                            <input type="number" id="armor-right-leg"
-                                   class="armor form-control form-control-sm text-center" min="0" value="0">
-                            <label for="armor-right-leg" hidden></label>
+                            <label for="hp-left-arm" hidden></label>
+                            <input id="hp-left-arm" class="hp input-slider" data-slider-id="hp-left-arm-slider"
+                                   type="text"
+                                   data-slider-min="0" data-slider-max="3" data-slider-step="1" data-slider-value="3"
+                                   data-slider-handle="custom" data-slider-orientation="vertical"
+                                   data-slider-reversed="true"/>
                         </div>
                     </div>
-                    <div class="offset-lg-0 offset-md-1 col-4 align-middle text-center px-0">
-                        <svg height="5em" width="5em" data-toggle="tooltip" data-html="true" data-placement="top"
-                             title="Touché sur 6i au contact<br/>Touché sur 6 à distance">
-                            <use xlink:href="#svg-left-foot"></use>
-                        </svg>
-                        <label for="hp-left-leg" hidden></label>
-                        <input id="hp-left-leg" class="hp input-slider" data-slider-id="hp-left-leg-slider" type="text"
-                               data-slider-min="0" data-slider-max="3" data-slider-step="1" data-slider-value="3"
-                               data-slider-handle="custom" data-slider-orientation="vertical"
-                               data-slider-reversed="true"/>
-                        <div class="md-form form-sm m-0 align-middle input-with-pre-icon">
-                            <svg height="2em" width="2em" class="input-prefix">
-                                <use xlink:href="#svg-left-leg-armor"></use>
+                    <div class="row mt-3">
+                        <div class="offset-2 col-4 align-middle text-center px-0">
+                            <label for="hp-right-leg" hidden></label>
+                            <input id="hp-right-leg" class="hp input-slider" data-slider-id="hp-right-leg-slider"
+                                   type="text" data-slider-min="0" data-slider-max="3" data-slider-step="1"
+                                   data-slider-value="3" data-slider-handle="custom" data-slider-orientation="vertical"
+                                   data-slider-reversed="true"/>
+                            <svg height="5em" width="5em" data-toggle="tooltip" data-html="true" data-placement="top"
+                                 title="Touché sur 6p au contact<br/>Touché sur 5 à distance">
+                                <use xlink:href="#svg-right-foot"></use>
                             </svg>
-                            <input type="number" id="armor-left-leg"
-                                   class="armor form-control form-control-sm text-center" min="0" value="0">
-                            <label for="armor-left-leg" hidden></label>
+                            <div class="md-form form-sm m-0 align-middle input-with-pre-icon">
+                                <svg height="2em" width="2em" class="input-prefix">
+                                    <use xlink:href="#svg-right-leg-armor"></use>
+                                </svg>
+                                <input type="number" id="armor-right-leg"
+                                       class="armor form-control form-control-sm text-center" min="0" value="0">
+                                <label for="armor-right-leg" hidden></label>
+                            </div>
+                        </div>
+                        <div class="offset-lg-0 offset-md-1 col-4 align-middle text-center px-0">
+                            <svg height="5em" width="5em" data-toggle="tooltip" data-html="true" data-placement="top"
+                                 title="Touché sur 6i au contact<br/>Touché sur 6 à distance">
+                                <use xlink:href="#svg-left-foot"></use>
+                            </svg>
+                            <label for="hp-left-leg" hidden></label>
+                            <input id="hp-left-leg" class="hp input-slider" data-slider-id="hp-left-leg-slider"
+                                   type="text"
+                                   data-slider-min="0" data-slider-max="3" data-slider-step="1" data-slider-value="3"
+                                   data-slider-handle="custom" data-slider-orientation="vertical"
+                                   data-slider-reversed="true"/>
+                            <div class="md-form form-sm m-0 align-middle input-with-pre-icon">
+                                <svg height="2em" width="2em" class="input-prefix">
+                                    <use xlink:href="#svg-left-leg-armor"></use>
+                                </svg>
+                                <input type="number" id="armor-left-leg"
+                                       class="armor form-control form-control-sm text-center" min="0" value="0">
+                                <label for="armor-left-leg" hidden></label>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Protection summary, unease, breath and psychic balance -->
-            <div class="offset-1 col-lg-3 col-md-4 mt-5 align-middle">
-                <div class="row mb-5">
-                    Malus de protection:<span id="armor-penalty">0</span>
+                <!-- Protection summary, unease, breath and psychic balance -->
+                <div class="offset-1 col-lg-3 col-md-4 mt-5 align-middle">
+                    <div class="row mb-5">
+                        Malus de protection:<span id="armor-penalty">0</span>
+                    </div>
+                    <div class="row">
+                        <label for="unease">Malaise (M):<span id="unease-text">pas de malus</span></label>
+                    </div>
+                    <div class="row mb-5">
+                        <input id="unease" data-slider-id="unease-slider" type="text" data-slider-min="0"
+                               data-slider-max="4" data-slider-step="1" data-slider-value="0" class="input-slider"
+                               data-slider-tooltip-position="bottom"/>
+                    </div>
+                    <div class="row clickable btn-link" data-toggle="modal" data-target="#breath-max-update">
+                        <label class="clickable" for="breath">Souffle (PS)</label>
+                    </div>
+                    <div class="row mb-5">
+                        <input id="breath" data-slider-id="breath-slider" type="text" data-slider-min="0"
+                               data-slider-max="4" data-slider-step="1" data-slider-value="4"
+                               data-slider-reversed="true"
+                               class="input-slider" data-slider-handle="custom" data-slider-tooltip-position="bottom"/>
+                    </div>
+                    <div class="row clickable btn-link" data-toggle="modal" data-target="#psychic-max-update">
+                        <label class="clickable" for="psychic">Équilibre Psychique (EP)</label>
+                    </div>
+                    <div class="row">
+                        <input id="psychic" data-slider-id="psychic-slider" type="text" data-slider-min="0"
+                               data-slider-max="4" data-slider-step="1" data-slider-value="4"
+                               data-slider-reversed="true"
+                               class="input-slider" data-slider-handle="custom" data-slider-tooltip-position="bottom"/>
+                    </div>
+                    <div class="row">
+                        <label for="rest">Jours de repos</label>
+                    </div>
+                    <div class="row">
+                        <input id="rest" data-slider-id="rest-slider" type="text" data-slider-min="0"
+                               data-slider-max="7"
+                               data-slider-step="1" data-slider-value="0" class="input-slider"
+                               data-slider-handle="custom" data-slider-tooltip-position="bottom"/>
+                    </div>
                 </div>
-                <div class="row">
-                    <label for="unease">Malaise (M):<span id="unease-text">pas de malus</span></label>
-                </div>
-                <div class="row mb-5">
-                    <input id="unease" data-slider-id="unease-slider" type="text" data-slider-min="0"
-                           data-slider-max="4" data-slider-step="1" data-slider-value="0" class="input-slider"
-                           data-slider-tooltip-position="bottom"/>
-                </div>
-                <div class="row clickable btn-link" data-toggle="modal" data-target="#breath-max-update">
-                    <label class="clickable" for="breath">Souffle (PS)</label>
-                </div>
-                <div class="row mb-5">
-                    <input id="breath" data-slider-id="breath-slider" type="text" data-slider-min="0"
-                           data-slider-max="4" data-slider-step="1" data-slider-value="4" data-slider-reversed="true"
-                           class="input-slider" data-slider-handle="custom" data-slider-tooltip-position="bottom"/>
-                </div>
-                <div class="row clickable btn-link" data-toggle="modal" data-target="#psychic-max-update">
-                    <label class="clickable" for="psychic">Équilibre Psychique (EP)</label>
-                </div>
-                <div class="row">
-                    <input id="psychic" data-slider-id="psychic-slider" type="text" data-slider-min="0"
-                           data-slider-max="4" data-slider-step="1" data-slider-value="4" data-slider-reversed="true"
-                           class="input-slider" data-slider-handle="custom" data-slider-tooltip-position="bottom"/>
-                </div>
-                <div class="row">
-                    <label for="rest">Jours de repos</label>
-                </div>
-                <div class="row">
-                    <input id="rest" data-slider-id="rest-slider" type="text" data-slider-min="0" data-slider-max="7"
-                           data-slider-step="1" data-slider-value="0" class="input-slider"
-                           data-slider-handle="custom" data-slider-tooltip-position="bottom"/>
-                </div>
-            </div>
             </div>
         </div>
 
@@ -1544,6 +1583,367 @@
                 </table>
             </div>
         </div>
+
+        <!-- Magic and Ki -->
+        <div id="magic-tab" class="tab-pane fade row my-1 container-fluid">
+            <!-- Magical energies and Ki -->
+            <div class="row mt-2 ml-1"><b>Énergies magiques</b></div>
+            <div class="row form-row mt-2 md-form p-0 m-0">
+                <div class="col-md-2">
+                    <label for="water">Eau</label>
+                    <input class="energy form-control" id="water" type="number" value="" min="0" max="3">
+                </div>
+
+                <div class="col-md-2">
+                    <label for="earth">Terre</label>
+                    <input class="energy form-control" id="earth" type="number" value="" min="0" max="3">
+                </div>
+
+                <div class="col-md-2">
+                    <label for="fire">Feu</label>
+                    <input class="energy form-control" id="fire" type="number" value="" min="0" max="3">
+                </div>
+
+                <div class="col-md-2">
+                    <label for="air">Air</label>
+                    <input class="energy form-control" id="air" type="number" value="" min="0" max="3">
+                </div>
+
+                <div class="col-md-2">
+                    <label for="fog">Brume/Illusion</label>
+                    <input class="energy form-control" id="fog" type="number" value="" min="0" max="3">
+                </div>
+
+                <div class="col-md-2">
+                    <label for="mud">Boue</label>
+                    <input class="energy form-control" id="mud" type="number" value="" min="0" max="3">
+                </div>
+            </div>
+            <div class="row form-row md-form p-0 m-0">
+                <div class="col-md-2">
+                    <label for="lightning">Électricité</label>
+                    <input class="energy form-control" id="lightning" type="number" value="" min="0" max="3">
+                </div>
+
+                <div class="col-md-2">
+                    <label for="metal">Métal</label>
+                    <input class="energy form-control" id="metal" type="number" value="" min="0" max="3">
+                </div>
+
+                <div class="col-md-2">
+                    <label for="healing">Guérison</label>
+                    <input class="energy form-control" id="healing" type="number" value="" min="0" max="3">
+                </div>
+
+                <div class="col-md-2">
+                    <label for="necromancy">Nécromancie</label>
+                    <input class="energy form-control" id="necromancy" type="number" value="" min="0" max="3">
+                </div>
+
+                <div class="col-md-2">
+                    <label for="invocation">Invocation</label>
+                    <input class="energy form-control" id="invocation" type="number" value="" min="0" max="3">
+                </div>
+
+                <div class="col-md-2">
+                    <label for="protection">Protection</label>
+                    <input class="energy form-control" id="protection" type="number" value="" min="0" max="3">
+                </div>
+            </div>
+            <div class="row form-row md-form p-0 m-0">
+                <div class="col-md-2">
+                    <label for="divination">Divination</label>
+                    <input class="energy form-control" id="divination" type="number" value="" min="0" max="3">
+                </div>
+
+                <div class="col-md-2">
+                    <label for="enchantment">Enchantement</label>
+                    <input class="energy form-control" id="enchantment" type="number" value="" min="0" max="3">
+                </div>
+
+                <div class="col-md-2">
+                    <label for="charm">Charme</label>
+                    <input class="energy form-control" id="charm" type="number" value="" min="0" max="3">
+                </div>
+
+                <div class="col-md-2">
+                    <label for="voodoo">Vaudou</label>
+                    <input class="energy form-control" id="voodoo" type="number" value="" min="0" max="3">
+                </div>
+
+                <div class="col-md-2">
+                    <label for="spiritualism">Spiritisme</label>
+                    <input class="energy form-control" id="spiritualism" type="number" value="" min="0" max="3">
+                </div>
+
+                <div class="col-md-2">
+                    <label for="metamorphosis">Métamorphose</label>
+                    <input class="energy form-control" id="metamorphosis" type="number" value="" min="0" max="3">
+                </div>
+            </div>
+            <div class="row form-row md-form p-0 m-0">
+                <div class="col-md-2">
+                    <label for="witchcraft">Sorcellerie</label>
+                    <input class="energy form-control" id="witchcraft" type="number" value="" min="0" max="3">
+                </div>
+
+                <div class="col-md-2">
+                    <label for="time">Temps</label>
+                    <input class="energy form-control" id="time" type="number" value="" min="0" max="3">
+                </div>
+
+                <div class="col-md-2">
+                    <label for="shamanism">Chamanisme</label>
+                    <input class="energy form-control" id="shamanism" type="number" value="" min="0" max="3">
+                </div>
+
+                <div class="col-md-2">
+                    <label for="runes">Runes</label>
+                    <input class="energy form-control" id="runes" type="number" value="" min="0" max="3">
+                </div>
+
+                <div class="col-md-2">
+                    <label for="name-magic">Noms</label>
+                    <input class="energy form-control" id="name-magic" type="number" value="" min="0" max="3">
+                </div>
+
+                <div class="col-md-2">
+                    <label for="hermetic">Hermétique</label>
+                    <input class="energy form-control" id="hermetic" type="number" value="" min="0" max="3">
+                </div>
+            </div>
+            <div class="row form-row md-form p-0 m-0">
+                <div class="col-md-2">
+                    <label for="meta-magic">Métamagie</label>
+                    <input class="energy form-control" id="meta-magic" type="number" value="" min="0" max="3">
+                </div>
+
+                <div class="offset-md-6 col-md-2">
+                    <label for="divine">Divin</label>
+                    <input class="energy form-control" id="divine" type="number" value="" min="0" max="3">
+                </div>
+
+                <div class="col-md-2">
+                    <label for="ki">Ki</label>
+                    <input class="energy form-control" id="ki" type="number" value="" min="0" max="3">
+                </div>
+            </div>
+
+            <!-- Black magic & misc -->
+            <div class="row mt-2 ml-1"><b>Compteurs</b></div>
+            <div class="row form-row md-form mt-1 p-0 m-0">
+                <div class="col-md-2">
+                    <label for="black-magic">Magie noire</label>
+                    <input class="energy form-control" id="black-magic" type="number" value="" min="0">
+                </div>
+
+                <div class="col-md-2">
+                    <label for="malemagite">Malemagite</label>
+                    <input class="energy form-control" id="malemagite" type="number" value="" min="0">
+                </div>
+            </div>
+
+            <!-- Spells -->
+            <div class="row mt-2 ml-1"><b>Sorts</b></div>
+            <div class="table-responsive-xl col-12">
+                <table class="table table-hover my-1">
+                    <thead>
+                    <tr>
+                        <th scope="col" class="col-3">Nom</th>
+                        <th scope="col" class="col-2">Liste</th>
+                        <th scope="col" class="col-1 text-center">Niveau</th>
+                        <th scope="col" class="col-3 text-center">Formule</th>
+                        <th scope="col" class="col-2 text-center">Difficulté</th>
+                        <th scope="col" class="col-1 text-center">Valeur</th>
+                        <th scope="col" class="col-1 text-center">Temps</th>
+                        <th scope="col" class="col-1 text-center">Distance</th>
+                        <th scope="col" class="col-3">Effet</th>
+                    </tr>
+                    </thead>
+                    <tbody id="spell-table">
+                    <tr>
+                        <td class="md-form my-0 py-0 align-middle">
+                            <label for="spell-0-name"></label>
+                            <input id="spell-0-name" class="spell-name form-control" type="text" value="">
+                        </td>
+                        <td class="md-form my-0 py-0 align-middle">
+                            <label for="spell-0-list"></label>
+                            <input id="spell-0-list" class="spell-list form-control" type="text" value="">
+                        </td>
+                        <td class="md-form my-0 py-0 align-middle">
+                            <input id="spell-0-level" class="spell-level form-control text-center"
+                                   type="number" value="" min="1" max="3">
+                            <label for="spell-0-level"></label>
+                        </td>
+                        <td class="my-0 py-0 spell-formula align-middle">
+                            <div class="row">
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" class="custom-control-input spell-formula-elem"
+                                           id="spell-0-body" name="spell-0-component">
+                                    <label class="custom-control-label" for="spell-0-body">
+                                        <svg height="1em" width="1em" class="input-prefix">
+                                            <use xlink:href="#svg-body"></use>
+                                        </svg>
+                                    </label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" class="custom-control-input spell-formula-elem"
+                                           id="spell-0-instincts" name="spell-0-component">
+                                    <label class="custom-control-label" for="spell-0-instincts">
+                                        <svg height="1em" width="1em" class="input-prefix">
+                                            <use xlink:href="#svg-instincts"></use>
+                                        </svg>
+                                    </label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" class="custom-control-input spell-formula-elem"
+                                           id="spell-0-heart" name="spell-0-component">
+                                    <label class="custom-control-label" for="spell-0-heart">
+                                        <svg height="1em" width="1em" class="input-prefix">
+                                            <use xlink:href="#svg-heart"></use>
+                                        </svg>
+                                    </label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" class="custom-control-input spell-formula-elem"
+                                           id="spell-0-mind" name="spell-0-component">
+                                    <label class="custom-control-label" for="spell-0-mind">
+                                        <svg height="1em" width="1em" class="input-prefix">
+                                            <use xlink:href="#svg-mind"></use>
+                                        </svg>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" class="custom-control-input spell-formula-elem"
+                                           id="spell-0-perception" name="spell-0-means">
+                                    <label class="custom-control-label" for="spell-0-perception">
+                                        <svg height="1em" width="1em" class="input-prefix">
+                                            <use xlink:href="#svg-perception"></use>
+                                        </svg>
+                                    </label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" class="custom-control-input spell-formula-elem"
+                                           id="spell-0-action" name="spell-0-means">
+                                    <label class="custom-control-label" for="spell-0-action">
+                                        <svg height="1em" width="1em" class="input-prefix">
+                                            <use xlink:href="#svg-action"></use>
+                                        </svg>
+                                    </label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" class="custom-control-input spell-formula-elem"
+                                           id="spell-0-desire" name="spell-0-means">
+                                    <label class="custom-control-label" for="spell-0-desire">
+                                        <svg height="1em" width="1em" class="input-prefix">
+                                            <use xlink:href="#svg-desire"></use>
+                                        </svg>
+                                    </label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" class="custom-control-input spell-formula-elem"
+                                           id="spell-0-resistance" name="spell-0-means">
+                                    <label class="custom-control-label" for="spell-0-resistance">
+                                        <svg height="1em" width="1em" class="input-prefix">
+                                            <use xlink:href="#svg-resistance"></use>
+                                        </svg>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" class="custom-control-input spell-formula-elem"
+                                           id="spell-0-mineral" name="spell-0-realm">
+                                    <label class="custom-control-label" for="spell-0-mineral">
+                                        <svg height="1em" width="1em" class="input-prefix">
+                                            <use xlink:href="#svg-mineral"></use>
+                                        </svg>
+                                    </label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" class="custom-control-input spell-formula-elem"
+                                           id="spell-0-vegetal" name="spell-0-realm">
+                                    <label class="custom-control-label" for="spell-0-vegetal">
+                                        <svg height="1em" width="1em" class="input-prefix">
+                                            <use xlink:href="#svg-vegetal"></use>
+                                        </svg>
+                                    </label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" class="custom-control-input spell-formula-elem"
+                                           id="spell-0-animal" name="spell-0-realm">
+                                    <label class="custom-control-label" for="spell-0-animal">
+                                        <svg height="1em" width="1em" class="input-prefix">
+                                            <use xlink:href="#svg-animal"></use>
+                                        </svg>
+                                    </label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" class="custom-control-input spell-formula-elem"
+                                           id="spell-0-humanoid" name="spell-0-realm">
+                                    <label class="custom-control-label" for="spell-0-humanoid">
+                                        <svg height="1em" width="1em" class="input-prefix">
+                                            <use xlink:href="#svg-humanoid"></use>
+                                        </svg>
+                                    </label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" class="custom-control-input spell-formula-elem"
+                                           id="spell-0-mechanical" name="spell-0-realm">
+                                    <label class="custom-control-label" for="spell-0-mechanical">
+                                        <svg height="1em" width="1em" class="input-prefix">
+                                            <use xlink:href="#svg-mechanical"></use>
+                                        </svg>
+                                    </label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" class="custom-control-input spell-formula-elem"
+                                           id="spell-0-void" name="spell-0-realm">
+                                    <label class="custom-control-label" for="spell-0-void">
+                                        <svg height="1em" width="1em" class="input-prefix">
+                                            <use xlink:href="#svg-void"></use>
+                                        </svg>
+                                    </label>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="spell-difficulty my-0 py-0 align-middle">
+                            <div class="row">
+                                <div class="text-center col-12">
+                                    <label for="spell-0-difficulty-input" id="spell-0-difficulty">0</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="text-center col-12">
+                                    <input id="spell-0-difficulty-input" data-slider-id="spell-0-difficulty-slider"
+                                           type="text" data-slider-min="0" data-slider-max="30" data-slider-step="1"
+                                           data-slider-value="0" class="input-slider spell-difficulty-input"
+                                           data-slider-tooltip-position="bottom"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="my-0 py-0 text-center align-middle">
+                            <div id="spell-0-value" class="spell-value"></div>
+                        </td>
+                        <td class="md-form my-0 py-0 align-middle">
+                            <input id="spell-0-time" class="spell-time form-control text-center" type="text">
+                            <label for="spell-0-time"></label>
+                        </td>
+                        <td class="md-form my-0 py-0 align-middle">
+                            <input id="spell-0-distance" class="spell-distance form-control text-center" type="text">
+                            <label for="spell-0-distance"></label>
+                        </td>
+                        <td class="md-form my-0 py-0 align-middle">
+                            <input id="spell-0-effect" class="spell-effect form-control" type="text">
+                            <label for="spell-0-effect"></label>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <div class="md-form row form-row my-1">
@@ -1620,6 +2020,11 @@
             const sum_id = components.includes(id) ? "#" + id + "-" + others[i] : "#" + others[i] + "-" + id
             $(sum_id)[0].innerText = parseInt(value) + parseInt($("#" + others[i])[0].value)
         }
+
+        // Update all of the spell values
+        $(".spell-value").each((i, elem) => {
+            update_spell_value($(elem))
+        })
     }
 
     $(".means").on("change", update_sum)
@@ -1688,6 +2093,25 @@
                     return "K.O."
                 if (input.id === "psychic" && value === 0)
                     return "Fou"
+                if ($(input).hasClass("spell-difficulty-input")) {
+                    const difficulty_elem = $("#" + input.id.slice(0, -6))
+                    let difficulty // Use the count of the spell casted to compute difficulty
+                    if (value < 4)
+                        difficulty = -4
+                    else if (value <= 6)
+                        difficulty = -3
+                    else if (value <= 8)
+                        difficulty = -2
+                    else if (value === 9)
+                        difficulty = -1
+                    else if (value <= 19)
+                        difficulty = 0
+                    else if (value <= 29)
+                        difficulty = 1
+                    else
+                        difficulty = 2
+                    difficulty_elem.text(difficulty)
+                }
                 return value + "/" + max
             }
         }
@@ -1734,7 +2158,6 @@
 
         let penalty = 0
         if (armor_sum >= 12 && armor_sum <= 23) {
-            console.log(armor_sum >= 12 && armor_sum <= 23)
             penalty = 1
         } else if (armor_sum >= 24 && armor_sum <= 30) {
             penalty = 2
@@ -1821,6 +2244,57 @@
         const current_max = parseInt(psychic[0].getAttribute("data-slider-max"))
         if (current_max > 1)
             set_slider_max(psychic, current_max - 1)
+    })
+
+    /* Update the spell difficulty */
+
+    function update_spell_value(value_div) {
+        let sum = 0
+        const value_id = value_div[0].id
+        let base_array = value_id.split("-")
+        base_array.pop()
+        const base_id = base_array.join("-")
+
+        // Recover component, means and realm
+        const elements = ["component", "means", "realm"]
+        for (let i = 0; i < elements.length; i++) {
+            const elem_name = base_id + "-" + elements[i]
+            const checked_elem = $("input[name=" + elem_name + "]:checked")
+            if (checked_elem.length === 0)
+                return // Not a full formula
+            base_array = checked_elem[0].id.split("-")
+            sum += parseInt($("#" + base_array[base_array.length - 1]).val())
+        }
+
+        // Recover difficulty
+        sum += parseInt($("#" + base_id + "-difficulty").text())
+
+        // Update
+        value_div.text(sum)
+    }
+
+    $(".spell-formula-elem").on("click", event => {
+        // Trigger update of the spell difficulty
+        const target_id = event.target.id
+        const value_array = target_id.split("-")
+        value_array.pop()
+        const value_id = value_array.join("-") + "-value"
+        update_spell_value($("#" + value_id))
+    })
+    $(".spell-difficulty-input").on("change", event => {
+        // Trigger update of the spell difficulty
+        const target_id = event.target.id
+        const value_array = target_id.split("-")
+        value_array.pop()
+        value_array.pop()
+        const value_id = value_array.join("-") + "-value"
+        update_spell_value($("#" + value_id))
+    })
+    $(".realm").on("change", _ => {
+        // Update all of the spell values
+        $(".spell-value").each((i, elem) => {
+            update_spell_value($(elem))
+        })
     })
 
     /* Save Character page */
