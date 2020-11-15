@@ -88,6 +88,11 @@
             background-color: white;
             border-radius: 50%;
         }
+
+        /* Force the talent table to use a scrollbar */
+        .talent {
+            min-width: 300px;
+        }
     </style>
 
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
@@ -542,6 +547,976 @@
                        data-slider-step="1" data-slider-value="0" class="input-slider"
                        data-slider-handle="custom" data-slider-tooltip-position="bottom"/>
             </div>
+        </div>
+    </div>
+
+    <!-- Talents -->
+    <div class="row mt-5"><b class="col-12 text-center">Talents</b></div>
+    <div class="row my-1">
+        <div class="table-responsive-xl col-12">
+            <table class="table table-hover my-1">
+                <thead>
+                <tr>
+                    <th scope="col" class="text-center col-3">X</th>
+                    <th scope="col" class="text-center col-3">-4</th>
+                    <th scope="col" class="text-center col-3">-2</th>
+                    <th scope="col" class="text-center col-3">0</th>
+                </tr>
+                </thead>
+                <tbody id="talent-table">
+                <tr>
+                    <td class="talent talent-X md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="x0-name"></label>
+                                <input id="x0-name" class="form-control" type="text" value="Agriculture">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="x0-level" class="form-control" type="number" value="" min="-4" max="3">
+                                <label for="x0-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-4 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="-40-name"></label>
+                                <input id="-40-name" class="form-control" type="text" value="Armes normales">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="-40-level" class="form-control" type="number" value="" min="-4" max="3">
+                                <label for="-40-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-2 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="-20-name"></label>
+                                <input id="-20-name" class="form-control" type="text" value="Armes légères">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="-20-level" class="form-control" type="number" value="" min="-2" max="3">
+                                <label for="-20-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-0 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="00-name"></label>
+                                <input id="00-name" class="form-control" type="text" value="Athlétisme">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="00-level" class="form-control" type="number" value="" min="0" max="3">
+                                <label for="00-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="talent talent-X md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="x1-name"></label>
+                                <input id="x1-name" class="form-control" type="text" value="Alchimie">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="x1-level" class="form-control" type="number" value="" min="-4" max="3">
+                                <label for="x1-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-4 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="-41-name"></label>
+                                <input id="-41-name" class="form-control" type="text" value="Arts martiaux/Lutte">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="-41-level" class="form-control" type="number" value="" min="-4" max="3">
+                                <label for="-41-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-2 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="-21-name"></label>
+                                <input id="-21-name" class="form-control" type="text" value="Bricolage">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="-21-level" class="form-control" type="number" value="" min="-2" max="3">
+                                <label for="-21-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-0 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="01-name"></label>
+                                <input id="01-name" class="form-control" type="text" value="Bagarre">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="01-level" class="form-control" type="number" value="" min="0" max="3">
+                                <label for="01-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="talent talent-X md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="x2-name"></label>
+                                <input id="x2-name" class="form-control" type="text" value="Art de la guerre">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="x2-level" class="form-control" type="number" value="" min="-4" max="3">
+                                <label for="x2-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-4 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="-42-name"></label>
+                                <input id="-42-name" class="form-control" type="text" value="Camouflage">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="-42-level" class="form-control" type="number" value="" min="-4" max="3">
+                                <label for="-42-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-2 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="-22-name"></label>
+                                <input id="-22-name" class="form-control" type="text" value="Cartographie">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="-22-level" class="form-control" type="number" value="" min="-2" max="3">
+                                <label for="-22-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-0 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="02-name"></label>
+                                <input id="02-name" class="form-control" type="text" value="Chant">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="02-level" class="form-control" type="number" value="" min="0" max="3">
+                                <label for="02-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="talent talent-X md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="x3-name"></label>
+                                <input id="x3-name" class="form-control" type="text" value="Art Magique">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="x3-level" class="form-control" type="number" value="" min="-4" max="3">
+                                <label for="x3-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-4 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="-43-name"></label>
+                                <input id="-43-name" class="form-control" type="text" value="Commerce/Marchandage">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="-43-level" class="form-control" type="number" value="" min="-4" max="3">
+                                <label for="-43-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-2 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="-23-name"></label>
+                                <input id="-23-name" class="form-control" type="text" value="Comédie">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="-23-level" class="form-control" type="number" value="" min="-2" max="3">
+                                <label for="-23-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-0 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="03-name"></label>
+                                <input id="03-name" class="form-control" type="text" value="Cuisine">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="03-level" class="form-control" type="number" value="" min="0" max="3">
+                                <label for="03-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="talent talent-X md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="x4-name"></label>
+                                <input id="x4-name" class="form-control" type="text" value="Botanique">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="x4-level" class="form-control" type="number" value="" min="-4" max="3">
+                                <label for="x4-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-4 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="-44-name"></label>
+                                <input id="-44-name" class="form-control" type="text" value="Coutumes étrangères">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="-44-level" class="form-control" type="number" value="" min="-4" max="3">
+                                <label for="-44-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-2 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="-24-name"></label>
+                                <input id="-24-name" class="form-control" type="text" value="Danse">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="-24-level" class="form-control" type="number" value="" min="-2" max="3">
+                                <label for="-24-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-0 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="04-name"></label>
+                                <input id="04-name" class="form-control" type="text" value="Discrétion">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="04-level" class="form-control" type="number" value="" min="0" max="3">
+                                <label for="04-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="talent talent-X md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="x5-name"></label>
+                                <input id="x5-name" class="form-control" type="text" value="Histoire d'Heldor">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="x5-level" class="form-control" type="number" value="" min="-4" max="3">
+                                <label for="x5-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-4 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="-45-name"></label>
+                                <input id="-45-name" class="form-control" type="text" value="Équitation">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="-45-level" class="form-control" type="number" value="" min="-4" max="3">
+                                <label for="-45-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-2 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="-25-name"></label>
+                                <input id="-25-name" class="form-control" type="text" value="Déguisement">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="-25-level" class="form-control" type="number" value="" min="-2" max="3">
+                                <label for="-25-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-0 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="05-name"></label>
+                                <input id="05-name" class="form-control" type="text" value="Entregent">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="05-level" class="form-control" type="number" value="" min="0" max="3">
+                                <label for="05-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="talent talent-X md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="x6-name"></label>
+                                <input id="x6-name" class="form-control" type="text" value="Langue étrangère éloignée">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="x6-level" class="form-control" type="number" value="" min="-4" max="3">
+                                <label for="x6-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-4 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="-46-name"></label>
+                                <input id="-46-name" class="form-control" type="text" value="Géographie d'Heldor">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="-46-level" class="form-control" type="number" value="" min="-4" max="3">
+                                <label for="-46-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-2 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="-26-name"></label>
+                                <input id="-26-name" class="form-control" type="text" value="Dressage">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="-26-level" class="form-control" type="number" value="" min="-2" max="3">
+                                <label for="-26-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-0 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="06-name"></label>
+                                <input id="06-name" class="form-control" type="text" value="Langue maternelle">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="06-level" class="form-control" type="number" value="" min="0" max="3">
+                                <label for="06-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="talent talent-X md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="x7-name"></label>
+                                <input id="x7-name" class="form-control" type="text" value="Lire et Écrire">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="x7-level" class="form-control" type="number" value="" min="-4" max="3">
+                                <label for="x7-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-4 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="-47-name"></label>
+                                <input id="-47-name" class="form-control" type="text" value="Langue étrangère proche">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="-47-level" class="form-control" type="number" value="" min="-4" max="3">
+                                <label for="-47-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-2 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="-27-name"></label>
+                                <input id="-27-name" class="form-control" type="text" value="Escalade">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="-27-level" class="form-control" type="number" value="" min="-2" max="3">
+                                <label for="-27-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-0 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="07-name"></label>
+                                <input id="07-name" class="form-control" type="text" value="Séduction">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="07-level" class="form-control" type="number" value="" min="0" max="3">
+                                <label for="07-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="talent talent-X md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="x8-name"></label>
+                                <input id="x8-name" class="form-control" type="text" value="Lire sur les lèvres">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="x8-level" class="form-control" type="number" value="" min="-4" max="3">
+                                <label for="x8-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-4 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="-48-name"></label>
+                                <input id="-48-name" class="form-control" type="text" value="Jonglage/Acrobaties">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="-48-level" class="form-control" type="number" value="" min="-4" max="3">
+                                <label for="-48-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-2 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="-28-name"></label>
+                                <input id="-28-name" class="form-control" type="text" value="Orientation">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="-28-level" class="form-control" type="number" value="" min="-2" max="3">
+                                <label for="-28-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-0 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="08-name"></label>
+                                <input id="08-name" class="form-control" type="text" value="Observation">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="08-level" class="form-control" type="number" value="" min="0" max="3">
+                                <label for="08-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="talent talent-X md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="x9-name"></label>
+                                <input id="x9-name" class="form-control" type="text" value="Mathématique">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="x9-level" class="form-control" type="number" value="" min="-4" max="3">
+                                <label for="x9-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-4 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="-49-name"></label>
+                                <input id="-49-name" class="form-control" type="text" value="Maçonnerie">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="-49-level" class="form-control" type="number" value="" min="-4" max="3">
+                                <label for="-49-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-2 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="-29-name"></label>
+                                <input id="-29-name" class="form-control" type="text" value="Poésie/Contes & Légendes">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="-29-level" class="form-control" type="number" value="" min="-2" max="3">
+                                <label for="-29-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-0 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="09-name"></label>
+                                <input id="09-name" class="form-control" type="text" value="">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="09-level" class="form-control" type="number" value="" min="0" max="3">
+                                <label for="09-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="talent talent-X md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="x10-name"></label>
+                                <input id="x10-name" class="form-control" type="text" value="Navigation">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="x10-level" class="form-control" type="number" value="" min="-4" max="3">
+                                <label for="x10-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-4 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="-410-name"></label>
+                                <input id="-410-name" class="form-control" type="text" value="Médecine">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="-410-level" class="form-control" type="number" value="" min="-4" max="3">
+                                <label for="-410-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-2 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="-210-name"></label>
+                                <input id="-210-name" class="form-control" type="text" value="Pistage/Chasse/Pêche">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="-210-level" class="form-control" type="number" value="" min="-2" max="3">
+                                <label for="-210-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-0 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="010-name"></label>
+                                <input id="010-name" class="form-control" type="text" value="">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="010-level" class="form-control" type="number" value="" min="0" max="3">
+                                <label for="010-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="talent talent-X md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="x11-name"></label>
+                                <input id="x11-name" class="form-control" type="text" value="Menuiserie/Ébénisterie">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="x11-level" class="form-control" type="number" value="" min="-4" max="3">
+                                <label for="x11-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-4 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="-411-name"></label>
+                                <input id="-411-name" class="form-control" type="text" value="Musique">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="-411-level" class="form-control" type="number" value="" min="-4" max="3">
+                                <label for="-411-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-2 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="-211-name"></label>
+                                <input id="-211-name" class="form-control" type="text" value="Premiers soins">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="-211-level" class="form-control" type="number" value="" min="-2" max="3">
+                                <label for="-211-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-0 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="011-name"></label>
+                                <input id="011-name" class="form-control" type="text" value="">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="011-level" class="form-control" type="number" value="" min="0" max="3">
+                                <label for="011-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="talent talent-X md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="x12-name"></label>
+                                <input id="x12-name" class="form-control" type="text" value="Minéralogie/Joaillerie">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="x12-level" class="form-control" type="number" value="" min="-4" max="3">
+                                <label for="x12-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-4 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="-412-name"></label>
+                                <input id="-412-name" class="form-control" type="text" value="Natation">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="-412-level" class="form-control" type="number" value="" min="-4" max="3">
+                                <label for="-412-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-2 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="-212-name"></label>
+                                <input id="-212-name" class="form-control" type="text"
+                                       value="Recherche en bibliothèque">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="-212-level" class="form-control" type="number" value="" min="-2" max="3">
+                                <label for="-212-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-0 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="012-name"></label>
+                                <input id="012-name" class="form-control" type="text" value="">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="012-level" class="form-control" type="number" value="" min="0" max="3">
+                                <label for="012-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="talent talent-X md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="x13-name"></label>
+                                <input id="x13-name" class="form-control" type="text" value="Poisons">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="x13-level" class="form-control" type="number" value="" min="-4" max="3">
+                                <label for="x13-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-4 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="-413-name"></label>
+                                <input id="-413-name" class="form-control" type="text" value="Piégeage">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="-413-level" class="form-control" type="number" value="" min="-4" max="3">
+                                <label for="-413-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-2 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="-213-name"></label>
+                                <input id="-213-name" class="form-control" type="text" value="Religion">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="-213-level" class="form-control" type="number" value="" min="-2" max="3">
+                                <label for="-213-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-0 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="013-name"></label>
+                                <input id="013-name" class="form-control" type="text" value="">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="013-level" class="form-control" type="number" value="" min="0" max="3">
+                                <label for="013-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="talent talent-X md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="x14-name"></label>
+                                <input id="x14-name" class="form-control" type="text" value="Serrurerie">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="x14-level" class="form-control" type="number" value="" min="-4" max="3">
+                                <label for="x14-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-4 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="-414-name"></label>
+                                <input id="-414-name" class="form-control" type="text" value="Vol à la tire">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="-414-level" class="form-control" type="number" value="" min="-4" max="3">
+                                <label for="-414-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-2 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="-214-name"></label>
+                                <input id="-214-name" class="form-control" type="text" value="Sculpture">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="-214-level" class="form-control" type="number" value="" min="-2" max="3">
+                                <label for="-214-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-0 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="014-name"></label>
+                                <input id="014-name" class="form-control" type="text" value="">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="014-level" class="form-control" type="number" value="" min="0" max="3">
+                                <label for="014-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="talent talent-X md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="x15-name"></label>
+                                <input id="x15-name" class="form-control" type="text" value="Zoologie">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="x15-level" class="form-control" type="number" value="" min="-4" max="3">
+                                <label for="x15-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-4 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="-415-name"></label>
+                                <input id="-415-name" class="form-control" type="text" value="">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="-415-level" class="form-control" type="number" value="" min="-4" max="3">
+                                <label for="-415-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-2 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="-215-name"></label>
+                                <input id="-215-name" class="form-control" type="text" value="">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="-215-level" class="form-control" type="number" value="" min="-2" max="3">
+                                <label for="-215-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-0 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="015-name"></label>
+                                <input id="015-name" class="form-control" type="text" value="">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="015-level" class="form-control" type="number" value="" min="0" max="3">
+                                <label for="015-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="talent talent-X md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="x16-name"></label>
+                                <input id="x16-name" class="form-control" type="text" value="">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="x16-level" class="form-control" type="number" value="" min="-4" max="3">
+                                <label for="x16-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-4 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="-416-name"></label>
+                                <input id="-416-name" class="form-control" type="text" value="">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="-416-level" class="form-control" type="number" value="" min="-4" max="3">
+                                <label for="-416-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-2 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="-216-name"></label>
+                                <input id="-216-name" class="form-control" type="text" value="">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="-216-level" class="form-control" type="number" value="" min="-2" max="3">
+                                <label for="-216-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-0 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="016-name"></label>
+                                <input id="016-name" class="form-control" type="text" value="">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="016-level" class="form-control" type="number" value="" min="0" max="3">
+                                <label for="016-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="talent talent-X md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="x17-name"></label>
+                                <input id="x17-name" class="form-control" type="text" value="">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="x17-level" class="form-control" type="number" value="" min="-4" max="3">
+                                <label for="x17-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-4 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="-417-name"></label>
+                                <input id="-417-name" class="form-control" type="text" value="">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="-417-level" class="form-control" type="number" value="" min="-4" max="3">
+                                <label for="-417-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-2 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="-217-name"></label>
+                                <input id="-217-name" class="form-control" type="text" value="">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="-217-level" class="form-control" type="number" value="" min="-2" max="3">
+                                <label for="-217-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-0 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="017-name"></label>
+                                <input id="017-name" class="form-control" type="text" value="">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="017-level" class="form-control" type="number" value="" min="0" max="3">
+                                <label for="017-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="talent talent-X md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="x18-name"></label>
+                                <input id="x18-name" class="form-control" type="text" value="">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="x18-level" class="form-control" type="number" value="" min="-4" max="3">
+                                <label for="x18-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-4 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="-418-name"></label>
+                                <input id="-418-name" class="form-control" type="text" value="">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="-418-level" class="form-control" type="number" value="" min="-4" max="3">
+                                <label for="-418-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-2 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="-218-name"></label>
+                                <input id="-218-name" class="form-control" type="text" value="">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="-218-level" class="form-control" type="number" value="" min="-2" max="3">
+                                <label for="-218-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="talent talent-0 md-form my-0 py-0">
+                        <div class="row">
+                            <div class="col-9 m-0 p-0">
+                                <label for="018-name"></label>
+                                <input id="018-name" class="form-control" type="text" value="">
+                            </div>
+                            <div class="col-2 m-0 p-0 ml-2">
+                                <input id="018-level" class="form-control" type="number" value="" min="0" max="3">
+                                <label for="018-level"></label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
