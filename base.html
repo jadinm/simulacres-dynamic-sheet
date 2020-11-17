@@ -2083,10 +2083,22 @@
         </div>
     </div>
 
-    <div class="md-form row form-row my-1">
-        <button id="save-page" type="submit" class="btn btn-primary form-control rounded">
-            Sauvegarder
-        </button>
+    <div class="md-form row form-row mt-4">
+        <div class="col-6 mt-3">
+            <button id="save-page" type="submit" class="btn btn-primary form-control rounded">
+                Sauvegarder
+            </button>
+        </div>
+        <div class="input-group col-6">
+            <div class="input-group-prepend pt-2 mt-1 pb-5">
+                <span class="input-group-text" id="import-page-desc">Importer</span>
+            </div>
+            <div class=" custom-file">
+                <input type="file" class="custom-file-input" id="import-page" accept="text/html"
+                       aria-describedby="import-page-desc">
+                <label class="custom-file-label" for="import-page">Choose file</label>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -2546,6 +2558,54 @@
         if (character_name === null || character_name.length === 0)
             character_name = "Anonyme"
         saveAs(blob, character_name + ".html")
+    })
+
+    /* Import Character page data */
+    $("#import-page").on("change", function (event) {
+        if (event.target.files.length === 0)
+            return
+
+        const reader = new FileReader();
+        reader.onload = e => {
+            // Executed at the completion of the read
+            const old_html = $(e.target.result)
+
+            // Retrieve and copy all of the input values of the old_html
+            const table_row_input_id = /(.+)-(\d+)-.+/;
+            old_html.find("input").each((i, old_input) => {
+                let new_input = $("#" + old_input.id)
+
+                if (new_input.length === 0) {
+                    const matching = old_input.id.match(table_row_input_id)
+                    if (matching) {
+                        // Add rows to the tables until it finds the appropriate field
+                        const button = $("#add-" + matching[1])
+                        while (new_input.length === 0) {
+                            button.trigger("click")
+                            new_input = $("#" + old_input.id)
+                        }
+                    }
+                }
+
+                // Refresh modified sliders
+                if (new_input.hasClass("input-slider")) {
+                    new_input.slider("setValue", old_input.value)
+                    new_input.slider("refresh", {useCurrentValue: true})
+                }
+
+                // We change the value and trigger the change in case of a listener
+                new_input.val(old_input.value).trigger("change")
+            })
+
+            // Check correct radio buttons
+            old_html.find("input:checked").each((i, old_input) => {
+                const new_input = $("#" + old_input.id)
+                new_input.click().trigger("click")
+            })
+        }
+
+        // Asynchronous read
+        reader.readAsText(event.target.files[0])
     })
 </script>
 
