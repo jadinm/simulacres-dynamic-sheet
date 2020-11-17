@@ -1,4 +1,5 @@
 import argparse
+import base64
 import re
 import os
 
@@ -24,11 +25,13 @@ def minified_path(path):
 with open(args.input_html, "r") as base_html:
     js_pattern = re.compile(r".*<script .*src=[\"'](.*)[\"'].*>.*")
     css_pattern = re.compile(r".*<link rel=[\"']stylesheet[\"'] .*href=[\"'](.*)[\"'].*>.*")
+    font_pattern = re.compile(r".*src: url\([\"'](font\/.+)[\"']\) format\(\"truetype\"\);.*")
     header = True
 
     for input_line in base_html:
         js_match = js_pattern.match(input_line)
         css_match = css_pattern.match(input_line)
+        font_match = font_pattern.match(input_line)
         if js_match is not None and os.path.exists(js_match.group(1)):
             extern_file_path = minified_path(js_match.group(1))
             with open(extern_file_path, "r") as extern_file:
@@ -41,6 +44,13 @@ with open(args.input_html, "r") as base_html:
                 output_lines.append("<style>")
                 output_lines.extend(extern_file.readlines())
                 output_lines.append("</style>\n")
+        elif font_match is not None and os.path.exists(font_match.group(1)):
+            line_pattern = "src: url(\"data:application/truetype;charset=utf-8;base64,{}\") format(\"truetype\");"
+            extern_file_path = font_match.group(1)
+            print(extern_file_path)
+            with open(extern_file_path, "rb") as extern_file:
+                base64_data = base64.b64encode(extern_file.read())
+            output_lines.append(line_pattern.format(base64_data.decode()))
         else:
             output_lines.append(input_line)
 
