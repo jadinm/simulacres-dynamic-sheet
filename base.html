@@ -2418,6 +2418,27 @@
         value_div.text(sum)
     }
 
+    function list_changed(event) {
+        // Trigger update of the spell difficulty
+        const target_id = event.target.id
+        const value_array = target_id.split("-")
+        value_array.pop()
+        const difficulty_id = value_array.join("-") + "-difficulty-input"
+
+        // Fix the level to 0 if divine or ki energies
+        const slider = $("#" + difficulty_id)
+        if (event.target.value === "Divin" || event.target.value === "Ki") {
+            slider.val(10).slider("setValue", 10).slider("refresh", {useCurrentValue: true}).slider("disable")
+            $(slider.slider("getElement")).hide()
+        } else {
+            slider.slider("enable").slider("refresh", {useCurrentValue: true})
+            $(slider.slider("getElement")).show()
+        }
+
+        // Update spell value
+        casting_count_changed({target: slider[0]})
+    }
+
     function formula_changed(event) {
         // Trigger update of the spell difficulty
         const target_id = event.target.id
@@ -2437,6 +2458,7 @@
         update_spell_value($("#" + value_id))
     }
 
+    $(".spell-list").on("change", list_changed)
     $(".spell-formula-elem").on("click", formula_changed)
     $(".spell-difficulty-input").on("change", casting_count_changed)
     $(".realm").on("change", _ => {
@@ -2454,6 +2476,9 @@
         const new_id = parseInt(last_tr_id.split("-").pop()) + 1
 
         // Find all elements that have id containing old value
+        new_elem.find("input").each((i, elem) => {
+            elem.value = ""
+        })
         new_elem.find("*[id*=-0-]").each((i, elem) => {
             elem.id = elem.id.replace("-0-", "-" + new_id + "-")
         })
@@ -2477,6 +2502,7 @@
 
         // We have to reset listeners because of the slider
         const new_spell = $("#spell-0").clone(true, false)
+        new_spell.find(".spell-list").on("change", list_changed)
         new_spell.find(".spell-formula-elem").on("click", formula_changed)
         new_spell.find(".spell-difficulty-input").on("change", casting_count_changed)
 
