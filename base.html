@@ -2477,6 +2477,14 @@
         // Find all elements that have id containing old value
         new_elem.find("input").each((i, elem) => {
             elem.value = ""
+            $(elem).on("change", function (event) {
+                event.target.setAttribute("value", event.target.value)
+            })
+        })
+        new_elem.find("input.input-slider").each((i, elem) => {
+            $(elem).on("change", function (event) {
+                event.target.setAttribute("data-slider-value", event.target.value)
+            })
         })
         new_elem.find("*[id*=-0-]").each((i, elem) => {
             elem.id = elem.id.replace("-0-", "-" + new_id + "-")
