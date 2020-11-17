@@ -2139,12 +2139,25 @@
     const means = ["perception", "action", "desire", "resistance"]
 
     /* Update field value attributes as the user writes so that it will be saved in the HTML */
-    $("input").on("change", function (event) {
+
+    function update_input(event) {
         event.target.setAttribute("value", event.target.value)
-    })
-    $("input.input-slider").on("change", function (event) {
+    }
+
+    $("input").on("change", update_input)
+
+    function update_slider(event) {
         event.target.setAttribute("data-slider-value", event.target.value)
-    })
+    }
+
+    $("input.input-slider").on("change", update_slider)
+
+    function update_radio(event) {
+        $("input[name='" + event.target.name + "']").removeAttr("checked")
+        event.target.setAttribute("checked", "")
+    }
+
+    $("input[type=\"radio\"]").on("click", update_radio)
 
     /* Update sum of means and component when one of them changes */
 
@@ -2223,7 +2236,7 @@
         // Remove pre-existing sliders (this happens after a save of the html page)
         const elem = "#" + input.getAttribute("data-slider-id")
         const input_id = input.id
-        $(elem).remove();
+        $(elem).remove()
         input.setAttribute("style", {})
         const opts = {
             formatter: value => { // Show remaining HP over maximum HP
@@ -2295,9 +2308,9 @@
     /* Update armor penalty */
     $(".armor").on("change", event => {
         const armors = $.map($(".armor"), element => parseInt(element.value))
-        let armor_sum = 0;
+        let armor_sum = 0
         for (let i = 0; i < armors.length; i++) {
-            armor_sum += armors[i] << 0;
+            armor_sum += armors[i] << 0
         }
 
         let penalty = 0
@@ -2477,15 +2490,10 @@
         // Find all elements that have id containing old value
         new_elem.find("input").each((i, elem) => {
             elem.value = ""
-            $(elem).on("change", function (event) {
-                event.target.setAttribute("value", event.target.value)
-            })
+            $(elem).on("change", update_input)
         })
-        new_elem.find("input.input-slider").each((i, elem) => {
-            $(elem).on("change", function (event) {
-                event.target.setAttribute("data-slider-value", event.target.value)
-            })
-        })
+        new_elem.find("input.input-slider").on("change", update_slider)
+        new_elem.find("input[type=\"radio\"]").on("click", update_radio)
         new_elem.find("*[id*=-0-]").each((i, elem) => {
             elem.id = elem.id.replace("-0-", "-" + new_id + "-")
         })
@@ -2537,7 +2545,7 @@
         let character_name = $("input#character-name")[0].value
         if (character_name === null || character_name.length === 0)
             character_name = "Anonyme"
-        saveAs(blob, character_name + ".html");
+        saveAs(blob, character_name + ".html")
     })
 </script>
 
