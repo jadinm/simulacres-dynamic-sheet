@@ -154,9 +154,8 @@
             <input class="form-control" id="race" name="race" type="text" value="">
             <label for="race">Race/Peuple</label>
         </div>
-        <div class="col-sm-2">
-            <input class="form-control" id="adventure-points" name="character-name" type="number" value="0" min="0">
-            <label for="adventure-points">PA</label>
+        <div class="col-sm-2 mt-3 text-center">
+            PA non dépensés: <span id="remaining-adventure-points"></span>
         </div>
         <div class="col-sm-2">
             <input class="form-control" id="luck-points" name="character-name" type="number" value="0" min="0" max="3">
@@ -445,6 +444,12 @@
             <a class="nav-link" data-toggle="tab" href="#equipment-tab" role="tab" aria-controls="profile"
                aria-selected="false">
                 Équipement
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#adventure-points-tab" role="tab" aria-controls="profile"
+               aria-selected="false">
+                PA
             </a>
         </li>
     </ul>
@@ -2093,6 +2098,106 @@
                 <button id="add-equipment" class="btn btn-success rounded">+</button>
             </div>
         </div>
+
+        <!-- Adventure Point Tracking -->
+        <div id="adventure-points-tab" class="tab-pane fade row my-1 container-fluid">
+            <!-- Adventure points total -->
+            <div class="row form-row mt-2 md-form p-0 m-0">
+                <div class="col-12">
+                    <label for="adventure-points">Nombre total de PA reçus (création comprise)</label>
+                    <input class="form-control adventure-points-setting" id="adventure-points" type="number" value="0"
+                           min="0">
+                </div>
+            </div>
+
+            <div class="row mt-2 ml-1">
+                <h3 class="text-center">Paramètres pour la dépense de PAs</h3>
+            </div>
+            <div class="row mt-2 ml-1">
+                Le contenu suivant ne doit être encodé qu'une seule fois (sauf pour les lanceurs de sorts
+                qui devront peut-être changer encore le dernier champ).
+                Au début de la campagne, il est possible de faire certaines actions qui diminuent ou augmentent
+                le coût en PA de ce qui est encodé dans la fiche.
+            </div>
+            <div class="row mt-2 ml-1">
+                D'abord passer directement certaines énergies ou règnes à 2 avec les 8 points d'énergie et de règne
+                initiaux fait économiser 5 PA car passer au niveau 2 demande 10 PA au lieu de 5.
+            </div>
+            <div class="row form-row mt-2 md-form p-0 m-0">
+                <div class="col-12">
+                    <label for="energies-started-level-2">Nombre d'énergies montées à 2 à la création</label>
+                    <input class="form-control adventure-points-setting" id="energies-started-level-2" type="number"
+                           value="0" min="0" max="4">
+                </div>
+            </div>
+            <div class="row mt-2 ml-1">
+                Ensuite, le choix du métier et donc des talents qui sont montés à 0 ou à 1 influe sur la consommation
+                en PA selon le niveau initial de ces talents de métiers.
+            </div>
+            <div class="row form-row mt-2 md-form p-0 m-0">
+                <div class="col-4">
+                    <label for="job-talents-x">Talents de métier en colonne X</label>
+                    <input class="form-control adventure-points-setting" id="job-talents-x" type="number" value="0"
+                           min="0">
+                </div>
+                <div class="col-4">
+                    <label for="job-talents-4">Talents de métier en colonne -4</label>
+                    <input class="form-control adventure-points-setting" id="job-talents-4" type="number" value="0"
+                           min="0">
+                </div>
+                <div class="col-4">
+                    <label for="job-talents-2">Talents de métier en colonne -2</label>
+                    <input class="form-control adventure-points-setting" id="job-talents-2" type="number" value="0"
+                           min="0">
+                </div>
+            </div>
+            <div class="row mt-2 ml-1">
+                Il y a également des talents conseillé pour chaque métier. Les prendre à la création du personnage
+                réduit de 1 le coût de ceux-ci.
+            </div>
+            <div class="row form-row mt-2 md-form p-0 m-0">
+                <div class="col-12">
+                    <label for="advised-talents">Nombre de talents conseillés à la création</label>
+                    <input class="form-control adventure-points-setting" id="advised-talents" type="number" value="0"
+                           min="0">
+                </div>
+            </div>
+
+            <div class="row mt-2 ml-1"><h4>Mages uniquement</h4></div>
+            <div class="row mt-2 ml-1">
+                En début de campagne et uniquement au début, les mages peuvent décider de dépenser des PA pour augmenter
+                le niveau initial des sorts qu'ils ont. Normalement celui-ci est d'office à -4 et s'entraine
+                par la pratique mais ils peuvent décider au début de monter cette valeur directement à -2 ou à 0
+                pour le même prix qu'un talent. Le sort étant considéré comme un talent X, pour le passer à -2,
+                cela coûte 3 PA et pour le passer à 0, cela coûte 5 PA.
+            </div>
+            <div class="row form-row mt-2 md-form p-0 m-0">
+                <div class="col-sm-6">
+                    <label for="spells-started-level-2">Nombre de sorts montés à -2 à la création</label>
+                    <input class="form-control adventure-points-setting" id="spells-started-level-2" type="number"
+                           value="0" min="0">
+                </div>
+                <div class="col-sm-6">
+                    <label for="spells-started-level-0">Nombre de sorts montés à 0 à la création</label>
+                    <input class="form-control adventure-points-setting" id="spells-started-level-0" type="number"
+                           value="0" min="0">
+                </div>
+            </div>
+
+            <div class="row mt-2 ml-1"><h4>Lanceurs de sorts uniquement</h4></div>
+            <div class="row mt-2 ml-1">
+                Lorsqu'un lanceur de sort (mage, prêtre,...) apprend le même sort pour différents règnes, il dépense
+                1 PA de moins pour l'apprendre. C'est la seule case qui doit être mise à jour
+                après le début de la campagne.
+            </div>
+            <div class="row form-row mt-2 md-form p-0 m-0">
+                <div class="col-12">
+                    <label for="same-spells-different-realms">Nombre de sorts bénéficiant de la réduction de 1PA</label>
+                    <input class="form-control adventure-points-setting" id="same-spells-different-realms"
+                           type="number" value="0" min="0">
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="md-form row form-row mt-4">
@@ -2183,6 +2288,143 @@
 
     $("input[type=\"radio\"]").on("click", update_radio)
 
+    /* Remaining adventure point computation */
+
+    const start_components = 18
+    const component_ap_cost = 20
+    const start_means = 10
+    const means_ap_cost = 10
+    const start_breath = 4
+    const breath_ap_cost = 30
+    const start_psychic_balance = 4
+    const psychic_balance_ap_cost = 30
+
+    const start_energies = 8
+    const energy_cost_by_level = [0, 5, 15, 35]
+
+    // XXX Inaccuracy for talent that are not raised directly from X to 0 because it takes 6 PA instead of 5 PA
+    // if this is not done directly (but that would be complicated to manage)
+    const talent_values = ["X", "-4", "-2", "0", "1", "2", "3"]
+    const talent_increment_cost = {
+        X: {X: 0, "-4": 2, "-2": 3, "0": 5, "1": 10, "2": 30, "3": 70},
+        "-4": {"-4": 0, "-2": 1, "0": 4, "1": 9, "2": 29, "3": 69},
+        "-2": {"-2": 0, "0": 3, "1": 8, "2": 28, "3": 68},
+        "0": {"0": 0, "1": 5, "2": 25, "3": 65}
+    }
+    const mage_spell_ap_cost = talent_increment_cost["X"]["-4"]
+    const ki_divine_spell_ap_cost = talent_increment_cost["X"]["0"]
+
+    function compute_remaining_ap() {
+        let consumed_points = 0
+
+        // Components
+        let sum_points = 0
+        $(".component").each((i, elem) => {
+            sum_points += parseInt(elem.value)
+        })
+        if (sum_points > start_components)
+            consumed_points += (sum_points - start_components) * component_ap_cost
+
+        // Means
+        sum_points = 0
+        $(".means").each((i, elem) => {
+            sum_points += parseInt(elem.value)
+        })
+        if (sum_points > start_means)
+            consumed_points += (sum_points - start_means) * means_ap_cost
+
+        // Breath
+        const breath = $("#breath")
+        let max_breath = parseInt(breath.attr("data-slider-max"))
+        if ($("#heart").hasClass("bonus-applied")) { // +1 due to heart value
+            max_breath -= 1
+        }
+        consumed_points += (max_breath - start_breath) * breath_ap_cost
+
+        // Psychic balance
+        const psychic = $("#psychic")
+        let max_psychic = parseInt(psychic.attr("data-slider-max"))
+        if ($("#mind").hasClass("bonus-applied")) { // +1 due to mind value
+            max_psychic -= 1
+        }
+        consumed_points += (max_psychic - start_psychic_balance) * psychic_balance_ap_cost
+
+        // Realm & energies
+        let energy_point_increased = 0
+        const energies_repartition_level = [0, 0, 0, 0] // Level ranges from 0 to 3
+        $(".realm, .energy").each((i, elem) => {
+            let value = parseInt(elem.value)
+            if (isNaN(value) || elem.id === "void")
+                value = 0
+            energy_point_increased += value
+            energies_repartition_level[value] += 1
+        })
+        if (energy_point_increased > start_energies) { // To check that at least the 8 starting points were spent
+            for (let level = 0; level < energies_repartition_level.length; level++) {
+                consumed_points += energy_cost_by_level[level] * energies_repartition_level[level]
+            }
+            const start_energies_2 = parseInt($("#energies-started-level-2").val())
+            const start_energies_1 = start_energies - start_energies_2 * 2
+            consumed_points -= (energy_cost_by_level[2] * start_energies_2 + energy_cost_by_level[1] * start_energies_1)
+        }
+
+        // Talents
+        let job_talent_found = false
+        $(".talent").each((i, elem) => {
+            // Current talent level
+            const current_value = $(elem).find("input*[id*=\"-level\"]").val().trim()
+            if (!talent_values.includes(current_value))
+                return
+            if (current_value === "1")
+                job_talent_found = true
+
+            // Initial talent level
+            let old_value = "X"
+            if ($(elem).hasClass("talent-4"))
+                old_value = "-4"
+            else if ($(elem).hasClass("talent-2"))
+                old_value = "-2"
+            else if ($(elem).hasClass("talent-0"))
+                old_value = "0"
+            consumed_points += talent_increment_cost[old_value][current_value]
+        })
+        // Initial talents of the job were raised to 0
+        consumed_points -= talent_increment_cost["X"]["0"] * parseInt($("#job-talents-x").val())
+        consumed_points -= talent_increment_cost["-4"]["0"] * parseInt($("#job-talents-4").val())
+        consumed_points -= talent_increment_cost["-2"]["0"] * parseInt($("#job-talents-2").val())
+        // Main talent of the job was raised to 1
+        if (job_talent_found)
+            consumed_points -= talent_increment_cost["0"]["1"]
+        // Advised talents for the job reduces their cost by 1 PA
+        consumed_points -= parseInt($("#advised-talents").val())
+
+        // Spells
+        $(".spell-list").each((i, elem) => {
+            const value = elem.value.trim()
+            if (value === "Divin" || value === "Ki")
+                consumed_points += ki_divine_spell_ap_cost // Priest and monk have level 0 spell directly
+            else if (value.length > 0)
+                consumed_points += mage_spell_ap_cost // Mages have -4 level spells at start
+        })
+        // Spell increased above level 0 at start of the campaign
+        const diff_level_2 = talent_increment_cost["X"]["-2"] - talent_increment_cost["X"]["-4"]
+        consumed_points += diff_level_2 * parseInt($("#spells-started-level-2").val())
+        const diff_level_0 = talent_increment_cost["X"]["0"] - talent_increment_cost["X"]["-4"]
+        consumed_points += diff_level_0 * parseInt($("#spells-started-level-0").val())
+        // Spells of same realm for the job reduces their cost by 1 PA
+        consumed_points -= parseInt($("#same-spells-different-realms").val())
+
+        // Show difference with total points
+        const total_points = parseInt($("#adventure-points").val())
+        $("#remaining-adventure-points").text(total_points - consumed_points)
+    }
+
+    $(".energy").on("change", compute_remaining_ap)
+    // New talents
+    $(".talent input*[id*=\"-level\"]").on("change", compute_remaining_ap)
+    // Change adventure points settings
+    $(".adventure-points-setting").on("change", compute_remaining_ap)
+
     /* Update sum of means and component when one of them changes */
 
     function update_sum(event) {
@@ -2199,6 +2441,9 @@
         $(".spell-value").each((i, elem) => {
             update_spell_value($(elem))
         })
+
+        // Update adventure points
+        compute_remaining_ap()
     }
 
     $(".means").on("change", update_sum)
@@ -2407,24 +2652,36 @@
         const current_max = parseInt(breath[0].getAttribute("data-slider-max"))
         if (current_max < 8)
             set_slider_max(breath, current_max + 1)
+
+        // Adventure points
+        compute_remaining_ap()
     })
     $("#decrement-breath").on("click", _ => {
         const breath = $("#breath")
         const current_max = parseInt(breath[0].getAttribute("data-slider-max"))
         if (current_max > 1)
             set_slider_max(breath, current_max - 1)
+
+        // Adventure points
+        compute_remaining_ap()
     })
     $("#increment-psychic").on("click", _ => {
         const psychic = $("#psychic")
         const current_max = parseInt(psychic[0].getAttribute("data-slider-max"))
         if (current_max < 8)
             set_slider_max(psychic, current_max + 1)
+
+        // Adventure points
+        compute_remaining_ap()
     })
     $("#decrement-psychic").on("click", _ => {
         const psychic = $("#psychic")
         const current_max = parseInt(psychic[0].getAttribute("data-slider-max"))
         if (current_max > 1)
             set_slider_max(psychic, current_max - 1)
+
+        // Adventure points
+        compute_remaining_ap()
     })
 
     /* Update the spell difficulty */
@@ -2473,6 +2730,9 @@
 
         // Update spell value
         casting_count_changed({target: slider[0]})
+
+        // Update adventure points
+        compute_remaining_ap()
     }
 
     function formula_changed(event) {
@@ -2502,6 +2762,9 @@
         $(".spell-value").each((i, elem) => {
             update_spell_value($(elem))
         })
+
+        // Update Adventure Points
+        compute_remaining_ap()
     })
 
     /* Add new spell rows */
@@ -2511,13 +2774,6 @@
         const last_tr_id = table.children().last()[0].id
         const new_id = parseInt(last_tr_id.split("-").pop()) + 1
 
-        // Find all elements that have id containing old value
-        new_elem.find("input").each((i, elem) => {
-            elem.value = ""
-            $(elem).on("change", update_input)
-        })
-        new_elem.find("input.input-slider").on("change", update_slider)
-        new_elem.find("input[type=\"radio\"]").on("click", update_radio)
         new_elem.find("*[id*=-0-]").each((i, elem) => {
             elem.id = elem.id.replace("-0-", "-" + new_id + "-")
         })
@@ -2544,6 +2800,14 @@
         new_spell.find(".spell-list").on("change", list_changed)
         new_spell.find(".spell-formula-elem").on("click", formula_changed)
         new_spell.find(".spell-difficulty-input").on("change", casting_count_changed)
+
+        // Find all elements that have id containing old value
+        new_spell.find("input").each((i, elem) => {
+            elem.value = ""
+            $(elem).on("change", update_input)
+        })
+        new_spell.find("input.input-slider").on("change", update_slider)
+        new_spell.find("input[type=\"radio\"]").on("click", update_radio)
 
         const new_id = add_row(table, new_spell)
         activate_slider(new_spell.find("#spell-" + new_id + "-difficulty-input")[0])
@@ -2606,7 +2870,8 @@
                 }
 
                 // We change the value and trigger the change in case of a listener
-                new_input.val(old_input.value).trigger("change")
+                new_input.val(old_input.value)
+                new_input.trigger("change")
             })
 
             // Check correct radio buttons
