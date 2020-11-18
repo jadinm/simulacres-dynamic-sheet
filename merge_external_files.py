@@ -25,7 +25,7 @@ def minified_path(path):
 with open(args.input_html, "r") as base_html:
     js_pattern = re.compile(r".*<script .*src=[\"'](.*)[\"'].*>.*")
     css_pattern = re.compile(r".*<link rel=[\"']stylesheet[\"'] .*href=[\"'](.*)[\"'].*>.*")
-    font_pattern = re.compile(r".*src: url\([\"'](font\/.+)[\"']\) format\(\"truetype\"\);.*")
+    font_pattern = re.compile(r".*src: url\([\"'](font/.+)[\"']\) format\(\"truetype\"\);.*")
     header = True
 
     for input_line in base_html:
