@@ -2109,6 +2109,17 @@
                            min="0">
                 </div>
             </div>
+            <div class="row mt-2 ml-1">
+                Le MD peut accorder des réductions sur le coût des compétences.
+                La somme des PAs sauvés par ce moyen peut être inscrite ci-dessous:
+            </div>
+            <div class="row form-row mt-2 md-form p-0 m-0">
+                <div class="col-12">
+                    <label for="adventure-points-discount">Réductions sur le coût des compétences</label>
+                    <input class="form-control adventure-points-setting" id="adventure-points-discount" type="number"
+                           value="0" min="0">
+                </div>
+            </div>
 
             <div class="row mt-2 ml-1">
                 <h3 class="text-center">Paramètres pour la dépense de PAs</h3>
@@ -2415,7 +2426,7 @@
         consumed_points -= parseInt($("#same-spells-different-realms").val())
 
         // Show difference with total points
-        const total_points = parseInt($("#adventure-points").val())
+        const total_points = parseInt($("#adventure-points").val()) + parseInt($("#adventure-points-discount").val())
         $("#remaining-adventure-points").text(total_points - consumed_points)
     }
 
