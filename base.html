@@ -2129,7 +2129,7 @@
                         }
                     }
 
-                    if (talent_matching) {
+                    if (talent_matching && old_input.value.trim().length > 0) {
                         // Add element
                         const button = $("#add-talent-" + talent_matching[1])
                         while (new_input.length === 0) {
