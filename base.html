@@ -2118,7 +2118,15 @@
                     if (target_talent_list[0].id !== current_talent_list[0].id) {
                         // Move to new table if needed
                         const row = $(new_input).parents(".talent")
-                        $("#" + target_talent_list[0].id).children().first().after(row)
+                        const list = $("#" + target_talent_list[0].id)
+                        const header = list.children().first()
+                        const last_orig_moved = list.find(".talent-origin:not(:empty)").last()
+                        if (last_orig_moved.length > 0) { // Insert after last moved item (to preserve the order)
+                            last_orig_moved.parents(".talent").after(row)
+                        } else {
+                            header.after(row)
+                        }
+                        update_talent({item: row[0], to: list[0]})
                     }
                 }
 
