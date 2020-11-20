@@ -2481,58 +2481,76 @@
             const table_row_input_id = /(.+)-(\d+)-.+/;
             const talent_input_id = /(x|(?:-4)|(?:-2)|0)(\d+)-name/;
             old_html.find("input").each((i, old_input) => {
-                let new_input = $("#" + old_input.id)
+                if (old_input.id && old_input.id.length > 0) {
+                    let new_input = $("#" + old_input.id)
 
-                const talent_matching = old_input.id.match(talent_input_id);
-                if (new_input.length === 0) {
-                    let matching = old_input.id.match(table_row_input_id)
-                    if (matching) {
-                        // Add rows to the tables until it finds the appropriate field
-                        const button = $("#add-" + matching[1])
-                        while (new_input.length === 0) {
-                            button.trigger("click")
-                            new_input = $("#" + old_input.id)
+                    const talent_matching = old_input.id.match(talent_input_id);
+                    if (new_input.length === 0) {
+                        let matching = old_input.id.match(table_row_input_id)
+                        if (matching) {
+                            // Add rows to the tables until it finds the appropriate field
+                            const button = $("#add-" + matching[1])
+                            while (new_input.length === 0) {
+                                button.trigger("click")
+                                new_input = $("#" + old_input.id)
+                            }
+                        }
+
+                        if (talent_matching && old_input.value.trim().length > 0) {
+                            // Add element
+                            const button = $("#add-talent-" + talent_matching[1])
+                            while (new_input.length === 0) {
+                                button.trigger("click")
+                                new_input = $("#" + old_input.id)
+                            }
                         }
                     }
 
-                    if (talent_matching && old_input.value.trim().length > 0) {
-                        // Add element
-                        const button = $("#add-talent-" + talent_matching[1])
-                        while (new_input.length === 0) {
-                            button.trigger("click")
-                            new_input = $("#" + old_input.id)
+                    // Check the list of the talent
+                    if (talent_matching) {
+                        const target_talent_list = old_html.find(old_input).parents(".talent-list")
+                        const current_talent_list = $(new_input).parents(".talent-list")
+                        if (target_talent_list.length > 0 && target_talent_list[0].id !== current_talent_list[0].id) {
+                            // Move to new table if needed
+                            const row = $(new_input).parents(".talent")
+                            const list = $("#" + target_talent_list[0].id)
+                            const header = list.children().first()
+                            const last_orig_moved = list.find(".talent-origin:not(:empty)").last()
+                            if (last_orig_moved.length > 0) { // Insert after last moved item (to preserve the order)
+                                last_orig_moved.parents(".talent").after(row)
+                            } else {
+                                header.after(row)
+                            }
+                            update_talent({item: row[0], to: list[0]})
                         }
                     }
-                }
 
-                // Check the list of the talent
-                if (talent_matching) {
-                    const target_talent_list = old_html.find(old_input).parents(".talent-list")
-                    const current_talent_list = $(new_input).parents(".talent-list")
-                    if (target_talent_list.length > 0 && target_talent_list[0].id !== current_talent_list[0].id) {
-                        // Move to new table if needed
-                        const row = $(new_input).parents(".talent")
-                        const list = $("#" + target_talent_list[0].id)
-                        const header = list.children().first()
-                        const last_orig_moved = list.find(".talent-origin:not(:empty)").last()
-                        if (last_orig_moved.length > 0) { // Insert after last moved item (to preserve the order)
-                            last_orig_moved.parents(".talent").after(row)
-                        } else {
-                            header.after(row)
-                        }
-                        update_talent({item: row[0], to: list[0]})
+                    // Refresh modified sliders
+                    if (new_input.hasClass("input-slider")) {
+                        new_input.slider("setValue", old_input.value)
+                        new_input.slider("refresh", {useCurrentValue: true})
                     }
-                }
 
-                // Refresh modified sliders
-                if (new_input.hasClass("input-slider")) {
-                    new_input.slider("setValue", old_input.value)
-                    new_input.slider("refresh", {useCurrentValue: true})
+                    // We change the value and trigger the change in case of a listener
+                    new_input.val(old_input.value)
+                    new_input.trigger("change")
                 }
+            })
 
-                // We change the value and trigger the change in case of a listener
-                new_input.val(old_input.value)
-                new_input.trigger("change")
+            old_html.find("select").each((i, old_select) => {
+                // Find the correct option
+                const selection = old_html.find("select#" + old_select.id + " option:selected")
+                if (selection.length > 0) {
+                    // Set this option on the new document
+                    const new_select = $("#" + old_select.id)
+                    new_select.children().each((j, option) => {
+                        option.removeAttribute("selected")
+                        if (option.value === selection[0].value) {
+                            option.setAttribute("selected", "selected")
+                        }
+                    })
+                    new_select.selectpicker("refresh")
+                }
             })
 
             // Preserve order of sortable elements
