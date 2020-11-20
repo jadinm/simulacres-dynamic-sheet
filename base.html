@@ -1545,7 +1545,7 @@
         consumed_points -= parseInt($("#advised-talents").val())
 
         // Spells
-        $(".spell-list:visible").each((i, elem) => {
+        $(".spell-list").each((i, elem) => {
             const value = elem.value.trim()
             if (value === "Divin" || value === "Ki")
                 consumed_points += ki_divine_spell_ap_cost // Priest and monk have level 0 spell directly
@@ -1623,7 +1623,7 @@
     function hp_update(event) {
         const value = parseInt(event.target.value)
         const slider = $("#" + event.target.getAttribute("data-slider-id"))
-        const handle = slider.find(".slider-handle.custom:visible")
+        const handle = slider.find(".slider-handle.custom")
         const selection = slider.find(".slider-selection")
         // Update color
         if (value === 0) {
@@ -1710,7 +1710,7 @@
         }
     }
 
-    $('.input-slider:visible').each((i, input) => {
+    $('.input-slider').each((i, input) => {
         activate_slider(input)
     })
 
@@ -1981,7 +1981,7 @@
         if (event.target.value === "Divin" || event.target.value === "Ki") {
             slider.val(10).slider("setValue", 10).slider("refresh", {useCurrentValue: true}).slider("disable")
             $(slider.slider("getElement")).hide()
-        } else {
+        } else if (event.target.value.length === 0) {
             slider.slider("enable").slider("refresh", {useCurrentValue: true})
             $(slider.slider("getElement")).show()
         }
@@ -2012,7 +2012,7 @@
         update_spell_value($("#" + value_id))
     }
 
-    $(".spell-list:visible").on("change", list_changed)
+    $(".spell-list").on("change", list_changed)
     $(".spell-formula-elem").on("click", formula_changed)
     $(".spell-difficulty-input").on("change", casting_count_changed)
     $(".realm").on("change", _ => {
@@ -2106,7 +2106,6 @@
     function find_index(parent, elem) {
         let idx = 0
         parent.children().each((i, child) => {
-            console.log(child.id)
             if (child.id === elem.id) {
                 idx = i
             }
@@ -2171,8 +2170,7 @@
                 }
 
                 // Refresh modified sliders
-                if (new_input.hasClass("input-slider") && new_input.is(":visible")) {
-                    console.log(new_input)
+                if (new_input.hasClass("input-slider")) {
                     new_input.slider("setValue", old_input.value)
                     new_input.slider("refresh", {useCurrentValue: true})
                 }
