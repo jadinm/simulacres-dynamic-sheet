@@ -139,6 +139,7 @@
         }
     </style>
 
+    <script src="node_modules/natsort/dist/natsort.min.js"></script>
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
     <script src="node_modules/popper.js/dist/umd/popper.min.js"></script>
     <script src="node_modules/popper.js/dist/umd/popper-utils.min.js"></script>
@@ -654,15 +655,17 @@
                         <th scope="col" class="col-3" style="min-width: 200px">Talent</th>
                         <th scope="col" class="col-3 text-center" style="min-width: 250px">Formule</th>
                         <th scope="col" class="col-1 text-center">Valeur</th>
-                        <th scope="col" class="col-5" style="min-width: 200px">Effet</th>
+                        <th scope="col" class="col-5" style="min-width: 300px">Effet</th>
                     </tr>
                     </thead>
                     <tbody id="roll-table" class="sortable-list">
                     <tr id="roll-x" hidden>
-                        <td class="md-form my-0 py-0 align-middle">
-                            <i class="fas fa-arrows-alt prefix mt-4 ml-1" style="font-size: 1.5em;"></i>
+                        <td class="my-0 py-0 align-middle md-form row">
                             <label for="roll-x-talent"></label>
-                            <input id="roll-x-talent" class="roll-talent form-control" type="text" value="">
+                            <select class="show-tick form-control talent-select" data-live-search="true"
+                                    id="roll-x-talent" data-style="col-8 ml-5 align-middle">
+                            </select>
+                            <i class="fas fa-arrows-alt prefix mt-3 ml-1" style="font-size: 1.5em;"></i>
                         </td>
                         <td class="my-0 py-0 roll-formula align-middle">
                             <div class="row">
@@ -1574,6 +1577,19 @@
     const components = ["body", "instincts", "heart", "mind"]
     const means = ["perception", "action", "desire", "resistance"]
 
+    /* select pickers */
+
+    // Remove duplicated select picker
+    $("select.talent-select").each((i, select) => {
+        $(select).parents('.bootstrap-select').replaceWith(function () {
+            return $('select', this);
+        })
+        $(select).selectpicker('destroy')
+    })
+
+    // Set the right version of bootstrap for bootstrap-select
+    $.fn.selectpicker.Constructor.BootstrapVersion = '4';
+
     /* Update field value attributes as the user writes so that it will be saved in the HTML */
 
     function update_input(event) {
@@ -1753,6 +1769,11 @@
         // Update all of the spell values
         $(".spell-value").each((i, elem) => {
             update_spell_value($(elem))
+        })
+
+        // Update all the rolls
+        $(".roll-value").each((i, elem) => {
+            update_roll_value($(elem))
         })
 
         // Update adventure points
@@ -1999,6 +2020,34 @@
 
     /* Talent lists */
 
+    function update_talent_select(select) {
+        // Find the selected option
+        const selected_option = select.find("option:selected").val()
+
+        // Recover talent list
+        const talent_list = $(".talent input[id*='-name']").filter((i, e) => {
+            return e.value && e.value.length > 0;
+        })
+        select.empty()
+
+        // Sort it
+        talent_list.sort((a, b) => {
+            return a.value.localeCompare(b.value) // Sort correctly accents
+        }).each((i, elem) => {
+            let new_option = "<option value='" + elem.value + "'"
+            if (selected_option === elem.value) // Keep selection
+                new_option += " selected"
+            new_option += ">" + elem.value + "</option>"
+            select.append(new_option)
+        })
+
+        select.selectpicker()
+        select.selectpicker("refresh")
+    }
+    $("select.talent-select").each((i, elem) => {
+        update_talent_select($(elem))
+    })
+
     function add_talent(list) {
         const initial_level = list[0].id.replace("talents_", "")
 
@@ -2021,6 +2070,10 @@
 
         list.children().last().before(new_talent)
 
+        // Update all list selections of talents
+        $("select.talent-select").each((i, elem) => {
+            update_talent_select($(elem))
+        })
         // Update rolls
         $(".roll-value").each((i, elem) => {
             update_roll_value($(elem))
@@ -2042,8 +2095,8 @@
     })
 
     default_talents = {
-        x: ["Agriculture", "Alchimie", "Art de la guerre", "Art magique", "Botanique", "Histoire d'Heldor",
-            "Langue étrangère éloignée", "Lire & Écrire", "Lire sur les lèvres", "Mathématiques", "Navigation",
+        x: ["Agriculture", "Alchimie", "Art de la guerre", "Art Magique", "Botanique", "Histoire d'Heldor",
+            "Langue étrangère éloignée", "Lire et Écrire", "Lire sur les lèvres", "Mathématiques", "Navigation",
             "Menuiserie/Ébénisterie", "Minéralogie/Joaillerie", "Poisons", "Serrurerie", "Zoologie"],
         "-4": ["Armes normales", "Arts martiaux/Lutte", "Camouflage", "Commerce/Marchandage", "Coutumes étrangères",
             "Équitation", "Géographie d'Heldor", "Langue étrangère proche", "Jonglage/Acrobaties", "Maçonnerie",
@@ -2104,6 +2157,10 @@
         onEnd: update_talent
     })
 
+    $('#roll-table').sortable({
+        handle: '.fa-arrows-alt',
+        dragoverBubble: true
+    })
     $('#spell-table').sortable({
         handle: '.fa-arrows-alt',
         dragoverBubble: true
@@ -2165,9 +2222,30 @@
         update_roll_value($("#" + value_id))
     }
 
-    $(".roll-talent").on("change", roll_changed) // TODO changed.bs.select
+    function talent_changed(e, clickedIndex, newValue, oldValue) {
+        const value_id = e.target.id
+        let base_array = value_id.split("-")
+        base_array.pop()
+        const base_id = base_array.join("-")
+
+        roll_changed(e)
+        $("#roll-" + base_id + "-talent").children().each((i, elem) => { // Save results in DOM
+            elem.removeAttribute('selected')
+            if (i === clickedIndex) {
+                $("#roll-" + base_id + "-talent").children()[clickedIndex].setAttribute('selected','selected')
+            }
+        })
+    }
+
     $(".roll-formula-elem").on("click", roll_changed)
+
     $(".talent input[id*='-name']").on("change", _ => {
+        // Update all list selections of talents
+        $("select.talent-select").each((i, elem) => {
+            update_talent_select($(elem))
+        })
+
+        // Update all the rolls
         $(".roll-value").each((i, elem) => {
             update_roll_value($(elem))
         })
@@ -2332,7 +2410,23 @@
         add_row($("#equipment-table"), $("#equipment-x").clone(true, true))
     })
     $("#add-roll").on("click", _ => {
-        add_row($("#roll-table"), $("#roll-x").clone(true, true))
+        const new_row = $("#roll-x").clone(true, false)
+
+        const new_id = add_row($("#roll-table"), new_row)
+        const select = $("#roll-" + new_id + "-talent")
+        select.parents('.bootstrap-select').replaceWith(function () {
+            return $('select', this);
+        })
+        select.selectpicker()
+
+        // Reset all the listeners
+        new_row.find("input").each((i, elem) => {
+            elem.value = ""
+            $(elem).on("change", update_input)
+        })
+        new_row.find("input[type=\"radio\"]").on("click", update_radio)
+        select.on("changed.bs.select", talent_changed)
+        new_row.find(".roll-formula-elem").on("click", roll_changed)
     })
 
     /* Save Character page */
@@ -2453,6 +2547,9 @@
         // Asynchronous read
         reader.readAsText(event.target.files[0])
     })
+
+    // Add listeners to selects
+    $("select.talent-select").on("changed.bs.select", talent_changed)
 </script>
 
 <!-- Begin SVG images -->
