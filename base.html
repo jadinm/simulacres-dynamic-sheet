@@ -1747,7 +1747,7 @@
         // Spells
         $(".spell-list").each((i, elem) => {
             const value = elem.value.trim()
-            if (value === "Divin" || value === "Ki")
+            if (value === "Divin")
                 consumed_points += ki_divine_spell_ap_cost // Priest and monk have level 0 spell directly
             else if (value.length > 0)
                 consumed_points += mage_spell_ap_cost // Mages have -4 level spells at start
@@ -2311,7 +2311,7 @@
 
         // Fix the level to 0 if divine or ki energies
         const slider = $("#" + difficulty_id)
-        if (event.target.value === "Divin" || event.target.value === "Ki") {
+        if (event.target.value === "Divin") {
             slider.val(10).slider("setValue", 10).slider("refresh", {useCurrentValue: true}).slider("disable")
             $(slider.slider("getElement")).hide()
         } else if (event.target.value.length === 0) {
