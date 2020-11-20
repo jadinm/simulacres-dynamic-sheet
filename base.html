@@ -2244,10 +2244,10 @@
         const base_id = base_array.join("-")
 
         roll_changed(e)
-        $("#roll-" + base_id + "-talent").children().each((i, elem) => { // Save results in DOM
+        $("#" + base_id + "-talent").children().each((i, elem) => { // Save results in DOM
             elem.removeAttribute('selected')
             if (i === clickedIndex) {
-                $("#roll-" + base_id + "-talent").children()[clickedIndex].setAttribute('selected','selected')
+                $("#" + base_id + "-talent").children()[clickedIndex].setAttribute('selected','selected')
             }
         })
     }
