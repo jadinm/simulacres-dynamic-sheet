@@ -1441,47 +1441,52 @@
                 Le contenu suivant ne doit être encodé qu'une seule fois (sauf pour les lanceurs de sorts
                 qui devront peut-être changer encore le dernier champ).
                 Au début de la campagne, il est possible de faire certaines actions qui diminuent ou augmentent
-                le coût en PA de ce qui est encodé dans la fiche.
+                les coûts en PA.
             </div>
             <div class="row mt-2 ml-1">
-                D'abord passer directement certaines énergies ou règnes à 2 avec les 8 points d'énergie et de règne
-                initiaux fait économiser 5 PA car passer au niveau 2 demande 10 PA au lieu de 5.
+                Les règnes et les énergies classiques peuvent être montés à 2 à la création en utilisant
+                les 8 points d'énergie et de règne initiaux.
+                Cela fait économiser 5 PA car passer au niveau 2 demande 10 PA au lieu de 5.
+                En revance, ce n'est pas possible pour les énergies magiques ou spéciales qui ne peuvent être
+                montées qu'à 1, à la création.
             </div>
             <div class="row form-row mt-2 md-form p-0 m-0">
                 <div class="col-12">
-                    <label for="energies-started-level-2">Nombre d'énergies montées à 2 à la création</label>
+                    <label for="energies-started-level-2">
+                        Nombre de règnes et énergies classiques montées à 2 à la création
+                    </label>
                     <input class="form-control adventure-points-setting" id="energies-started-level-2" type="number"
                            value="0" min="0" max="4">
                 </div>
             </div>
             <div class="row mt-2 ml-1">
-                Ensuite, le choix du métier et donc des talents qui sont montés à 0 ou à 1 influe sur la consommation
-                en PA selon le niveau initial de ces talents de métiers.
+                Le métier sélectionné par le joueur donne accès à certains talents dit "de métier" qui sont montés à 0
+                lors de la création du personnage et l'un d'entre eux est monté à 1. Le tout sans dépenser de PA.
             </div>
             <div class="row form-row mt-2 md-form p-0 m-0">
-                <div class="col-4">
-                    <label for="job-talents-x">Talents de métier en colonne X</label>
+                <div class="col-lg-4">
+                    <label for="job-talents-x">Nombre de talents de métier initialement de niveau X</label>
                     <input class="form-control adventure-points-setting" id="job-talents-x" type="number" value="0"
                            min="0">
                 </div>
-                <div class="col-4">
-                    <label for="job-talents-4">Talents de métier en colonne -4</label>
+                <div class="col-lg-4">
+                    <label for="job-talents-4">Nombre de talents de métier initialement de niveau -4</label>
                     <input class="form-control adventure-points-setting" id="job-talents-4" type="number" value="0"
                            min="0">
                 </div>
-                <div class="col-4">
-                    <label for="job-talents-2">Talents de métier en colonne -2</label>
+                <div class="col-lg-4">
+                    <label for="job-talents-2">Nombre de talents de métier initialement de niveau -2</label>
                     <input class="form-control adventure-points-setting" id="job-talents-2" type="number" value="0"
                            min="0">
                 </div>
             </div>
             <div class="row mt-2 ml-1">
-                Il y a également des talents conseillé pour chaque métier. Les prendre à la création du personnage
+                Il y a également des talents conseillés pour chaque métier. Les prendre à la création du personnage
                 réduit de 1 le coût de ceux-ci.
             </div>
             <div class="row form-row mt-2 md-form p-0 m-0">
                 <div class="col-12">
-                    <label for="advised-talents">Nombre de talents conseillés à la création</label>
+                    <label for="advised-talents">Nombre de talents conseillés pris à la création</label>
                     <input class="form-control adventure-points-setting" id="advised-talents" type="number" value="0"
                            min="0">
                 </div>
