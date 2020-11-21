@@ -70,7 +70,7 @@ $("#import-page").on("change", function (event) {
                     if (talent_matching && old_input.value.trim().length > 0) {
                         // Add element
                         const button = $("#add-talent-" + talent_matching[1])
-                        button.trigger("click", parseInt(matching[2])) // Add a new elem with forced index
+                        button.trigger("click", parseInt(talent_matching[2])) // Add a new elem with forced index
                         new_input = $(old_input_sel)
                     }
                 }
