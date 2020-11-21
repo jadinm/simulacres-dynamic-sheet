@@ -11,13 +11,17 @@ function talent_base_level(talent) {
     return talent.id.match(regex_talent_from_id)[1]
 }
 
-function add_talent(list) {
+function add_talent(list, fixed_id=null) {
     const initial_level = list[0].id.replace("talents_", "")
 
     // Find new id
     let new_id_idx = 0
-    while ($("#talent_" + initial_level + new_id_idx).length > 0)
-        new_id_idx++
+    if (fixed_id === null) {
+        while ($("#talent_" + initial_level + new_id_idx).length > 0)
+            new_id_idx++
+    } else {
+        new_id_idx = fixed_id
+    }
 
     // Clone and set ids
     const new_talent = $("#talent_" + initial_level).clone(true, true)
@@ -44,17 +48,17 @@ function add_talent(list) {
     return new_talent
 }
 
-$("#add-talent-x").on("click", _ => {
-    add_talent($("#talents_x"))
+$("#add-talent-x").on("click", (event, idx=null) => { // Add parameter to fix the id
+    add_talent($("#talents_x"), idx)
 })
-$("#add-talent--4").on("click", _ => {
-    add_talent($("#talents_-4"))
+$("#add-talent--4").on("click", (event, idx=null) => { // Add parameter to fix the id
+    add_talent($("#talents_-4"), idx)
 })
-$("#add-talent--2").on("click", _ => {
-    add_talent($("#talents_-2"))
+$("#add-talent--2").on("click", (event, idx=null) => { // Add parameter to fix the id
+    add_talent($("#talents_-2"), idx)
 })
-$("#add-talent-0").on("click", _ => {
-    add_talent($("#talents_0"))
+$("#add-talent-0").on("click", (event, idx=null) => { // Add parameter to fix the id
+    add_talent($("#talents_0"), idx)
 })
 
 default_talents = {
@@ -123,4 +127,18 @@ $('.talent-list').sortable({
 $("select.talent-select").on("changed.bs.select", talent_changed).each((i, elem) => {
     if (elem.id !== "roll-x-talent")
         update_talent_select($(elem))
+})
+
+$('.remove-talent').sortable({
+    group: 'talent-lists', // So that it can delete those items
+    ghostClass: "remove-drop",
+    onAdd: event => {
+        // Remove the element
+        $(event.item).remove()
+
+        // Update rolls
+        $(".roll-value").each((i, elem) => {
+            update_roll_value($(elem))
+        })
+    }
 })

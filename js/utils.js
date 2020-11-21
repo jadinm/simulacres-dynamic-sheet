@@ -25,5 +25,6 @@ $.fn.selectpicker.Constructor.BootstrapVersion = '4';
 /* Tooltip initializations */
 $(_ => {
     $('[data-toggle="tooltip"]:visible').tooltip()
+    $('button[data-toggle="tooltip"]').tooltip()
     $("#roll-x-talent").selectpicker("destroy")  // Remove hidden selectpickers for cloning
 })

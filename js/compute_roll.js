@@ -55,7 +55,6 @@ function list_changed(event) {
         slider.val(10).slider("setValue", 10).slider("refresh", {useCurrentValue: true}).slider("disable")
         $(slider.slider("getElement")).hide()
     } else if (event.target.value.length === 0) {
-        console.log(slider)
         slider.slider("enable").slider("refresh", {useCurrentValue: true})
         $(slider.slider("getElement")).show()
     }
@@ -159,7 +158,7 @@ $(".realm,.component,.realm," + talent_list_selector).on("change", _ => {
 
 /* Add buttons */
 
-$("#add-spell").on("click", _ => {
+$("#add-spell").on("click", (event, idx=null) => { // Add parameter for forced index
     const table = $("#spell-table")
 
     // We have to reset listeners because of the slider
@@ -171,7 +170,7 @@ $("#add-spell").on("click", _ => {
         $(elem).trigger("change")
     })
 
-    const new_id = add_row(table, new_spell)
+    const new_id = add_row(table, new_spell, idx)
     activate_slider(new_spell.find("#spell-" + new_id + "-difficulty-input")[0],
         input => {
             return value => {
@@ -200,10 +199,10 @@ $("#add-spell").on("click", _ => {
     add_row_listeners(new_spell)
 })
 
-$("#add-roll").on("click", _ => {
+$("#add-roll").on("click", (event, idx=null) => { // Add parameter for forced index
     const new_row = $("#roll-x").clone(true, false)
 
-    const new_id = add_row($("#roll-table"), new_row)
+    const new_id = add_row($("#roll-table"), new_row, idx)
     const select = new_row.find("#roll-" + new_id + "-talent")
     select.selectpicker()
 

@@ -14,16 +14,22 @@ function row_elem(base_elem, element_id_suffix) {
 
 /* Add new rows to tables */
 
-function add_row(table, new_elem) {
-    // Increment the spell id
-    let max_tr_id = -1
-    table.children().each((i, elem) => {
-        let old_value = elem.id.split("-").pop()
-        if (old_value === "x")
-            old_value = "-1"
-        max_tr_id = Math.max(parseInt(old_value), max_tr_id)
-    })
-    const new_id = max_tr_id + 1
+function add_row(table, new_elem, fixed_idx=null) {
+    let new_id
+    if (fixed_idx === null) {
+        // Increment the spell id
+        let max_tr_id = -1
+        table.children().each((i, elem) => {
+            let old_value = elem.id.split("-").pop()
+            if (old_value === "x")
+                old_value = "-1"
+            max_tr_id = Math.max(parseInt(old_value), max_tr_id)
+        })
+        new_id = max_tr_id + 1
+    } else {
+        // Use requested idx
+        new_id = fixed_idx
+    }
 
     new_elem.find("*[id*=-x-]").each((i, elem) => {
         elem.id = elem.id.replace("-x-", "-" + new_id + "-")
@@ -46,19 +52,37 @@ function add_row(table, new_elem) {
 
 /* Add new equipment, spell and roll rows */
 
-$("#add-focus").on("click", _ => {
-    add_row($("#focus-table"), $("#focus-x").clone(true, true))
+$("#add-focus").on("click", (event, idx=null) => { // Add parameter for forced index
+    add_row($("#focus-table"), $("#focus-x").clone(true, true), idx)
 })
 
-$("#add-magical-equipment").on("click", _ => {
-    add_row($("#magical-equipment-table"), $("#magical-equipment-x").clone(true, true))
+$("#add-magical-equipment").on("click", (event, idx=null) => { // Add parameter for forced index
+    add_row($("#magical-equipment-table"), $("#magical-equipment-x").clone(true, true), idx)
 })
 
-$("#add-equipment").on("click", _ => {
-    add_row($("#equipment-table"), $("#equipment-x").clone(true, true))
+$("#add-equipment").on("click", (event, idx=null) => { // Add parameter for forced index
+    add_row($("#equipment-table"), $("#equipment-x").clone(true, true), idx)
 })
 
-$('#roll-table,#spell-table,#focus-table,#magical-equipment-table,#equipment-table').sortable({
-    handle: '.fa-arrows-alt',
-    dragoverBubble: true
+/* Sortable handling */
+
+$('#roll-table,#spell-table,#focus-table,#magical-equipment-table,#equipment-table').each((i, elem) => {
+    $(elem).sortable({
+        handle: '.fa-arrows-alt',
+        dragoverBubble: true,
+        group: elem.id
+    })
+})
+
+/* Remove */
+
+$('#roll-table-remove,#spell-table-remove,#focus-table-remove,#magical-equipment-table-remove,#equipment-table-remove').each((i, elem) => {
+    $(elem).sortable({
+        group: elem.id.replace("-remove", ""), // So that it can delete the appropriate table items
+        ghostClass: "remove-drop",
+        onAdd: event => {
+            // Remove the element
+            $(event.item).remove()
+        }
+    })
 })

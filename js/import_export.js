@@ -63,16 +63,14 @@ $("#import-page").on("change", function (event) {
                     if (matching) {
                         // Add rows to the tables until it finds the appropriate field
                         const button = $("#add-" + matching[1])
-                        while (new_input.length === 0) {
-                            button.trigger("click")
-                            new_input = $(old_input_sel)
-                        }
+                        button.trigger("click", parseInt(matching[2])) // Add a new elem with forced index
+                        new_input = $(old_input_sel)
                     }
 
                     if (talent_matching && old_input.value.trim().length > 0) {
                         // Add element
                         const button = $("#add-talent-" + talent_matching[1])
-                        while (new_input.length === 0) {
+                        while (new_input.length === 0) { // TODO This method is ugly and creates empty rows
                             button.trigger("click")
                             new_input = $(old_input_sel)
                         }
