@@ -13,6 +13,14 @@ function add_row_listeners(row = $(document)) {
     row.find(".spell-difficulty-input").on("change", event => {
         update_spell_value(row_elem(event.target, "value"))
     })
+    row.find(".row-roll-trigger").on("click", event => {
+        let button = $(event.target);
+        if (!button.hasClass("row-roll-trigger"))
+            button = $(event.target).parents(".row-roll-trigger")
+        const value = parseInt(row_elem(button[0], "value").text()) // Recover max value
+        trigger_roll(value)
+    })
+    row.find(".roll-formula-elem").on("click", roll_changed)
 }
 
 function compute_formula(row) {
@@ -43,6 +51,7 @@ function update_spell_value(value_div) {
 
     // Update
     value_div.text(sum)
+    row_elem(value_div[0], "dice")[0].removeAttribute("hidden")
 }
 
 function list_changed(event) {
@@ -123,6 +132,7 @@ function update_roll_value(value_div) {
 
     // Update
     value_div.text(sum)
+    row_elem(value_div[0], "dice")[0].removeAttribute("hidden")
 }
 
 function roll_changed(event) {
@@ -142,8 +152,6 @@ function talent_changed(e, clickedIndex, newValue, oldValue) {
 }
 
 /* Triggers */
-
-$(".roll-formula-elem").on("click", roll_changed)
 
 $(".realm,.component,.realm," + talent_list_selector).on("change", _ => {
     // Update all of the spell values
@@ -207,11 +215,60 @@ $("#add-roll").on("click", (event, idx=null) => { // Add parameter for forced in
     select.selectpicker()
 
     // Reset all the listeners
-    add_save_to_dom_listeners(new_row)
     new_row.find("input").each((i, elem) => {
         elem.value = ""
         $(elem).trigger("change")
     })
     select.on("changed.bs.select", talent_changed)
-    new_row.find(".roll-formula-elem").on("click", roll_changed)
+    add_row_listeners()
 })
+
+/* Actual roll */
+
+function roll_dices(number=2, type=6) {
+    let sum = 0;
+    for (let i = 0; i < number; i++) {
+        let random = Math.random();
+        sum += Math.floor(random * type) + 1;
+    }
+    return sum;
+}
+
+$("#roll-dialog-1d6").on("click", _ => {
+    const dice_value = roll_dices(1)
+    $("#roll-dialog-1d6-result").text("1d6 additionnel: " + dice_value)
+})
+
+$("#roll-dialog-2d6").on("click", _ => {
+    const dice_value = roll_dices()
+    $("#roll-dialog-2d6-result").text("2d6 additionnels: " + dice_value)
+})
+
+function trigger_roll(max_value=null) {
+    // Reset text
+    $("#roll-dialog-1d6-result").text("")
+    $("#roll-dialog-2d6-result").text("")
+
+    const dice_value = roll_dices()
+    if (max_value) {
+        $("#roll-dialog-result").text("Marge = " + (max_value - dice_value)
+            + "\nSomme des 2d6 = " + dice_value + "\nValeur seuil = " + max_value)
+    } else {
+        $("#roll-dialog-result").text("Résultat du jet de 2d6 = " + dice_value)
+    }
+
+    // Fill in penalties
+    let penalty_text = ""
+    const unease = get_unease()
+    if (unease !== 0) {
+        penalty_text += "\nMalaise courant: " + unease + " (cela peut ou non s'appliquer)\n"
+    }
+    const armor_penalty = get_armor_penalty()
+    if (armor_penalty !== 0) {
+        penalty_text += "Malaise d'armure: " + armor_penalty
+            + " (cela peut ou non s'appliquer sur les actions physiques)\n"
+    }
+    $("#roll-dialog-penalties").text(penalty_text)
+
+    $('#roll-dialog').modal()
+}

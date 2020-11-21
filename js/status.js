@@ -27,7 +27,7 @@ function hp_update(event) {
 
 /* Update armor penalty */
 
-$(".armor").on("change", event => {
+function get_armor_penalty() {
     const armors = $.map($(".armor"), element => parseInt(element.value))
     let armor_sum = 0
     for (let i = 0; i < armors.length; i++) {
@@ -36,13 +36,17 @@ $(".armor").on("change", event => {
 
     let penalty = 0
     if (armor_sum >= 12 && armor_sum <= 23) {
-        penalty = 1
+        penalty = -1
     } else if (armor_sum >= 24 && armor_sum <= 30) {
-        penalty = 2
+        penalty = -2
     } else if (armor_sum >= 31) {
-        penalty = 3
+        penalty = -3
     }
-    $("#armor-penalty").text(penalty)
+    return penalty
+}
+
+$(".armor").on("change", _ => {
+    $("#armor-penalty").text(get_armor_penalty())
 })
 
 /* Update constitution on resistance change */
@@ -132,6 +136,10 @@ $("#decrement-psychic").on("click", _ => {
 
 /* Enable all the sliders on load */
 
+function get_unease() {
+    return parseInt($("#unease-value").text())
+}
+
 $(_ => {
 
     /**
@@ -145,13 +153,18 @@ $(_ => {
             const max = slider_max(input)
             const initial_malus = -1 + max - 4
             let text = ""
-            if (value === 0 || initial_malus - value === 0)
+            let unease = 0
+            if (value === 0 || initial_malus - value === 0) {
                 text = "\u2205"
-            else if (value === max)
+            } else if (value === max) {
                 text = "coma"
-            else
+                unease = initial_malus - value
+            } else {
                 text = "malus de " + (initial_malus - value)
+                unease = initial_malus - value
+            }
             $("#unease-text").text(text)
+            $("#unease-value").text(unease)
             return text
         }
     })

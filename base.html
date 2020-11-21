@@ -618,10 +618,13 @@
                 <!-- Protection summary, unease, breath and psychic balance -->
                 <div class="offset-1 col-lg-3 col-md-4 mt-5 align-middle">
                     <div class="row mb-5">
-                        Malus de protection:<span id="armor-penalty">0</span>
+                        Malus de protection:&nbsp;<span id="armor-penalty">0</span>
                     </div>
                     <div class="row">
-                        <label for="unease">Malaise (M):<span id="unease-text">pas de malus</span></label>
+                        <label for="unease">Malaise (M):&nbsp;
+                            <span id="unease-text">pas de malus</span>
+                            <span id="unease-value" hidden></span>
+                        </label>
                     </div>
                     <div class="row mb-5">
                         <input id="unease" data-slider-id="unease-slider" type="text" data-slider-min="0"
@@ -816,7 +819,12 @@
                             </div>
                         </td>
                         <td class="my-0 py-0 text-center align-middle">
-                            <div id="roll-x-value" class="roll-value"></div>
+                            <div>
+                                <span id="roll-x-value" class="roll-value"></span>
+                                <span id="roll-x-dice" class="clickable row-roll-trigger" hidden>
+                                    <i class="fas fa-dice"></i>
+                                </span>
+                            </div>
                         </td>
                         <td class="md-form my-0 py-0 align-middle">
                             <input id="roll-x-effect" class="roll-effect form-control" type="text">
@@ -1338,7 +1346,10 @@
                             </div>
                         </td>
                         <td class="my-0 py-0 text-center align-middle">
-                            <div id="spell-x-value" class="spell-value"></div>
+                            <span id="spell-x-value" class="spell-value"></span>
+                            <span id="spell-x-dice" class="clickable row-roll-trigger" hidden>
+                                <i class="fas fa-dice"></i>
+                            </span>
                         </td>
                         <td class="md-form my-0 py-0 align-middle">
                             <input id="spell-x-time" class="spell-time form-control text-center" type="text">
@@ -1724,6 +1735,43 @@
                         <button id="decrement-psychic" class="btn btn-danger col-6 mx-0 px-0">
                             Diminuer de 1 le maximum des EP
                         </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Rolls -->
+<div class="container">
+    <div class="modal fade bd-modal-lg" id="roll-dialog" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">
+                        Résultat du jet
+                    </h2>
+                </div>
+                <div class="modal-body align-middle">
+                    <div class="row mx-1" id="roll-dialog-result" style="white-space: pre-line;">
+                        <!-- Show the cause of the roll -->
+                    </div>
+                    <div class="row mx-1">
+                        <!-- Warn user about current malus here -->
+                        <span id="roll-dialog-penalties" style="white-space: pre-line;"></span>
+                    </div>
+                    <hr/>
+                    <div class="row mx-1">
+                        Le jet nécessite parfois de de lancer un ou deux autres dés pour localiser ou quantifier
+                        l'effet. Les deux boutons suivants permettent de faire ça.
+                    </div>
+                    <div class="row mx-1">
+                        <div id="roll-dialog-1d6" class="btn btn-info"><i class="fas fa-dice-six"></i></div>
+                        <div id="roll-dialog-1d6-result" class="mt-3"></div>
+                    </div>
+                    <div class="row mx-1">
+                        <div id="roll-dialog-2d6" class="btn btn-info"><i class="fas fa-dice"></i></div>
+                        <div id="roll-dialog-2d6-result" class="mt-3"></div>
                     </div>
                 </div>
             </div>
