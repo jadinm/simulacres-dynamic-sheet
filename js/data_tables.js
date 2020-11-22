@@ -70,7 +70,10 @@ $('#roll-table,#spell-table,#focus-table,#magical-equipment-table,#equipment-tab
     $(elem).sortable({
         handle: '.fa-arrows-alt',
         dragoverBubble: true,
-        group: elem.id
+        group: elem.id,
+        onEnd: _ => {
+            changed_page = true
+        }
     })
 })
 
@@ -83,6 +86,8 @@ $('#roll-table-remove,#spell-table-remove,#focus-table-remove,#magical-equipment
         onAdd: event => {
             // Remove the element
             $(event.item).remove()
+
+            changed_page = true
         }
     })
 })

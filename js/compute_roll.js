@@ -102,6 +102,8 @@ function update_talent_select(select) {
 
     if (select.id !== "roll-x-talent")
         select.selectpicker("refresh")
+
+    changed_page = true
 }
 
 function update_roll_value(value_div) {

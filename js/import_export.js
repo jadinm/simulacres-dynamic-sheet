@@ -2,11 +2,18 @@
  * This file handles data saving to the DOM and data importing from another html file
  */
 
+let changed_page = false
+
+/* Remind the user that they need to save the page if they changed anything */
+window.onbeforeunload = function() {
+    if (changed_page)
+        return ""
+}
+
 /* Remove duplicated select picker */
 
 $("select.talent-select").each((i, select) => {
     $(select).parents('.bootstrap-select').first().replaceWith($(select))
-    //$(select).selectpicker('destroy')
 })
 
 /* Update field value attributes as the user writes so that it will be saved in the HTML */
@@ -15,13 +22,16 @@ function add_save_to_dom_listeners(base = $(document)) {
 
     base.find("input").on("change", event => {
         event.target.setAttribute("value", event.target.value)
+        changed_page = true
     })
     base.find("input.input-slider").on("change", event => {
         event.target.setAttribute("data-slider-value", event.target.value)
+        changed_page = true
     })
     base.find("input[type=\"radio\"]").on("click", event => {
         $("input[name='" + event.target.name + "']").removeAttr("checked")
         event.target.setAttribute("checked", "")
+        changed_page = true
     })
 }
 
@@ -37,6 +47,8 @@ $("#save-page").on("click", function (_) {
     if (character_name === null || character_name.length === 0)
         character_name = "Anonyme"
     saveAs(blob, character_name + ".html")
+
+    changed_page = false
 })
 
 /* Import Character page data */
