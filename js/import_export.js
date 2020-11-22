@@ -156,8 +156,30 @@ $("#import-page").on("change", function (event) {
             const new_input = $("#" + old_input.id)
             new_input.click().trigger("click")
         })
+
+        // Update the image if any
+        const old_image = old_html.find("#character-image")
+        if (old_image.length > 0)
+            $("#character-image")[0].src = old_image[0].src
     }
 
     // Asynchronous read
     reader.readAsText(event.target.files[0])
+})
+
+/* Import character image */
+
+$("#import-image").on("change", event => {
+    if (event.target.files.length === 0)
+        return
+
+    const reader = new FileReader();
+    reader.onload = _ => {
+        // Executed at the completion of the read
+        $("#character-image")[0].src = reader.result;
+
+        event.target.setAttribute("value", "")
+        $(event.target).next().text("Image")
+    }
+    reader.readAsDataURL(event.target.files[0])
 })
