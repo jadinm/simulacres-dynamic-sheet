@@ -166,6 +166,38 @@ $(".realm,.component,.realm," + talent_list_selector).on("change", _ => {
     })
 })
 
+/* Update sliders on load */
+
+function show_difficulty_builder(input) {
+    return value => {
+        const max = slider_max(input)
+        const difficulty_elem = $("#" + input.id.slice(0, -6))
+        let difficulty // Use the count of the spell casted to compute difficulty
+        if (value < 4)
+            difficulty = -4
+        else if (value <= 6)
+            difficulty = -3
+        else if (value <= 8)
+            difficulty = -2
+        else if (value === 9)
+            difficulty = -1
+        else if (value <= 19)
+            difficulty = 0
+        else if (value <= 29)
+            difficulty = 1
+        else
+            difficulty = 2
+        difficulty_elem.text(difficulty)
+        return value + "/" + max
+    }
+}
+
+$(_ => {
+    $('.spell-difficulty-input').each((i, input) => {
+        activate_slider(input, show_difficulty_builder)
+    })
+})
+
 /* Add buttons */
 
 $("#add-spell").on("click", (event, idx=null) => { // Add parameter for forced index
@@ -181,30 +213,7 @@ $("#add-spell").on("click", (event, idx=null) => { // Add parameter for forced i
     })
 
     const new_id = add_row(table, new_spell, idx)
-    activate_slider(new_spell.find("#spell-" + new_id + "-difficulty-input")[0],
-        input => {
-            return value => {
-                const max = slider_max(input)
-                const difficulty_elem = $("#" + input.id.slice(0, -6))
-                let difficulty // Use the count of the spell casted to compute difficulty
-                if (value < 4)
-                    difficulty = -4
-                else if (value <= 6)
-                    difficulty = -3
-                else if (value <= 8)
-                    difficulty = -2
-                else if (value === 9)
-                    difficulty = -1
-                else if (value <= 19)
-                    difficulty = 0
-                else if (value <= 29)
-                    difficulty = 1
-                else
-                    difficulty = 2
-                difficulty_elem.text(difficulty)
-                return value + "/" + max
-            }
-        })
+    activate_slider(new_spell.find("#spell-" + new_id + "-difficulty-input")[0], show_difficulty_builder)
 
     add_row_listeners(new_spell)
 })
