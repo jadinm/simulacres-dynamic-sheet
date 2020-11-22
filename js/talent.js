@@ -119,6 +119,13 @@ function update_talent(event) {
     changed_page = true
 }
 
+$(".talent input[id*='-name']").on("click", _ => {
+    // Update all list selections of talents
+    $("select.talent-select").each((i, elem) => {
+        update_talent_select($(elem))
+    })
+})
+
 $('.talent-list').sortable({
     handle: '.fa-arrows-alt',
     group: 'talent-lists',

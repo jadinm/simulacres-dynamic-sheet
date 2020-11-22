@@ -118,6 +118,12 @@ $("#import-page").on("change", function (event) {
             }
         })
 
+        // Update all list selections of talents
+        $("select.talent-select").each((i, elem) => {
+            update_talent_select($(elem))
+        })
+
+        // Select the correct element in the list
         old_html.find("select").each((i, old_select) => {
             // Find the correct option
             const selection = old_html.find("select#" + old_select.id + " option:selected")
