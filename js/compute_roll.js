@@ -14,11 +14,26 @@ function add_row_listeners(row = $(document)) {
         update_spell_value(row_elem(event.target, "value"))
     })
     row.find(".row-roll-trigger").on("click", event => {
+        // Find the real target of the click
         let button = $(event.target);
         if (!button.hasClass("row-roll-trigger"))
             button = $(event.target).parents(".row-roll-trigger")
+
+        // Find either spell difficulty or talent level to detect critical rolls
+        let difficulty
+        const spell_difficulty = row_elem(button[0], "difficulty")
+        if (spell_difficulty.length > 0) { // Spell
+            difficulty = parseInt(spell_difficulty.text())
+        } else { // Talent
+            const talent_select = row_elem(button[0], "talent")
+            const talent = talent_select.find("option:selected").val()
+            difficulty = parseInt(talent_level($(".talent input[value='" + talent + "']")))
+        }
+        difficulty = isNaN(difficulty) ? 0 : difficulty
+
+        // Do the actual roll
         const value = parseInt(row_elem(button[0], "value").text()) // Recover max value
-        trigger_roll(value)
+        trigger_roll(value, difficulty)
     })
     row.find(".roll-formula-elem").on("click", roll_changed)
 }
@@ -200,7 +215,7 @@ $(_ => {
 
 /* Add buttons */
 
-$("#add-spell").on("click", (event, idx=null) => { // Add parameter for forced index
+$("#add-spell").on("click", (event, idx = null) => { // Add parameter for forced index
     const table = $("#spell-table")
 
     // We have to reset listeners because of the slider
@@ -218,7 +233,7 @@ $("#add-spell").on("click", (event, idx=null) => { // Add parameter for forced i
     add_row_listeners(new_spell)
 })
 
-$("#add-roll").on("click", (event, idx=null) => { // Add parameter for forced index
+$("#add-roll").on("click", (event, idx = null) => { // Add parameter for forced index
     const new_row = $("#roll-x").clone(true, false)
 
     const new_id = add_row($("#roll-table"), new_row, idx)
@@ -236,7 +251,7 @@ $("#add-roll").on("click", (event, idx=null) => { // Add parameter for forced in
 
 /* Actual roll */
 
-function roll_dices(number=2, type=6) {
+function roll_dices(number = 2, type = 6) {
     let sum = 0;
     for (let i = 0; i < number; i++) {
         let random = Math.random();
@@ -255,17 +270,34 @@ $("#roll-dialog-2d6").on("click", _ => {
     $("#roll-dialog-2d6-result").text("2d6 additionnels: " + dice_value)
 })
 
-function trigger_roll(max_value=null) {
+function trigger_roll(max_value = null, talent_level = 0) {
     // Reset text
     $("#roll-dialog-1d6-result").text("")
     $("#roll-dialog-2d6-result").text("")
+    const critical_div = $("#roll-dialog-critical")
+    critical_div.text("")
 
     const dice_value = roll_dices()
+
+    // Check for critical rolls
+    let text_end = ""
+    let modifier = 0
+    if (dice_value === 12) {
+        critical_div.html("<b class='text-danger'>Échec critique... :'(</b>")
+        modifier = -1 * roll_dices(1)
+        text_end = "<br/>1d6 retiré à la marge d'une valeur de " + modifier
+    } else if (dice_value <= 2 + talent_level) {
+        critical_div.html("<b class='text-success'>Succès critique !</b>")
+        modifier = roll_dices(1 + talent_level)
+        text_end = "<br/>" + (1 + talent_level) + "d6 ajouté" + ((talent_level > 0) ? "s" : "")
+            + " à la marge d'une valeur de " + modifier
+    }
+
     if (max_value) {
-        $("#roll-dialog-result").text("Marge = " + (max_value - dice_value)
-            + "\nSomme des 2d6 = " + dice_value + "\nValeur seuil = " + max_value)
+        $("#roll-dialog-result").html("Marge = " + (max_value - dice_value + modifier)
+            + "<br/>Somme des 2d6 = " + dice_value + "<br/>Valeur seuil = " + max_value + "" + text_end)
     } else {
-        $("#roll-dialog-result").text("Résultat du jet de 2d6 = " + dice_value)
+        $("#roll-dialog-result").html("Résultat du jet de 2d6 = " + dice_value)
     }
 
     // Fill in penalties
@@ -276,8 +308,7 @@ function trigger_roll(max_value=null) {
     }
     const armor_penalty = get_armor_penalty()
     if (armor_penalty !== 0) {
-        penalty_text += "Malaise d'armure: " + armor_penalty
-            + " (cela peut ou non s'appliquer sur les actions physiques)\n"
+        penalty_text += "\nMalaise d'armure: " + armor_penalty + " (cela s'applique sur les actions physiques)\n"
     }
     $("#roll-dialog-penalties").text(penalty_text)
 
