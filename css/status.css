@@ -1,0 +1,69 @@
+/* Sliders styling */
+
+.slider.slider-vertical.hp-slider {
+    height: 5em;
+}
+
+.slider.slider-horizontal.hp-slider {
+    width: 5em;
+}
+
+.slider-handle.custom.full::before {
+    line-height: 20px;
+    font-size: 20px;
+    content: '\1F49A';
+}
+
+.slider-handle.custom.unease::before {
+    line-height: 20px;
+    font-size: 20px;
+    content: '\1F9E1';
+}
+
+.slider-handle.custom.dead::before {
+    line-height: 20px;
+    font-size: 20px;
+    content: '\1F5A4';
+}
+
+.slider-selection.full {
+    background: green;
+}
+
+.slider-selection.unease {
+    background: orange;
+}
+
+#unease-slider .slider-selection {
+    background: red;
+}
+
+#unease-slider .slider-handle {
+    background: red;
+}
+
+#breath-slider .slider-selection {
+    background: dodgerblue;
+}
+
+#breath-slider .slider-handle.custom::before {
+    content: '\1F4AA';
+}
+
+#psychic-slider .slider-selection {
+    background: pink;
+}
+
+#psychic-slider .slider-handle.custom::before {
+    content: '\1F9E0';
+}
+
+#rest-slider .slider-selection {
+    background: darkgray;
+}
+
+#rest-slider .slider-handle.custom::before {
+    content: '\1F6CF';
+    background-color: white;
+    border-radius: 50%;
+}

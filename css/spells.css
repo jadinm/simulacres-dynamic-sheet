@@ -1,0 +1,24 @@
+/* Spell table */
+.spell-name {
+    min-width: 300px;
+}
+
+.spell-list {
+    min-width: 100px;
+}
+
+.spell-effect {
+    min-width: 300px;
+}
+
+.spell-formula {
+    min-width: 250px;
+}
+
+.spell-difficulty .slider-selection {
+    background: black;
+}
+
+.spell-difficulty .slider-handle {
+    background: black;
+}

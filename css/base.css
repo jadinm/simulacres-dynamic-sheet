@@ -1,0 +1,23 @@
+/* Fix mdbootstrap that activates the icon when value attribute is set at loading */
+.md-form .input-prefix.active {
+    color: black;
+}
+
+/* Remove capital letters for buttons */
+.btn {
+    text-transform: none;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+/* Makes means readable */
+input {
+    min-width: 5em;
+}
+
+/* Prevent the trash drop zone to display the item about to be trashed in a list */
+.remove-drop {
+    display: none;
+}

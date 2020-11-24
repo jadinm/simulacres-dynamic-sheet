@@ -1,0 +1,9 @@
+/* Talents */
+
+.talent-list {
+    min-height: 50px; /* Otherwise empty lists cannot receive an item */
+}
+
+.increased-talent {
+    -webkit-text-fill-color: orangered;
+}
