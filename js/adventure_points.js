@@ -21,6 +21,8 @@ const talent_increment_cost = {
 const mage_spell_ap_cost = talent_increment_cost["x"]["-4"]
 const ki_divine_spell_ap_cost = talent_increment_cost["x"]["0"]
 
+const power_level_ap_cost = 5 // From 1 to 2 and from 2 to 3
+
 function compute_remaining_ap() {
     let consumed_points = 0
 
@@ -113,9 +115,17 @@ function compute_remaining_ap() {
     // Spells of same realm for the job reduces their cost by 1 PA
     consumed_points -= parseInt($("#same-spells-different-realms").val())
 
+    // Monk powers
+    $(".ki-level").each((i, elem) => {
+        const value = parseInt(elem.value)
+        if (!isNaN(value) && value > 0 && value <= 3) {
+            consumed_points += (value - 1) * power_level_ap_cost
+        }
+    })
+
     // Show difference with total points
     const total_points = parseInt($("#adventure-points").val()) + parseInt($("#adventure-points-discount").val())
     $("#remaining-adventure-points").text(total_points - consumed_points)
 }
 
-$(".component,.means,.realm,.energy,.adventure-points-setting").on("change", compute_remaining_ap)
+$(".component,.means,.realm,.energy,.adventure-points-setting,.ki-level").on("change", compute_remaining_ap)
