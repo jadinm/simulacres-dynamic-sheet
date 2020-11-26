@@ -2,10 +2,10 @@
 
 To produce the character sheet, you need to first load javascript and css libraries
 with [yarn](https://classic.yarnpkg.com/en/docs/install/)
-by executing the following command:
+by executing the following command in the root of the project:
 
 ```console
-$ yarn install .
+$ yarn
 ```
 
 Then you can create the HTML file with all the code bundled by executing:
