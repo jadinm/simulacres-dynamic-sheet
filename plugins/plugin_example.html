@@ -1,0 +1,30 @@
+<li id="plugin-button-example" class="plugin-button nav-item">
+    <a class="nav-link" data-toggle="tab" href="#plugin-tab-example" role="tab" aria-controls="profile"
+       aria-selected="false">
+        Plugin exemple
+    </a>
+</li>
+
+<div id="plugin-tab-example" class="plugin-tab tab-pane fade row my-1 container-fluid m-0 pr-0">
+    <div class="row form-row mt-2 md-form p-0 m-0">
+        <div class="col-12">
+            <label for="plugin-example-field">Champ exemple</label>
+            <!-- You need to define a unique id for each of your inputs.
+                 Prefix it with "plugin-" and include the plugin name into it -->
+            <input class="form-control" id="plugin-example-field" type="text">
+        </div>
+    </div>
+</div>
+
+<style id="plugin-css-example" class="plugin-css">
+    /* Set the font color to red in the labels of the tab */
+    #plugin-tab-example label {
+        color: red;
+    }
+</style>
+
+<script id="plugin-js-example" class="plugin-js">
+    $("#plugin-example-field").on("change", _ => {
+        alert("Vous avez changé le texte de l'exemple")
+    })
+</script>

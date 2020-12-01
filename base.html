@@ -338,7 +338,7 @@
         </div>
     </div>
 
-    <ul class="nav nav-tabs" role="tablist">
+    <ul id="nav-tabs" class="nav nav-tabs" role="tablist">
         <li class="nav-item">
             <a class="nav-link active" data-toggle="tab" href="#status-tab" role="tab" aria-controls="home"
                aria-selected="true">
@@ -383,7 +383,7 @@
         </li>
     </ul>
 
-    <div class="tab-content">
+    <div id="tabs" class="tab-content">
         <div id="status-tab" class="tab-pane fade show active row">
             <div class="row container offset-xl-3 offset-lg-2 offset-md-1">
                 <!-- Localized HP and protection -->
@@ -1645,20 +1645,23 @@
         </div>
     </div>
 
-    <div class="md-form row form-row mt-4">
-        <div class="col-sm-6 mt-3">
-            <button id="save-page" type="submit" class="btn btn-primary form-control rounded">
-                Sauvegarder
-            </button>
+    <div class="form-row row mt-3 ml-0 mr-2">
+        <button id="save-page" type="submit" class="btn btn-primary rounded col-12 pb-2 pt-2">
+            Sauvegarder
+        </button>
+    </div>
+    <div class="form-row row mb-3 ml-0 mr-0">
+        <div class="input-group col-sm-6">
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" id="import-page" accept="text/html">
+                <label class="custom-file-label" for="import-page">Importer une ancienne fiche</label>
+            </div>
         </div>
         <div class="input-group col-sm-6">
-            <div class="input-group-prepend pt-2 mt-1 pb-5">
-                <span class="input-group-text" id="import-page-desc">Importer</span>
-            </div>
-            <div class=" custom-file">
-                <input type="file" class="custom-file-input" id="import-page" accept="text/html"
-                       aria-describedby="import-page-desc">
-                <label class="custom-file-label" for="import-page">Choisir le fichier</label>
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" id="import-plugin" accept="text/html"
+                       aria-describedby="import-plugin-desc">
+                <label class="custom-file-label" for="import-plugin">Importer un plugin</label>
             </div>
         </div>
     </div>
