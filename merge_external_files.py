@@ -41,7 +41,11 @@ with open(args.input_html, "r") as base_html:
             extern_file_path = minified_path(css_match.group(1))
             with open(extern_file_path, "r") as extern_file:
                 output_lines.append("<style>")
-                output_lines.extend(extern_file.readlines())
+                for line in extern_file.readlines():
+                    if "# sourceMappingURL=" not in line:
+                        # Filter out css source maps because we don't include them
+                        # and we want to prevent warnings from browsers
+                        output_lines.append(line)
                 output_lines.append("</style>\n")
         elif font_match is not None and os.path.exists(font_match.group(1)):
             line_pattern = "src: url(\"data:application/truetype;charset=utf-8;base64,{}\") format(\"truetype\");"
