@@ -119,7 +119,7 @@ function update_talent(event) {
     changed_page = true
 }
 
-$(".talent input[id*='-name']").on("click", _ => {
+$(".talent input[id*='-name']").on("change", _ => {
     // Update all list selections of talents
     $("select.talent-select").each((i, elem) => {
         update_talent_select($(elem))
