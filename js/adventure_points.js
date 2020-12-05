@@ -22,6 +22,7 @@ const talent_increment_cost = {
 const advised_talent_save = 1
 const mage_spell_ap_cost = talent_increment_cost["x"]["-4"]
 const ki_divine_spell_ap_cost = talent_increment_cost["x"]["0"]
+const spell_same_realm_discount = 1
 
 const power_level_ap_cost = 5 // From 1 to 2 and from 2 to 3
 
@@ -85,20 +86,28 @@ function compute_remaining_ap() {
     })
 
     // Spells
-    $(".spell-list").each((i, elem) => {
-        const value = elem.value.trim()
-        if (value === priest_energy)
-            consumed_points += ki_divine_spell_ap_cost // Priest and monk have level 0 spell directly
-        else if (value.length > 0)
-            consumed_points += mage_spell_ap_cost // Mages have -4 level spells at start
+    const all_names = []
+    $(".spell-name").each((i, elem) => {
+        const name = elem.value.trim()
+        let realm_modifier = spell_same_realm_discount
+        if (name.length > 0) {
+            if (!all_names.includes(name)) {
+                realm_modifier = 0
+                all_names.push(name)
+            }
+
+            const spell_list = row_elem(elem, "list")[0].value.trim()
+            if (spell_list === priest_energy)
+                consumed_points += ki_divine_spell_ap_cost - realm_modifier // Priest and monk have level 0 spell directly
+            else if (spell_list.length > 0)
+                consumed_points += mage_spell_ap_cost - realm_modifier // Mages have -4 level spells at start
+        }
     })
     // Spell increased above level 0 at start of the campaign
     const diff_level_2 = talent_increment_cost["x"]["-2"] - talent_increment_cost["x"]["-4"]
     consumed_points += diff_level_2 * parseInt($("#spells-started-level-2").val())
     const diff_level_0 = talent_increment_cost["x"]["0"] - talent_increment_cost["x"]["-4"]
     consumed_points += diff_level_0 * parseInt($("#spells-started-level-0").val())
-    // Spells of same realm for the job reduces their cost by 1 PA
-    consumed_points -= parseInt($("#same-spells-different-realms").val())
 
     // Monk powers
     $(".ki-level").each((i, elem) => {

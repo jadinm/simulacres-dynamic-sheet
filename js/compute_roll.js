@@ -6,6 +6,9 @@ const talent_list_selector = ".talent input[id*='-name']"
 
 function add_row_listeners(row = $(document)) {
     add_save_to_dom_listeners(row)
+    row.find(".spell-name").on("change", _ => {
+        compute_remaining_ap()
+    })
     row.find(".spell-list").on("change", list_changed)
     row.find(".spell-formula-elem").on("click", event => {
         update_spell_value(row_elem(event.target, "value"))
