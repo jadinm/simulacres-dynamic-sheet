@@ -128,4 +128,4 @@ function compute_remaining_ap() {
     $("#remaining-adventure-points").text(total_points - consumed_points)
 }
 
-$(".component,.means,.realm,.energy,.adventure-points-setting,.ki-level").on("change", compute_remaining_ap)
+$(".component,.means,.realm,.energy,.adventure-points-setting").on("change", compute_remaining_ap)

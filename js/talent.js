@@ -11,6 +11,37 @@ function talent_base_level(talent) {
     return talent.id.match(regex_talent_from_id)[1]
 }
 
+/**
+ * Update the select options based on a talent list
+ */
+function update_talent_select(select) {
+    // Find the selected option
+    const selected_option = select.find("option:selected").val()
+
+    // Recover talent list
+    const talent_list = $(talent_list_selector).filter((i, e) => {
+        return e.value && e.value.length > 0;
+    })
+    select.empty()
+
+    // Sort it
+    talent_list.sort((a, b) => {
+        return a.value.localeCompare(b.value) // Sort correctly accents
+    }).each((i, elem) => {
+        let new_option = "<option value='" + elem.value + "'"
+        if (selected_option === elem.value) // Keep selection
+            new_option += " selected"
+        new_option += ">" + elem.value + "</option>"
+        select.append(new_option)
+    })
+
+    if (!select[0].id.includes("-x-")) {// Ignore template lines
+        select.selectpicker("refresh")
+    }
+
+    changed_page = true
+}
+
 function add_talent(list, fixed_id = null) {
     const initial_level = list[0].id.replace("talents_", "")
 
@@ -133,9 +164,8 @@ $('.talent-list').sortable({
     onEnd: update_talent
 })
 
-$("select.talent-select").on("changed.bs.select", talent_changed).each((i, elem) => {
-    if (elem.id !== "roll-x-talent")
-        update_talent_select($(elem))
+$("select.talent-select").each((i, elem) => {
+    update_talent_select($(elem))
     changed_page = false // Because this is not changed by the user
 })
 

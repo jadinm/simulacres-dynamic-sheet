@@ -12,6 +12,8 @@ window.onbeforeunload = function () {
 
 /* Remove duplicated select picker */
 
+$("select[id*='-x-']").selectpicker("destroy")  // Remove hidden select pickers for cloning
+
 $("select.talent-select").each((i, select) => {
     $(select).parents('.bootstrap-select').first().replaceWith($(select))
 })
@@ -32,6 +34,15 @@ function add_save_to_dom_listeners(base = $(document)) {
         $("input[name='" + event.target.name + "']").removeAttr("checked")
         event.target.setAttribute("checked", "")
         changed_page = true
+    })
+
+    base.find("select").on("changed.bs.select", (e, clickedIndex, newValue, oldValue) => {
+        $(e.target).children().each((i, elem) => { // Save results in DOM
+            elem.removeAttribute('selected')
+            if (i === clickedIndex) {
+                $(e.target).children()[clickedIndex].setAttribute('selected', 'selected')
+            }
+        })
     })
 }
 

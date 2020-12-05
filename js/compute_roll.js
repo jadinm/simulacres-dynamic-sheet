@@ -94,33 +94,6 @@ add_row_listeners()
 
 /* Rolls-related */
 
-function update_talent_select(select) {
-    // Find the selected option
-    const selected_option = select.find("option:selected").val()
-
-    // Recover talent list
-    const talent_list = $(talent_list_selector).filter((i, e) => {
-        return e.value && e.value.length > 0;
-    })
-    select.empty()
-
-    // Sort it
-    talent_list.sort((a, b) => {
-        return a.value.localeCompare(b.value) // Sort correctly accents
-    }).each((i, elem) => {
-        let new_option = "<option value='" + elem.value + "'"
-        if (selected_option === elem.value) // Keep selection
-            new_option += " selected"
-        new_option += ">" + elem.value + "</option>"
-        select.append(new_option)
-    })
-
-    if (select.id !== "roll-x-talent")
-        select.selectpicker("refresh")
-
-    changed_page = true
-}
-
 function update_roll_value(value_div) {
     let sum = 0
 
@@ -155,17 +128,6 @@ function update_roll_value(value_div) {
 function roll_changed(event) {
     // Trigger update of the spell difficulty
     update_roll_value(row_elem(event.target, "value"))
-}
-
-function talent_changed(e, clickedIndex, newValue, oldValue) {
-    roll_changed(e)
-    const talent = row_elem(e.target, "talent")
-    talent.children().each((i, elem) => { // Save results in DOM
-        elem.removeAttribute('selected')
-        if (i === clickedIndex) {
-            talent.children()[clickedIndex].setAttribute('selected', 'selected')
-        }
-    })
 }
 
 /* Triggers */
@@ -245,7 +207,9 @@ $("#add-roll").on("click", (event, idx = null) => { // Add parameter for forced 
         elem.value = ""
         $(elem).trigger("change")
     })
-    select.on("changed.bs.select", talent_changed)
+    select.on("changed.bs.select", (e, clickedIndex, newValue, oldValue) => {
+        roll_changed(e)
+    })
     add_row_listeners()
 })
 

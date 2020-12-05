@@ -65,7 +65,12 @@ $("#add-equipment").on("click", (event, idx = null) => { // Add parameter for fo
 })
 
 $("#add-ki").on("click", (event, idx = null) => { // Add parameter for forced index
-    add_row($("#ki-table"), $("#ki-x").clone(true, true), idx)
+    const new_row = $("#ki-x").clone(true, false)
+    add_row($("#ki-table"), new_row, idx)
+    const select = row_elem(new_row[0], "name")
+    select.selectpicker()
+    add_save_to_dom_listeners(new_row)
+    new_row.find(".ki-level").on("change", compute_remaining_ap)
 })
 
 /* Sortable handling */
