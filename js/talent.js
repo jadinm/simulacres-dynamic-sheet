@@ -4,6 +4,8 @@ regex_talent_from_id = /talent_(x|(?:-4)|(?:-2)|0)\d*/
 
 function talent_level(talent, target_list = null) {
     const list = (target_list) ? target_list : $(talent).parents(".talent-list")[0]
+    if (list == null)
+        return "x"
     return list.id.replace("talents_", "")
 }
 
@@ -137,6 +139,13 @@ function update_talent(event) {
         event.item.setAttribute("data-original-title", "")
         $(event.item).removeClass("increased-talent").tooltip({disabled: true})
         $(event.item).find(".talent-origin").text("")
+    }
+
+    if ($(event.item).parent().length === 0) { // Talent removed => update selections
+        // Update all list selections of talents
+        $("select.talent-select").each((i, elem) => {
+            update_talent_select($(elem))
+        })
     }
 
     // Update rolls
