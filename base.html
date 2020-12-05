@@ -1709,25 +1709,30 @@
                     <div class="row mx-1" id="roll-dialog-critical">
                         <!-- In case of critical -->
                     </div>
-                    <div class="row mx-1" id="roll-dialog-result" style="white-space: pre-line;">
+                    <div class="row mx-1">
                         <!-- Show the cause of the roll -->
+                        <div>
+                            <span id="roll-dialog-result-label"></span><span id="roll-dialog-result"></span>
+                        </div>
                     </div>
+                    <div class="row mx-1" id="roll-dialog-details"></div>
                     <div class="row mx-1">
                         <!-- Warn user about current malus here -->
                         <span id="roll-dialog-penalties" style="white-space: pre-line;"></span>
                     </div>
+                    <div class="row mx-1">
+                        <label for="roll-dialog-modifier">Modificateur&nbsp;</label>
+                        <input id="roll-dialog-modifier" data-slider-id="roll-dialog-modifier-slider" type="text"
+                               data-slider-min="-9" data-slider-max="9" data-slider-step="1" data-slider-value="0"
+                               class="input-slider" data-slider-tooltip-position="bottom"/>
+                    </div>
                     <hr/>
                     <div class="row mx-1">
-                        Le jet nécessite parfois de lancer un ou deux autres dés pour localiser ou quantifier
-                        l'effet. Les deux boutons suivants permettent de faire ça.
+                        Le jet nécessite parfois de lancer un autre dés pour localiser l'effet:
                     </div>
                     <div class="row mx-1">
                         <div id="roll-dialog-1d6" class="btn btn-info"><i class="fas fa-dice-six"></i></div>
                         <div id="roll-dialog-1d6-result" class="mt-3"></div>
-                    </div>
-                    <div class="row mx-1">
-                        <div id="roll-dialog-2d6" class="btn btn-info"><i class="fas fa-dice"></i></div>
-                        <div id="roll-dialog-2d6-result" class="mt-3"></div>
                     </div>
                     <hr/>
                     <ul class="nav nav-tabs" role="tablist">

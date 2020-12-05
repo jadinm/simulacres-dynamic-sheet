@@ -9,13 +9,13 @@ function build_max_formatter(input) {
     }
 }
 
-function activate_slider(input, formatter_builder = build_max_formatter, post_build = _ => void 0) {
+function activate_slider(input, formatter_builder = build_max_formatter, post_build = _ => void 0, opts={}) {
     // Remove pre-existing sliders (this happens after a save of the html page)
     const elem = "#" + input.getAttribute("data-slider-id")
     $(elem).remove()
     input.setAttribute("style", {})
 
-    const opts = {formatter: formatter_builder(input)}
+    opts["formatter"] = formatter_builder(input)
 
     const orientation = input.getAttribute("data-slider-reversed")
     if (orientation != null && orientation === "true") {

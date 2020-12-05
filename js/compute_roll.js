@@ -272,12 +272,37 @@ function trigger_roll(max_value = null, talent_level = 0) {
     }
     $("#roll-dialog-penalties").text(penalty_text)
 
+    const select_modifier = $("#roll-dialog-modifier")
     if (max_value) {
-        $("#roll-dialog-result").html("Marge = " + (max_value + unease - dice_value + modifier)
-            + "<br/>Somme des 2d6 = " + dice_value + "<br/>Valeur seuil = " + (max_value + unease) + "" + text_end)
+        $("#roll-dialog-result-label").html("Marge = ")
+        const result = $("#roll-dialog-result")
+        const result_value = max_value + unease - dice_value + modifier
+        result[0].setAttribute("value", result_value.toString())
+        result.html(result_value)
+        $("#roll-dialog-details").html("Somme des 2d6 = " + dice_value + "<br/>Valeur seuil = " + (max_value + unease)
+            + "" + text_end)
+
+        // Reset additional modifier
+        select_modifier.slider("setValue", 0)
+        select_modifier.slider("refresh", {useCurrentValue: true})
+        $(select_modifier.slider("getElement")).show()
     } else {
-        $("#roll-dialog-result").html("Résultat du jet de 2d6 = " + dice_value)
+        $("#roll-dialog-result-label").html("Résultat du jet de 2d6 = ")
+        $("#roll-dialog-result").html(dice_value)
+        $("#roll-dialog-details").html("")
+        $(select_modifier.slider("getElement")).hide()
     }
 
     $('#roll-dialog').modal()
 }
+
+$(_ => {
+    activate_slider($("#roll-dialog-modifier")[0], _ => {
+        return modifier => {
+            const result_span = $("#roll-dialog-result")
+            const result = parseInt(result_span[0].getAttribute("value"))
+            result_span.html(result + modifier)
+            return modifier
+        }
+    }, _ => void 0, {tooltip: "always"})
+})
