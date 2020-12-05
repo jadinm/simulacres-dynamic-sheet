@@ -260,24 +260,24 @@ function trigger_roll(max_value = null, talent_level = 0) {
             + " à la marge d'une valeur de " + modifier
     }
 
-    if (max_value) {
-        $("#roll-dialog-result").html("Marge = " + (max_value - dice_value + modifier)
-            + "<br/>Somme des 2d6 = " + dice_value + "<br/>Valeur seuil = " + max_value + "" + text_end)
-    } else {
-        $("#roll-dialog-result").html("Résultat du jet de 2d6 = " + dice_value)
-    }
-
     // Fill in penalties
     let penalty_text = ""
     const unease = get_unease()
     if (unease !== 0) {
-        penalty_text += "\nMalaise courant: " + unease + " (cela peut ou non s'appliquer)\n"
+        penalty_text += "\nMalaise courant: " + unease + " (déjà appliqué)\n"
     }
     const armor_penalty = get_armor_penalty()
     if (armor_penalty !== 0) {
         penalty_text += "\nMalaise d'armure: " + armor_penalty + " (cela s'applique sur les actions physiques)\n"
     }
     $("#roll-dialog-penalties").text(penalty_text)
+
+    if (max_value) {
+        $("#roll-dialog-result").html("Marge = " + (max_value + unease - dice_value + modifier)
+            + "<br/>Somme des 2d6 = " + dice_value + "<br/>Valeur seuil = " + (max_value + unease) + "" + text_end)
+    } else {
+        $("#roll-dialog-result").html("Résultat du jet de 2d6 = " + dice_value)
+    }
 
     $('#roll-dialog').modal()
 }
