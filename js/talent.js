@@ -13,6 +13,26 @@ function talent_base_level(talent) {
     return talent.id.match(regex_talent_from_id)[1]
 }
 
+function talent_cost(talent) {
+    const current_value = talent_level(talent)
+    let old_value = talent_base_level(talent)
+
+    const talent_name = $(talent).find("input").val()
+    if (work_talents().includes(talent_name)) {
+        // Check that it is not a work talent
+        old_value = "0" // Compute PA cost from level 0
+    }
+    if (main_work_talent() === talent_name) {
+        // Check that it is not the main work talent
+        old_value = "1" // Compute PA cost from level 1
+    }
+
+    const cost = talent_increment_cost[old_value][current_value]
+    if (advised_talent().includes(talent_name))
+        return Math.max(0, cost - advised_talent_save)
+    return cost
+}
+
 /**
  * Update the select options based on a talent list
  */
@@ -123,30 +143,24 @@ function add_missing_talents(talents) {
 
 add_missing_talents(default_talents)
 
-function update_talent(event) {
-    const target_list = event.to
-    const current_level = talent_level(event.item, target_list)
-    const old_level = talent_base_level(event.item)
-
-    // Update tooltip and color for increased talents
+function update_talent_tooltip(talent, target_list=null) {
+    const current_level = talent_level(talent, target_list)
+    const old_level = talent_base_level(talent)
     if (current_level !== old_level) {
-        event.item.setAttribute("data-original-title",
-            "Talent " + old_level.toUpperCase() + " à la base <br />" + "Coût: "
-            + talent_increment_cost[old_level][current_level] + " PA")
-        $(event.item).addClass("increased-talent").tooltip({disabled: false})
-        $(event.item).find(".talent-origin").text("< " + old_level.toUpperCase())
+        const old_level = talent_base_level(talent)
+        talent.setAttribute("data-original-title",
+            "Talent " + old_level.toUpperCase() + " à la base <br />" + "Coût: " + talent_cost(talent) + " PA")
+        $(talent).addClass("increased-talent").tooltip({disabled: false})
+        $(talent).find(".talent-origin").text("< " + old_level.toUpperCase())
     } else {
-        event.item.setAttribute("data-original-title", "")
-        $(event.item).removeClass("increased-talent").tooltip({disabled: true})
-        $(event.item).find(".talent-origin").text("")
+        talent.setAttribute("data-original-title", "")
+        $(talent).removeClass("increased-talent").tooltip({disabled: true})
+        $(talent).find(".talent-origin").text("")
     }
+}
 
-    if ($(event.item).parent().length === 0) { // Talent removed => update selections
-        // Update all list selections of talents
-        $("select.talent-select").each((i, elem) => {
-            update_talent_select($(elem))
-        })
-    }
+function update_talent(event) {
+    update_talent_tooltip(event.item, event.to)
 
     // Update rolls
     $(".roll-value").each((i, elem) => {

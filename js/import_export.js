@@ -37,12 +37,16 @@ function add_save_to_dom_listeners(base = $(document)) {
     })
 
     base.find("select").on("changed.bs.select", (e, clickedIndex, newValue, oldValue) => {
+        let current_value = $(e.target).selectpicker('val')
+        if (!Array.isArray(current_value))
+            current_value = [current_value]
         $(e.target).children().each((i, elem) => { // Save results in DOM
             elem.removeAttribute('selected')
-            if (i === clickedIndex) {
-                $(e.target).children()[clickedIndex].setAttribute('selected', 'selected')
+            if (current_value.includes(elem.value)) {
+                $(e.target).children()[i].setAttribute('selected', 'selected')
             }
         })
+        changed_page = true
     })
 }
 
@@ -153,13 +157,14 @@ function import_data(src_html, dst_html) {
             const new_select = dst_html.find("#" + old_select.id)
             new_select.children().each((j, option) => {
                 option.removeAttribute("selected")
-                if (option.value === selection[0].value) {
+                if (selection.filter("option[value='" + option.value + "']").length > 0) {
                     option.setAttribute("selected", "selected")
                 }
             })
             new_select.selectpicker("refresh")
         }
     })
+    dst_html.find(".talent-select.adventure-points-select").trigger("changed.bs.select")
 
     // Preserve order of sortable elements
     dst_html.find(".sortable-list").each((i, elem) => {

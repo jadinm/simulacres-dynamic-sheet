@@ -16,8 +16,10 @@ const talent_increment_cost = {
     x: {x: 0, "-4": 2, "-2": 3, "0": 5, "1": 10, "2": 30, "3": 70},
     "-4": {x: 0, "-4": 0, "-2": 1, "0": 4, "1": 9, "2": 29, "3": 69},
     "-2": {x: 0, "-4": 0, "-2": 0, "0": 3, "1": 8, "2": 28, "3": 68},
-    "0": {x: 0, "-4": 0, "-2": 0, "0": 0, "1": 5, "2": 25, "3": 65}
+    "0": {x: 0, "-4": 0, "-2": 0, "0": 0, "1": 5, "2": 25, "3": 65},
+    "1": {x: 0, "-4": 0, "-2": 0, "0": 0, "1": 0, "2": 20, "3": 60}
 }
+const advised_talent_save = 1
 const mage_spell_ap_cost = talent_increment_cost["x"]["-4"]
 const ki_divine_spell_ap_cost = talent_increment_cost["x"]["0"]
 
@@ -78,26 +80,9 @@ function compute_remaining_ap() {
     }
 
     // Talents
-    let job_talent_found = false
     $(".talent").each((i, elem) => {
-        // Current talent level
-        const current_value = talent_level(elem)
-        if (current_value === "1")
-            job_talent_found = true
-
-        // Initial talent level
-        const old_value = talent_base_level(elem)
-        consumed_points += talent_increment_cost[old_value][current_value]
+        consumed_points += talent_cost(elem)
     })
-    // Initial talents of the job were raised to 0
-    consumed_points -= talent_increment_cost["x"]["0"] * parseInt($("#job-talents-x").val())
-    consumed_points -= talent_increment_cost["-4"]["0"] * parseInt($("#job-talents-4").val())
-    consumed_points -= talent_increment_cost["-2"]["0"] * parseInt($("#job-talents-2").val())
-    // Main talent of the job was raised to 1
-    if (job_talent_found)
-        consumed_points -= talent_increment_cost["0"]["1"]
-    // Advised talents for the job reduces their cost by 1 PA
-    consumed_points -= parseInt($("#advised-talents").val())
 
     // Spells
     $(".spell-list").each((i, elem) => {
@@ -129,3 +114,34 @@ function compute_remaining_ap() {
 }
 
 $(".component,.means,.realm,.energy,.adventure-points-setting").on("change", compute_remaining_ap)
+
+function work_talents() {
+    return $("#work-talents").val()
+}
+
+function main_work_talent() {
+    return $("#work-main-talent").val()
+}
+
+function advised_talent() {
+    return $("#advised-talents").val()
+}
+
+$(".talent-select.adventure-points-select").on("changed.bs.select", e => {
+    let talents_to_update = $(e.target).selectpicker("val")
+    if (!Array.isArray(talents_to_update))
+        talents_to_update = [talents_to_update]
+    const talents = $(".talent").filter((_, elem) => {
+        for (let i = 0; i < talents_to_update.length; i++) {
+            if ($(elem).find("input[value='" + talents_to_update[i] + "']").length > 0)
+                return true
+        }
+        return false
+    })
+    if (talents.length > 0) {
+        for (let i = 0; i < talents_to_update.length; i++) {
+            update_talent_tooltip(talents[i])
+        }
+    }
+    compute_remaining_ap()
+})

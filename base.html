@@ -1562,7 +1562,7 @@
                 Les règnes et les énergies classiques peuvent être montés à 2 à la création en utilisant
                 les 8 points d'énergie et de règne initiaux.
                 Cela fait économiser 5 PA car passer au niveau 2 demande 10 PA au lieu de 5.
-                En revance, ce n'est pas possible pour les énergies magiques ou spéciales qui ne peuvent être
+                En revanche, ce n'est pas possible pour les énergies magiques ou spéciales qui ne peuvent être
                 montées qu'à 1, à la création.
             </div>
             <div class="row form-row mt-2 md-form p-0 m-0">
@@ -1578,36 +1578,34 @@
                 Le métier sélectionné par le joueur donne accès à certains talents dits "de métier" qui sont montés à 0
                 lors de la création du personnage et l'un d'entre eux est monté à 1. Le tout sans dépenser de PA.
             </div>
-            <div class="row form-row mt-2 md-form p-0 m-0">
-                <div class="col-lg-4">
-                    <label for="job-talents-x" class="text-truncate">Nombre de talents de métier de niveau X
-                        pris à la création</label>
-                    <input class="form-control adventure-points-setting" id="job-talents-x" type="number" value="0"
-                           min="0">
-                </div>
-                <div class="col-lg-4">
-                    <label for="job-talents-4" class="text-truncate">Nombre de talents de métier de niveau -4
-                        pris à la création</label>
-                    <input class="form-control adventure-points-setting" id="job-talents-4" type="number" value="0"
-                           min="0">
-                </div>
-                <div class="col-lg-4">
-                    <label for="job-talents-2" class="text-truncate">Nombre de talents de métier de niveau -2
-                        pris à la création</label>
-                    <input class="form-control adventure-points-setting" id="job-talents-2" type="number" value="0"
-                           min="0">
-                </div>
+            <div class="row mt-2 ml-1">
+                Sélectionnez le talent de métier qui a été monté à 1 à la création
+            </div>
+            <div class="row md-form ml-1 mr-2">
+                <select class="show-tick form-control talent-select selectpicker adventure-points-select"
+                        data-live-search="true" id="work-main-talent" data-style="col-12 align-middle"
+                        title="Talent de métier monté à 1 à la création">
+                </select>
+            </div>
+            <div class="row mt-2 ml-1">
+                Sélectionnez les autres talents de métier qui ont été montés à 0 à la création
+            </div>
+            <div class="row md-form ml-1 mr-2">
+                <select class="show-tick form-control talent-select selectpicker adventure-points-select"
+                        data-live-search="true" id="work-talents" data-style="col-12 align-middle" multiple
+                        title="Talents de métier montés à 0 à la création">
+                </select>
             </div>
             <div class="row mt-2 ml-1">
                 Il y a également des talents conseillés pour chaque métier. Les prendre à la création du personnage
                 réduit de 1 le coût de ceux-ci.
             </div>
-            <div class="row form-row mt-2 md-form p-0 m-0">
-                <div class="col-12">
-                    <label for="advised-talents">Nombre de talents conseillés pris à la création</label>
-                    <input class="form-control adventure-points-setting" id="advised-talents" type="number" value="0"
-                           min="0">
-                </div>
+            <div class="row md-form ml-1 mr-2">
+                <label for="advised-talents" class="text-truncate"></label>
+                <select class="show-tick form-control talent-select selectpicker adventure-points-select"
+                        data-live-search="true" id="advised-talents" data-style="col-12 align-middle" multiple
+                        title="Talents conseillés pris à la création">
+                </select>
             </div>
 
             <div class="row mt-2 ml-1"><h4>Mages uniquement</h4></div>
