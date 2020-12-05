@@ -20,7 +20,7 @@ function find_index(parent, child) {
 }
 
 // Set the right version of bootstrap for bootstrap-select
-$.fn.selectpicker.Constructor.BootstrapVersion = '4';
+$.fn.selectpicker.Constructor.BootstrapVersion = '4'
 
 /* Tooltip initializations */
 $(_ => {

@@ -87,14 +87,15 @@ function reset_tab_selection(html) {
  */
 function import_data(src_html, dst_html) {
     // Retrieve and copy all of the input values of the src_html
-    const table_row_input_id = /(.+)-(\d+)-.+/;
-    const talent_input_id = /(x|(?:-4)|(?:-2)|0)(\d+)-name/;
+    const table_row_input_id = /(.+)-(\d+)-.+/
+    const talent_input_id = /(x|(?:-4)|(?:-2)|0)(\d+)-name/
+
     src_html.find("input").each((i, old_input) => {
         if (old_input.id && old_input.id.length > 0) {
             const old_input_sel = "#" + old_input.id
             let new_input = dst_html.find(old_input_sel)
 
-            const talent_matching = old_input.id.match(talent_input_id);
+            const talent_matching = old_input.id.match(talent_input_id)
             if (new_input.length === 0) {
                 let matching = old_input.id.match(table_row_input_id)
                 if (matching) {
@@ -238,7 +239,7 @@ $("#import-page").on("change", function (event) {
     if (event.target.files.length === 0)
         return
 
-    const reader = new FileReader();
+    const reader = new FileReader()
     reader.onload = e => {
         // Executed at the completion of the read
         const old_html = $(e.target.result)
@@ -263,10 +264,10 @@ $("#import-image").on("change", event => {
     if (event.target.files.length === 0)
         return
 
-    const reader = new FileReader();
+    const reader = new FileReader()
     reader.onload = _ => {
         // Executed at the completion of the read
-        $("#character-image")[0].src = reader.result;
+        $("#character-image")[0].src = reader.result
 
         event.target.setAttribute("value", "")
         $(event.target).next().text("Image")
@@ -279,7 +280,7 @@ $("#import-plugin").on("change", event => {
     if (event.target.files.length === 0)
         return
 
-    const reader = new FileReader();
+    const reader = new FileReader()
     reader.onload = e => {
         // Executed at the completion of the read
         const plugin = $(e.target.result)

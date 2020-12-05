@@ -18,7 +18,7 @@ function add_row_listeners(row = $(document)) {
     })
     row.find(".row-roll-trigger").on("click", event => {
         // Find the real target of the click
-        let button = $(event.target);
+        let button = $(event.target)
         if (!button.hasClass("row-roll-trigger"))
             button = $(event.target).parents(".row-roll-trigger")
 
@@ -219,12 +219,12 @@ $("#add-roll").on("click", (event, idx = null) => { // Add parameter for forced 
 /* Actual roll */
 
 function roll_dices(number = 2, type = 6) {
-    let sum = 0;
+    let sum = 0
     for (let i = 0; i < number; i++) {
-        let random = Math.random();
-        sum += Math.floor(random * type) + 1;
+        let random = Math.random()
+        sum += Math.floor(random * type) + 1
     }
-    return sum;
+    return sum
 }
 
 $("#roll-dialog-1d6").on("click", _ => {

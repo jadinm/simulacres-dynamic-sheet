@@ -42,7 +42,7 @@ function update_talent_select(select) {
 
     // Recover talent list
     const talent_list = $(talent_list_selector).filter((i, e) => {
-        return e.value && e.value.length > 0;
+        return e.value && e.value.length > 0
     })
     select.empty()
 
