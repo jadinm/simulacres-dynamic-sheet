@@ -37,8 +37,11 @@ function talent_cost(talent) {
  * Update the select options based on a talent list
  */
 function update_talent_select(select) {
+    const is_template = select[0].id.includes("-x-")
     // Find the selected option
-    const selected_option = select.find("option:selected").val()
+    let selected_options = !is_template ? select.selectpicker('val') : []
+    if (!Array.isArray(selected_options))
+        selected_options = [selected_options]
 
     // Recover talent list
     const talent_list = $(talent_list_selector).filter((i, e) => {
@@ -51,13 +54,13 @@ function update_talent_select(select) {
         return a.value.localeCompare(b.value) // Sort correctly accents
     }).each((i, elem) => {
         let new_option = "<option value='" + elem.value + "'"
-        if (selected_option === elem.value) // Keep selection
-            new_option += " selected"
+        if (selected_options.includes(elem.value)) // Keep selection
+            new_option += " selected='selected'"
         new_option += ">" + elem.value + "</option>"
         select.append(new_option)
     })
 
-    if (!select[0].id.includes("-x-")) {// Ignore template lines
+    if (!is_template) {// Ignore template lines
         select.selectpicker("refresh")
     }
 
