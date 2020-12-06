@@ -327,11 +327,9 @@ function trigger_roll(max_value = null, talent_level = 0, effect="") {
         effect = effect.replaceAll(effect_column_regex, (match, p1, p2, p3) => {
             p1 = typeof p1 === "undefined" ? "" : "&nbsp;"
             p3 = typeof p3 === "undefined" ? "" : p3
-            console.log(match)
             return p1 + "<span class='roll-dialog-effect' value='" + effect_dices + "' column='" + p2 + "' " +
                 "modifier='" + p3 + "'>" + compute_effect(effect_dices + margin, p2, p3) + "</span>"
         })
-        console.log(effect)
         // Update with the MR if "MR" is in the text
         $("#roll-dialog-effect").html(effect.replaceAll(effect_margin_regex,
             "$1<span class='roll-dialog-margin'>" + margin + "</span>$3"))
@@ -372,7 +370,6 @@ $(_ => {
                 let column_modifier = elem.getAttribute("modifier")
                 column_modifier = column_modifier.length > 0 ? parseInt(column_modifier) : 0
                 $(elem).html(compute_effect(effect_dices + margin, column, column_modifier))
-                console.log("sum " + (effect_dices + margin) + " column " + column + " modifier " + column_modifier)
             })
             return modifier
         }
