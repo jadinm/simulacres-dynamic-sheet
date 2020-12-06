@@ -36,7 +36,7 @@ function add_row_listeners(row = $(document)) {
 
         // Do the actual roll
         const value = parseInt(row_elem(button[0], "value").text()) // Recover max value
-        trigger_roll(value, difficulty)
+        trigger_roll(value, difficulty, row_elem(button[0], "effect").val())
     })
     row.find(".roll-formula-elem").on("click", roll_changed)
 }
@@ -60,8 +60,6 @@ function update_spell_value(value_div) {
 
     // Recover component, means and realm
     const formula = compute_formula(row(value_div[0]))
-    if (formula === null)
-        return
     sum += formula
 
     // Recover difficulty
@@ -102,8 +100,6 @@ function update_roll_value(value_div) {
 
     // Recover component, means and realm
     const formula = compute_formula(row(value_div[0]))
-    if (formula === null)
-        return
     sum += formula
 
     // Add talent if any
@@ -237,7 +233,38 @@ $("#roll-dialog-2d6").on("click", _ => {
     $("#roll-dialog-2d6-result").text("2d6 additionnels: " + dice_value)
 })
 
-function trigger_roll(max_value = null, talent_level = 0) {
+effect_table = {
+    /*  0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 */
+    A: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3],
+    B: [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 4, 4, 4, 4],
+    C: [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5],
+    D: [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2, 2, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6],
+    E: [0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 6, 6, 6, 6, 8, 8, 8, 8],
+    F: [0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 3, 3, 4, 4, 4, 4, 4, 4, 4, 6, 6, 6, 6, 8, 8, 8, 8],
+    G: [0, 0, 0, 1, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 5, 5, 5, 5, 7, 7, 7, 7, 9, 9, 9, 9],
+    H: [0, 0, 0, 1, 2, 2, 2, 3, 3, 3, 4, 4, 5, 5, 5, 6, 6, 6, 6, 8, 8, 8, 8, 9, 9, 9, 9],
+    I: [0, 0, 0, 1, 2, 2, 2, 4, 4, 4, 4, 4, 5, 5, 5, 6, 6, 6, 6, 8, 8, 8, 8, 10, 10, 10, 10],
+    J: [0, 0, 0, 1, 3, 3, 3, 4, 4, 4, 5, 5, 6, 6, 6, 8, 8, 8, 8, 10, 10, 10, 10, 12, 12, 12, 12],
+    K: [0, 0, 0, 1, 3, 3, 3, 5, 5, 5, 5, 5, 6, 6, 6, 8, 8, 8, 8, 10, 10, 10, 10, 12, 12, 12, 12],
+}
+
+effect_upgrade = {A: 1, B: 1, C: 2, D: 2, E: 2, F: 2, G: 3, H: 3, I: 4, J: 4, K: 6}
+
+function compute_effect(dices, column, modifier) {
+    const total = parseInt(dices) + (modifier.length > 0 ? parseInt(modifier) : 0)
+    if (total < 0)
+        return 0
+    if (total > 26) {
+        const additional_ranges = Math.floor((total - 26) / 4) + 1
+        return effect_table[column][26] + effect_upgrade[column] * additional_ranges
+    }
+    return effect_table[column][total]
+}
+
+const effect_column_regex = /(\W)?\[([ABCDEFGHIJK])([+-]\d+)?]/gi
+const effect_margin_regex = /(^|\W)(MR)(\W|$)/gi
+
+function trigger_roll(max_value = null, talent_level = 0, effect="") {
     // Reset text
     $("#roll-dialog-1d6-result").text("")
     $("#roll-dialog-2d6-result").text("")
@@ -276,21 +303,45 @@ function trigger_roll(max_value = null, talent_level = 0) {
     if (max_value) {
         $("#roll-dialog-result-label").html("Marge = ")
         const result = $("#roll-dialog-result")
-        const result_value = max_value + unease - dice_value + modifier
-        result[0].setAttribute("value", result_value.toString())
-        result.html(result_value)
+        const margin = max_value + unease - dice_value + modifier
+        result[0].setAttribute("value", margin.toString())
+        result.html(margin)
+
+        const effect_dices = roll_dices(2)
         $("#roll-dialog-details").html("Somme des 2d6 = " + dice_value + "<br/>Valeur seuil = " + (max_value + unease)
-            + "" + text_end)
+            + "" + text_end + "<br/>Dés d'effet = " + effect_dices)
 
         // Reset additional modifier
         select_modifier.slider("setValue", 0)
         select_modifier.slider("refresh", {useCurrentValue: true})
         $(select_modifier.slider("getElement")).show()
+
+        const effect_divs = $(".roll-dialog-effect-hide")
+        if (margin <= 0) {
+            effect_divs.addClass("d-none")
+        } else {
+            effect_divs.removeClass("d-none")
+        }
+
+        // Show the actual effect instead of [A] or [B+2]
+        effect = effect.replaceAll(effect_column_regex, (match, p1, p2, p3) => {
+            p1 = typeof p1 === "undefined" ? "" : "&nbsp;"
+            p3 = typeof p3 === "undefined" ? "" : p3
+            console.log(match)
+            return p1 + "<span class='roll-dialog-effect' value='" + effect_dices + "' column='" + p2 + "' " +
+                "modifier='" + p3 + "'>" + compute_effect(effect_dices + margin, p2, p3) + "</span>"
+        })
+        console.log(effect)
+        // Update with the MR if "MR" is in the text
+        $("#roll-dialog-effect").html(effect.replaceAll(effect_margin_regex,
+            "$1<span class='roll-dialog-margin'>" + margin + "</span>$3"))
+
     } else {
         $("#roll-dialog-result-label").html("Résultat du jet de 2d6 = ")
         $("#roll-dialog-result").html(dice_value)
         $("#roll-dialog-details").html("")
         $(select_modifier.slider("getElement")).hide()
+        $(".roll-dialog-effect-hide").addClass("d-none")
     }
 
     $('#roll-dialog').modal()
@@ -301,7 +352,28 @@ $(_ => {
         return modifier => {
             const result_span = $("#roll-dialog-result")
             const result = parseInt(result_span[0].getAttribute("value"))
-            result_span.html(result + modifier)
+            const margin = result + modifier
+            result_span.html(margin)
+
+            const effect_divs = $(".roll-dialog-effect-hide")
+            if (margin <= 0) {
+                effect_divs.addClass("d-none")
+            } else {
+                effect_divs.removeClass("d-none")
+            }
+
+            // Replace MR in effect
+            $(".roll-dialog-margin").html(margin)
+
+            // Update with scaled effect in the text
+            $(".roll-dialog-effect").each((i, elem) => {
+                const effect_dices = parseInt(elem.getAttribute("value"))
+                const column = elem.getAttribute("column")
+                let column_modifier = elem.getAttribute("modifier")
+                column_modifier = column_modifier.length > 0 ? parseInt(column_modifier) : 0
+                $(elem).html(compute_effect(effect_dices + margin, column, column_modifier))
+                console.log("sum " + (effect_dices + margin) + " column " + column + " modifier " + column_modifier)
+            })
             return modifier
         }
     }, _ => void 0, {tooltip: "always"})

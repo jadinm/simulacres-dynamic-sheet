@@ -10,3 +10,11 @@
 .roll-effect {
     min-width: 500px;
 }
+
+#roll-dialog-modifier-slider .slider-selection {
+    background: black;
+}
+
+#roll-dialog-modifier-slider .slider-handle {
+    background: black;
+}
