@@ -334,12 +334,14 @@ function trigger_roll(max_value = null, talent_level = 0, effect="") {
         $("#roll-dialog-effect").html(effect.replaceAll(effect_margin_regex,
             "$1<span class='roll-dialog-margin'>" + margin + "</span>$3"))
 
+        $("#roll-dialog-modifier-label").removeClass("d-none")
     } else {
         $("#roll-dialog-result-label").html("Résultat du jet de 2d6 = ")
         $("#roll-dialog-result").html(dice_value)
         $("#roll-dialog-details").html("")
         $(select_modifier.slider("getElement")).hide()
         $(".roll-dialog-effect-hide").addClass("d-none")
+        $("#roll-dialog-modifier-label").addClass("d-none")
     }
 
     $('#roll-dialog').modal()
@@ -374,4 +376,10 @@ $(_ => {
             return modifier
         }
     }, _ => void 0, {tooltip: "always"})
+})
+
+/* Quick roll button */
+
+$("#roll-2d6").on("click", _ => {
+    trigger_roll(null, 0)
 })

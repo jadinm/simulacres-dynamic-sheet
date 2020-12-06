@@ -568,7 +568,9 @@
 
         <!-- Quick rolls -->
         <div id="roll-tab" class="tab-pane fade row my-1 container-fluid m-0 pr-0">
-            <div class="row mt-2 ml-1"><b class="col-12 text-center">Jets rapides</b></div>
+            <div class="row mt-2 ml-1">
+                <b class="col-12 text-center">Jets rapides</b>&nbsp;
+            </div>
             <div class="table-responsive-xl col-12">
                 <table class="table table-hover my-1">
                     <thead>
@@ -756,6 +758,11 @@
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <div class="row mt-3 ml-2 mr-1">Lancer 2d6</div>
+            <div class="row ml-2 mr-1">
+                <div id="roll-2d6" class="btn btn-info"><i class="fas fa-dice"></i></div>
             </div>
         </div>
 
@@ -1721,7 +1728,7 @@
                         <span id="roll-dialog-penalties" style="white-space: pre-line;"></span>
                     </div>
                     <div class="row mx-1">
-                        <label for="roll-dialog-modifier">Modificateur&nbsp;</label>
+                        <label id="roll-dialog-modifier-label" for="roll-dialog-modifier">Modificateur&nbsp;</label>
                         <input id="roll-dialog-modifier" data-slider-id="roll-dialog-modifier-slider" type="text"
                                data-slider-min="-9" data-slider-max="9" data-slider-step="1" data-slider-value="0"
                                class="input-slider" data-slider-tooltip-position="bottom"/>
