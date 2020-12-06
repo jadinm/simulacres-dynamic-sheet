@@ -71,7 +71,7 @@ $("#save-page").on("click", function (_) {
  * @param html the jquery object of the page
  */
 function reset_tab_selection(html) {
-    html.find(".tab-pane").removeClass("show").removeClass("active")
+    html.find("#tabs .tab-pane").removeClass("show").removeClass("active")
     html.find("#status-tab").addClass("show").addClass("active")
     const tab_buttons = html.find("#nav-tabs a")
     tab_buttons.removeClass("active").each((i, elem) => {
