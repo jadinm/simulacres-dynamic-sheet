@@ -162,7 +162,9 @@ function import_data(src_html, dst_html) {
                     option.setAttribute("selected", "selected")
                 }
             })
-            new_select.selectpicker("refresh")
+            if (!new_select[0].id.includes("-x-")) {// Ignore template lines
+                new_select.selectpicker("refresh")
+            }
         }
     })
     dst_html.find(".talent-select.adventure-points-select").trigger("changed.bs.select")
