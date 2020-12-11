@@ -10,10 +10,16 @@ by executing the following command in the root of the project:
 $ yarn
 ```
 
-Then you can create the HTML file with all the code bundled by executing:
+Then, you need some Python dependencies that you can load with
 
 ```console
-$ python3 merge_external_files.py base.html simulacres_fiche_perso.html
+$ pip3 install -r requirements.txt
+```
+
+Finally, you can create the HTML file with all the code bundled by executing:
+
+```console
+$ python3 compile.py simulacres_fiche_perso.html
 ```
 
 ## Plugins

@@ -1,0 +1,245 @@
+<div class="row my-1">
+    <!-- Components and means -->
+    <div class="table-responsive-xl col-lg-6">
+        <table class="table table-hover my-1">
+            <thead>
+            <tr>
+                <th scope="col" class="align-middle">
+                    <div class="text-right">Moyens</div>
+                    Composantes
+                </th>
+                <th scope="col" class="align-middle md-form input-with-pre-icon">
+                    <svg height="3em" width="2em" class="input-prefix">
+                        <use xlink:href="#svg-perception"></use>
+                    </svg>
+                    <input class="form-control means text-center" id="perception" name="perception" type="number"
+                           value="1" min="1" max="5" data-toggle="tooltip" data-placement="top" title="Perception">
+                </th>
+                <th scope="col" class="align-middle md-form input-with-pre-icon">
+                    <svg height="3em" width="2em" class="input-prefix">
+                        <use xlink:href="#svg-action"></use>
+                    </svg>
+                    <input class="form-control means text-center" id="action" name="action" type="number" value="1"
+                           min="1" max="5" data-toggle="tooltip" data-placement="top" title="Action">
+                </th>
+                <th scope="col" class="align-middle md-form input-with-pre-icon">
+                    <svg height="3em" width="2em" class="input-prefix">
+                        <use xlink:href="#svg-desire"></use>
+                    </svg>
+                    <input class="form-control means text-center" id="desire" name="desire" type="number" value="1"
+                           min="1" max="5" data-toggle="tooltip" data-placement="top" title="Désir">
+                </th>
+                <th scope="col" class="align-middle md-form input-with-pre-icon">
+                    <svg height="3em" width="2em" class="input-prefix">
+                        <use xlink:href="#svg-resistance"></use>
+                    </svg>
+                    <input class="form-control means text-center" id="resistance" name="resistance" type="number"
+                           value="1" min="1" max="5" data-toggle="tooltip" data-placement="top" title="Résistance">
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th scope="row" class="align-middle md-form input-with-pre-icon">
+                    <svg height="3em" width="2em" class="input-prefix">
+                        <use xlink:href="#svg-body"></use>
+                    </svg>
+                    <input class="form-control component text-center" id="body" name="body" type="number" value="3"
+                           min="3" max="7" data-toggle="tooltip" data-placement="top" title="Corps">
+                </th>
+                <td class="align-middle text-center" id="body-perception" data-toggle="tooltip" data-html="true"
+                    data-placement="right"
+                    title="Voir, sentir, écouter;<br/>équilibre corporel;<br/>combat à distance"></td>
+                <td class="align-middle text-center" id="body-action" data-toggle="tooltip" data-html="true"
+                    data-placement="right"
+                    title="Action physique;<br/>dépense corporelle;<br/>combat au contact"></td>
+                <td class="align-middle text-center" id="body-desire" data-toggle="tooltip" data-html="true"
+                    data-placement="right"
+                    title="Surmonter la faim,<br/>le sommeil, les blessures;<br/>survivre"></td>
+                <td class="align-middle text-center" id="body-resistance" data-toggle="tooltip" data-html="true"
+                    data-placement="right"
+                    title="Résister à la faim, à la soif,<br/>aux maladies, à l'asphyxie"></td>
+            </tr>
+            <tr>
+                <th scope="row" class="align-middle md-form input-with-pre-icon">
+                    <svg height="3em" width="2em" class="input-prefix">
+                        <use xlink:href="#svg-instincts"></use>
+                    </svg>
+                    <input class="form-control component text-center" id="instincts" name="instincts" type="number"
+                           value="3" min="3" max="7" data-toggle="tooltip" data-placement="top" title="Instincts">
+                </th>
+                <td class="align-middle text-center" id="instincts-perception" data-toggle="tooltip"
+                    data-html="true" data-placement="right"
+                    title="Deviner une réaction;<br/>6e sens;<br/>se laisser guider par l'intuition"></td>
+                <td class="align-middle text-center" id="instincts-action" data-toggle="tooltip"
+                    data-html="true" data-placement="right"
+                    title="Réagir d'instinct;<br/>convaincre par la convoitise"></td>
+                <td class="align-middle text-center" id="instincts-desire" data-toggle="tooltip"
+                    data-html="true" data-placement="right"
+                    title="Imposer sa personalité;<br/>exorciser, réaliser ses rêves"></td>
+                <td class="align-middle text-center" id="instincts-resistance" data-toggle="tooltip"
+                    data-html="true" data-placement="right"
+                    title="Laisser la 'bête' (violence, plaisir) au fond de soi"></td>
+            </tr>
+            <tr>
+                <th scope="row" class="align-middle md-form input-with-pre-icon">
+                    <svg height="3em" width="2em" class="input-prefix">
+                        <use xlink:href="#svg-heart"></use>
+                    </svg>
+                    <input class="form-control component text-center" id="heart" name="heart" type="number"
+                           value="3" min="3" max="7" data-toggle="tooltip" data-placement="top" title="Cœur">
+                </th>
+                <td class="align-middle text-center" id="heart-perception" data-toggle="tooltip" data-html="true"
+                    data-placement="right" title="Connaître les sentiments;<br/>psychologie"></td>
+                <td class="align-middle text-center" id="heart-action" data-toggle="tooltip" data-html="true"
+                    data-placement="right" title="Se faire aimer;<br/>convaincre par la passion"></td>
+                <td class="align-middle text-center" id="heart-desire" data-toggle="tooltip" data-html="true"
+                    data-placement="right"
+                    title="Avoir la foi;<br/>créer la paix, la confiance et les miracles"></td>
+                <td class="align-middle text-center" id="heart-resistance" data-toggle="tooltip" data-html="true"
+                    data-placement="right" title="Résister à la séduction, à la pitié, à la misère"></td>
+            </tr>
+            <tr>
+                <th scope="row" class="align-middle md-form input-with-pre-icon">
+                    <svg height="3em" width="2em" class="input-prefix">
+                        <use xlink:href="#svg-mind"></use>
+                    </svg>
+                    <input class="form-control component text-center" id="mind" name="mind" type="number" value="3"
+                           min="3" max="7" data-toggle="tooltip" data-placement="top" title="Esprit">
+                </th>
+                <td class="align-middle text-center" id="mind-perception" data-toggle="tooltip" data-html="true"
+                    data-placement="right" title="Comprendre un problème;<br/>analyser une situation"></td>
+                <td class="align-middle text-center" id="mind-action" data-toggle="tooltip" data-html="true"
+                    data-placement="right" title="Raisonner, calculer, résoudre;<br/>Agir par la réflexion"></td>
+                <td class="align-middle text-center" id="mind-desire" data-toggle="tooltip" data-html="true"
+                    data-placement="right" title="Se raisonner, se détacher des sentiments, inventer"></td>
+                <td class="align-middle text-center" id="mind-resistance" data-toggle="tooltip" data-html="true"
+                    data-placement="right" title="Rester logique, d'esprit libre;<br/>résister à l'hypnotisme"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Realms -->
+    <div class="col-lg-2 col-md-3 col-sm-4 mt-4">
+        <div class="row m-0"><b>Règnes</b></div>
+        <div class="row m-0">
+            <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
+                 data-placement="right" title="Minéral">
+                <svg height="3em" width="2em" class="input-prefix">
+                    <use xlink:href="#svg-mineral"></use>
+                </svg>
+                <label for="mineral" hidden></label>
+                <input class="form-control realm text-center" id="mineral" name="mineral" type="number" value="0"
+                       min="0" max="3">
+            </div>
+        </div>
+        <div class="row m-0">
+            <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
+                 data-placement="right" title="Végétal">
+                <svg height="3em" width="2em" class="input-prefix">
+                    <use xlink:href="#svg-vegetal"></use>
+                </svg>
+                <label for="vegetal" hidden></label>
+                <input class="form-control realm text-center" id="vegetal" name="vegetal" type="number" value="0"
+                       min="0" max="3">
+            </div>
+        </div>
+        <div class="row m-0">
+            <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
+                 data-placement="right" title="Animal">
+                <svg height="3em" width="2em" class="input-prefix">
+                    <use xlink:href="#svg-animal"></use>
+                </svg>
+                <label for="animal" hidden></label>
+                <input class="form-control realm text-center" id="animal" name="animal" type="number" value="0"
+                       min="0" max="3">
+            </div>
+        </div>
+        <div class="row m-0">
+            <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
+                 data-placement="right" title="Humanoïde">
+                <svg height="3em" width="2em" class="input-prefix">
+                    <use xlink:href="#svg-humanoid"></use>
+                </svg>
+                <label for="humanoid" hidden></label>
+                <input class="form-control realm text-center" id="humanoid" name="humanoid" type="number" value="0"
+                       min="0" max="3">
+            </div>
+        </div>
+        <div class="row m-0">
+            <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
+                 data-placement="right" title="Mécanique">
+                <svg height="3em" width="2em" class="input-prefix">
+                    <use xlink:href="#svg-mechanical"></use>
+                </svg>
+                <label for="mechanical" hidden></label>
+                <input class="form-control realm text-center" id="mechanical" name="mechanic" type="number"
+                       value="0" min="0" max="3">
+            </div>
+        </div>
+        <div class="row m-0">
+            <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
+                 data-placement="right" title="Néant">
+                <svg height="3em" width="2em" class="input-prefix">
+                    <use xlink:href="#svg-void"></use>
+                </svg>
+                <label for="void" hidden></label>
+                <input class="form-control realm text-center" id="void" name="void" type="number" value="-1"
+                       min="-1" max="-1" disabled>
+            </div>
+        </div>
+    </div>
+
+    <!-- Energies -->
+    <div class="col-lg-2 col-md-3 col-sm-4 mt-4">
+        <div class="row m-0"><b>Énergies</b></div>
+        <div class="row m-0">
+            <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
+                 data-placement="left" title="Puissance">
+                <svg height="3em" width="2em" class="input-prefix">
+                    <use xlink:href="#svg-power"></use>
+                </svg>
+                <label for="power" hidden></label>
+                <input class="form-control energy text-center" id="power" name="power" type="number" value="0"
+                       min="0" max="3">
+            </div>
+        </div>
+        <div class="row m-0">
+            <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
+                 data-placement="left" title="Rapidité">
+                <svg height="3em" width="2em" class="input-prefix">
+                    <use xlink:href="#svg-speed"></use>
+                </svg>
+                <label for="speed" hidden></label>
+                <input class="form-control energy text-center" id="speed" name="speed" type="number" value="0"
+                       min="0" max="3">
+            </div>
+        </div>
+        <div class="row m-0">
+            <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
+                 data-placement="left" title="Précision">
+                <svg height="3em" width="2em" class="input-prefix">
+                    <use xlink:href="#svg-precision"></use>
+                </svg>
+                <label for="precision" hidden></label>
+                <input class="form-control energy text-center" id="precision" name="precision" type="number"
+                       value="0" min="0" max="3">
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-2 col-md-3 col-sm-4 mt-4">
+        <div class="row mt-3 justify-content-center p-2">
+            <img id="character-image" class="img-responsive rounded-lg" style="object-fit: cover; width: 100%"/>
+        </div>
+        <div class="row justify-content-center p-2">
+            <div class="input-group">
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="import-image" accept="image/*"
+                           aria-describedby="import-image-desc">
+                    <label class="custom-file-label" for="import-image">Image</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

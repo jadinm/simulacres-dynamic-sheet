@@ -1,0 +1,198 @@
+<div id="roll-tab" class="tab-pane fade row my-1 container-fluid m-0 pr-0">
+    <div class="row mt-2 ml-1">
+        <b class="col-12 text-center">Jets rapides</b>&nbsp;
+    </div>
+    <div class="table-responsive-xl col-12">
+        <table class="table table-hover my-1">
+            <thead>
+            <tr>
+                <th scope="col" class="col-3" style="min-width: 200px">Talent</th>
+                <th scope="col" class="col-3 text-center" style="min-width: 250px">Formule</th>
+                <th scope="col" class="col-1 text-center">Valeur</th>
+                <th scope="col" class="col-5" style="min-width: 300px">Effet</th>
+            </tr>
+            </thead>
+            <tbody id="roll-table" class="sortable-list">
+            <tr id="roll-x" hidden>
+                <td class="my-0 py-0 align-middle md-form row">
+                    <label for="roll-x-talent"></label>
+                    <select class="show-tick form-control talent-select selectpicker" data-live-search="true"
+                            id="roll-x-talent" data-style="col-8 ml-5 align-middle">
+                    </select>
+                    <i class="fas fa-arrows-alt prefix mt-3 ml-1" style="font-size: 1.5em;"></i>
+                </td>
+                <td class="my-0 py-0 roll-formula align-middle">
+                    <div class="row">
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" class="custom-control-input roll-formula-elem"
+                                   id="roll-x-body" name="roll-x-component">
+                            <label class="custom-control-label" for="roll-x-body">
+                                <svg height="1em" width="1em" class="input-prefix">
+                                    <use xlink:href="#svg-body"></use>
+                                </svg>
+                            </label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" class="custom-control-input roll-formula-elem"
+                                   id="roll-x-instincts" name="roll-x-component">
+                            <label class="custom-control-label" for="roll-x-instincts">
+                                <svg height="1em" width="1em" class="input-prefix">
+                                    <use xlink:href="#svg-instincts"></use>
+                                </svg>
+                            </label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" class="custom-control-input roll-formula-elem"
+                                   id="roll-x-heart" name="roll-x-component">
+                            <label class="custom-control-label" for="roll-x-heart">
+                                <svg height="1em" width="1em" class="input-prefix">
+                                    <use xlink:href="#svg-heart"></use>
+                                </svg>
+                            </label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" class="custom-control-input roll-formula-elem"
+                                   id="roll-x-mind" name="roll-x-component">
+                            <label class="custom-control-label" for="roll-x-mind">
+                                <svg height="1em" width="1em" class="input-prefix">
+                                    <use xlink:href="#svg-mind"></use>
+                                </svg>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" class="custom-control-input roll-formula-elem"
+                                   id="roll-x-perception" name="roll-x-means">
+                            <label class="custom-control-label" for="roll-x-perception">
+                                <svg height="1em" width="1em" class="input-prefix">
+                                    <use xlink:href="#svg-perception"></use>
+                                </svg>
+                            </label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" class="custom-control-input roll-formula-elem"
+                                   id="roll-x-action" name="roll-x-means">
+                            <label class="custom-control-label" for="roll-x-action">
+                                <svg height="1em" width="1em" class="input-prefix">
+                                    <use xlink:href="#svg-action"></use>
+                                </svg>
+                            </label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" class="custom-control-input roll-formula-elem"
+                                   id="roll-x-desire" name="roll-x-means">
+                            <label class="custom-control-label" for="roll-x-desire">
+                                <svg height="1em" width="1em" class="input-prefix">
+                                    <use xlink:href="#svg-desire"></use>
+                                </svg>
+                            </label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" class="custom-control-input roll-formula-elem"
+                                   id="roll-x-resistance" name="roll-x-means">
+                            <label class="custom-control-label" for="roll-x-resistance">
+                                <svg height="1em" width="1em" class="input-prefix">
+                                    <use xlink:href="#svg-resistance"></use>
+                                </svg>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" class="custom-control-input roll-formula-elem"
+                                   id="roll-x-mineral" name="roll-x-realm">
+                            <label class="custom-control-label" for="roll-x-mineral">
+                                <svg height="1em" width="1em" class="input-prefix">
+                                    <use xlink:href="#svg-mineral"></use>
+                                </svg>
+                            </label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" class="custom-control-input roll-formula-elem"
+                                   id="roll-x-vegetal" name="roll-x-realm">
+                            <label class="custom-control-label" for="roll-x-vegetal">
+                                <svg height="1em" width="1em" class="input-prefix">
+                                    <use xlink:href="#svg-vegetal"></use>
+                                </svg>
+                            </label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" class="custom-control-input roll-formula-elem"
+                                   id="roll-x-animal" name="roll-x-realm">
+                            <label class="custom-control-label" for="roll-x-animal">
+                                <svg height="1em" width="1em" class="input-prefix">
+                                    <use xlink:href="#svg-animal"></use>
+                                </svg>
+                            </label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" class="custom-control-input roll-formula-elem"
+                                   id="roll-x-humanoid" name="roll-x-realm">
+                            <label class="custom-control-label" for="roll-x-humanoid">
+                                <svg height="1em" width="1em" class="input-prefix">
+                                    <use xlink:href="#svg-humanoid"></use>
+                                </svg>
+                            </label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" class="custom-control-input roll-formula-elem"
+                                   id="roll-x-mechanical" name="roll-x-realm">
+                            <label class="custom-control-label" for="roll-x-mechanical">
+                                <svg height="1em" width="1em" class="input-prefix">
+                                    <use xlink:href="#svg-mechanical"></use>
+                                </svg>
+                            </label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" class="custom-control-input roll-formula-elem"
+                                   id="roll-x-void" name="roll-x-realm">
+                            <label class="custom-control-label" for="roll-x-void">
+                                <svg height="1em" width="1em" class="input-prefix">
+                                    <use xlink:href="#svg-void"></use>
+                                </svg>
+                            </label>
+                        </div>
+                    </div>
+                </td>
+                <td class="my-0 py-0 text-center align-middle">
+                    <div>
+                        <span id="roll-x-value" class="roll-value"></span>
+                        <span id="roll-x-dice" class="clickable row-roll-trigger" hidden>
+                                    <i class="fas fa-dice"></i>
+                                </span>
+                    </div>
+                </td>
+                <td class="md-form my-0 py-0 align-middle">
+                    <input id="roll-x-effect" class="roll-effect form-control" type="text">
+                    <label for="roll-x-effect"></label>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="row ml-2 mr-1">
+        <div class="col-lg-2 col-md-4 row">
+            <div class="col-6 px-0 mx-0">
+                <button id="add-roll" class="btn btn-success btn-block">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <div class="col-6 px-0 mx-0">
+                <div id="roll-table-remove" class="sortable-list text-center" style="min-height: 50px">
+                    <button class="btn-block btn btn-danger" style="cursor:default;" data-toggle="tooltip"
+                            data-html="true" data-placement="bottom"
+                            title="Déplacez un élément ici pour le supprimer">
+                        <i class="fas fa-trash-alt fa-1x"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-3 ml-2 mr-1">Lancer 2d6</div>
+    <div class="row ml-2 mr-1">
+        <div id="roll-2d6" class="btn btn-info"><i class="fas fa-dice"></i></div>
+    </div>
+</div>

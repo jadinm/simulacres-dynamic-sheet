@@ -1,0 +1,175 @@
+<div id="equipment-tab" class="tab-pane fade row my-1 container-fluid">
+    <!-- Money -->
+    <div class="row mt-2 ml-1"><b>Fortune</b></div>
+    <div class="row form-row mt-2 md-form p-0 m-0">
+        <div class="col-sm-4">
+            <label for="gold-coins">Soleils</label>
+            <input class="form-control" id="gold-coins" type="number" value="0" min="0">
+        </div>
+
+        <div class="col-sm-4">
+            <label for="silver-coins">Lunes</label>
+            <input class="form-control" id="silver-coins" type="number" value="0" min="0">
+        </div>
+
+        <div class="col-sm-4">
+            <label for="copper-coins">Besins</label>
+            <input class="form-control" id="copper-coins" type="number" value="0" min="0">
+        </div>
+    </div>
+
+    <!-- Focus -->
+    <div class="row mt-2 ml-1"><b>Focus</b></div>
+    <div class="table-responsive-xl col-12">
+        <table class="table table-hover my-1">
+            <thead>
+            <tr>
+                <th scope="col" class="col-8" style="width: 75%; min-width: 300px">Aspect</th>
+                <th scope="col" class="col-2 text-center" style="width: 12.5%">Charge actuelle</th>
+                <th scope="col" class="col-2 text-center" style="width: 12.5%">Charge maximum</th>
+            </tr>
+            </thead>
+            <tbody id="focus-table" class="sortable-list">
+            <tr id="focus-x" hidden>
+                <td class="md-form my-0 py-0 align-middle">
+                    <i class="fas fa-arrows-alt prefix mt-2 ml-1" style="font-size: 1.5em;"></i>
+                    <label for="focus-x-name"></label>
+                    <input id="focus-x-name" class="focus-name form-control" type="text" value="">
+                </td>
+                <td class="md-form my-0 py-0 align-middle">
+                    <input id="focus-x-charge" class="focus-charge form-control text-center" type="number"
+                           value="" min="0">
+                    <label for="focus-x-charge"></label>
+                </td>
+                <td class="md-form my-0 py-0 align-middle">
+                    <input id="focus-x-max" class="focus-max form-control text-center" type="number"
+                           value="" min="0">
+                    <label for="focus-x-max"></label>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="row ml-2 mr-1">
+        <div class="col-lg-2 col-md-4 row">
+            <div class="col-6 px-0 mx-0">
+                <button id="add-focus" class="btn btn-success btn-block">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <div class="col-6 px-0 mx-0">
+                <div id="focus-table-remove" class="sortable-list text-center" style="min-height: 50px">
+                    <button class="btn-block btn btn-danger" style="cursor:default;" data-toggle="tooltip"
+                            data-html="true" data-placement="bottom"
+                            title="Déplacez un élément ici pour le supprimer">
+                        <i class="fas fa-trash-alt fa-1x"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Magical equipment -->
+    <div class="row mt-2 ml-1"><b>Équipement magique</b></div>
+    <div class="table-responsive-xl col-12">
+        <table class="table table-hover my-1">
+            <thead>
+            <tr>
+                <th scope="col" class="col-3" style="width: 20%; min-width: 200px">Nom</th>
+                <th scope="col" class="col-2 text-center" style="width: 10%;">Nbr utilisations</th>
+                <th scope="col" class="col-7" style="width: 70%; min-width: 500px">Fonctionnement</th>
+            </tr>
+            </thead>
+            <tbody id="magical-equipment-table" class="sortable-list">
+            <tr id="magical-equipment-x" hidden>
+                <td class="md-form my-0 py-0 align-middle">
+                    <i class="fas fa-arrows-alt prefix mt-2 ml-1" style="font-size: 1.5em;"></i>
+                    <label for="magical-equipment-x-name"></label>
+                    <input id="magical-equipment-x-name" class="magical-equipment-name form-control" type="text"
+                           value="">
+                </td>
+                <td class="md-form my-0 py-0 align-middle">
+                    <input id="magical-equipment-x-charge"
+                           class="magical-equipment-charge form-control text-center" type="text">
+                    <label for="magical-equipment-x-charge"></label>
+                </td>
+                <td class="md-form my-0 py-0 align-middle">
+                    <label for="magical-equipment-x-details"></label>
+                    <input id="magical-equipment-x-details" class="magical-equipment-details form-control"
+                           type="text" value="">
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="row ml-2 mr-1">
+        <div class="col-lg-2 col-md-4 row">
+            <div class="col-6 px-0 mx-0">
+                <button id="add-magical-equipment" class="btn btn-success btn-block">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <div class="col-6 px-0 mx-0">
+                <div id="magical-equipment-table-remove" class="sortable-list text-center"
+                     style="min-height: 50px">
+                    <button class="btn-block btn btn-danger" style="cursor:default;" data-toggle="tooltip"
+                            data-html="true" data-placement="bottom"
+                            title="Déplacez un élément ici pour le supprimer">
+                        <i class="fas fa-trash-alt fa-1x"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Regular Equipment -->
+    <div class="row mt-2 ml-1"><b>Équipement</b></div>
+    <div class="table-responsive-xl col-12">
+        <table class="table table-hover my-1">
+            <thead>
+            <tr>
+                <th scope="col" class="col-2" style="width: 10%">Quantité</th>
+                <th scope="col" class="col-8" style="width: 80%; min-width: 300px">Description</th>
+                <th scope="col" class="col-2 text-center" style="width: 10%">Prix à l'unité (Besins)</th>
+            </tr>
+            </thead>
+            <tbody id="equipment-table" class="sortable-list">
+            <tr id="equipment-x" hidden>
+                <td class="md-form my-0 py-0 align-middle">
+                    <i class="fas fa-arrows-alt prefix mt-2 ml-1" style="font-size: 1.5em;"></i>
+                    <input id="equipment-x-quantity" class="equipment quantity form-control text-center"
+                           type="number" value="0" min="0">
+                    <label for="equipment-x-quantity"></label>
+                </td>
+                <td class="md-form my-0 py-0 align-middle">
+                    <label for="equipment-x-name"></label>
+                    <input id="equipment-x-name" class="equipment-name form-control" type="text" value="">
+                </td>
+                <td class="md-form my-0 py-0 align-middle">
+                    <input id="equipment-x-price" class="equipment-price form-control text-center"
+                           type="number" value="0" min="0">
+                    <label for="equipment-x-price"></label>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="row ml-2 mr-1">
+        <div class="col-lg-2 col-md-4 row">
+            <div class="col-6 px-0 mx-0">
+                <button id="add-equipment" class="btn btn-success btn-block">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <div class="col-6 px-0 mx-0">
+                <div id="equipment-table-remove" class="sortable-list text-center" style="min-height: 50px">
+                    <button class="btn-block btn btn-danger" style="cursor:default;" data-toggle="tooltip"
+                            data-html="true" data-placement="bottom"
+                            title="Déplacez un élément ici pour le supprimer">
+                        <i class="fas fa-trash-alt fa-1x"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

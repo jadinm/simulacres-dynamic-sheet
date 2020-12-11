@@ -1,0 +1,61 @@
+<div id="ki-tab" class="tab-pane fade row my-1 container-fluid">
+    <!-- Energy -->
+    <div class="row form-row mt-2 md-form p-0 m-0">
+        <div class="col-md-4">
+            <label for="ki">Énergie Ki</label>
+            <input class="energy form-control" id="ki" type="number" value="0" min="0" max="3">
+        </div>
+    </div>
+    <!-- Power levels -->
+    <div class="row mt-2 ml-1"><b>Niveaux de pouvoirs débloqués pour chaque talent de moine</b></div>
+    <div class="table-responsive-xl col-12">
+        <table class="table table-hover my-1">
+            <thead>
+            <tr>
+                <th scope="col" class="col-3" style="width: 30%; min-width: 300px">Nom</th>
+                <th scope="col" class="col-2" style="width: 10%">Niveau max</th>
+                <th scope="col" class="col-7" style="width: 70%; min-width: 500px">Effets</th>
+            </tr>
+            </thead>
+            <tbody id="ki-table" class="sortable-list">
+            <tr id="ki-x" hidden>
+                <td class="md-form my-0 py-0 align-middle row">
+                    <label for="ki-x-name"></label>
+                    <select class="show-tick form-control talent-select selectpicker" data-live-search="true"
+                            id="ki-x-name" data-style="col-8 ml-5 align-middle">
+                    </select>
+                    <i class="fas fa-arrows-alt prefix mt-2 ml-1" style="font-size: 1.5em;"></i>
+                </td>
+                <td class="md-form my-0 py-0 align-middle">
+                    <input id="ki-x-level" class="ki-level form-control text-center"
+                           type="number" value="1" min="1" max="3">
+                    <label for="ki-x-level"></label>
+                </td>
+                <td class="md-form my-0 py-0 align-middle">
+                    <input id="ki-x-description" class="ki-description form-control"
+                           type="text" value="">
+                    <label for="ki-x-description"></label>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="row ml-2 mr-1">
+        <div class="col-lg-2 col-md-4 row">
+            <div class="col-6 px-0 mx-0">
+                <button id="add-ki" class="btn btn-success btn-block">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <div class="col-6 px-0 mx-0">
+                <div id="ki-table-remove" class="sortable-list text-center" style="min-height: 50px">
+                    <button class="btn-block btn btn-danger" style="cursor:default;" data-toggle="tooltip"
+                            data-html="true" data-placement="bottom"
+                            title="Déplacez un élément ici pour le supprimer">
+                        <i class="fas fa-trash-alt fa-1x"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
