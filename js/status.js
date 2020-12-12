@@ -152,7 +152,7 @@ $(_ => {
         return value => {
             const max = slider_max(input)
             const initial_malus = -1 + max - 4
-            let text = ""
+            let text
             let unease = 0
             if (value === 0 || initial_malus - value === 0) {
                 text = "\u2205"
