@@ -141,10 +141,21 @@ function talent_x_inefficient_raise() {
     return $("#talents-inefficient-raise").val()
 }
 
-$(".talent-select.adventure-points-select").on("changed.bs.select", e => {
+$(".talent-select.adventure-points-select").on("changed.bs.select", (e, clickedIndex, isSelected, previousValue) => {
+    // Retrieve all talents that were selected or removed
     let talents_to_update = $(e.target).selectpicker("val")
     if (!Array.isArray(talents_to_update))
         talents_to_update = [talents_to_update]
+    if (previousValue) {
+        if (!Array.isArray(previousValue))
+            previousValue = [previousValue]
+        for (let i = 0; i < previousValue.length; i++) {
+            if (!talents_to_update.includes(previousValue[i]))
+                talents_to_update.push(previousValue[i])
+        }
+    }
+    console.log(talents_to_update)
+
     const talents = $(".talent").filter((_, elem) => {
         for (let i = 0; i < talents_to_update.length; i++) {
             if ($(elem).find("input[value='" + talents_to_update[i] + "']").length > 0)
