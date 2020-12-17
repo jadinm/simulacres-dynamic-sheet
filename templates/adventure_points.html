@@ -23,6 +23,18 @@
         <h3 class="text-center">Paramètres pour la dépense de PAs</h3>
     </div>
     <div class="row mt-2 ml-1">
+        Les talents originnellement de niveau X nécessitent 6 PA au lieu de 5 pour passer au niveau 0
+        s'ils ne sont pas monté en une fois à ce niveau 0.
+        Par défaut, on considère que tous les talents originellement de niveau X et à présent de niveau 0 à 3
+        ont été montés d'un seul coup. Sélectionnez ci-dessous les talents qui pour lesquels ce n'est pas le cas.
+    </div>
+    <div class="row md-form ml-1 mr-2">
+        <select class="show-tick form-control talent-select selectpicker adventure-points-select"
+                data-live-search="true" id="talents-inefficient-raise" data-style="col-12 align-middle" multiple
+                title="Talents X qui n'ont pas été montés à 0 en une fois" data-talent-filter-origin-level="x">
+        </select>
+    </div>
+    <div class="row mt-2 ml-1">
         Le contenu suivant ne doit être encodé qu'une seule fois.
         Au début de la campagne, il est possible de faire certaines actions qui diminuent ou augmentent
         les coûts en PA.

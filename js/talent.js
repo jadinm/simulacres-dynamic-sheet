@@ -27,7 +27,13 @@ function talent_cost(talent) {
         old_value = "1" // Compute PA cost from level 1
     }
 
-    const cost = talent_increment_cost[old_value][current_value]
+    let cost  = talent_increment_cost[old_value][current_value]
+
+    if (talent_x_inefficient_raise().includes(talent_name) && parseInt(current_value) >= 0) {
+        // 6 PA were consumed to raise this talent from X to 0 instead of 5
+        cost += indirect_x_to_0_raise_cost
+    }
+
     if (advised_talent().includes(talent_name))
         return Math.max(0, cost - advised_talent_save)
     return cost
@@ -43,9 +49,11 @@ function update_talent_select(select) {
     if (!Array.isArray(selected_options))
         selected_options = [selected_options]
 
-    // Recover talent list
+    // Recover talent list, potentially filtered
+    const only_from = select[0].getAttribute("data-talent-filter-origin-level")
     const talent_list = $(talent_list_selector).filter((i, e) => {
         return e.value && e.value.length > 0
+            && (only_from == null || talent_base_level($(e).parents(".talent")[0]) === only_from)
     })
     select.empty()
 

@@ -19,6 +19,7 @@ const talent_increment_cost = {
     "0": {x: 0, "-4": 0, "-2": 0, "0": 0, "1": 5, "2": 25, "3": 65},
     "1": {x: 0, "-4": 0, "-2": 0, "0": 0, "1": 0, "2": 20, "3": 60}
 }
+const indirect_x_to_0_raise_cost = 1
 const advised_talent_save = 1
 const mage_spell_ap_cost = talent_increment_cost["x"]["-4"]
 const ki_divine_spell_ap_cost = talent_increment_cost["x"]["0"]
@@ -134,6 +135,10 @@ function main_work_talent() {
 
 function advised_talent() {
     return $("#advised-talents").val()
+}
+
+function talent_x_inefficient_raise() {
+    return $("#talents-inefficient-raise").val()
 }
 
 $(".talent-select.adventure-points-select").on("changed.bs.select", e => {
