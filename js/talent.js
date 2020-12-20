@@ -109,6 +109,8 @@ function add_talent(list, fixed_id = null) {
     $(".roll-value").each((i, elem) => {
         update_roll_value($(elem))
     })
+    // Update armor penalty
+    $("#armor-penalty").text(get_armor_penalty())
     return new_talent
 }
 
@@ -132,8 +134,8 @@ default_talents = {
     "-4": ["Armes normales", "Arts martiaux/Lutte", "Camouflage", "Commerce/Marchandage", "Coutumes étrangères",
         "Équitation", "Géographie d'Heldor", "Langue étrangère proche", "Jonglage/Acrobaties", "Maçonnerie",
         "Médecine", "Musique", "Natation", "Piégeage", "Vol à la tire"],
-    "-2": ["Armes légères", "Bricolage", "Cartographie", "Comédie", "Danse", "Déguisement", "Dessin", "Dressage",
-        "Escalade", "Orientation", "Poésie/Contes & Légendes", "Pistage/Chasse/Pêche", "Premiers soins",
+    "-2": ["Armes légères", "Bouclier", "Bricolage", "Cartographie", "Comédie", "Danse", "Déguisement", "Dessin",
+        "Dressage", "Escalade", "Orientation", "Poésie/Contes & Légendes", "Pistage/Chasse/Pêche", "Premiers soins",
         "Recherches en bibliothèque", "Religion", "Sculpture"],
     "0": ["Athlétisme", "Bagarre", "Chant", "Cuisine", "Discrétion", "Entregent", "Langue maternelle", "Séduction",
         "Observation"]
@@ -177,6 +179,9 @@ function update_talent(event) {
     $(".roll-value").each((i, elem) => {
         update_roll_value($(elem))
     })
+
+    // Update armor penalty
+    $("#armor-penalty").text(get_armor_penalty())
 
     // Update Adventure points
     compute_remaining_ap()

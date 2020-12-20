@@ -27,6 +27,18 @@ function hp_update(event) {
 
 /* Update armor penalty */
 
+function armor_penalty(armor_sum) {
+    let penalty = 0
+    if (armor_sum >= 12 && armor_sum <= 23) {
+        penalty = -1
+    } else if (armor_sum >= 24 && armor_sum <= 30) {
+        penalty = -2
+    } else if (armor_sum >= 31) {
+        penalty = "-3 (actions physiques) et -1 (autres actions)"
+    }
+    return penalty
+}
+
 function get_armor_penalty() {
     const armors = $.map($(".armor"), element => parseInt(element.value))
     let armor_sum = 0
@@ -34,18 +46,27 @@ function get_armor_penalty() {
         armor_sum += armors[i] << 0
     }
 
-    let penalty = 0
-    if (armor_sum >= 12 && armor_sum <= 23) {
-        penalty = -1
-    } else if (armor_sum >= 24 && armor_sum <= 30) {
-        penalty = -2
-    } else if (armor_sum >= 31) {
-        penalty = -3
+    // Take shield into account
+    const shield = parseInt($("#shield").val())
+    if (!isNaN(shield) && shield > 0) {
+        // Check if shield talent exists and is above 0
+        const shield_talent = $(".talent input[value='Bouclier']")
+        const level = shield_talent.length > 0 ? parseInt(talent_level(shield_talent)[0]) : NaN
+        if (!isNaN(level) && level >= 0) {
+            return armor_penalty(armor_sum) + " en parade, "
+                + armor_penalty(armor_sum + shield * 6) + " en protection"
+        }
+        return armor_penalty(armor_sum) + " en parade (protection impossible car le talent 'Bouclier' est à moins de 0)"
     }
-    return penalty
+
+    return armor_penalty(armor_sum)
 }
 
 $(".armor").on("change", _ => {
+    $("#armor-penalty").text(get_armor_penalty())
+})
+
+$("#shield").on("change", _ => {
     $("#armor-penalty").text(get_armor_penalty())
 })
 

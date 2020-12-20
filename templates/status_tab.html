@@ -134,9 +134,17 @@
         </div>
 
         <!-- Protection summary, unease, breath and psychic balance -->
-        <div class="offset-1 col-lg-3 col-md-4 mt-5 align-middle">
-            <div class="row mb-5">
+        <div class="offset-1 col-lg-3 col-md-4 mt-2 align-middle">
+            <div class="row">
                 Malus de protection:&nbsp;<span id="armor-penalty">0</span>
+            </div>
+            <div class="row mt-1 mb-3 md-form form-sm m-0 input-with-pre-icon" style="width: 200px">
+                <svg height="2em" width="2em" class="input-prefix">
+                    <use xlink:href="#svg-shield"></use>
+                </svg>
+                <input type="number" id="shield" class="form-control form-control-sm text-center" min="0" max="2"
+                       value="0">
+                <label for="shield" hidden></label>
             </div>
             <div class="row">
                 <label for="unease">Malaise (M):&nbsp;
