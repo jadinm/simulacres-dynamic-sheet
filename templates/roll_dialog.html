@@ -23,10 +23,24 @@
                         <span id="roll-dialog-penalties" style="white-space: pre-line;"></span>
                     </div>
                     <div class="row mx-1">
-                        <label id="roll-dialog-modifier-label" for="roll-dialog-modifier">Modificateur&nbsp;</label>
+                        <label id="roll-dialog-modifier-label" for="roll-dialog-modifier">
+                            Modificateur à la MR (ex. énergies investies)&nbsp;
+                        </label>
                         <input id="roll-dialog-modifier" data-slider-id="roll-dialog-modifier-slider" type="text"
                                data-slider-min="-9" data-slider-max="9" data-slider-step="1" data-slider-value="0"
-                               class="input-slider" data-slider-tooltip-position="bottom"/>
+                               class="input-slider" data-slider-tooltip-position="top"/>
+                    </div>
+                    <div class="row mx-1">
+                        <!-- Warn user about current malus here -->
+                        <span id="roll-dialog-effect-penalties" style="white-space: pre-line;"></span>
+                    </div>
+                    <div class="row mx-1">
+                        <label id="roll-dialog-effect-modifier-label" for="roll-dialog-effect-modifier">
+                            Modificateur aux dés d'effet (ex. armure cible)&nbsp;
+                        </label>
+                        <input id="roll-dialog-effect-modifier" data-slider-id="roll-dialog-effect-modifier-slider"
+                               type="text" data-slider-min="-9" data-slider-max="9" data-slider-step="1"
+                               data-slider-value="0" class="input-slider" data-slider-tooltip-position="bottom"/>
                     </div>
                     <hr class="roll-dialog-effect-hide"/>
                     <div class="roll-dialog-effect-hide row mx-1">Effet:</div>

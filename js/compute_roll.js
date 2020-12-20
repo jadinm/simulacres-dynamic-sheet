@@ -264,7 +264,7 @@ function compute_effect(dices, column, modifier) {
 const effect_column_regex = /(\W)?\[([ABCDEFGHIJK])([+-]\d+)?]/gi
 const effect_margin_regex = /(^|\W)(MR)(\W|$)/gi
 
-function trigger_roll(max_value = null, talent_level = 0, effect="") {
+function trigger_roll(max_value = null, talent_level = 0, effect = "") {
     // Reset text
     $("#roll-dialog-1d6-result").text("")
     $("#roll-dialog-2d6-result").text("")
@@ -300,6 +300,7 @@ function trigger_roll(max_value = null, talent_level = 0, effect="") {
     $("#roll-dialog-penalties").text(penalty_text)
 
     const select_modifier = $("#roll-dialog-modifier")
+    const select_effect_modifier = $("#roll-dialog-effect-modifier")
     if (max_value) {
         $("#roll-dialog-result-label").html("Marge = ")
         const result = $("#roll-dialog-result")
@@ -311,10 +312,13 @@ function trigger_roll(max_value = null, talent_level = 0, effect="") {
         $("#roll-dialog-details").html("Somme des 2d6 = " + dice_value + "<br/>Valeur seuil = " + (max_value + unease)
             + "" + text_end + "<br/>Dés d'effet = " + effect_dices)
 
-        // Reset additional modifier
+        // Reset additional modifiers
         select_modifier.slider("setValue", 0)
+        select_effect_modifier.slider("setValue", 0)
         select_modifier.slider("refresh", {useCurrentValue: true})
+        select_effect_modifier.slider("refresh", {useCurrentValue: true})
         $(select_modifier.slider("getElement")).show()
+        $(select_effect_modifier.slider("getElement")).show()
 
         const effect_divs = $(".roll-dialog-effect-hide")
         if (margin <= 0) {
@@ -335,27 +339,30 @@ function trigger_roll(max_value = null, talent_level = 0, effect="") {
             "$1<span class='roll-dialog-margin'>" + margin + "</span>$3"))
 
         $("#roll-dialog-modifier-label").removeClass("d-none")
+        $("#roll-dialog-effect-modifier-label").removeClass("d-none")
     } else {
         $("#roll-dialog-result-label").html("Résultat du jet de 2d6 = ")
         $("#roll-dialog-result").html(dice_value)
         $("#roll-dialog-details").html("")
         $(select_modifier.slider("getElement")).hide()
+        $(select_effect_modifier.slider("getElement")).hide()
         $(".roll-dialog-effect-hide").addClass("d-none")
         $("#roll-dialog-modifier-label").addClass("d-none")
+        $("#roll-dialog-effect-modifier-label").addClass("d-none")
     }
 
     $('#roll-dialog').modal()
 }
 
-$(_ => {
-    activate_slider($("#roll-dialog-modifier")[0], _ => {
-        return modifier => {
-            const result_span = $("#roll-dialog-result")
-            const result = parseInt(result_span[0].getAttribute("value"))
-            const margin = result + modifier
-            result_span.html(margin)
+function slider_value_changed(input) {
+    return modifier => {
+        const result_span = $("#roll-dialog-result")
+        const result = parseInt(result_span[0].getAttribute("value"))
+        const margin = result + modifier
 
-            const effect_divs = $(".roll-dialog-effect-hide")
+        const effect_divs = $(".roll-dialog-effect-hide")
+        if (input.id === "roll-dialog-modifier") { // Modify the MR only for MR modifier
+            result_span.html(margin)
             if (margin <= 0) {
                 effect_divs.addClass("d-none")
             } else {
@@ -364,18 +371,26 @@ $(_ => {
 
             // Replace MR in effect
             $(".roll-dialog-margin").html(margin)
-
-            // Update with scaled effect in the text
-            $(".roll-dialog-effect").each((i, elem) => {
-                const effect_dices = parseInt(elem.getAttribute("value"))
-                const column = elem.getAttribute("column")
-                let column_modifier = elem.getAttribute("modifier")
-                column_modifier = column_modifier.length > 0 ? parseInt(column_modifier) : 0
-                $(elem).html(compute_effect(effect_dices + margin, column, column_modifier))
-            })
-            return modifier
         }
-    }, _ => void 0, {tooltip: "always"})
+
+        // Update with scaled effect in the text
+        $(".roll-dialog-effect").each((i, elem) => {
+            const effect_dices = parseInt(elem.getAttribute("value"))
+            const column = elem.getAttribute("column")
+            let column_modifier = elem.getAttribute("modifier")
+            column_modifier = column_modifier.length > 0 ? parseInt(column_modifier) : 0
+            $(elem).html(compute_effect(effect_dices + margin, column, column_modifier))
+        })
+        return modifier
+    }
+}
+
+$(_ => {
+    activate_slider($("#roll-dialog-modifier")[0], slider_value_changed, _ => void 0,
+        {tooltip: "always"})
+    activate_slider($("#roll-dialog-effect-modifier")[0], slider_value_changed, _ => void 0,
+        {tooltip: "always"})
+    console.log($("#roll-dialog-effect-modifier")[0])
 })
 
 /* Quick roll button */
