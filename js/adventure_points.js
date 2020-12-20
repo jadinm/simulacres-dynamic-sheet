@@ -154,7 +154,6 @@ $(".talent-select.adventure-points-select").on("changed.bs.select", (e, clickedI
                 talents_to_update.push(previousValue[i])
         }
     }
-    console.log(talents_to_update)
 
     const talents = $(".talent").filter((_, elem) => {
         for (let i = 0; i < talents_to_update.length; i++) {

@@ -155,6 +155,23 @@ $("#decrement-psychic").on("click", _ => {
     compute_remaining_ap()
 })
 
+/* Show/hide absorption on click */
+$("#toggle-absorption").on("click", e => {
+    const show = $(e.target).text().includes("Voir")
+    $(".absorption").each((i, elem) => {
+        if (show) {
+            $(elem).parent().removeClass("d-none")
+        } else {
+            $(elem).parent().addClass("d-none")
+        }
+    })
+    if (show) {
+        $(e.target).text("Cacher l'absorption des dégâts")
+    } else {
+        $(e.target).text("Voir l'absorption des dégâts")
+    }
+})
+
 /* Enable all the sliders on load */
 
 function get_unease() {

@@ -26,4 +26,5 @@ $.fn.selectpicker.Constructor.BootstrapVersion = '4'
 $(_ => {
     $('[data-toggle="tooltip"]:visible').tooltip()
     $('button[data-toggle="tooltip"]').tooltip()
+    $('.absorption').parent().tooltip()
 })

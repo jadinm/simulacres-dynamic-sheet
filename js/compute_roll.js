@@ -390,7 +390,6 @@ $(_ => {
         {tooltip: "always"})
     activate_slider($("#roll-dialog-effect-modifier")[0], slider_value_changed, _ => void 0,
         {tooltip: "always"})
-    console.log($("#roll-dialog-effect-modifier")[0])
 })
 
 /* Quick roll button */

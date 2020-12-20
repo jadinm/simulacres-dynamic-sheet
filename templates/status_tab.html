@@ -4,7 +4,8 @@
         <div class="col-lg-5 col-md-7 col-sm-12 col-xs-12">
             <div class="row mt-1 ml-2">
                 <div class="offset-4 col-4 align-middle text-center">
-                    <div class="md-form form-sm m-0 align-middle input-with-pre-icon">
+                    <div class="md-form form-sm m-0 align-middle input-with-pre-icon" data-toggle="tooltip"
+                         data-html="true" data-placement="right" title="Armure">
                         <svg height="2em" width="2em" class="input-prefix">
                             <use xlink:href="#svg-helmet"></use>
                         </svg>
@@ -12,6 +13,14 @@
                                class="armor form-control form-control-sm text-center"
                                min="0" value="0">
                         <label for="armor-head" hidden></label>
+                    </div>
+                    <div class="md-form form-sm m-0 align-middle input-with-pre-icon d-none" data-toggle="tooltip"
+                         data-html="true" data-placement="right" title="Absorption">
+                        <span class="input-prefix">Abs.</span>
+                        <input type="number" id="absorption-head"
+                               class="absorption form-control form-control-sm text-center"
+                               min="0" value="0">
+                        <label for="absorption-head" hidden></label>
                     </div>
                     <div data-toggle="tooltip" data-html="true" data-placement="right" title="Touché sur 1">
                         <svg height="4.5em" width="4.5em">
@@ -28,13 +37,22 @@
             </div>
             <div class="row ml-2">
                 <div class="col-4 align-middle text-center p-0 m-0">
-                    <div class="md-form form-sm m-0 align-middle input-with-pre-icon">
+                    <div class="md-form form-sm m-0 align-middle input-with-pre-icon" data-toggle="tooltip"
+                         data-html="true" data-placement="right" title="Armure">
                         <svg height="2em" width="2em" class="input-prefix">
                             <use xlink:href="#svg-right-gauntlet"></use>
                         </svg>
                         <input type="number" id="armor-right-arm"
                                class="armor form-control form-control-sm text-center" min="0" value="0">
                         <label for="armor-right-arm" hidden></label>
+                    </div>
+                    <div class="md-form form-sm m-0 align-middle input-with-pre-icon d-none" data-toggle="tooltip"
+                         data-html="true" data-placement="right" title="Absorption">
+                        <span class="input-prefix">Abs.</span>
+                        <input type="number" id="absorption-right-arm"
+                               class="absorption form-control form-control-sm text-center"
+                               min="0" value="0">
+                        <label for="absorption-right-arm" hidden></label>
                     </div>
                     <label for="hp-right-arm" hidden></label>
                     <input id="hp-right-arm" class="hp input-slider" data-slider-id="hp-right-arm-slider"
@@ -47,7 +65,8 @@
                     </svg>
                 </div>
                 <div class="col-4 align-middle text-center p-0 m-0">
-                    <div class="md-form form-sm m-0 align-middle input-with-pre-icon">
+                    <div class="md-form form-sm m-0 align-middle input-with-pre-icon" data-toggle="tooltip"
+                         data-html="true" data-placement="right" title="Armure">
                         <svg height="2em" width="2em" class="input-prefix">
                             <use xlink:href="#svg-chest-armor"></use>
                         </svg>
@@ -55,6 +74,14 @@
                                class="armor form-control form-control-sm text-center"
                                min="0" value="0">
                         <label for="armor-trunk" hidden></label>
+                    </div>
+                    <div class="md-form form-sm m-0 align-middle input-with-pre-icon d-none" data-toggle="tooltip"
+                         data-html="true" data-placement="right" title="Absorption">
+                        <span class="input-prefix">Abs.</span>
+                        <input type="number" id="absorption-trunk"
+                               class="absorption form-control form-control-sm text-center"
+                               min="0" value="0">
+                        <label for="absorption-trunk" hidden></label>
                     </div>
                     <div data-toggle="tooltip" data-html="true" data-placement="top"
                          title="Touché sur 2 ou 3 au contact<br/>Touché sur 2 à distance">
@@ -68,13 +95,22 @@
                            data-slider-handle="custom"/>
                 </div>
                 <div class="col-4 align-middle text-center p-0 m-0">
-                    <div class="md-form form-sm m-0 align-middle input-with-pre-icon">
+                    <div class="md-form form-sm m-0 align-middle input-with-pre-icon" data-toggle="tooltip"
+                         data-html="true" data-placement="right" title="Armure">
                         <svg height="2em" width="2em" class="input-prefix">
                             <use xlink:href="#svg-left-gauntlet"></use>
                         </svg>
                         <input type="number" id="armor-left-arm"
                                class="armor form-control form-control-sm text-center" min="0" value="0">
                         <label for="armor-left-arm" hidden></label>
+                    </div>
+                    <div class="md-form form-sm m-0 align-middle input-with-pre-icon d-none" data-toggle="tooltip"
+                         data-html="true" data-placement="right" title="Absorption">
+                        <span class="input-prefix">Abs.</span>
+                        <input type="number" id="absorption-left-arm"
+                               class="absorption form-control form-control-sm text-center"
+                               min="0" value="0">
+                        <label for="absorption-left-arm" hidden></label>
                     </div>
                     <svg height="4.5em" width="4.5em" data-toggle="tooltip" data-html="true"
                          data-placement="top" title="Touché sur 5 au contact<br/>Touché sur 4 à distance">
@@ -100,13 +136,22 @@
                          title="Touché sur 6p au contact<br/>Touché sur 5 à distance">
                         <use xlink:href="#svg-right-foot"></use>
                     </svg>
-                    <div class="md-form form-sm m-0 align-middle input-with-pre-icon">
+                    <div class="md-form form-sm m-0 align-middle input-with-pre-icon" data-toggle="tooltip"
+                         data-html="true" data-placement="right" title="Armure">
                         <svg height="2em" width="2em" class="input-prefix">
                             <use xlink:href="#svg-right-leg-armor"></use>
                         </svg>
                         <input type="number" id="armor-right-leg"
                                class="armor form-control form-control-sm text-center" min="0" value="0">
                         <label for="armor-right-leg" hidden></label>
+                    </div>
+                    <div class="md-form form-sm m-0 align-middle input-with-pre-icon d-none" data-toggle="tooltip"
+                         data-html="true" data-placement="right" title="Absorption">
+                        <span class="input-prefix">Abs.</span>
+                        <input type="number" id="absorption-right-leg"
+                               class="absorption form-control form-control-sm text-center"
+                               min="0" value="0">
+                        <label for="absorption-right-leg" hidden></label>
                     </div>
                 </div>
                 <div class="offset-lg-0 offset-md-1 col-4 align-middle text-center px-0">
@@ -121,13 +166,22 @@
                            data-slider-min="0" data-slider-max="3" data-slider-step="1" data-slider-value="3"
                            data-slider-handle="custom" data-slider-orientation="vertical"
                            data-slider-reversed="true"/>
-                    <div class="md-form form-sm m-0 align-middle input-with-pre-icon">
+                    <div class="md-form form-sm m-0 align-middle input-with-pre-icon" data-toggle="tooltip"
+                         data-html="true" data-placement="right" title="Armure">
                         <svg height="2em" width="2em" class="input-prefix">
                             <use xlink:href="#svg-left-leg-armor"></use>
                         </svg>
                         <input type="number" id="armor-left-leg"
                                class="armor form-control form-control-sm text-center" min="0" value="0">
                         <label for="armor-left-leg" hidden></label>
+                    </div>
+                    <div class="md-form form-sm m-0 align-middle input-with-pre-icon d-none" data-toggle="tooltip"
+                         data-html="true" data-placement="right" title="Absorption">
+                        <span class="input-prefix">Abs.</span>
+                        <input type="number" id="absorption-left-leg"
+                               class="absorption form-control form-control-sm text-center"
+                               min="0" value="0">
+                        <label for="absorption-left-leg" hidden></label>
                     </div>
                 </div>
             </div>
@@ -138,7 +192,7 @@
             <div class="row">
                 Malus de protection:&nbsp;<span id="armor-penalty">0</span>
             </div>
-            <div class="row mt-1 mb-3 md-form form-sm m-0 input-with-pre-icon" style="width: 200px">
+            <div class="row mt-1 md-form form-sm m-0 input-with-pre-icon" style="width: 200px">
                 <svg height="2em" width="2em" class="input-prefix">
                     <use xlink:href="#svg-shield"></use>
                 </svg>
@@ -146,13 +200,16 @@
                        value="0">
                 <label for="shield" hidden></label>
             </div>
+            <div class="row mb-3">
+                <div id="toggle-absorption" class="btn btn-dark rounded-lg">Voir l'absorption des dégâts</div>
+            </div>
             <div class="row">
                 <label for="unease">Malaise (M):&nbsp;
                     <span id="unease-text">pas de malus</span>
                     <span id="unease-value" hidden></span>
                 </label>
             </div>
-            <div class="row mb-5">
+            <div class="row mb-3">
                 <input id="unease" data-slider-id="unease-slider" type="text" data-slider-min="0"
                        data-slider-max="4" data-slider-step="1" data-slider-value="0" class="input-slider"
                        data-slider-tooltip-position="bottom"/>
@@ -160,7 +217,7 @@
             <div class="row clickable btn-link" data-toggle="modal" data-target="#breath-max-update">
                 <label class="clickable" for="breath">Souffle (PS)</label>
             </div>
-            <div class="row mb-5">
+            <div class="row mb-3">
                 <input id="breath" data-slider-id="breath-slider" type="text" data-slider-min="0"
                        data-slider-max="4" data-slider-step="1" data-slider-value="4"
                        data-slider-reversed="true"
