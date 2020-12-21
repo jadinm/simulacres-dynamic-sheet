@@ -1,12 +1,12 @@
-name: Merge JS and CSS libraries
+name: Produce character sheet
 on: [push, pull_request]
 env:
   PYTHON_SCRIPT: compile.py
   FINAL_FILENAME: simulacres_fiche_perso.html
 
 jobs:
-  merge_css_js:
-    name: Compile Jinja template
+  produce_character_sheet:
+    name: Produce character sheet
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the event commit
