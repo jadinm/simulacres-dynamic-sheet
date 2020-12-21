@@ -2,6 +2,30 @@
 
 ## Getting started
 
+You can download a [release](../../releases) of the character sheet
+or compile it from source code
+(see [Compile from source code](#compile-from-source-code)).
+
+When you modify fields, you can save the file by using the button or CTRL+S.
+
+Since it is a page opened by a browser, we cannot select the save location for you.
+The new version of the character sheet is in your downloads if your browser did not
+leave you the choice.
+
+### Upgrade existing character sheets
+
+First, download the targeted version of the character sheet.
+Then open it, click on the import button
+and select the old version of your character sheet.
+After a few seconds, all the data from your older version will be imported to the new one.
+Finally, save this new sheet.
+
+Since it is a page opened by a browser, we cannot select the save location for you.
+The new version of the character sheet is in your downloads if your browser did not
+leave you the choice.
+
+### Compile from source code
+
 To produce the character sheet, you need to first load javascript and css libraries
 with [yarn](https://classic.yarnpkg.com/en/docs/install/)
 by executing the following command in the root of the project:
@@ -25,6 +49,7 @@ $ python3 compile.py simulacres_fiche_perso.html
 ## Plugins
 
 You can insert new tabs into the character sheet by creating and importing plugins.
+There is a button for that on the bottom of the character sheet.
 
 ### Import a plugin
 
