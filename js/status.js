@@ -1,3 +1,5 @@
+localized_hp = $("#unease").length > 0
+
 /* HP slider */
 
 function hp_update(event) {
@@ -40,6 +42,12 @@ function armor_penalty(armor_sum) {
 }
 
 function get_armor_penalty() {
+    // If no localized HP, this is a user encoded value
+    if (!localized_hp) {
+        const penalty = $("#armor-penalty-input").val()
+        return penalty != null ? penalty : 0
+    }
+
     const armors = $.map($(".armor"), element => parseInt(element.value))
     let armor_sum = 0
     for (let i = 0; i < armors.length; i++) {
@@ -62,16 +70,20 @@ function get_armor_penalty() {
     return armor_penalty(armor_sum)
 }
 
-$(".armor").on("change", _ => {
+function recompute_armor_penalty() {
     $("#armor-penalty").text(get_armor_penalty())
+}
+
+$(".armor").on("change", _ => {
+    recompute_armor_penalty()
 })
 
 $("#shield").on("change", _ => {
-    $("#armor-penalty").text(get_armor_penalty())
+    recompute_armor_penalty()
 })
 
 /* Update constitution on resistance change */
-
+base_hp = localized_hp ? 3 : 4
 $("#resistance").on("change", event => {
     const value = parseInt(event.target.value)
     const trunk = $("#hp-trunk")
@@ -79,19 +91,19 @@ $("#resistance").on("change", event => {
     const left_leg = $("#hp-left-leg")
     const unease = $("#unease")
     if (value <= 1) { // Weak constitution
-        set_slider_max(trunk, 3)
-        set_slider_max(right_leg, 3)
-        set_slider_max(left_leg, 3)
+        set_slider_max(trunk, base_hp)
+        set_slider_max(right_leg, base_hp)
+        set_slider_max(left_leg, base_hp)
         set_slider_max(unease, 4)
     } else if (value === 2) { // Normal constitution
-        set_slider_max(trunk, 4)
-        set_slider_max(right_leg, 3)
-        set_slider_max(left_leg, 3)
+        set_slider_max(trunk, base_hp + 1)
+        set_slider_max(right_leg, base_hp)
+        set_slider_max(left_leg, base_hp)
         set_slider_max(unease, 5)
     } else { // Strong constitution
-        set_slider_max(trunk, 5)
-        set_slider_max(right_leg, 4)
-        set_slider_max(left_leg, 4)
+        set_slider_max(trunk, base_hp + 2)
+        set_slider_max(right_leg, base_hp + 1)
+        set_slider_max(left_leg, base_hp + 1)
         set_slider_max(unease, 6)
     }
 })
@@ -175,7 +187,8 @@ $("#toggle-absorption").on("click", e => {
 /* Enable all the sliders on load */
 
 function get_unease() {
-    return parseInt($("#unease-value").text())
+    const unease = parseInt($("#unease-value").text())
+    return isNaN(unease) ? 0 : unease
 }
 
 $(_ => {
@@ -186,26 +199,28 @@ $(_ => {
      * player health is too low
      */
 
-    activate_slider($('#unease')[0], input => {
-        return value => {
-            const max = slider_max(input)
-            const initial_malus = -1 + max - 4
-            let text
-            let unease = 0
-            if (value === 0 || initial_malus - value === 0) {
-                text = "\u2205"
-            } else if (value === max) {
-                text = "coma"
-                unease = initial_malus - value
-            } else {
-                text = "malus de " + (initial_malus - value)
-                unease = initial_malus - value
+    if (localized_hp) {
+        activate_slider($('#unease')[0], input => {
+            return value => {
+                const max = slider_max(input)
+                const initial_malus = -1 + max - 4
+                let text
+                let unease = 0
+                if (value === 0 || initial_malus - value === 0) {
+                    text = "\u2205"
+                } else if (value === max) {
+                    text = "coma"
+                    unease = initial_malus - value
+                } else {
+                    text = "malus de " + (initial_malus - value)
+                    unease = initial_malus - value
+                }
+                $("#unease-text").text(text)
+                $("#unease-value").text(unease)
+                return text
             }
-            $("#unease-text").text(text)
-            $("#unease-value").text(unease)
-            return text
-        }
-    })
+        })
+    }
 
     $('.hp.input-slider').each((i, input) => {
         activate_slider(input, build_max_formatter, slider => {

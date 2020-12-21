@@ -28,12 +28,18 @@ function activate_slider(input, formatter_builder = build_max_formatter, post_bu
 }
 
 function set_slider_max(slider, value) {
+    if (slider.length === 0)
+        return
+
     slider.slider("setAttribute", "max", value)
     slider[0].setAttribute("data-slider-max", value.toString())
     slider.slider("refresh", {useCurrentValue: true})
 }
 
 function set_slider_min(slider, new_min) {
+    if (slider.length === 0)
+        return
+
     // Update current value by the difference between old min and new min
     const old_min = parseInt(slider.slider("getAttribute", "min"))
     const old_value = parseInt(slider[0].value)

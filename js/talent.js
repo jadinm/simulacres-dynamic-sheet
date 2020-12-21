@@ -110,7 +110,7 @@ function add_talent(list, fixed_id = null) {
         update_roll_value($(elem))
     })
     // Update armor penalty
-    $("#armor-penalty").text(get_armor_penalty())
+    recompute_armor_penalty()
     return new_talent
 }
 
@@ -181,7 +181,7 @@ function update_talent(event) {
     })
 
     // Update armor penalty
-    $("#armor-penalty").text(get_armor_penalty())
+    recompute_armor_penalty()
 
     // Update Adventure points
     compute_remaining_ap()

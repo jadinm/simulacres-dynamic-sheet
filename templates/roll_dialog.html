@@ -51,44 +51,60 @@
                     <div id="roll-dialog-effect" class="row mx-1 roll-dialog-effect-hide"
                          style="white-space: pre-line;"></div>
                     <hr/>
-                    <div class="row mx-1">
-                        Le jet nécessite parfois de lancer un autre dés pour localiser l'effet:
-                    </div>
-                    <div class="row mx-1">
-                        <div id="roll-dialog-1d6" class="btn btn-info"><i class="fas fa-dice-six"></i></div>
-                        <div id="roll-dialog-1d6-result" class="mt-3"></div>
-                    </div>
-                    <hr/>
+                    {% if localisation %}
+                        <div class="row mx-1">
+                            Le jet nécessite parfois de lancer un autre dés pour localiser l'effet:
+                        </div>
+                        <div class="row mx-1">
+                            <div id="roll-dialog-1d6" class="btn btn-info"><i class="fas fa-dice-six"></i></div>
+                            <div id="roll-dialog-1d6-result" class="mt-3"></div>
+                        </div>
+                        <hr/>
+                    {% endif %}
                     <ul class="nav nav-tabs" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" data-toggle="tab" href="#localization-tab" role="tab"
-                               aria-controls="home" aria-selected="true">
-                                Localisation
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#damage-tab" role="tab"
-                               aria-controls="profile" aria-selected="false">
-                                Table des dégâts et effets
-                            </a>
-                        </li>
+                        {% if localisation %}
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#localization-tab" role="tab"
+                                   aria-controls="home" aria-selected="true">
+                                    Localisation
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#damage-tab" role="tab"
+                                   aria-controls="profile" aria-selected="false">
+                                    Table des dégâts et effets
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#damage-tab" role="tab"
+                                   aria-controls="profile" aria-selected="false">
+                                    Table des dégâts et effets
+                                </a>
+                            </li>
+                        {% endif %}
                     </ul>
 
                     <div class="tab-content">
-                        <div id="localization-tab" class="tab-pane fade show active row mx-1">
-                            <div style="white-space: pre-line;">
-                                1: La tête
-                                2: Le torse
-                                3: Le torse au contact, le bras droit à distance
-                                4: Le bras droit au contact, le bras gauche à distance
-                                5: Le bras gauche au contact, la jambe droite à distance
-                                6: Une des jambes au contact* et la jambe gauche à distance
+                        {% if localisation %}
+                            <div id="localization-tab" class="tab-pane fade show active row mx-1">
+                                <div style="white-space: pre-line;">
+                                    1: La tête
+                                    2: Le torse
+                                    3: Le torse au contact, le bras droit à distance
+                                    4: Le bras droit au contact, le bras gauche à distance
+                                    5: Le bras gauche au contact, la jambe droite à distance
+                                    6: Une des jambes au contact* et la jambe gauche à distance
 
-                                Sur un 6, au contact, il faut relancer 1d6. Si le résultat est pair, il s'agit de la
-                                droite et sinon la gauche.
+                                    Sur un 6, au contact, il faut relancer 1d6. Si le résultat est pair, il s'agit de la
+                                    droite et sinon la gauche.
+                                </div>
                             </div>
-                        </div>
-                        <div id="damage-tab" class="tab-pane fade row mx-1">
+                            {% set active = "" %}
+                        {% else %}
+                            {% set active = "show active" %}
+                        {% endif %}
+                        <div id="damage-tab" class="tab-pane {{ active }} fade row mx-1">
                             <div class="table-responsive-xl col-12">
                                 <table class="table table-hover table-bordered table-striped my-1">
                                     <thead>

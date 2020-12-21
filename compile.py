@@ -6,6 +6,7 @@ from jinja2 import Environment, PackageLoader, select_autoescape, Markup
 
 parser = argparse.ArgumentParser(description="Compile the html, css and js templates to a single html file")
 parser.add_argument("output_html", help="The path to the resulting HTML file")
+parser.add_argument("--localisation", help="Use localisation of HP and armor", action='store_true')
 args = parser.parse_args()
 
 
@@ -30,7 +31,7 @@ with open(os.path.join(html_dir, "../font/augusta.regular.ttf"), "rb") as extern
 # Build html sheet
 
 template = env.get_template('base.html')
-compiled_html = template.render({"augusta_font": augusta_font})
+compiled_html = template.render({"augusta_font": augusta_font, "localisation": args.localisation})
 
 # Replacing external file content
 

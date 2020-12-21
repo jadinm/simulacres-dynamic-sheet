@@ -4,10 +4,6 @@
     height: 5em;
 }
 
-.slider.slider-horizontal.hp-slider {
-    width: 5em;
-}
-
 .slider-handle.custom.full::before {
     line-height: 20px;
     font-size: 20px;

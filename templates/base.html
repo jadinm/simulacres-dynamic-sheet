@@ -27,6 +27,9 @@
     </style>
     <style>{{ include_static("../css/base.css") }}</style>
     <style>{{ include_static("../css/status.css") }}</style>
+    {% if localisation %}
+        <style>{{ include_static("../css/localized_hp.css") }}</style>
+    {% endif %}
     <style>{{ include_static("../css/talent.css") }}</style>
     <style>{{ include_static("../css/spells.css") }}</style>
     <style>{{ include_static("../css/rolls.css") }}</style>
@@ -100,7 +103,11 @@
 
     <div id="tabs" class="tab-content">
         <!-- Status tab -->
-        {% include "status_tab.html" %}
+        {% if localisation %}
+            {% include "localized_status_tab.html" %}
+        {% else %}
+            {% include "status_tab.html" %}
+        {% endif %}
 
         <!-- Quick rolls -->
         {% include "roll_tab.html" %}
