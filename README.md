@@ -1,46 +1,59 @@
-# Simulacres Dynamic Sheet
+# Fiche dynamique pour [SimulacreS](https://www.facebook.com/groups/1501312836787784/)
 
-## Getting started
+La fiche utilise les règles de campagne de
+[SimulacreS version 7](https://www.facebook.com/groups/Simulacres/permalink/1512926132293121/)
+avec les éléments suivant en plus :
+- les points de vie localisés, l'armure localisée et le bouclier
+  (voir [Casus Belli HS n°16](http://confrerie-acier.chez-alice.fr/localisation%20armures%20et%20autres.htm)),
+- la voie du moine (voir [Casus Belli LPC n°25](http://joueursdurepaire.free.fr/casus_belli/cb_LPC25.html)).
 
-You can download a [release](../../releases) of the character sheet
-or compile it from source code
-(see [Compile from source code](#compile-from-source-code)).
+## Premiers pas
 
-When you modify fields, you can save the file by using the button or CTRL+S.
+Vous pouvez télécharge une [release](../../releases) de la fiche
+ou la compiler depuis le code source
+(voir [Compiler depuis le code source](#compiler-depuis-le-code-source)).
 
-Since it is a page opened by a browser, we cannot select the save location for you.
-The new version of the character sheet is in your downloads if your browser did not
-leave you the choice.
+Une fois que vous avez modifié des champs de la fiche, n'oubliez pas de la sauvegarder,
+en utilisant soit le bouton en bas de la fiche, soit CTRL+S.
 
-### Upgrade existing character sheets
+Comme il s'agit d'une page html ouverte par un browser, on ne peut pas sélectionner
+le point de sauvegarde pour vous.
+La version modifiée se trouve dans vos téléchargements si votre browser ne vous a
+pas demandé où sauvegarder la fiche.
 
-First, download the targeted version of the character sheet.
-Then open it, click on the import button
-and select the old version of your character sheet.
-After a few seconds, all the data from your older version will be imported to the new one.
-Finally, save this new sheet.
+### Mettre à jour une fiche existante
 
-Since it is a page opened by a browser, we cannot select the save location for you.
-The new version of the character sheet is in your downloads if your browser did not
-leave you the choice.
+D'abord, téléchargez la version voulue pour la fiche.
+Ouvrez cette page vierge, cliquez sur le bouton "Importer une ancienne fiche"
+et choisissez votre ancienne fiche.
+Après quelques secondes, toutes les données de votre ancienne fiche sont importées
+dans la nouvelle.
+Il ne vous reste plus qu'à sauvegarder la nouvelle version
 
-### Compile from source code
+Comme il s'agit d'une page html ouverte par un browser, on ne peut pas sélectionner
+le point de sauvegarde pour vous.
+La nouvelle version se trouve dans vos téléchargements si votre browser ne vous a
+pas demandé où sauvegarder la fiche.
 
-To produce the character sheet, you need to first load javascript and css libraries
-with [yarn](https://classic.yarnpkg.com/en/docs/install/)
-by executing the following command in the root of the project:
+### Compiler depuis le code source
+
+Pour produire la fiche dynamique, vous devez d'abord télécharger les librairies
+javascript et css avec [yarn](https://classic.yarnpkg.com/en/docs/install/)
+en exécutant la commande suivante à la racine du projet :
 
 ```console
 $ yarn
 ```
 
-Then, you need some Python dependencies that you can load with
+Après, vous avez besoin de certaines libraires python que vous pouvez
+télécharger avec la commande suivante.
+Ce projet supporte les versions de python à partir de 3.5.
 
 ```console
 $ pip3 install -r requirements.txt
 ```
 
-Finally, you can create the HTML file with all the code bundled by executing:
+Enfin, vous pouvez créez le fichier HTML incluant tout le code en exécutant :
 
 ```console
 $ python3 compile.py simulacres_fiche_perso.html
@@ -48,41 +61,47 @@ $ python3 compile.py simulacres_fiche_perso.html
 
 ## Plugins
 
-You can insert new tabs into the character sheet by creating and importing plugins.
-There is a button for that on the bottom of the character sheet.
+Vous pouvez insérer de nouveaux tabs dans la fiche en créant et en important des plugins.
 
-### Import a plugin
+### Importer un plugin
 
-You have to import any html file from the plugin folder.
-At the moment, we have the following plugins:
+Vous pouvez importer n'importe quel fichier qui se trouve
+dans le [dossier plugin](plugins) ou un que vous aurez créé
+(voir [Contruire son propre plugin](#construire-son-propre-plugin)).
+Le bouton pour importer un plugin se trouve en bas de la fiche.
+Pour le moment nous avons les plugins suivants :
 
-- [Example plugin](plugins/plugin_example.html): testing and documentation.
+- [Plugin exemple](plugins/plugin_example.html) pour le test et la documentation
 
-### Update a plugin
+### Mettre à jour un plugin
 
-You can update the plugin by importing the new version in your character sheet.
+Vous pouvez mettre à jour un plugin en important la nouvelle version de celui-ci
+dans votre fiche. Il n'y a pas besoin de créer une nouvelle fiche.
 
-### Build your own plugin
+### Construire son propre plugin
 
-We fix some conventions for the plugins.
-Each component needs to include an appropriate class:
+Nous fixons quelques conventions pour les plugins.
+Chaque composante doit inclure une classe appropriée :
 
-- The button for the tab: ``plugin-button``
-- The tab itself: ``plugin-tab``
-- The associated css: ``plugin-css``
-- The associated javascript: ``plugin-js``
+- Le bouton du tab : ``plugin-button``
+- Le tab lui-même : ``plugin-tab``
+- Le code css associé : ``plugin-css``
+- Le code javascript associé : ``plugin-js``
 
-You can have multiple blocks of each type.
-However, each component needs to have a different id.
-To guarantee the uniqueness of your ids, include the name of your plugin into it
-and prefix the id by ``plugin-``.
+Vous pouvez avoir plusieurs blocks de chaque type
+mais chaque block doit avoir un id différent.
+Pour garantir l'unicité de vos ids, préfixez votre id par ``plugin-<plugin-name>-``
+en remplaçant ``<plugin-name>`` par le nom de votre plugin.
 
-You also need to put an id for each input field that you define.
-Otherwise, when updating your plugin, user data won't be copied.
-You have to include the name of your plugin into it and prefix the id by ``plugin-``.
+Il est également possible d'écraser des parties de la fiche dynamique avec cette
+méthode en utilisant le même id que le block à écraser
+mais utilisez ça avec prudence car cela peut introduire des bugs.
 
-#### Important: once you release your plugin, do not change any id
+#### Important: une fois votre plugin disponible, ne changez plus le moindre id
 
-If you change input field ids, this will cause data loss for these fields.
-If you change the component ids, the old components won't be replaced by the new ones
-but the new components will still be replaced.
+En effet, si vous changez les ids des champs, les utilisateurs perdront l'information
+encodée dans ces champs à la mise à jour.
+De plus, si vous changez les ids des blocks, les vieilles composantes ne seront
+pas remplacées par les nouvelles mais ces dernières seront quand-même insérées.
+Donc vous ne devez pas non plus supprimer de block (contentez-vous de vider
+le contenu du block si vous voulez le "supprimer").
