@@ -5,6 +5,8 @@ La fiche utilise les règles de campagne de
 avec les éléments suivant en plus :
 - les points de vie localisés, l'armure localisée et le bouclier
   (voir [Casus Belli HS n°16](http://confrerie-acier.chez-alice.fr/localisation%20armures%20et%20autres.htm)),
+- les utilisations optionnelles des énergies classiques
+  (voir [Casus Belli HS n°16](http://confrerie-acier.chez-alice.fr/localisation%20armures%20et%20autres.htm)),
 - la voie du moine (voir [Casus Belli LPC n°25](http://joueursdurepaire.free.fr/casus_belli/cb_LPC25.html)).
 
 ## Premiers pas
