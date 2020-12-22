@@ -34,6 +34,9 @@ function add_row_listeners(row = $(document)) {
         }
         difficulty = isNaN(difficulty) ? 0 : difficulty
 
+        // Reset precision
+        $("#roll-dialog-invested-precision").val("0")
+
         // Do the actual roll
         const value = parseInt(row_elem(button[0], "value").text()) // Recover max value
         trigger_roll(value, difficulty, row_elem(button[0], "effect").val())
@@ -214,11 +217,14 @@ $("#add-roll").on("click", (event, idx = null) => { // Add parameter for forced 
 
 /* Actual roll */
 
+let current_dices = []
 function roll_dices(number = 2, type = 6) {
     let sum = 0
+    current_dices = []
     for (let i = 0; i < number; i++) {
         let random = Math.random()
-        sum += Math.floor(random * type) + 1
+        current_dices.push(Math.floor(random * type) + 1)
+        sum += current_dices[current_dices.length - 1]
     }
     return sum
 }
@@ -264,7 +270,17 @@ function compute_effect(dices, column, modifier) {
 const effect_column_regex = /(\W)?\[([ABCDEFGHIJK])([+-]\d+)?]/gi
 const effect_margin_regex = /(^|\W)(MR)(\W|$)/gi
 
-function trigger_roll(max_value = null, talent_level = 0, effect = "") {
+let old_max_value = null
+let old_talent_level = 0
+let old_effect = ""
+
+function trigger_roll(max_value = old_max_value, talent_level = old_talent_level,
+                      effect = old_effect) {
+    // Save the current roll parameters
+    old_max_value = max_value
+    old_talent_level = talent_level
+    old_effect = effect
+
     // Reset text
     $("#roll-dialog-1d6-result").text("")
     $("#roll-dialog-2d6-result").text("")
@@ -272,19 +288,24 @@ function trigger_roll(max_value = null, talent_level = 0, effect = "") {
     critical_div.text("")
 
     const dice_value = roll_dices()
+    let dices = current_dices
 
     // Check for critical rolls
     let text_end = ""
     let modifier = 0
+    let precision = parseInt($("#roll-dialog-invested-precision").val())
+    precision = isNaN(precision) ? 0 : precision
     if (dice_value === 12) {
         critical_div.html("<b class='text-danger'>Échec critique... :'(</b>")
         modifier = -1 * roll_dices(1)
+        dices.concat(current_dices)
         text_end = "<br/>1d6 retiré à la marge d'une valeur de " + modifier
-    } else if (dice_value <= 2 + talent_level) {
+    } else if (dice_value <= 2 + talent_level + precision) {
         critical_div.html("<b class='text-success'>Succès critique !</b>")
         modifier = roll_dices(1 + talent_level)
+        dices.concat(current_dices)
         text_end = "<br/>" + (1 + talent_level) + "d6 ajouté" + ((talent_level > 0) ? "s" : "")
-            + " à la marge d'une valeur de " + modifier
+            + " à la marge d'une valeur de " + modifier + " (" + current_dices.join(" + ") + ")"
     }
 
     // Fill in penalties
@@ -309,8 +330,11 @@ function trigger_roll(max_value = null, talent_level = 0, effect = "") {
         result.html(margin)
 
         const effect_dices = roll_dices(2)
-        $("#roll-dialog-details").html("Somme des 2d6 = " + dice_value + "<br/>Valeur seuil = " + (max_value + unease)
-            + "" + text_end + "<br/>Dés d'effet = " + effect_dices)
+        dices.concat(current_dices)
+        $("#roll-dialog-details").html("Somme des 2d6 = " + dice_value + " (" + dices[0] + " + " + dices[1]
+            + ")<br/>Valeur seuil = " + (max_value + unease)
+            + "" + text_end + "<br/>Dés d'effet = " + effect_dices
+            + " (" + current_dices[0] + " + " + current_dices[1] + ")")
 
         // Reset additional modifiers
         select_modifier.slider("setValue", 0)
@@ -343,7 +367,7 @@ function trigger_roll(max_value = null, talent_level = 0, effect = "") {
     } else {
         $("#roll-dialog-result-label").html("Résultat du jet de 2d6 = ")
         $("#roll-dialog-result").html(dice_value)
-        $("#roll-dialog-details").html("")
+        $("#roll-dialog-details").html("(" + dices[0] + " + " + dices[1] + ")")
         $(select_modifier.slider("getElement")).hide()
         $(select_effect_modifier.slider("getElement")).hide()
         $(".roll-dialog-effect-hide").addClass("d-none")
@@ -395,5 +419,27 @@ $(_ => {
 /* Quick roll button */
 
 $("#roll-2d6").on("click", _ => {
+    // Reset precision
+    $("#roll-dialog-invested-precision").val("0")
+    // Trigger roll
     trigger_roll(null, 0)
+})
+
+/* Precision energy */
+$("#precision").on("change", event => {
+    let value = parseInt(event.target.value)
+    if (isNaN(value))
+        value = 0
+    const invested_precision = $("#roll-dialog-invested-precision")
+    invested_precision[0].setAttribute("max", value)
+    if (value > 0) {
+        invested_precision.parent().removeClass("d-none")
+    } else {
+        invested_precision.parent().addClass("d-none")
+    }
+})
+
+$("#roll-dialog-invested-precision").on("change", _ => {
+    // Trigger the same roll but with the correct precision
+    trigger_roll()
 })

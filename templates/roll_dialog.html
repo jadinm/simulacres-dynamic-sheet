@@ -51,16 +51,24 @@
                     <div id="roll-dialog-effect" class="row mx-1 roll-dialog-effect-hide"
                          style="white-space: pre-line;"></div>
                     <hr/>
-                    {% if localisation %}
-                        <div class="row mx-1">
-                            Le jet nécessite parfois de lancer un autre dés pour localiser l'effet:
-                        </div>
-                        <div class="row mx-1">
-                            <div id="roll-dialog-1d6" class="btn btn-info"><i class="fas fa-dice-six"></i></div>
-                            <div id="roll-dialog-1d6-result" class="mt-3"></div>
-                        </div>
-                        <hr/>
-                    {% endif %}
+                    <div class="row md-form mx-1 d-none">
+                        <label for="roll-dialog-invested-precision">
+                            Précision utilisée pour augmenter la chance de succès critique
+                        </label>
+                        <input class="special-energy form-control" id="roll-dialog-invested-precision"
+                               type="number" value="0" min="0" max="0">
+                    </div>
+                    <hr/>
+                    <div class="row mx-1">
+                        Le jet nécessite parfois de lancer un autre dé pour localiser l'effet ou
+                        pour augmenter la MR en cas de réussite quand le test passe
+                        si on a investi des points de puissance pour ça:
+                    </div>
+                    <div class="row mx-1">
+                        <div id="roll-dialog-1d6" class="btn btn-info"><i class="fas fa-dice-six"></i></div>
+                        <div id="roll-dialog-1d6-result" class="mt-3"></div>
+                    </div>
+                    <hr/>
                     <ul class="nav nav-tabs" role="tablist">
                         {% if localisation %}
                             <li class="nav-item">
