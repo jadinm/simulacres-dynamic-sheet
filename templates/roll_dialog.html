@@ -17,7 +17,7 @@
                             <span id="roll-dialog-result-label"></span><span id="roll-dialog-result"></span>
                         </div>
                     </div>
-                    <div class="row mx-1" id="roll-dialog-details"></div>
+                    <div id="roll-dialog-details"></div>
                     <div class="row mx-1">
                         <!-- Warn user about current malus here -->
                         <span id="roll-dialog-penalties" style="white-space: pre-line;"></span>
@@ -31,10 +31,6 @@
                         <input id="roll-dialog-modifier" data-slider-id="roll-dialog-modifier-slider" type="text"
                                data-slider-min="-9" data-slider-max="9" data-slider-step="1" data-slider-value="0"
                                class="input-slider" data-slider-tooltip-position="bottom"/>
-                    </div>
-                    <div class="row mx-1">
-                        <!-- Warn user about current malus here -->
-                        <span id="roll-dialog-effect-penalties" style="white-space: pre-line;"></span>
                     </div>
                     <div class="row mx-1">
                         <label id="roll-dialog-effect-modifier-label" for="roll-dialog-effect-modifier">
@@ -58,7 +54,6 @@
                         <input class="special-energy form-control" id="roll-dialog-invested-precision"
                                type="number" value="0" min="0" max="0">
                     </div>
-                    <hr/>
                     <div class="row mx-1">
                         Le jet nécessite parfois de lancer un autre dé pour localiser l'effet ou
                         pour augmenter la MR en cas de réussite quand le test passe
@@ -69,202 +64,205 @@
                         <div id="roll-dialog-1d6-result" class="mt-3"></div>
                     </div>
                     <hr/>
-                    <ul class="nav nav-tabs" role="tablist">
-                        {% if localisation %}
-                            <li class="nav-item">
-                                <a class="nav-link active" data-toggle="tab" href="#localization-tab" role="tab"
-                                   aria-controls="home" aria-selected="true">
-                                    Localisation
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#damage-tab" role="tab"
-                                   aria-controls="profile" aria-selected="false">
-                                    Table des dégâts et effets
-                                </a>
-                            </li>
-                        {% else %}
-                            <li class="nav-item">
-                                <a class="nav-link active" data-toggle="tab" href="#damage-tab" role="tab"
-                                   aria-controls="profile" aria-selected="false">
-                                    Table des dégâts et effets
-                                </a>
-                            </li>
-                        {% endif %}
-                    </ul>
+                    {% if version == V7 %}
+                        <ul class="nav nav-tabs" role="tablist">
+                            {% if localisation %}
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="#localization-tab" role="tab"
+                                       aria-controls="home" aria-selected="true">
+                                        Localisation
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#damage-tab" role="tab"
+                                       aria-controls="profile" aria-selected="false">
+                                        Table des dégâts et effets
+                                    </a>
+                                </li>
+                            {% else %}
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="#damage-tab" role="tab"
+                                       aria-controls="profile" aria-selected="false">
+                                        Table des dégâts et effets
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
 
-                    <div class="tab-content">
-                        {% if localisation %}
-                            <div id="localization-tab" class="tab-pane fade show active row mx-1">
-                                <div style="white-space: pre-line;">
-                                    1: La tête
-                                    2: Le torse
-                                    3: Le torse au contact, le bras droit à distance
-                                    4: Le bras droit au contact, le bras gauche à distance
-                                    5: Le bras gauche au contact, la jambe droite à distance
-                                    6: Une des jambes au contact* et la jambe gauche à distance
+                        <div class="tab-content">
+                            {% if localisation %}
+                                <div id="localization-tab" class="tab-pane fade show active row mx-1">
+                                    <div style="white-space: pre-line;">
+                                        1: La tête
+                                        2: Le torse
+                                        3: Le torse au contact, le bras droit à distance
+                                        4: Le bras droit au contact, le bras gauche à distance
+                                        5: Le bras gauche au contact, la jambe droite à distance
+                                        6: Une des jambes au contact* et la jambe gauche à distance
 
-                                    Sur un 6, au contact, il faut relancer 1d6. Si le résultat est pair, il s'agit de la
-                                    droite et sinon la gauche.
+                                        Sur un 6, au contact, il faut relancer 1d6. Si le résultat est pair, il s'agit
+                                        de la
+                                        droite et sinon la gauche.
+                                    </div>
+                                </div>
+                                {% set active = "" %}
+                            {% else %}
+                                {% set active = "show active" %}
+                            {% endif %}
+                            <div id="damage-tab" class="tab-pane {{ active }} fade row mx-1">
+                                <div class="table-responsive-xl col-12">
+                                    <table class="table table-hover table-bordered table-striped my-1">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col" class="col-1 text-center" style="white-space: nowrap">
+                                                MR+2d6
+                                            </th>
+                                            <th scope="col" class="col-1 text-center">A</th>
+                                            <th scope="col" class="col-1 text-center">B</th>
+                                            <th scope="col" class="col-1 text-center">C</th>
+                                            <th scope="col" class="col-1 text-center">D</th>
+                                            <th scope="col" class="col-1 text-center">E</th>
+                                            <th scope="col" class="col-1 text-center">F</th>
+                                            <th scope="col" class="col-1 text-center">G</th>
+                                            <th scope="col" class="col-1 text-center">H</th>
+                                            <th scope="col" class="col-1 text-center">I</th>
+                                            <th scope="col" class="col-1 text-center">J</th>
+                                            <th scope="col" class="col-1 text-center">K</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="damage-table" class="sortable-list">
+                                        <tr>
+                                            <th class="text-center">3</th>
+                                            <td class="text-center">0</td>
+                                            <td class="text-center">0</td>
+                                            <td class="text-center">1</td>
+                                            <td class="text-center">1</td>
+                                            <td class="text-center">1</td>
+                                            <td class="text-center">1</td>
+                                            <td class="text-center">1</td>
+                                            <td class="text-center">1</td>
+                                            <td class="text-center">1</td>
+                                            <td class="text-center">1</td>
+                                            <td class="text-center">1</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-center" style="white-space: nowrap">4 5 6</th>
+                                            <td class="text-center">0</td>
+                                            <td class="text-center">0</td>
+                                            <td class="text-center">1</td>
+                                            <td class="text-center">1</td>
+                                            <td class="text-center">1</td>
+                                            <td class="text-center">2</td>
+                                            <td class="text-center">2</td>
+                                            <td class="text-center">2</td>
+                                            <td class="text-center">2</td>
+                                            <td class="text-center">3</td>
+                                            <td class="text-center">3</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-center" style="white-space: nowrap">7 8 9</th>
+                                            <td class="text-center">0</td>
+                                            <td class="text-center">1</td>
+                                            <td class="text-center">1</td>
+                                            <td class="text-center">1</td>
+                                            <td class="text-center">2</td>
+                                            <td class="text-center">2</td>
+                                            <td class="text-center">3</td>
+                                            <td class="text-center">3</td>
+                                            <td class="text-center">4</td>
+                                            <td class="text-center">4</td>
+                                            <td class="text-center">5</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-center" style="white-space: nowrap">10 11</th>
+                                            <td class="text-center">1</td>
+                                            <td class="text-center">1</td>
+                                            <td class="text-center">1</td>
+                                            <td class="text-center">2</td>
+                                            <td class="text-center">3</td>
+                                            <td class="text-center">3</td>
+                                            <td class="text-center">3</td>
+                                            <td class="text-center">4</td>
+                                            <td class="text-center">4</td>
+                                            <td class="text-center">5</td>
+                                            <td class="text-center">5</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-center" style="white-space: nowrap">12 13 14</th>
+                                            <td class="text-center">1</td>
+                                            <td class="text-center">1</td>
+                                            <td class="text-center">2</td>
+                                            <td class="text-center">3</td>
+                                            <td class="text-center">3</td>
+                                            <td class="text-center">4</td>
+                                            <td class="text-center">4</td>
+                                            <td class="text-center">5</td>
+                                            <td class="text-center">5</td>
+                                            <td class="text-center">6</td>
+                                            <td class="text-center">6</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-center" style="white-space: nowrap">15 16 17 18</th>
+                                            <td class="text-center">1</td>
+                                            <td class="text-center">1</td>
+                                            <td class="text-center">3</td>
+                                            <td class="text-center">4</td>
+                                            <td class="text-center">4</td>
+                                            <td class="text-center">4</td>
+                                            <td class="text-center">5</td>
+                                            <td class="text-center">6</td>
+                                            <td class="text-center">6</td>
+                                            <td class="text-center">8</td>
+                                            <td class="text-center">8</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-center" style="white-space: nowrap">19 20 21 22</th>
+                                            <td class="text-center">2</td>
+                                            <td class="text-center">2</td>
+                                            <td class="text-center">4</td>
+                                            <td class="text-center">5</td>
+                                            <td class="text-center">6</td>
+                                            <td class="text-center">6</td>
+                                            <td class="text-center">7</td>
+                                            <td class="text-center">8</td>
+                                            <td class="text-center">8</td>
+                                            <td class="text-center">10</td>
+                                            <td class="text-center">10</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-center" style="white-space: nowrap">23 24 25 26</th>
+                                            <td class="text-center">3</td>
+                                            <td class="text-center">4</td>
+                                            <td class="text-center">5</td>
+                                            <td class="text-center">6</td>
+                                            <td class="text-center">8</td>
+                                            <td class="text-center">8</td>
+                                            <td class="text-center">9</td>
+                                            <td class="text-center">9</td>
+                                            <td class="text-center">10</td>
+                                            <td class="text-center">12</td>
+                                            <td class="text-center">12</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-center" style="white-space: nowrap">par tranche de 4</th>
+                                            <td class="text-center">+1</td>
+                                            <td class="text-center">+1</td>
+                                            <td class="text-center">+2</td>
+                                            <td class="text-center">+2</td>
+                                            <td class="text-center">+2</td>
+                                            <td class="text-center">+2</td>
+                                            <td class="text-center">+3</td>
+                                            <td class="text-center">+3</td>
+                                            <td class="text-center">+4</td>
+                                            <td class="text-center">+4</td>
+                                            <td class="text-center">+6</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
-                            {% set active = "" %}
-                        {% else %}
-                            {% set active = "show active" %}
-                        {% endif %}
-                        <div id="damage-tab" class="tab-pane {{ active }} fade row mx-1">
-                            <div class="table-responsive-xl col-12">
-                                <table class="table table-hover table-bordered table-striped my-1">
-                                    <thead>
-                                    <tr>
-                                        <th scope="col" class="col-1 text-center" style="white-space: nowrap">
-                                            MR+2d6
-                                        </th>
-                                        <th scope="col" class="col-1 text-center">A</th>
-                                        <th scope="col" class="col-1 text-center">B</th>
-                                        <th scope="col" class="col-1 text-center">C</th>
-                                        <th scope="col" class="col-1 text-center">D</th>
-                                        <th scope="col" class="col-1 text-center">E</th>
-                                        <th scope="col" class="col-1 text-center">F</th>
-                                        <th scope="col" class="col-1 text-center">G</th>
-                                        <th scope="col" class="col-1 text-center">H</th>
-                                        <th scope="col" class="col-1 text-center">I</th>
-                                        <th scope="col" class="col-1 text-center">J</th>
-                                        <th scope="col" class="col-1 text-center">K</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody id="damage-table" class="sortable-list">
-                                    <tr>
-                                        <th class="text-center">3</th>
-                                        <td class="text-center">0</td>
-                                        <td class="text-center">0</td>
-                                        <td class="text-center">1</td>
-                                        <td class="text-center">1</td>
-                                        <td class="text-center">1</td>
-                                        <td class="text-center">1</td>
-                                        <td class="text-center">1</td>
-                                        <td class="text-center">1</td>
-                                        <td class="text-center">1</td>
-                                        <td class="text-center">1</td>
-                                        <td class="text-center">1</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-center" style="white-space: nowrap">4 5 6</th>
-                                        <td class="text-center">0</td>
-                                        <td class="text-center">0</td>
-                                        <td class="text-center">1</td>
-                                        <td class="text-center">1</td>
-                                        <td class="text-center">1</td>
-                                        <td class="text-center">2</td>
-                                        <td class="text-center">2</td>
-                                        <td class="text-center">2</td>
-                                        <td class="text-center">2</td>
-                                        <td class="text-center">3</td>
-                                        <td class="text-center">3</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-center" style="white-space: nowrap">7 8 9</th>
-                                        <td class="text-center">0</td>
-                                        <td class="text-center">1</td>
-                                        <td class="text-center">1</td>
-                                        <td class="text-center">1</td>
-                                        <td class="text-center">2</td>
-                                        <td class="text-center">2</td>
-                                        <td class="text-center">3</td>
-                                        <td class="text-center">3</td>
-                                        <td class="text-center">4</td>
-                                        <td class="text-center">4</td>
-                                        <td class="text-center">5</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-center" style="white-space: nowrap">10 11</th>
-                                        <td class="text-center">1</td>
-                                        <td class="text-center">1</td>
-                                        <td class="text-center">1</td>
-                                        <td class="text-center">2</td>
-                                        <td class="text-center">3</td>
-                                        <td class="text-center">3</td>
-                                        <td class="text-center">3</td>
-                                        <td class="text-center">4</td>
-                                        <td class="text-center">4</td>
-                                        <td class="text-center">5</td>
-                                        <td class="text-center">5</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-center" style="white-space: nowrap">12 13 14</th>
-                                        <td class="text-center">1</td>
-                                        <td class="text-center">1</td>
-                                        <td class="text-center">2</td>
-                                        <td class="text-center">3</td>
-                                        <td class="text-center">3</td>
-                                        <td class="text-center">4</td>
-                                        <td class="text-center">4</td>
-                                        <td class="text-center">5</td>
-                                        <td class="text-center">5</td>
-                                        <td class="text-center">6</td>
-                                        <td class="text-center">6</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-center" style="white-space: nowrap">15 16 17 18</th>
-                                        <td class="text-center">1</td>
-                                        <td class="text-center">1</td>
-                                        <td class="text-center">3</td>
-                                        <td class="text-center">4</td>
-                                        <td class="text-center">4</td>
-                                        <td class="text-center">4</td>
-                                        <td class="text-center">5</td>
-                                        <td class="text-center">6</td>
-                                        <td class="text-center">6</td>
-                                        <td class="text-center">8</td>
-                                        <td class="text-center">8</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-center" style="white-space: nowrap">19 20 21 22</th>
-                                        <td class="text-center">2</td>
-                                        <td class="text-center">2</td>
-                                        <td class="text-center">4</td>
-                                        <td class="text-center">5</td>
-                                        <td class="text-center">6</td>
-                                        <td class="text-center">6</td>
-                                        <td class="text-center">7</td>
-                                        <td class="text-center">8</td>
-                                        <td class="text-center">8</td>
-                                        <td class="text-center">10</td>
-                                        <td class="text-center">10</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-center" style="white-space: nowrap">23 24 25 26</th>
-                                        <td class="text-center">3</td>
-                                        <td class="text-center">4</td>
-                                        <td class="text-center">5</td>
-                                        <td class="text-center">6</td>
-                                        <td class="text-center">8</td>
-                                        <td class="text-center">8</td>
-                                        <td class="text-center">9</td>
-                                        <td class="text-center">9</td>
-                                        <td class="text-center">10</td>
-                                        <td class="text-center">12</td>
-                                        <td class="text-center">12</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-center" style="white-space: nowrap">par tranche de 4</th>
-                                        <td class="text-center">+1</td>
-                                        <td class="text-center">+1</td>
-                                        <td class="text-center">+2</td>
-                                        <td class="text-center">+2</td>
-                                        <td class="text-center">+2</td>
-                                        <td class="text-center">+2</td>
-                                        <td class="text-center">+3</td>
-                                        <td class="text-center">+3</td>
-                                        <td class="text-center">+4</td>
-                                        <td class="text-center">+4</td>
-                                        <td class="text-center">+6</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
                         </div>
-                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>

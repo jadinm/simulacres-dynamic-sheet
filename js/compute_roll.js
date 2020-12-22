@@ -268,12 +268,36 @@ function compute_effect(dices, column, modifier) {
     return effect_table[column][total]
 }
 
+function compute_dss(margin) {
+    return margin > 0 ? Math.floor(margin / 3) : 0
+}
+
+function compute_des(margin) {
+    if (-6 <= margin && margin <= -4)
+        return 1
+    else if (margin <= -7)
+        return 2
+    return 0
+}
+
+function set_result_label(margin) {
+    if ((is_v7 && margin > 0 || !is_v7 && margin >= 0) && !critical_failure || critical_success) {
+        $("#roll-dialog-result-label").html("Marge de réussite = ")
+    } else {
+        $("#roll-dialog-result-label").html("Marge d'échec = ")
+    }
+}
+
 const effect_column_regex = /(\W)?\[([ABCDEFGHIJK])([+-]\d+)?]/gi
 const effect_margin_regex = /(^|\W)(MR)(\W|$)/gi
+const effect_dss_regex = /(^|\W)(DSS)(\W|$)/gi
+const effect_des_regex = /(^|\W)(DES)(\W|$)/gi
 
 let old_max_value = null
 let old_talent_level = 0
 let old_effect = ""
+let critical_failure = false
+let critical_success = false
 
 function trigger_roll(max_value = old_max_value, talent_level = old_talent_level,
                       effect = old_effect) {
@@ -294,17 +318,21 @@ function trigger_roll(max_value = old_max_value, talent_level = old_talent_level
     // Check for critical rolls
     let text_end = ""
     let modifier = 0
+    critical_failure = false
+    critical_success = false
     let precision = parseInt($("#roll-dialog-invested-precision").val())
     precision = isNaN(precision) ? 0 : precision
     if (dice_value === 12) {
         critical_div.html("<b class='text-danger'>Échec critique... :'(</b>")
-        text_end = "<br/>La marge doit être considérée comme maximum 0 même si elle est positive"
+        text_end = "<div class='row mx-1'>La marge est maximum 0 et c'est un échec</div>"
+        critical_failure = true
     } else if (dice_value <= 2 + talent_level + precision) {
         critical_div.html("<b class='text-success'>Succès critique !</b>")
         modifier = roll_dices(1 + talent_level)
         dices.concat(current_dices)
-        text_end = "<br/>" + (1 + talent_level) + "d6 ajouté" + ((talent_level > 0) ? "s" : "")
-            + " à la marge d'une valeur de " + modifier + " (" + current_dices.join(" + ") + ")"
+        text_end = "<div class='row mx-1'>" + (1 + talent_level) + "d6 ajouté" + ((talent_level > 0) ? "s" : "")
+            + " à la marge d'une valeur de " + modifier + " (" + current_dices.join(" + ") + ")</div>"
+        critical_success = true
     }
 
     // Fill in penalties
@@ -321,19 +349,44 @@ function trigger_roll(max_value = old_max_value, talent_level = old_talent_level
 
     const select_modifier = $("#roll-dialog-modifier")
     const select_effect_modifier = $("#roll-dialog-effect-modifier")
+
+    // Hide everything and show it afterwards if needed
+    $(select_modifier.slider("getElement")).hide()
+    $(select_effect_modifier.slider("getElement")).hide()
+    $(".roll-dialog-effect-hide").addClass("d-none")
+    $("#roll-dialog-modifier-label").addClass("d-none")
+    $("#roll-dialog-effect-modifier-label").addClass("d-none")
+
     if (max_value) {
-        $("#roll-dialog-result-label").html("Marge = ")
         const result = $("#roll-dialog-result")
-        const margin = max_value + unease - dice_value + modifier
+        let margin = max_value + unease - dice_value + modifier
+        if (critical_failure) // Cannot have more than 0 in case of critical failure
+            margin = Math.min(0, margin)
         result[0].setAttribute("value", margin.toString())
         result.html(margin)
 
-        const effect_dices = roll_dices(2)
-        dices.concat(current_dices)
-        $("#roll-dialog-details").html("Somme des 2d6 = " + dice_value + " (" + dices[0] + " + " + dices[1]
-            + ")<br/>Valeur seuil = " + (max_value + unease)
-            + "" + text_end + "<br/>Dés d'effet = " + effect_dices
-            + " (" + current_dices[0] + " + " + current_dices[1] + ")")
+        set_result_label(margin)
+
+        let effect_dices = 0
+        let dss = 0
+        let des = 0
+        let effect_text = ""
+        if (is_v7) {
+            // Roll the two additional dices
+            effect_dices = roll_dices(2)
+            dices.concat(current_dices)
+            effect_text = "<div class='row mx-1'>Dés d'effet = " + effect_dices
+                + " (" + current_dices[0] + " + " + current_dices[1] + ")</div>"
+        } else {
+            // DSS = MR // 3 and DES = 0 or (1 if 4 <= ME <= 6) or (2 if ME >= 7)
+            dss = compute_dss(margin)
+            des = compute_des(margin)
+            effect_text = "<div class='row mx-1'>DSS =&nbsp;<span class='roll-dialog-dss'>" + dss
+                + "</span></div><div class='row mx-1'>DES =&nbsp;<span class='roll-dialog-des'>" + des + "</span></div>"
+        }
+        $("#roll-dialog-details").html("<div class='row mx-1'>Somme des 2d6 = " + dice_value
+            + " (" + dices[0] + " + " + dices[1] + ")</div><div class='row mx-1'>Valeur seuil = "
+            + (max_value + unease) + "</div>" + text_end + effect_text)
 
         // Reset additional modifiers
         select_modifier.slider("setValue", 0)
@@ -341,37 +394,39 @@ function trigger_roll(max_value = old_max_value, talent_level = old_talent_level
         select_modifier.slider("refresh", {useCurrentValue: true})
         select_effect_modifier.slider("refresh", {useCurrentValue: true})
         $(select_modifier.slider("getElement")).show()
-        $(select_effect_modifier.slider("getElement")).show()
+        if (is_v7)
+            $(select_effect_modifier.slider("getElement")).show()
 
         const effect_divs = $(".roll-dialog-effect-hide")
-        if (margin <= 0) {
-            effect_divs.addClass("d-none")
-        } else {
-            effect_divs.removeClass("d-none")
-        }
+        effect_divs.removeClass("d-none")
 
-        // Show the actual effect instead of [A] or [B+2]
-        effect = effect.replaceAll(effect_column_regex, (match, p1, p2, p3) => {
-            p1 = typeof p1 === "undefined" ? "" : "&nbsp;"
-            p3 = typeof p3 === "undefined" ? "" : p3
-            return p1 + "<span class='roll-dialog-effect' value='" + effect_dices + "' column='" + p2 + "' " +
-                "modifier='" + p3 + "'>" + compute_effect(effect_dices + margin, p2, p3) + "</span>"
-        })
+        if (is_v7) {
+            // Show the actual effect instead of [A] or [B+2]
+            effect = effect.replaceAll(effect_column_regex, (match, p1, p2, p3) => {
+                p1 = typeof p1 === "undefined" ? "" : "&nbsp;"
+                p3 = typeof p3 === "undefined" ? "" : p3
+                const effect_value = (margin > 0) ? compute_effect(effect_dices + margin, p2, p3) : 0
+                return p1 + "<span class='roll-dialog-effect' value='" + effect_dices + "' column='" + p2 + "' " +
+                    "modifier='" + p3 + "'>" + effect_value + "</span>"
+            })
+        } else {
+            // Update with the DSS if "DSS" is in the text
+            effect = effect.replaceAll(effect_dss_regex,
+                "$1<span class='roll-dialog-dss'>" + dss + "</span>$3")
+            effect = effect.replaceAll(effect_des_regex,
+                "$1<span class='roll-dialog-des'>" + des + "</span>$3")
+        }
         // Update with the MR if "MR" is in the text
         $("#roll-dialog-effect").html(effect.replaceAll(effect_margin_regex,
             "$1<span class='roll-dialog-margin'>" + margin + "</span>$3"))
 
         $("#roll-dialog-modifier-label").removeClass("d-none")
-        $("#roll-dialog-effect-modifier-label").removeClass("d-none")
+        if (is_v7)
+            $("#roll-dialog-effect-modifier-label").removeClass("d-none")
     } else {
         $("#roll-dialog-result-label").html("Résultat du jet de 2d6 = ")
         $("#roll-dialog-result").html(dice_value)
         $("#roll-dialog-details").html("(" + dices[0] + " + " + dices[1] + ")")
-        $(select_modifier.slider("getElement")).hide()
-        $(select_effect_modifier.slider("getElement")).hide()
-        $(".roll-dialog-effect-hide").addClass("d-none")
-        $("#roll-dialog-modifier-label").addClass("d-none")
-        $("#roll-dialog-effect-modifier-label").addClass("d-none")
     }
 
     $('#roll-dialog').modal()
@@ -381,19 +436,20 @@ function slider_value_changed(input) {
     return modifier => {
         const result_span = $("#roll-dialog-result")
         const result = parseInt(result_span[0].getAttribute("value"))
-        const margin = result + modifier
+        let margin = result + modifier
+        if (critical_failure)
+            margin = Math.min(0, margin)
 
-        const effect_divs = $(".roll-dialog-effect-hide")
         if (input.id === "roll-dialog-modifier") { // Modify the MR only for MR modifier
             result_span.html(margin)
-            if (margin <= 0) {
-                effect_divs.addClass("d-none")
-            } else {
-                effect_divs.removeClass("d-none")
-            }
+            // Toggle failure or success
+            set_result_label(margin)
 
             // Replace MR in effect
             $(".roll-dialog-margin").html(margin)
+            // Replace DSS and DES in effect
+            $(".roll-dialog-dss").html(compute_dss(margin))
+            $(".roll-dialog-des").html(compute_des(margin))
         }
 
         // Update with scaled effect in the text
@@ -402,7 +458,8 @@ function slider_value_changed(input) {
             const column = elem.getAttribute("column")
             let column_modifier = elem.getAttribute("modifier")
             column_modifier = column_modifier.length > 0 ? parseInt(column_modifier) : 0
-            $(elem).html(compute_effect(effect_dices + margin, column, column_modifier))
+            const effect_value = (margin > 0) ? compute_effect(effect_dices + margin, column, column_modifier) : 0
+            $(elem).html(effect_value)
         })
         return modifier
     }

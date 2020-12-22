@@ -4,9 +4,18 @@ import os
 
 from jinja2 import Environment, PackageLoader, select_autoescape, Markup
 
+V7 = "7"
+V8 = "8"
+MED_FANTASY = "Médiéval fantastique"
+CAPTAIN_VOODOO = "Capitaine Vaudou"
+
 parser = argparse.ArgumentParser(description="Compile the html, css and js templates to a single html file")
 parser.add_argument("output_html", help="The path to the resulting HTML file")
-parser.add_argument("--localisation", help="Use localisation of HP and armor", action='store_true')
+parser.add_argument("--version", help="Version of SimulacreS", choices=[V7, V8], default=V7)
+parser.add_argument("--localisation", help="Use localisation of HP and armor (only valid for version 7)",
+                    action='store_true')
+parser.add_argument("--universe", help="Universe of the adventure", choices=[MED_FANTASY, CAPTAIN_VOODOO, "Autre"],
+                    default=MED_FANTASY)
 args = parser.parse_args()
 
 
@@ -31,7 +40,9 @@ with open(os.path.join(html_dir, "../font/augusta.regular.ttf"), "rb") as extern
 # Build html sheet
 
 template = env.get_template('base.html')
-compiled_html = template.render({"augusta_font": augusta_font, "localisation": args.localisation})
+compiled_html = template.render({"augusta_font": augusta_font, "version": args.version,
+                                 "localisation": args.localisation and args.version == V7, "universe": args.universe,
+                                 "V7": V7, "V8": V8, "captain_voodoo": CAPTAIN_VOODOO, "med_fantasy": MED_FANTASY})
 
 # Replacing external file content
 

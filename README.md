@@ -9,6 +9,10 @@ avec les éléments suivant en plus :
   (voir [Casus Belli HS n°16](http://confrerie-acier.chez-alice.fr/localisation%20armures%20et%20autres.htm)),
 - la voie du moine (voir [Casus Belli LPC n°25](http://joueursdurepaire.free.fr/casus_belli/cb_LPC25.html)).
 
+Elle supporte aussi les règles de campagne de
+[SimulacreS version 8](https://www.facebook.com/groups/Simulacres/permalink/2528183340767390/)
+et celles de [Capitaine Vaudou](https://www.black-book-editions.fr/catalogue.php?id=704). 
+
 ## Premiers pas
 
 Vous pouvez télécharge une [release](../../releases) de la fiche
@@ -59,6 +63,11 @@ Enfin, vous pouvez créez le fichier HTML incluant tout le code en exécutant :
 
 ```console
 $ python3 compile.py simulacres_fiche_perso.html
+```
+
+La documentation des paramètres de ce script est accessible avec la commande suivante :
+```console
+$ python3 compile.py -h
 ```
 
 ## Plugins

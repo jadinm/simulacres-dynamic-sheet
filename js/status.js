@@ -129,7 +129,7 @@ $("#heart").on("change", event => {
     update_body_energy(event.target, $("#breath"))
 })
 
-/* Update PS and EP if users click on the button */
+/* Update PV, PS and EP if users click on the button */
 $("#increment-breath").on("click", _ => {
     const breath = $("#breath")
     const current_max = slider_max(breath[0])
@@ -162,6 +162,24 @@ $("#decrement-psychic").on("click", _ => {
     const current_max = slider_max(psychic[0])
     if (current_max > 1)
         set_slider_max(psychic, current_max - 1)
+
+    // Adventure points
+    compute_remaining_ap()
+})
+$("#increment-hp").on("click", _ => {
+    const hp = $("#hp-trunk")
+    const current_max = slider_max(hp[0])
+    if (current_max < 8)
+        set_slider_max(hp, current_max + 1)
+
+    // Adventure points
+    compute_remaining_ap()
+})
+$("#decrement-hp").on("click", _ => {
+    const hp = $("#hp-trunk")
+    const current_max = slider_max(hp[0])
+    if (current_max > 1)
+        set_slider_max(hp, current_max - 1)
 
     // Adventure points
     compute_remaining_ap()

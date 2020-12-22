@@ -2,20 +2,32 @@
     <!-- Money -->
     <div class="row mt-2 ml-1"><b>Fortune</b></div>
     <div class="row form-row mt-2 md-form p-0 m-0">
-        <div class="col-sm-4">
-            <label for="gold-coins">Soleils</label>
-            <input class="form-control" id="gold-coins" type="number" value="0" min="0">
-        </div>
+        {% if universe == med_fantasy %}
+            <div class="col-sm-4">
+                <label for="gold-coins">Soleils</label>
+                <input class="form-control" id="gold-coins" type="number" value="0" min="0">
+            </div>
 
-        <div class="col-sm-4">
-            <label for="silver-coins">Lunes</label>
-            <input class="form-control" id="silver-coins" type="number" value="0" min="0">
-        </div>
+            <div class="col-sm-4">
+                <label for="silver-coins">Lunes</label>
+                <input class="form-control" id="silver-coins" type="number" value="0" min="0">
+            </div>
 
-        <div class="col-sm-4">
-            <label for="copper-coins">Besins</label>
-            <input class="form-control" id="copper-coins" type="number" value="0" min="0">
-        </div>
+            <div class="col-sm-4">
+                <label for="copper-coins">Besins</label>
+                <input class="form-control" id="copper-coins" type="number" value="0" min="0">
+            </div>
+        {% elif universe == captain_voodoo %}
+            <div class="col-sm-4">
+                <label for="peso-de-ocho">Pièces de huit</label>
+                <input class="form-control" id="peso-de-ocho" type="number" value="0" min="0">
+            </div>
+        {% else %}
+            <div class="col-sm-4">
+                <label for="money" hidden></label>
+                <input class="form-control" id="money" type="text" value="0">
+            </div>
+        {% endif %}
     </div>
 
     <!-- Focus -->
