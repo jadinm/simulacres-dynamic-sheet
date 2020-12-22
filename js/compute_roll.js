@@ -218,6 +218,7 @@ $("#add-roll").on("click", (event, idx = null) => { // Add parameter for forced 
 /* Actual roll */
 
 let current_dices = []
+
 function roll_dices(number = 2, type = 6) {
     let sum = 0
     current_dices = []
@@ -297,9 +298,7 @@ function trigger_roll(max_value = old_max_value, talent_level = old_talent_level
     precision = isNaN(precision) ? 0 : precision
     if (dice_value === 12) {
         critical_div.html("<b class='text-danger'>Échec critique... :'(</b>")
-        modifier = -1 * roll_dices(1)
-        dices.concat(current_dices)
-        text_end = "<br/>1d6 retiré à la marge d'une valeur de " + modifier
+        text_end = "<br/>La marge doit être considérée comme maximum 0 même si elle est positive"
     } else if (dice_value <= 2 + talent_level + precision) {
         critical_div.html("<b class='text-success'>Succès critique !</b>")
         modifier = roll_dices(1 + talent_level)
