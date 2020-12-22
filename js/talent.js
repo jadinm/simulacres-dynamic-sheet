@@ -22,7 +22,7 @@ function talent_cost(talent) {
         // Check that it is not a work talent
         old_value = "0" // Compute PA cost from level 0
     }
-    if (main_work_talent() === talent_name) {
+    if (main_work_talents().includes(talent_name)) {
         // Check that it is not the main work talent
         old_value = "1" // Compute PA cost from level 1
     }
@@ -127,20 +127,6 @@ $("#add-talent-0").on("click", (event, idx = null) => { // Add parameter to fix 
     add_talent($("#talents_0"), idx)
 })
 
-default_talents = {
-    x: ["Agriculture", "Alchimie", "Art de la guerre", "Art magique", "Botanique", "Histoire d'Heldor",
-        "Langue étrangère éloignée", "Lire & Écrire", "Lire sur les lèvres", "Mathématiques", "Navigation",
-        "Menuiserie/Ébénisterie", "Minéralogie/Joaillerie", "Poisons", "Serrurerie", "Zoologie"],
-    "-4": ["Armes normales", "Arts martiaux/Lutte", "Camouflage", "Commerce/Marchandage", "Coutumes étrangères",
-        "Équitation", "Géographie d'Heldor", "Langue étrangère proche", "Jonglage/Acrobaties", "Maçonnerie",
-        "Médecine", "Musique", "Natation", "Piégeage", "Vol à la tire"],
-    "-2": ["Armes légères", "Bouclier", "Bricolage", "Cartographie", "Comédie", "Danse", "Déguisement", "Dessin",
-        "Dressage", "Escalade", "Orientation", "Poésie/Contes & Légendes", "Pistage/Chasse/Pêche", "Premiers soins",
-        "Recherches en bibliothèque", "Religion", "Sculpture"],
-    "0": ["Athlétisme", "Bagarre", "Chant", "Cuisine", "Discrétion", "Entregent", "Langue maternelle", "Séduction",
-        "Observation"]
-}
-
 function add_missing_talents(talents) {
     // Insert missing default talent if they do not exist
     for (const [level, level_talents] of Object.entries(talents)) {
@@ -161,8 +147,13 @@ function update_talent_tooltip(talent, target_list=null) {
     const old_level = talent_base_level(talent)
     if (current_level !== old_level) {
         const old_level = talent_base_level(talent)
-        talent.setAttribute("data-original-title",
-            "Talent " + old_level.toUpperCase() + " à la base <br />" + "Coût: " + talent_cost(talent) + " PA")
+        const cost = talent_cost(talent)
+        if (!isNaN(cost))
+            talent.setAttribute("data-original-title",
+                "Talent " + old_level.toUpperCase() + " à la base <br />" + "Coût: " + talent_cost(talent) + " PA")
+        else
+            talent.setAttribute("data-original-title",
+                "Talent " + old_level.toUpperCase() + " à la base <br />" + "Mouvement invalide")
         $(talent).addClass("increased-talent").tooltip({disabled: false})
         $(talent).find(".talent-origin").text("< " + old_level.toUpperCase())
     } else {

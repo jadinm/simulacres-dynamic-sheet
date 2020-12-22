@@ -1,9 +1,11 @@
 name: Produce character sheet
-on: [push, pull_request]
+on: [ push, pull_request ]
 env:
   PYTHON_SCRIPT: compile.py
   V7_BASE_FINAL_FILENAME: simulacres_v7_fiche_perso.html
   V7_LOCALISATION_FINAL_FILENAME: simulacres_v7_localisation_fiche_perso.html
+  V8_BASE_FINAL_FILENAME: simulacres_v8_fiche_perso.html
+  V8_CAPTAIN_VOODOO_FINAL_FILENAME: simulacres_v8_capitaine_vaudou_fiche_perso.html
 
 jobs:
   produce_character_sheet:
@@ -22,7 +24,9 @@ jobs:
           python3 -m pip install --upgrade pip
           python3 -m pip install -r requirements.txt
           python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V7_BASE_FINAL_FILENAME }}
-          python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V7_LOCALISATION_FINAL_FILENAME }}
+          python3 ${{ env.PYTHON_SCRIPT }} --localisation target/${{ env.V7_LOCALISATION_FINAL_FILENAME }}
+          python3 ${{ env.PYTHON_SCRIPT }} --version 8 target/${{ env.V8_BASE_FINAL_FILENAME }}
+          python3 ${{ env.PYTHON_SCRIPT }} --version 8 --universe "Capitaine Vaudou" target/${{ env.V8_CAPTAIN_VOODOO_FINAL_FILENAME }}
       - name: Upload the base v7 sheet
         uses: actions/upload-artifact@v2
         with:
@@ -33,3 +37,13 @@ jobs:
         with:
           name: ${{ env.V7_LOCALISATION_FINAL_FILENAME }}
           path: target/${{ env.V7_LOCALISATION_FINAL_FILENAME }}
+      - name: Upload the base v8 sheet
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.V8_BASE_FINAL_FILENAME }}
+          path: target/${{ env.V8_BASE_FINAL_FILENAME }}
+      - name: Upload the Captain Voodoo sheet
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.V8_CAPTAIN_VOODOO_FINAL_FILENAME }}
+          path: target/${{ env.V8_CAPTAIN_VOODOO_FINAL_FILENAME }}

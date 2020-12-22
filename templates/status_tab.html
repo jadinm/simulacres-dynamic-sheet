@@ -2,9 +2,15 @@
     <div class="row justify-content-center mt-1">
         <div class="col-lg-3 col-md-4 col-sm-6">
             <!-- HP, breath and psychic balance -->
-            <div class="row">
-                <label for="hp-trunk">Points de vie (PV)</label>
-            </div>
+            {% if version == V7 %}
+                <div class="row">
+                    <label for="hp-trunk">Points de vie (PV)</label>
+                </div>
+            {% else %}
+                <div class="row clickable btn-link" data-toggle="modal" data-target="#hp-max-update">
+                    <label class="clickable" for="hp-trunk">Points de vie (PV)</label>
+                </div>
+            {% endif %}
             <div class="row mb-3">
                 <input id="hp-trunk" class="hp input-slider" data-slider-id="hp-trunk-slider" type="text"
                        data-slider-min="0" data-slider-max="4" data-slider-step="1" data-slider-value="4"

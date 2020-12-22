@@ -81,18 +81,27 @@
                 Équipement
             </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#magic-tab" role="tab" aria-controls="profile"
-               aria-selected="false">
-                Magie
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#ki-tab" role="tab" aria-controls="profile"
-               aria-selected="false">
-                Ki
-            </a>
-        </li>
+        {% if universe == med_fantasy %}
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#magic-tab" role="tab" aria-controls="profile"
+                   aria-selected="false">
+                    Magie
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#ki-tab" role="tab" aria-controls="profile"
+                   aria-selected="false">
+                    Ki
+                </a>
+            </li>
+        {% elif universe == captain_voodoo %}
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#magic-tab" role="tab" aria-controls="profile"
+                   aria-selected="false">
+                    Magie
+                </a>
+            </li>
+        {% endif %}
         <li class="nav-item">
             <a class="nav-link" data-toggle="tab" href="#adventure-points-tab" role="tab" aria-controls="profile"
                aria-selected="false">
@@ -118,11 +127,16 @@
         <!-- Equipment -->
         {% include "equipment_tab.html" %}
 
-        <!-- Magic and Ki -->
-        {% include "magic_tab.html" %}
+        {% if universe == med_fantasy %}
+            <!-- Magic -->
+            {% include "magic_tab.html" %}
 
-        <!-- Ki board -->
-        {% include "ki_tab.html" %}
+            <!-- Ki board -->
+            {% include "ki_tab.html" %}
+        {% elif universe == captain_voodoo %}
+            <!-- Magic -->
+            {% include "magic_tab.html" %}
+        {% endif %}
 
         <!-- Adventure Point Tracking -->
         {% include "adventure_points.html" %}
@@ -184,6 +198,26 @@
                         </button>
                         <button id="decrement-psychic" class="btn btn-danger col-6 mx-0 px-0">
                             Diminuer de 1 le maximum des EP
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Increase Health -->
+<div class="container">
+    <div class="modal fade bd-modal-lg" id="hp-max-update" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-body align-middle">
+                    <div class="row">
+                        <button id="increment-hp" class="btn btn-success col-6 mx-0 px-0">
+                            Augmenter de 1 le maximum des PV
+                        </button>
+                        <button id="decrement-hp" class="btn btn-danger col-6 mx-0 px-0">
+                            Diminuer de 1 le maximum des PV
                         </button>
                     </div>
                 </div>
@@ -303,6 +337,13 @@ l19 12q28 22 28 41q0 8 -4 18zM692 196l-188 -141q-40 22 -76 22q-26 0 -50 -12t-47 
 q75 31 145 31q116 0 191 -80q69 -73 69 -173q0 -65 -32 -119q-37 -57 -104 -89q-63 -30 -127 -30q-117 0 -156 87q-16 34 -16 74q0 66 38 117q38 53 92 57q77 5 118 -31q35 -30 35 -77q0 -36 -20 -59t-54 -23q-25 0 -42.5 8.5t-17.5 19.5q0 9 11 19q46 47 73 88l-67 44
 l-21 -33q-3 -4 -45 -46q-30 -30 -30 -65q0 -10 2 -20q8 -45 47 -72q37 -24 85 -24q64 0 108 40q50 45 50 123q0 18 -2 35q-12 82 -89 124q-65 34 -147 29q-91 -7 -150 -87q-53 -73 -53 -168q0 -58 22 -106q62 -135 227 -135q131 0 232 86q113 94 113 235q0 58 -21 118z"></path>
     </svg>
+    <!-- supernatural -->
+    <svg id="svg-supernatural" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+         viewBox="-10 0 942 1000">
+        <path fill="currentColor"
+              d="M680 799l-93 -296h52q-126 91 -123.5 91t2.5 -9q0 7 162 125v89zM513 280l-67 -210q25 0 25 13q0 23 -55 197h97zM344 466h-52l39 -125h-218v-16q39 0 231 141zM464 553q109 -76 113 -80q-41 -134 -41 -131l-139 -1l-43 131zM629 434q100 -70 128 -93h-159zM269 735h-52
+l196 -142l-123 -90h52q-15 57 -73 232zM749 810h-36q-251 -182 -246 -182l-248 182h-29q0 -33 94 -323h-16l-238 -175v-32h322l95 -300h34q102 320 87 300h331v32l-249 186z"></path>
+    </svg>
     <!-- power -->
     <svg id="svg-power" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
          viewBox="-10 0 911 1000">
@@ -326,6 +367,41 @@ q-14 34 -20 89q-6 49 -3 72z"></path>
               d="M815 438q-7 131 -100 224.5t-224 100.5v88h-36v-88q-132 -7 -225 -100.5t-99 -224.5h-79v-36h79q7 -131 100 -223.5t224 -98.5v-71h36v71q130 6 223 98.5t100 223.5h70v36h-69zM491 116v159q50 5 87 40.5t44 86.5h156q-7 -116 -89.5 -198t-197.5 -88zM491 311v91h95
 q-7 -36 -33 -61t-62 -30zM491 438v95q37 -5 63.5 -31.5t31.5 -63.5h-95zM455 312q-34 7 -58.5 31.5t-30.5 58.5h89v-90zM455 116q-116 6 -198.5 88t-89.5 198h163q6 -49 41 -84t84 -42v-160zM622 438q-5 52 -42 89t-89 42v158q116 -7 198.5 -90t88.5 -199h-156zM455 438h-90
 q5 35 30 61t60 33v-94zM455 568q-50 -7 -85.5 -43.5t-40.5 -86.5h-162q6 116 88.5 199t199.5 90v-159z"></path>
+    </svg>
+    <!-- heroism -->
+    <svg id="svg-heroism" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+         viewBox="-10 0 1277 1000">
+        <path fill="currentColor"
+              d="M864 -18h19q195 0 305 271q23 76 23 121h-8q-118 -159 -301 -215q-38 -4 -57 -4q-89 0 -154 61q49 77 56 79q5 0 38 -4q106 18 106 98q0 38 -38 87q26 56 41 56q98 11 98 72v23q0 30 -34 64q16 45 16 56v38q0 6 -16 15h-7q-36 0 -53 -87h-4q-84 0 -98 -83v-3
+q0 -32 34 -68q0 -12 -30 -61q-8 4 -34 8q-109 -18 -109 -94v-15q0 -19 26 -68q-54 -57 -56 -57q-43 43 -49 57q26 32 26 60v19q0 69 -90 87q0 3 -23 3l-34 -3q-26 50 -26 60q34 27 34 72q0 61 -83 79h-19q-18 90 -57 90q-19 -5 -19 -26v-19q0 -23 16 -68q-34 -33 -34 -64
+v-23q0 -51 79 -67h30q30 -61 30 -64q-38 -35 -38 -83q0 -65 83 -95h46l18 4q0 -6 49 -75q-71 -53 -139 -53h-19q-161 0 -354 215h-4v-4q0 -140 136 -302q98 -86 192 -86q128 0 253 151q117 -155 233 -155zM887 72q0 23 38 31q25 -8 30 -23v-4q0 -30 -30 -30h-8q-30 4 -30 26
+zM306 72v4q0 30 30 30h16q16 -9 22 -26q0 -25 -38 -30q-14 0 -30 22zM785 69v19q10 18 30 18h12q5 0 18 -18v-8q-3 -30 -30 -30q-19 0 -30 19zM416 76v19q9 19 30 19q20 0 30 -19v-19q-10 -19 -30 -19q-21 0 -30 19zM977 125v4q0 30 34 30q27 -7 27 -30q-8 -23 -31 -23h-3
+q-19 0 -27 19zM223 133v11q0 5 19 19h23q5 0 19 -19v-15q-10 -19 -34 -19q-17 6 -27 23zM314 619q10 45 45 45h19q38 -7 38 -37v-8q-11 -45 -46 -45h-11q-45 0 -45 45zM845 630q0 42 53 42q40 0 49 -53q0 -34 -49 -41q-53 9 -53 52z"></path>
+    </svg>
+    <!-- voodoo -->
+    <svg id="svg-voodoo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+         viewBox="-10 0 1277 1000">
+        <path fill="currentColor"
+              d="M394 -14h6q190 0 290 191q22 67 22 102v60q0 51 -22 124l16 -3q25 0 25 35v3q0 62 -54 137v10l32 70l3 12q0 73 -89 86q-76 -18 -76 -63q-107 130 -150 130h-6q-40 0 -143 -130q-25 63 -86 63q-80 -19 -80 -76v-16q0 -25 32 -70l3 -6q-54 -96 -54 -125l-3 -22
+q0 -27 19 -38h16l6 3v-3q-22 -71 -22 -149q0 -221 210 -306q47 -19 105 -19zM130 447v3q21 61 121 61q97 -7 118 -51v-16q0 -47 -121 -57q-99 0 -118 60zM394 387q-22 94 -22 156v117q-35 29 -35 32v7q0 8 44 12q0 5 10 10h9q14 -16 51 -16q1 -6 7 -6q-4 -18 -38 -35l3 -16
+v-70q0 -101 -26 -191h-3zM423 447q0 48 108 64h9q88 0 121 -51v-16q0 -47 -121 -57q-98 0 -117 60zM251 412q92 17 92 32q0 17 -95 32q-53 0 -93 -35q56 -29 96 -29zM544 412q92 17 92 32q0 17 -96 32q-54 0 -92 -35q55 -29 96 -29zM120 727q11 45 45 45q38 0 45 -42v-6
+q0 -36 -51 -41q-39 21 -39 44zM582 721q9 51 41 51h3q45 -8 45 -42q0 -47 -51 -47q-20 0 -38 38zM343 781h105v-3q-29 -41 -51 -41q-24 0 -54 44zM343 807q26 44 54 44q23 0 51 -41v-3h-105z"></path>
+    </svg>
+    <!-- white magic -->
+    <svg id="svg-white-magic" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+         viewBox="-10 0 1277 1000">
+        <path fill="currentColor"
+              d="M482 798q-17 0 -128 -115h1h-150q-22 0 -22 -22l1 -150l-137 -141q37 1 138 -103l1 -150q3 -21 22 -21l150 1q43 -40 123 -118l121 119h150q21 4 21 23l-1 149q48 49 111 117v16q-112 110 -112 107l-1 153q0 22 -22 22h-149zM557 102q-12 0 -81 -68v0l1 1q0 6 -56 62
+l139 1v1q0 3 -3 3zM230 223q107 -105 107 -111v28h-107v83zM581 641q37 -35 146 -146l1 -204q-99 -105 -145 -149l-205 -1q-124 118 -149 145l-1 207q35 37 146 147zM728 227l1 -85h-85q30 31 84 85zM184 449l1 -136l3 -1q1 0 1 2q0 9 -65 76zM771 452q53 -52 53 -67
+q0 -6 -9 -6q-69 -71 -74 -71l-1 1h32zM335 670q0 -5 -82 -91l-25 -24v84h107v31zM726 641l1 -84q-32 29 -85 84h84zM487 749h-17q83 -80 88 -80v16l-141 -1q65 65 70 65z"></path>
+    </svg>
+    <!-- black magic -->
+    <svg id="svg-black-magic" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+         viewBox="-10 0 1277 1000">
+        <path fill="currentColor"
+              d="M376 -51h5q9 0 49 88q-20 13 -20 33v31q60 0 125 84q25 55 25 72h42q11 0 31 -20q82 39 85 48q0 9 -89 49q-13 -20 -27 -20h-45v-2q0 99 -147 194v201q50 51 50 86v15q0 42 -53 79h-10v-12q37 -37 37 -61v-13q0 -25 -24 -47v20q0 13 19 36l-42 85h-12l-43 -92
+q21 -8 21 -23v-66q-69 -59 -69 -124q0 -57 69 -110v-166h-96l6 21h3q32 0 55 65v6q0 10 -11 10h-5q-71 -14 -71 -53q-21 -38 -21 -49h-53q-12 0 -26 18h-6q-80 -38 -83 -46q0 -10 92 -49q8 20 23 20h48q0 -78 97 -139q26 -11 48 -16v-35q0 -15 -20 -33zM260 257h93v-86
+q-42 10 -68 41q-25 36 -25 45zM410 172v85h90q0 -22 -46 -65q-32 -20 -44 -20zM410 314v130q90 -62 90 -130h-90zM331 596v10q0 27 22 50v-113q-22 19 -22 53z"></path>
     </svg>
     <!--
         The following svg images are released on https://www.flaticon.com/ under Flaticon License
@@ -425,12 +501,25 @@ q5 35 30 61t60 33v-94zM455 568q-50 -7 -85.5 -43.5t-40.5 -86.5h-162q6 116 88.5 19
 <!-- Custom Javascript -->
 <script>{{ include_static("../js/utils.js") }}</script>
 <script>{{ include_static("../js/import_export.js") }}</script>
+<script>{{ include_static("../js/adventure_points_utils.js") }}</script>
+{% if version == V7 %}
+    <script>{{ include_static("../js/adventure_points_v7.js") }}</script>
+{% else %}
+    <script>{{ include_static("../js/adventure_points_v8.js") }}</script>
+{% endif %}
 <script>{{ include_static("../js/adventure_points.js") }}</script>
 <script>{{ include_static("../js/components_means.js") }}</script>
 <script>{{ include_static("../js/slider.js") }}</script>
 <script>{{ include_static("../js/status.js") }}</script>
 <script>{{ include_static("../js/data_tables.js") }}</script>
 <script>{{ include_static("../js/compute_roll.js") }}</script>
+{% if universe == med_fantasy %}
+    <script id="default-talents">{{ include_static("../js/talent_med_fantasy.js") }}</script>
+{% elif universe == captain_voodoo %}
+    <script id="default-talents">{{ include_static("../js/talent_captain_voodoo.js") }}</script>
+{% else %}
+    <script id="default-talents">default_talents = {x: [], "-4": [], "-2": [], "0": []}</script>
+{% endif %}
 <script>{{ include_static("../js/talent.js") }}</script>
 
 </html>

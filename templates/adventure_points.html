@@ -22,52 +22,114 @@
     <div class="row mt-2 ml-1">
         <h3 class="text-center">Paramètres pour la dépense de PAs</h3>
     </div>
-    <div class="row mt-2 ml-1">
-        Les talents originnellement de niveau X nécessitent 6 PA au lieu de 5 pour passer au niveau 0
-        s'ils ne sont pas monté en une fois à ce niveau 0.
-        Par défaut, on considère que tous les talents originellement de niveau X et à présent de niveau 0 à 3
-        ont été montés d'un seul coup. Sélectionnez ci-dessous les talents qui pour lesquels ce n'est pas le cas.
-    </div>
-    <div class="row md-form ml-1 mr-2">
-        <select class="show-tick form-control talent-select selectpicker adventure-points-select"
-                data-live-search="true" id="talents-inefficient-raise" data-style="col-12 align-middle" multiple
-                title="Talents X qui n'ont pas été montés à 0 en une fois" data-talent-filter-origin-level="x">
-        </select>
-    </div>
+    {% if version == V7 %}
+        <div class="row mt-2 ml-1">
+            Les talents originellement de niveau X nécessitent 6 PA au lieu de 5 pour passer au niveau 0
+            s'ils ne sont pas monté en une fois à ce niveau 0.
+            Par défaut, on considère que tous les talents originellement de niveau X et à présent de niveau 0 à 3
+            ont été montés d'un seul coup. Sélectionnez ci-dessous les talents qui pour lesquels ce n'est pas le cas.
+        </div>
+        <div class="row md-form ml-1 mr-2">
+            <select class="show-tick form-control talent-select selectpicker adventure-points-select"
+                    data-live-search="true" id="talents-inefficient-raise" data-style="col-12 align-middle" multiple
+                    title="Talents X qui n'ont pas été montés à 0 en une fois" data-talent-filter-origin-level="x">
+            </select>
+        </div>
+    {% endif %}
     <div class="row mt-2 ml-1">
         Le contenu suivant ne doit être encodé qu'une seule fois.
         Au début de la campagne, il est possible de faire certaines actions qui diminuent ou augmentent
         les coûts en PA.
     </div>
-    <div class="row mt-2 ml-1">
-        Les règnes et les énergies classiques peuvent être montés à 2 à la création en utilisant
-        les 8 points d'énergie et de règne initiaux.
-        Cela fait économiser 5 PA car passer au niveau 2 demande 10 PA au lieu de 5.
-        En revanche, ce n'est pas possible pour les énergies magiques ou spéciales qui ne peuvent être
-        montées qu'à 1, à la création.
-    </div>
+    {% if version == V7 %}
+        <div class="row mt-2 ml-1">
+            Les règnes et les énergies classiques peuvent être montés à 2 à la création en utilisant
+            les 8 points d'énergie et de règne initiaux.
+            Cela fait économiser 5 PA car passer au niveau 2 demande 10 PA au lieu de 5.
+            En revanche, ce n'est pas possible pour les énergies magiques ou spéciales qui ne peuvent être
+            montées qu'à 1, à la création.
+        </div>
+    {% else %}
+        <div class="row mt-2 ml-1">
+            Les énergies classiques peuvent être montés à 2 à la création en utilisant
+            les 4 points d'énergie initiaux.
+            Cela fait économiser 5 PA car passer au niveau 2 demande 10 PA au lieu de 5.
+            En revanche, ce n'est pas possible pour l'héroïsme, les énergies magiques ou spéciales qui ne peuvent être
+            montées qu'à 1, à la création.
+        </div>
+    {% endif %}
     <div class="row form-row mt-2 md-form p-0 m-0">
         <div class="col-12">
             <label for="energies-started-level-2" class="text-truncate">
-                Nombre de règnes et énergies classiques montés à 2 à la création
+                {% if version == V7 %}
+                    Nombre de règnes et énergies classiques montés à 2 à la création
+                {% else %}
+                    Nombre d'énergies classiques montées à 2 à la création
+                {% endif %}
             </label>
             <input class="form-control adventure-points-setting" id="energies-started-level-2" type="number"
                    value="0" min="0" max="4">
         </div>
     </div>
-    <div class="row mt-2 ml-1">
-        Le métier sélectionné par le joueur donne accès à certains talents dits "de métier" qui sont montés à 0
-        lors de la création du personnage et l'un d'entre eux est monté à 1. Le tout sans dépenser de PA.
-    </div>
-    <div class="row mt-2 ml-1">
-        Sélectionnez le talent de métier qui a été monté à 1 à la création
-    </div>
-    <div class="row md-form ml-1 mr-2">
-        <select class="show-tick form-control talent-select selectpicker adventure-points-select"
-                data-live-search="true" id="work-main-talent" data-style="col-12 align-middle"
-                title="Talent de métier monté à 1 à la création">
-        </select>
-    </div>
+    {% if version == V8 %}
+        <div class="row mt-2 ml-1">
+            Les énergies spéciales telles que l'héroïsme et les énergies magiques peuvent être montées à 1 à la création
+            en utilisant les 4 points d'énergie initiaux.
+            Cela fait économiser 5 PA car passer une énergie spéciale au niveau 1 demande 10PA au lieu de 5 pour une
+            énergie classique.
+        </div>
+        <div class="row form-row mt-2 md-form p-0 m-0">
+            <div class="col-12">
+                <label for="special-energies-started-level-1" class="text-truncate">
+                    Nombre d'énergies spéciales montées à 1 à la création
+                </label>
+                <input class="form-control adventure-points-setting" id="special-energies-started-level-1" type="number"
+                       value="0" min="0" max="4">
+            </div>
+        </div>
+        <div class="row mt-2 ml-1">
+            Les composantes peuvent être montées à 6 à la création en utilisant les 13 points initiaux.
+            Cela fait économiser 6 PA car passer de 5 à 6 demande 20 PA au lieu de 14.
+        </div>
+        <div class="row form-row mt-2 md-form p-0 m-0">
+            <div class="col-12">
+                <label for="components-started-level-6" class="text-truncate">
+                    Nombre de composantes montées à 6 à la création
+                </label>
+                <input class="form-control adventure-points-setting" id="components-started-level-6" type="number"
+                       value="0" min="0" max="3">
+            </div>
+        </div>
+    {% endif %}
+    {% if version == V7 %}
+        <div class="row mt-2 ml-1">
+            Le métier sélectionné par le joueur donne accès à certains talents dits "de métier" qui sont montés à 0
+            lors de la création du personnage et l'un d'entre eux est monté à 1. Le tout sans dépenser de PA.
+        </div>
+        <div class="row mt-2 ml-1">
+            Sélectionnez le talent de métier qui a été monté à 1 à la création
+        </div>
+        <div class="row md-form ml-1 mr-2">
+            <select class="show-tick form-control talent-select selectpicker adventure-points-select"
+                    data-live-search="true" id="work-main-talent" data-style="col-12 align-middle"
+                    title="Talent de métier monté à 1 à la création">
+            </select>
+        </div>
+    {% else %}
+        <div class="row mt-2 ml-1">
+            Le métier sélectionné par le joueur donne accès à certains talents dits "de métier" qui sont montés à 0
+            lors de la création du personnage et d'autres sont montés à 1. Le tout sans dépenser de PA.
+        </div>
+        <div class="row mt-2 ml-1">
+            Sélectionnez les talents de métier qui ont été montés à 1 à la création
+        </div>
+        <div class="row md-form ml-1 mr-2">
+            <select class="show-tick form-control talent-select selectpicker adventure-points-select"
+                    data-live-search="true" id="work-main-talent" data-style="col-12 align-middle" multiple
+                    title="Talents de métier montés à 1 à la création">
+            </select>
+        </div>
+    {% endif %}
     <div class="row mt-2 ml-1">
         Sélectionnez les autres talents de métier qui ont été montés à 0 à la création
     </div>
@@ -77,36 +139,38 @@
                 title="Talents de métier montés à 0 à la création">
         </select>
     </div>
-    <div class="row mt-2 ml-1">
-        Il y a également des talents conseillés pour chaque métier. Les prendre à la création du personnage
-        réduit de 1 le coût de ceux-ci.
-    </div>
-    <div class="row md-form ml-1 mr-2">
-        <label for="advised-talents" class="text-truncate"></label>
-        <select class="show-tick form-control talent-select selectpicker adventure-points-select"
-                data-live-search="true" id="advised-talents" data-style="col-12 align-middle" multiple
-                title="Talents conseillés pris à la création">
-        </select>
-    </div>
+    {% if version == V7 %}
+        <div class="row mt-2 ml-1">
+            Il y a également des talents conseillés pour chaque métier. Les prendre à la création du personnage
+            réduit de 1 le coût de ceux-ci.
+        </div>
+        <div class="row md-form ml-1 mr-2">
+            <label for="advised-talents" class="text-truncate"></label>
+            <select class="show-tick form-control talent-select selectpicker adventure-points-select"
+                    data-live-search="true" id="advised-talents" data-style="col-12 align-middle" multiple
+                    title="Talents conseillés pris à la création">
+            </select>
+        </div>
 
-    <div class="row mt-2 ml-1"><h4>Mages uniquement</h4></div>
-    <div class="row mt-2 ml-1">
-        En début de campagne et uniquement au début, les mages peuvent décider de dépenser des PA pour augmenter
-        le niveau initial des sorts qu'ils ont. Normalement un tel sort est d'office à -4 et s'entraine
-        par la pratique, mais ils peuvent décider au début de monter cette valeur directement à -2 ou à 0
-        pour le même prix qu'un talent. Le sort étant considéré comme un talent X, pour le passer à -2,
-        cela coûte 3 PA et pour le passer à 0, cela coûte 5 PA.
-    </div>
-    <div class="row form-row mt-2 md-form p-0 m-0">
-        <div class="col-sm-6">
-            <label for="spells-started-level-2">Nombre de sorts montés à -2 à la création</label>
-            <input class="form-control adventure-points-setting" id="spells-started-level-2" type="number"
-                   value="0" min="0">
+        <div class="row mt-2 ml-1"><h4>Mages uniquement</h4></div>
+        <div class="row mt-2 ml-1">
+            En début de campagne et uniquement au début, les mages peuvent décider de dépenser des PA pour augmenter
+            le niveau initial des sorts qu'ils ont. Normalement un tel sort est d'office à -4 et s'entraine
+            par la pratique, mais ils peuvent décider au début de monter cette valeur directement à -2 ou à 0
+            pour le même prix qu'un talent. Le sort étant considéré comme un talent X, pour le passer à -2,
+            cela coûte 3 PA et pour le passer à 0, cela coûte 5 PA.
         </div>
-        <div class="col-sm-6">
-            <label for="spells-started-level-0">Nombre de sorts montés à 0 à la création</label>
-            <input class="form-control adventure-points-setting" id="spells-started-level-0" type="number"
-                   value="0" min="0">
+        <div class="row form-row mt-2 md-form p-0 m-0">
+            <div class="col-sm-6">
+                <label for="spells-started-level-2">Nombre de sorts montés à -2 à la création</label>
+                <input class="form-control adventure-points-setting" id="spells-started-level-2" type="number"
+                       value="0" min="0">
+            </div>
+            <div class="col-sm-6">
+                <label for="spells-started-level-0">Nombre de sorts montés à 0 à la création</label>
+                <input class="form-control adventure-points-setting" id="spells-started-level-0" type="number"
+                       value="0" min="0">
+            </div>
         </div>
-    </div>
+    {% endif %}
 </div>
