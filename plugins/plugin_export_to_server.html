@@ -49,9 +49,8 @@
         $.ajax({
             url: url,
             method: "POST",
-            type: "POST",
-            crossDomain: true,
-            dataType: "json",
+            contentType: "multipart/form-data",
+            dataType: null,
             data: {"name": character_name, "page": page},
             success: _ => {
                 $("#plugin-export-to-server-alert-message").text("La page a été exportée")
