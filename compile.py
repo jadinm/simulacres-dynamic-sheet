@@ -1,6 +1,7 @@
 import argparse
 import base64
 import os
+import re
 
 from jinja2 import Environment, PackageLoader, select_autoescape, Markup
 
@@ -18,10 +19,18 @@ parser.add_argument("--universe", help="Universe of the adventure", choices=[MED
                     default=MED_FANTASY)
 args = parser.parse_args()
 
+regex_background_url = re.compile(r"background(-image)?:url\([\w./:]+\)")
+
 
 def include_static(name):
     with open(os.path.join(html_dir, name)) as fileobj:
-        return Markup("".join([line for line in fileobj.readlines() if "# sourceMappingURL=" not in line]))
+        lines = []
+        for line in fileobj.readlines():
+            if "# sourceMappingURL=" in line:
+                continue
+            # Remove links to background images
+            lines.append(regex_background_url.sub("", line))
+        return Markup("".join(lines))
 
 
 # Jinja settings

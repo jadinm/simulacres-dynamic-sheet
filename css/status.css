@@ -59,7 +59,7 @@
 }
 
 #rest-slider .slider-handle.custom::before {
-    content: '\1F6CF';
+    content: '\1F6CC';
     background-color: white;
     border-radius: 50%;
 }
