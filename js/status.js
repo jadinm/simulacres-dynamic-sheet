@@ -1,5 +1,3 @@
-localized_hp = $("#unease").length > 0
-
 /* HP slider */
 
 function hp_update(event) {
@@ -126,6 +124,9 @@ $("#mind").on("change", event => {
     update_body_energy(event.target, $("#psychic"))
 })
 $("#heart").on("change", event => {
+    update_body_energy(event.target, $("#breath"))
+})
+$("#instincts").on("change", event => {
     update_body_energy(event.target, $("#breath"))
 })
 

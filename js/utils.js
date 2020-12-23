@@ -1,6 +1,5 @@
 /* Data */
 const priest_energy = "Divin"
-const is_v7 = $("#heroism").length === 0
 
 /**
  * Find the index of the child inside the parent based on id

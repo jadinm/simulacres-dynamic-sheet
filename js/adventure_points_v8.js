@@ -1,9 +1,9 @@
 /* Remaining adventure point computation in SimulacreS v8 */
 
-let start_components = 13
+let start_components = matrix_4x4 ? 17 : 13
 let component_ap_cost = 14
 let component_5_to_6_ap_cost = 20
-let start_means = 8
+let start_means = matrix_4x4 ? 10 : 8
 let means_ap_cost = 10
 let start_hp = 4
 let health_ap_cost = 10

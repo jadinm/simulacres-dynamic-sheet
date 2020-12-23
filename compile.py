@@ -15,6 +15,8 @@ parser.add_argument("output_html", help="The path to the resulting HTML file")
 parser.add_argument("--version", help="Version of SimulacreS", choices=[V7, V8], default=V7)
 parser.add_argument("--localisation", help="Use localisation of HP and armor (only valid for version 7)",
                     action='store_true')
+parser.add_argument("--matrix-4x4", help="Add instincts and desire to the stat matrix (only valid for version 8)",
+                    action='store_true')
 parser.add_argument("--universe", help="Universe of the adventure", choices=[MED_FANTASY, CAPTAIN_VOODOO, "Autre"],
                     default=MED_FANTASY)
 args = parser.parse_args()
@@ -51,6 +53,7 @@ with open(os.path.join(html_dir, "../font/augusta.regular.ttf"), "rb") as extern
 template = env.get_template('base.html')
 compiled_html = template.render({"augusta_font": augusta_font, "version": args.version,
                                  "localisation": args.localisation and args.version == V7, "universe": args.universe,
+                                 "matrix_4x4": args.version == V7 or args.matrix_4x4,
                                  "V7": V7, "V8": V8, "captain_voodoo": CAPTAIN_VOODOO, "med_fantasy": MED_FANTASY})
 
 # Replacing external file content

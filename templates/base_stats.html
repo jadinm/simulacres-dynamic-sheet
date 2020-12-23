@@ -7,14 +7,22 @@
 
         {% set tooltip_body_perception = "Voir, sentir, écouter;<br/>équilibre corporel;<br/>combat à distance" %}
         {% set tooltip_body_action = "Action physique;<br/>dépense corporelle;<br/>combat au contact" %}
+        {% set tooltip_body_desire = "Surmonter la faim,<br/>le sommeil, les blessures;<br/>survivre" %}
         {% set tooltip_body_resistance = "Résister à la faim, à la soif,<br/>aux maladies, à l'asphyxie" %}
+
+        {% set tooltip_instincts_perception = "Deviner une réaction;<br/>6e sens;<br/>se laisser guider par l'intuition" %}
+        {% set tooltip_instincts_action = "Réagir d'instinct;<br/>convaincre par la convoitise" %}
+        {% set tooltip_instincts_desire = "Imposer sa personalité;<br/>exorciser, réaliser ses rêves" %}
+        {% set tooltip_instincts_resistance = "Laisser la 'bête' (violence, plaisir) au fond de soi" %}
 
         {% set tooltip_heart_perception = "Connaître les sentiments;<br/>psychologie" %}
         {% set tooltip_heart_action = "Se faire aimer;<br/>convaincre par la passion" %}
+        {% set tooltip_heart_desire = "Avoir la foi;<br/>créer la paix, la confiance et les miracles" %}
         {% set tooltip_heart_resistance = "Résister à la séduction, à la pitié, à la misère" %}
 
         {% set tooltip_mind_perception = "Comprendre un problème;<br/>analyser une situation" %}
         {% set tooltip_mind_action = "Raisonner, calculer, résoudre;<br/>agir par la réflexion" %}
+        {% set tooltip_mind_desire = "Se raisonner, se détacher des sentiments, inventer" %}
         {% set tooltip_mind_resistance = "Rester logique, d'esprit libre;<br/>résister à l'hypnotisme" %}
     {% else %}
         {% set max_component = 6 %}
@@ -33,6 +41,24 @@
         {% set tooltip_mind_perception = "Comprendre, se souvenir;<br/>remarquer des indices, un illogisme." %}
         {% set tooltip_mind_action = "Analyser, raisonner, se raisonner, apprendre, résoudre, inventer." %}
         {% set tooltip_mind_resistance = "Rester logique, sain d’esprit." %}
+
+        {% if matrix_4x4 %}
+            {% set tooltip_body_action = "Actions physiques, agilité." %}
+            {% set tooltip_body_desire = "Dépasser ses limites, faire appel à l'instinct de vie pour surmonter les épreuves physiques." %}
+            {% set tooltip_body_resistance = "Résister par nature aux agressions physiques, faim et soif, maladie." %}
+
+            {% set tooltip_instincts_perception = "Deviner une réaction;<br/>6e sens." %}
+            {% set tooltip_instincts_action = "Agir ou réagir d'instinct;<br/>convaincre par la convoitise." %}
+            {% set tooltip_instincts_desire = "Imposer sa personalité;<br/>exorciser, rendre réel ses rêves." %}
+            {% set tooltip_instincts_resistance = "Laisser la 'bête' (violence, plaisir, jalousie) au fond de soi." %}
+
+            {% set tooltip_heart_action = "Convaincre, se faire aimer par la passion." %}
+            {% set tooltip_heart_desire = "Avoir la foi, créer la paix, la confiance et les miracles." %}
+            {% set tooltip_heart_resistance = "Rester serein;<br/>se protéger par la confiance ou la foi." %}
+
+            {% set tooltip_mind_action = "Comprendre, analyser." %}
+            {% set tooltip_mind_desire = "Se raisonner, se détacher des sensations, inventer." %}
+        {% endif %}
     {% endif %}
     <!-- Components and means -->
     <div class="table-responsive-xl col-lg-6">
@@ -61,7 +87,7 @@
                                min="1" max="{{ max_means }}">
                     </div>
                 </th>
-                {% if version == V7 %}
+                {% if matrix_4x4 %}
                     <th scope="col" class="align-middle md-form input-with-pre-icon">
                         <div data-toggle="tooltip" data-placement="top" title="Désir">
                             <svg height="3em" width="2em" class="input-prefix">
@@ -100,16 +126,16 @@
                 <td class="align-middle text-center" id="body-action" data-toggle="tooltip" data-html="true"
                     data-placement="right"
                     title="{{ tooltip_body_action }}"></td>
-                {% if version == V7 %}
+                {% if matrix_4x4 %}
                     <td class="align-middle text-center" id="body-desire" data-toggle="tooltip" data-html="true"
                         data-placement="right"
-                        title="Surmonter la faim,<br/>le sommeil, les blessures;<br/>survivre"></td>
+                        title="{{ tooltip_body_desire }}"></td>
                 {% endif %}
                 <td class="align-middle text-center" id="body-resistance" data-toggle="tooltip" data-html="true"
                     data-placement="right"
                     title="{{ tooltip_body_resistance }}"></td>
             </tr>
-            {% if version == V7 %}
+            {% if matrix_4x4 %}
                 <tr>
                     <th scope="row" class="align-middle md-form input-with-pre-icon">
                         <div data-toggle="tooltip" data-placement="top" title="Instincts">
@@ -122,16 +148,16 @@
                     </th>
                     <td class="align-middle text-center" id="instincts-perception" data-toggle="tooltip"
                         data-html="true" data-placement="right"
-                        title="Deviner une réaction;<br/>6e sens;<br/>se laisser guider par l'intuition"></td>
+                        title="{{ tooltip_instincts_perception }}"></td>
                     <td class="align-middle text-center" id="instincts-action" data-toggle="tooltip"
                         data-html="true" data-placement="right"
-                        title="Réagir d'instinct;<br/>convaincre par la convoitise"></td>
+                        title="{{ tooltip_instincts_action }}"></td>
                     <td class="align-middle text-center" id="instincts-desire" data-toggle="tooltip"
                         data-html="true" data-placement="right"
-                        title="Imposer sa personalité;<br/>exorciser, réaliser ses rêves"></td>
+                        title="{{ tooltip_instincts_desire }}"></td>
                     <td class="align-middle text-center" id="instincts-resistance" data-toggle="tooltip"
                         data-html="true" data-placement="right"
-                        title="Laisser la 'bête' (violence, plaisir) au fond de soi"></td>
+                        title="{{ tooltip_instincts_resistance }}"></td>
                 </tr>
             {% endif %}
             <tr>
@@ -148,10 +174,10 @@
                     data-placement="right" title="{{ tooltip_heart_perception }}"></td>
                 <td class="align-middle text-center" id="heart-action" data-toggle="tooltip" data-html="true"
                     data-placement="right" title="{{ tooltip_heart_action }}"></td>
-                {% if version == V7 %}
+                {% if matrix_4x4 %}
                     <td class="align-middle text-center" id="heart-desire" data-toggle="tooltip" data-html="true"
                         data-placement="right"
-                        title="Avoir la foi;<br/>créer la paix, la confiance et les miracles"></td>
+                        title="{{ tooltip_heart_desire }}"></td>
                 {% endif %}
                 <td class="align-middle text-center" id="heart-resistance" data-toggle="tooltip" data-html="true"
                     data-placement="right" title="{{ tooltip_heart_resistance }}"></td>
@@ -170,9 +196,9 @@
                     data-placement="right" title="{{ tooltip_mind_perception }}"></td>
                 <td class="align-middle text-center" id="mind-action" data-toggle="tooltip" data-html="true"
                     data-placement="right" title="{{ tooltip_mind_action }}"></td>
-                {% if version == V7 %}
+                {% if matrix_4x4 %}
                     <td class="align-middle text-center" id="mind-desire" data-toggle="tooltip" data-html="true"
-                        data-placement="right" title="Se raisonner, se détacher des sentiments, inventer"></td>
+                        data-placement="right" title="{{ tooltip_mind_desire }}"></td>
                 {% endif %}
                 <td class="align-middle text-center" id="mind-resistance" data-toggle="tooltip" data-html="true"
                     data-placement="right" title="{{ tooltip_mind_resistance }}"></td>

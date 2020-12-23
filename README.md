@@ -11,8 +11,11 @@ avec les éléments suivants en plus :
 
 Elle supporte aussi les règles de campagne de
 [SimulacreS version 8](https://www.facebook.com/groups/Simulacres/permalink/2324033054515754/)
-(avec [quelques règles optionnelles](https://www.facebook.com/groups/Simulacres/permalink/2186771051575289/))
-et celles de [Capitaine Vaudou](https://www.black-book-editions.fr/catalogue.php?id=704).
+avec les éléments suivants en plus :
+- les talents détaillés et l'armure
+  (voir [ces règles optionnelles](https://www.facebook.com/groups/Simulacres/permalink/2186771051575289/))
+- la [matrice 4x4](https://www.facebook.com/groups/Simulacres/permalink/2532857676966623/)
+- l'univers de [Capitaine Vaudou](https://www.black-book-editions.fr/catalogue.php?id=704).
 
 ## Premiers pas
 

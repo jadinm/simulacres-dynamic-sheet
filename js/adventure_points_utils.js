@@ -29,6 +29,9 @@ function compute_status_cost() {
     if ($("#heart").hasClass("bonus-applied")) { // +1 due to heart value
         max_breath -= 1
     }
+    if ($("#instincts").hasClass("bonus-applied")) { // +1 due to instincts value
+        max_breath -= 1
+    }
     consumed_points += (max_breath - start_breath) * breath_ap_cost
 
     // Psychic balance
