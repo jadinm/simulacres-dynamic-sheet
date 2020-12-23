@@ -10,8 +10,9 @@ avec les éléments suivants en plus :
 - la voie du moine (voir [Casus Belli LPC n°25](http://joueursdurepaire.free.fr/casus_belli/cb_LPC25.html)).
 
 Elle supporte aussi les règles de campagne de
-[SimulacreS version 8](https://www.facebook.com/groups/Simulacres/permalink/2528183340767390/)
-et celles de [Capitaine Vaudou](https://www.black-book-editions.fr/catalogue.php?id=704). 
+[SimulacreS version 8](https://www.facebook.com/groups/Simulacres/permalink/2324033054515754/)
+(avec [quelques règles optionnelles](https://www.facebook.com/groups/Simulacres/permalink/2186771051575289/))
+et celles de [Capitaine Vaudou](https://www.black-book-editions.fr/catalogue.php?id=704).
 
 ## Premiers pas
 
