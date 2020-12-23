@@ -65,6 +65,7 @@ $(_ => {
 
     // Dark mode initialization
     if (is_dark_mode()) {
+        disable_dark_mode()
         enable_dark_mode()
     } else {
         disable_dark_mode()
