@@ -196,9 +196,6 @@ function import_data(src_html, dst_html) {
     const old_image = src_html.find("#character-image")
     if (old_image.length > 0)
         dst_html.find("#character-image")[0].src = old_image[0].src
-
-    // Reset tab selection
-    reset_tab_selection(dst_html)
 }
 
 function insert_or_replace_block(block, parent) {
@@ -251,6 +248,7 @@ $("#import-page").on("change", function (event) {
             alert("Le document n'est pas une fiche de personnage. Si vous essayez d'importer un plugin, utilisez l'autre bouton.")
 
         import_data(old_html, $("html"))
+        reset_tab_selection($("html"))
         insert_or_replace_plugins($(e.target.result))
 
         event.target.setAttribute("value", "")
