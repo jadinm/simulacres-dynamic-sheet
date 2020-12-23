@@ -1,0 +1,80 @@
+<li id="plugin-button-export-to-server" class="plugin-button nav-item">
+    <a class="nav-link" data-toggle="tab" href="#plugin-tab-export-to-server" role="tab" aria-controls="profile"
+       aria-selected="false">
+        Exporter
+    </a>
+</li>
+
+<div id="plugin-tab-export-to-server" class="plugin-tab tab-pane fade row my-1 container-fluid m-0 pr-0 align-middle">
+    <div id="plugin-export-to-server-alert" class="alert alert-danger alert-dismissible mt-2 d-none" role="alert">
+        <p id="plugin-export-to-server-alert-message"></p>
+        <button id="plugin-export-to-server-alert-button" type="button" class="close" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="row form-row mt-2 md-form p-0 m-0">
+        <div class="col-12">
+            <label for="plugin-export-to-server-url">URL du serveur</label>
+            <input class="form-control" id="plugin-export-to-server-url" type="text"
+                   value="https://votre-server/chemin">
+        </div>
+    </div>
+    <div class="form-row row mt-2 p-0 m-0 pr-2">
+        <button id="plugin-export-to-server-export" type="submit" class="btn btn-secondary rounded col-12 pb-2 pt-2">
+            Exporter vers le serveur
+        </button>
+    </div>
+</div>
+
+<script id="plugin-js-export-to-server" class="plugin-js">
+    // Fix graphical bug with the label overlapping the default value
+    $("#plugin-export-to-server-url").trigger("change")
+
+    /* Hide alert */
+    $("#plugin-export-to-server-alert-button").on("click", _ => {
+        $("#plugin-export-to-server-alert").addClass("d-none")
+    })
+
+    /* Export character page */
+    $("#plugin-export-to-server-export").on("click", _ => {
+        const page = "<!DOCTYPE html><html lang=\"fr\">" + $("html").html() + "</html>"
+
+        // Retrieve the name of the character
+        let character_name = $("input#character-name")[0].value
+        if (character_name === null || character_name.length === 0)
+            character_name = "Anonyme"
+
+        // Export to server
+        const url = $("#plugin-export-to-server-url").val()
+        $.ajax({
+            url: url,
+            method: "POST",
+            type: "POST",
+            crossDomain: true,
+            dataType: "json",
+            data: {"name": character_name, "page": page},
+            success: _ => {
+                $("#plugin-export-to-server-alert-message").text("La page a été exportée")
+                $("#plugin-export-to-server-alert").removeClass("d-none").removeClass("alert-danger")
+                    .addClass("alert-success")
+            },
+            error: (jqXHR, textStatus, errorThrown) => {
+                console.log("ERROR")
+                // Failed to export data
+                let text = "La fiche n'a été exportée."
+                if (errorThrown)
+                    text += " " + errorThrown + "."
+                else if (textStatus === "error" && jqXHR.readyState !== 4) {
+                    text += " Cela peut arriver si le serveur n'est pas joignable" +
+                        " ou s'il n'a pas ajouté le header 'Access-Control-Allow-Origin: *' à sa réponse"
+                } else {
+                    text += " La raison est '" + textStatus + "'"
+                }
+                text += "."
+                $("#plugin-export-to-server-alert-message").text(text)
+                $("#plugin-export-to-server-alert").removeClass("d-none").removeClass("alert-success")
+                    .addClass("alert-danger")
+            }
+        })
+    })
+</script>

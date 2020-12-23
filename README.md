@@ -2,7 +2,7 @@
 
 La fiche utilise les règles de campagne de
 [SimulacreS version 7](https://www.facebook.com/groups/Simulacres/permalink/1512926132293121/)
-avec les éléments suivant en plus :
+avec les éléments suivants en plus :
 - les points de vie localisés, l'armure localisée et le bouclier
   (voir [Casus Belli HS n°16](http://confrerie-acier.chez-alice.fr/localisation%20armures%20et%20autres.htm)),
 - les utilisations optionnelles des énergies classiques
@@ -82,7 +82,18 @@ dans le [dossier plugin](plugins) ou un que vous aurez créé
 Le bouton pour importer un plugin se trouve en bas de la fiche.
 Pour le moment nous avons les plugins suivants :
 
-- [Plugin exemple](plugins/plugin_example.html) pour le test et la documentation
+- Le [plugin exemple](plugins/plugin_example.html) pour le test et la documentation
+- Le [plugin d'export](plugins/plugin_export_to_server.html) de fiche vers un server distant
+  qui permet d'envoyer le contenu de la fiche à une URL
+  en faisant une requête POST qui contient les données suivantes :
+  ```json
+  {
+    "name": "Le nom du personnage",
+    "page": "Le contenu de la page"
+  }
+  ```
+  Pour qu'il fonctionne, le serveur cible envoyer le header
+  'Access-Control-Allow-Origin: *' avec sa réponse.
 
 ### Mettre à jour un plugin
 
@@ -108,7 +119,7 @@ Il est également possible d'écraser des parties de la fiche dynamique avec cet
 méthode en utilisant le même id que le block à écraser
 mais utilisez ça avec prudence car cela peut introduire des bugs.
 
-#### Important: une fois votre plugin disponible, ne changez plus le moindre id
+#### Important : une fois votre plugin disponible, ne changez plus le moindre id
 
 En effet, si vous changez les ids des champs, les utilisateurs perdront l'information
 encodée dans ces champs à la mise à jour.
