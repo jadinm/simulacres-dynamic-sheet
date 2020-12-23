@@ -20,6 +20,15 @@ function find_index(parent, child) {
     return idx
 }
 
+// Update the title when the character name changes
+$("#character-name").on("change", e => {
+    const value = e.target.value
+    if (value && value.length > 0)
+        document.title = value
+    else
+        document.title = "SimulacreS"
+})
+
 // Set the right version of bootstrap for bootstrap-select
 $.fn.selectpicker.Constructor.BootstrapVersion = '4'
 
