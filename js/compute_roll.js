@@ -16,6 +16,9 @@ function add_row_listeners(row = $(document)) {
     row.find(".spell-difficulty-input").on("change", event => {
         update_spell_value(row_elem(event.target, "value"))
     })
+    row.find(".hermetic-difficulty").on("change", event => {
+        update_spell_value(row_elem(event.target, "value"))
+    })
     row.find(".row-roll-trigger").on("click", event => {
         // Find the real target of the click
         let button = $(event.target)
@@ -25,7 +28,7 @@ function add_row_listeners(row = $(document)) {
         // Find either spell difficulty or talent level to detect critical rolls
         let difficulty
         const spell_difficulty = row_elem(button[0], "difficulty")
-        if (spell_difficulty.length > 0) { // Spell
+        if (spell_difficulty.length > 0 && !is_hermetic_spell(button[0])) { // Spell
             difficulty = parseInt(spell_difficulty.text())
         } else { // Talent
             const talent_select = row_elem(button[0], "talent")
@@ -58,6 +61,10 @@ function compute_formula(row) {
     return sum
 }
 
+function is_hermetic_spell(value_div) {
+    return row_elem(value_div, "list").val().trim() === hermetic_energy
+}
+
 function update_spell_value(value_div) {
     let sum = 0
 
@@ -67,6 +74,24 @@ function update_spell_value(value_div) {
 
     // Recover difficulty
     sum += parseInt(row_elem(value_div[0], "difficulty").text())
+
+    if (is_hermetic_spell(value_div[0])) {
+        // Recover hermetic difficulty
+        const cast_diff = parseInt(row_elem(value_div[0], "hermetic-difficulty").val())
+        if (!isNaN(cast_diff)) {
+            sum += cast_diff
+        }
+        // Recover associated talent level
+        const name = row_elem(value_div[0], "talent").val()
+        if (name.length !== 0) {
+            const level = parseInt(talent_level($(".talent input[value='" + name + "']")))
+            if (isNaN(level)) {
+                sum = "X"
+            } else {
+                sum += level
+            }
+        }
+    }
 
     // Update
     value_div.text(sum)
@@ -79,12 +104,30 @@ function list_changed(event) {
     if (slider.length === 0 || slider[0].id.includes("spell-x-"))
         return
 
-    if (event.target.value === "Divin") {
+    const difficulty = row_elem(event.target, "difficulty")
+    const hermetic_difficulty = row_elem(event.target, "hermetic-difficulty")
+    const hermetic_talent = row_elem(event.target, "talent")
+    const name = row_elem(event.target, "name")
+    const handle = row_elem(event.target, "name-handle")
+    hermetic_difficulty.parent().addClass("d-none")
+    hermetic_talent.parent().parent().addClass("d-none")
+    name.removeClass("d-none")
+    handle.removeClass("d-none")
+    difficulty.parent().removeClass("d-none")
+    if (event.target.value.trim() === priest_energy) {
         slider.val(10).slider("setValue", 10).slider("refresh", {useCurrentValue: true}).slider("disable")
-        $(slider.slider("getElement")).hide()
-    } else if (event.target.value.length === 0) {
+        $(slider.slider("getElement")).parent().addClass("d-none")
+    } else if (event.target.value.trim() === hermetic_energy) {
+        slider.val(10).slider("setValue", 10).slider("refresh", {useCurrentValue: true}).slider("disable")
+        $(slider.slider("getElement")).parent().addClass("d-none")
+        hermetic_difficulty.parent().removeClass("d-none")
+        hermetic_talent.parent().parent().removeClass("d-none")
+        name.addClass("d-none")
+        handle.addClass("d-none")
+        difficulty.parent().addClass("d-none")
+    } else {
         slider.slider("enable").slider("refresh", {useCurrentValue: true})
-        $(slider.slider("getElement")).show()
+        $(slider.slider("getElement")).parent().removeClass("d-none")
     }
 
     // Update spell value
@@ -193,6 +236,12 @@ $("#add-spell").on("click", (event, idx = null) => { // Add parameter for forced
 
     const new_id = add_row(table, new_spell, idx)
     activate_slider(new_spell.find("#spell-" + new_id + "-difficulty-input")[0], show_difficulty_builder)
+
+    const select = new_spell.find("#spell-" + new_id + "-talent")
+    select.selectpicker()
+    select.on("changed.bs.select", _ => {
+        update_spell_value(row_elem(select[0], "value"))
+    })
 
     add_row_listeners(new_spell)
 })

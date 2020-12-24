@@ -1,5 +1,6 @@
 /* Data */
 const priest_energy = "Divin"
+const hermetic_energy = "Hermétique"
 
 /**
  * Find the index of the child inside the parent based on id

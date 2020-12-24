@@ -203,10 +203,21 @@
                 </thead>
                 <tbody id="spell-table" class="sortable-list">
                 <tr id="spell-x" hidden>
-                    <td class="md-form my-0 py-0 align-middle">
-                        <i class="fas fa-arrows-alt prefix mt-4 ml-1" style="font-size: 1.5em;"></i>
+                    <td class="md-form align-middle">
+                        <i id="spell-x-name-handle" class="fas fa-arrows-alt prefix mt-4 ml-1" style="font-size: 1.5em;"></i>
                         <label for="spell-x-name"></label>
                         <input id="spell-x-name" class="spell-name form-control" type="text" value="">
+
+                        <!-- Hermetic magic consider spells as regular talents -->
+                        <div class="row md-form d-none">
+                            <label for="spell-x-talent"></label>
+                            <select class="show-tick form-control talent-select selectpicker"
+                                    data-live-search="true"
+                                    id="spell-x-talent" data-style="col-8 ml-5 align-middle"
+                                    data-talent-filter-origin-level="x">
+                            </select>
+                            <i class="fas fa-arrows-alt prefix mt-3 ml-1" style="font-size: 1.5em;"></i>
+                        </div>
                     </td>
                     <td class="md-form my-0 py-0 align-middle">
                         <label for="spell-x-list"></label>
@@ -391,6 +402,11 @@
                                        type="text" data-slider-min="0" data-slider-max="30" data-slider-step="1"
                                        data-slider-value="0" class="input-slider spell-difficulty-input"
                                        data-slider-tooltip-position="bottom"/>
+                            </div>
+                            <div class="text-center md-form col-12 d-none">
+                                <label for="spell-x-hermetic-difficulty">Difficulté de lancer</label>
+                                <input class="form-control hermetic-difficulty" id="spell-x-hermetic-difficulty"
+                                       type="number" value="0">
                             </div>
                         </div>
                     </td>
