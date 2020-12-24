@@ -43,6 +43,7 @@ function add_row_listeners(row = $(document)) {
         // Do the actual roll
         const value = parseInt(row_elem(button[0], "value").text()) // Recover max value
         trigger_roll(value, difficulty, row_elem(button[0], "effect").val())
+        $('#roll-dialog').modal()
     })
     row.find(".roll-formula-elem").on("click", roll_changed)
 }
@@ -477,8 +478,6 @@ function trigger_roll(max_value = old_max_value, talent_level = old_talent_level
         $("#roll-dialog-result").html(dice_value)
         $("#roll-dialog-details").html("(" + dices[0] + " + " + dices[1] + ")")
     }
-
-    $('#roll-dialog').modal()
 }
 
 function slider_value_changed(input) {
@@ -528,6 +527,7 @@ $("#roll-2d6").on("click", _ => {
     $("#roll-dialog-invested-precision").val("0")
     // Trigger roll
     trigger_roll(null, 0)
+    $('#roll-dialog').modal()
 })
 
 /* Precision energy */
