@@ -3,6 +3,11 @@
     color: black;
 }
 
+/* Fix mdbootstrap with prefixes that overlap with labels by shifting the latter */
+.input-with-pre-icon label:not(.active) {
+    left: 3em;
+}
+
 /* Remove capital letters for buttons */
 .btn {
     text-transform: none;
