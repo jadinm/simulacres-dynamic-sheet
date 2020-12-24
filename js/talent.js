@@ -13,8 +13,8 @@ function talent_base_level(talent) {
     return talent.id.match(regex_talent_from_id)[1]
 }
 
-function talent_cost(talent) {
-    const current_value = talent_level(talent)
+function talent_cost(talent, list = null) {
+    const current_value = talent_level(talent, list)
     let old_value = talent_base_level(talent)
 
     const talent_name = $(talent).find("input").val()
@@ -27,7 +27,7 @@ function talent_cost(talent) {
         old_value = "1" // Compute PA cost from level 1
     }
 
-    let cost  = talent_increment_cost[old_value][current_value]
+    let cost = talent_increment_cost[old_value][current_value]
 
     if (talent_x_inefficient_raise().includes(talent_name) && parseInt(current_value) >= 0) {
         // 6 PA were consumed to raise this talent from X to 0 instead of 5
@@ -142,20 +142,22 @@ function add_missing_talents(talents) {
 
 add_missing_talents(default_talents)
 
-function update_talent_tooltip(talent, target_list=null) {
+function update_talent_tooltip(talent, target_list = null) {
     const current_level = talent_level(talent, target_list)
     const old_level = talent_base_level(talent)
     if (current_level !== old_level) {
         const old_level = talent_base_level(talent)
         const cost = talent_cost(talent)
-        if (!isNaN(cost))
+        if (!isNaN(cost)) {
             talent.setAttribute("data-original-title",
                 "Talent " + old_level.toUpperCase() + " à la base <br />" + "Coût: " + talent_cost(talent) + " PA")
-        else
+            $(talent).find(".talent-origin").text("< " + old_level.toUpperCase())
+        } else {
             talent.setAttribute("data-original-title",
                 "Talent " + old_level.toUpperCase() + " à la base <br />" + "Mouvement invalide")
+            $(talent).find(".talent-origin").text("< " + old_level.toUpperCase() + " (Mouvement invalide)")
+        }
         $(talent).addClass("increased-talent").tooltip({disabled: false})
-        $(talent).find(".talent-origin").text("< " + old_level.toUpperCase())
     } else {
         talent.setAttribute("data-original-title", "")
         $(talent).removeClass("increased-talent").tooltip({disabled: true})
@@ -187,11 +189,20 @@ $(".talent input[id*='-name']").on("change", _ => {
     })
 })
 
-$('.talent-list').sortable({
-    handle: '.fa-arrows-alt',
-    group: 'talent-lists',
-    dragoverBubble: true,
-    onEnd: update_talent
+$('.talent-list').each((i, elem) => {
+    $(elem).sortable({
+        handle: '.fa-arrows-alt',
+        group: 'talent-lists',
+        dragoverBubble: true,
+        onEnd: update_talent,
+        onMove: (e, _) => {
+            // Prevent moves that have an invalid PA cost
+            if (isNaN(talent_cost(e.dragged, e.to))) {
+                return false
+            }
+            return e.willInsertAfter ? 1 : -1
+        }
+    })
 })
 
 $("select.talent-select").each((i, elem) => {
