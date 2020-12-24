@@ -19,6 +19,13 @@ function add_row_listeners(row = $(document)) {
     row.find(".hermetic-difficulty").on("change", event => {
         update_spell_value(row_elem(event.target, "value"))
     })
+    row.find(".spell-talent").each((i, elem) => {
+        if (!elem.id.includes("-x-")) {
+            $(elem).on("changed.bs.select", e => {
+                update_spell_value(row_elem(e.target, "value"))
+            })
+        }
+    })
     row.find(".row-roll-trigger").on("click", event => {
         // Find the real target of the click
         let button = $(event.target)
@@ -46,6 +53,13 @@ function add_row_listeners(row = $(document)) {
         $('#roll-dialog').modal()
     })
     row.find(".roll-formula-elem").on("click", roll_changed)
+    row.find(".roll-talent").each((i, elem) => {
+        if (!elem.id.includes("-x-")) {
+            $(elem).on("changed.bs.select", e => {
+                roll_changed(e)
+            })
+        }
+    })
 }
 
 function compute_formula(row) {
@@ -240,9 +254,6 @@ $("#add-spell").on("click", (event, idx = null) => { // Add parameter for forced
 
     const select = new_spell.find("#spell-" + new_id + "-talent")
     select.selectpicker()
-    select.on("changed.bs.select", _ => {
-        update_spell_value(row_elem(select[0], "value"))
-    })
 
     add_row_listeners(new_spell)
 })
@@ -258,9 +269,6 @@ $("#add-roll").on("click", (event, idx = null) => { // Add parameter for forced 
     new_row.find("input").each((i, elem) => {
         elem.value = ""
         $(elem).trigger("change")
-    })
-    select.on("changed.bs.select", (e, clickedIndex, newValue, oldValue) => {
-        roll_changed(e)
     })
     add_row_listeners()
 })
