@@ -3,6 +3,8 @@
     <div class="row mt-2 ml-1"><b>Fortune</b></div>
     <div class="row form-row mt-2 md-form p-0 m-0">
         {% if universe == med_fantasy %}
+            {% set base_money = "Besins" %}
+            {% set money_comment = "(" + base_money + ")" %}
             <div class="col-sm-4">
                 <label for="gold-coins">Soleils</label>
                 <input class="form-control" id="gold-coins" type="number" value="0" min="0">
@@ -14,15 +16,19 @@
             </div>
 
             <div class="col-sm-4">
-                <label for="copper-coins">Besins</label>
+                <label for="copper-coins">{{ base_money }}</label>
                 <input class="form-control" id="copper-coins" type="number" value="0" min="0">
             </div>
         {% elif universe == captain_voodoo %}
+            {% set base_money = "Pièces de huit" %}
+            {% set money_comment = "(" + base_money + ")" %}
             <div class="col-sm-4">
-                <label for="peso-de-ocho">Pièces de huit</label>
+                <label for="peso-de-ocho">{{ base_money }}</label>
                 <input class="form-control" id="peso-de-ocho" type="number" value="0" min="0">
             </div>
         {% else %}
+            {% set base_money = "" %}
+            {% set money_comment = "" %}
             <div class="col-sm-4">
                 <label for="money" hidden></label>
                 <input class="form-control" id="money" type="text" value="0">
@@ -31,58 +37,60 @@
     </div>
 
     <!-- Focus -->
-    <div class="row mt-2 ml-1"><b>Focus</b></div>
-    <div class="table-responsive-xl col-12">
-        <table class="table table-hover my-1">
-            <thead>
-            <tr>
-                <th scope="col" class="col-8" style="width: 75%; min-width: 300px">Aspect</th>
-                <th scope="col" class="col-2 text-center" style="width: 12.5%">Charge actuelle</th>
-                <th scope="col" class="col-2 text-center" style="width: 12.5%">Charge maximum</th>
-            </tr>
-            </thead>
-            <tbody id="focus-table" class="sortable-list">
-            <tr id="focus-x" hidden>
-                <td class="md-form my-0 py-0 align-middle">
-                    <i class="fas fa-arrows-alt prefix mt-2 ml-1" style="font-size: 1.5em;"></i>
-                    <label for="focus-x-name"></label>
-                    <input id="focus-x-name" class="focus-name form-control" type="text" value="">
-                </td>
-                <td class="md-form my-0 py-0 align-middle">
-                    <input id="focus-x-charge" class="focus-charge form-control text-center" type="number"
-                           value="" min="0">
-                    <label for="focus-x-charge"></label>
-                </td>
-                <td class="md-form my-0 py-0 align-middle">
-                    <input id="focus-x-max" class="focus-max form-control text-center" type="number"
-                           value="" min="0">
-                    <label for="focus-x-max"></label>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="row ml-2 mr-1">
-        <div class="col-lg-2 col-md-4 row">
-            <div class="col-6 px-0 mx-0">
-                <button id="add-focus" class="btn btn-success btn-block">
-                    <i class="fas fa-plus"></i>
-                </button>
-            </div>
-            <div class="col-6 px-0 mx-0">
-                <div id="focus-table-remove" class="sortable-list text-center" style="min-height: 50px">
-                    <button class="btn-block btn btn-danger" style="cursor:default;" data-toggle="tooltip"
-                            data-html="true" data-placement="bottom"
-                            title="Déplacez un élément ici pour le supprimer">
-                        <i class="fas fa-trash-alt fa-1x"></i>
+    {% if universe == med_fantasy %}
+        <div class="row mt-2 ml-1"><b>Focus</b></div>
+        <div class="table-responsive-xl col-12">
+            <table class="table table-hover my-1">
+                <thead>
+                <tr>
+                    <th scope="col" class="col-8" style="width: 75%; min-width: 300px">Aspect</th>
+                    <th scope="col" class="col-2 text-center" style="width: 12.5%">Charge actuelle</th>
+                    <th scope="col" class="col-2 text-center" style="width: 12.5%">Charge maximum</th>
+                </tr>
+                </thead>
+                <tbody id="focus-table" class="sortable-list">
+                <tr id="focus-x" hidden>
+                    <td class="md-form my-0 py-0 align-middle">
+                        <i class="fas fa-arrows-alt prefix mt-2 ml-1" style="font-size: 1.5em;"></i>
+                        <label for="focus-x-name"></label>
+                        <input id="focus-x-name" class="focus-name form-control" type="text" value="">
+                    </td>
+                    <td class="md-form my-0 py-0 align-middle">
+                        <input id="focus-x-charge" class="focus-charge form-control text-center" type="number"
+                               value="" min="0">
+                        <label for="focus-x-charge"></label>
+                    </td>
+                    <td class="md-form my-0 py-0 align-middle">
+                        <input id="focus-x-max" class="focus-max form-control text-center" type="number"
+                               value="" min="0">
+                        <label for="focus-x-max"></label>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row ml-2 mr-1">
+            <div class="col-lg-2 col-md-4 row">
+                <div class="col-6 px-0 mx-0">
+                    <button id="add-focus" class="btn btn-success btn-block">
+                        <i class="fas fa-plus"></i>
                     </button>
+                </div>
+                <div class="col-6 px-0 mx-0">
+                    <div id="focus-table-remove" class="sortable-list text-center" style="min-height: 50px">
+                        <button class="btn-block btn btn-danger" style="cursor:default;" data-toggle="tooltip"
+                                data-html="true" data-placement="bottom"
+                                title="Déplacez un élément ici pour le supprimer">
+                            <i class="fas fa-trash-alt fa-1x"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    {% endif %}
 
-    <!-- Magical equipment -->
-    <div class="row mt-2 ml-1"><b>Équipement magique</b></div>
+    <!-- Magical/Charge equipment -->
+    <div class="row mt-2 ml-1"><b>Équipement à charge</b></div>
     <div class="table-responsive-xl col-12">
         <table class="table table-hover my-1">
             <thead>
@@ -142,7 +150,7 @@
             <tr>
                 <th scope="col" class="col-2" style="width: 10%">Quantité</th>
                 <th scope="col" class="col-8" style="width: 80%; min-width: 300px">Description</th>
-                <th scope="col" class="col-2 text-center" style="width: 10%">Prix à l'unité (Besins)</th>
+                <th scope="col" class="col-2 text-center" style="width: 10%">Prix à l'unité {{ money_comment }}</th>
             </tr>
             </thead>
             <tbody id="equipment-table" class="sortable-list">
