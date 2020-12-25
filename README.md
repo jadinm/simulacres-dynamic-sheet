@@ -28,10 +28,52 @@ en utilisant soit le bouton en bas de la fiche, soit CTRL+S.
 
 Comme il s'agit d'une page html ouverte par un browser, on ne peut pas sélectionner
 le point de sauvegarde pour vous.
-La version modifiée se trouve dans vos téléchargements si votre browser ne vous a
+La version modifiée se trouvera dans vos téléchargements si votre browser ne vous a
 pas demandé où sauvegarder la fiche.
 
-### Mettre à jour une fiche existante
+### Gestion des points d'aventure
+
+Pour avoir une estimation fiable des points d'aventure,
+il faut compléter les paramètres dans le tab "PA".
+
+### Gestion des talents
+
+Pour monter un talent, il suffit de le changer de colonne dans le tab des talents.
+Certains mouvements de talent ne sont pas possible, par exemple, il n'y a pas de
+sens de déplacer "Athlétisme" (niveau 0 de base) au niveau -4.
+
+Vous pouvez ajouter de nouveaux talents à n'importe quelle colonne de X à 0.
+Il est important de créer le talent dans la colonne du niveau du talent de base
+sinon le calcul des points d'aventure restants ne fonctionnera pas.
+
+### Gestion des jets pré-encodés
+
+Dans le tab "Jets", vous pouvez créer des jets pré-encodés, basés sur un talent.
+
+Une fois encodés, vous pouvez lancer le jet en cliquant sur l'image des dés.
+Les résultats du jet s'afficheront et vous pourrez appliquer
+les différents modificateurs à la marge de réussite
+(comme l'armure de la cible d'une attaque par exemple).
+
+Il affichera le texte de l'effet en replaçant certains mots-clés par leurs valeurs.
+Dans la version 8, "MR", "DES" et "DSS" seront remplacés.
+Dans la version 7, "MR" et les colonnes d'effets tels que [A-2] et [D] seront remplacés.
+
+### Gestion des sorts (version 7 uniquement)
+
+Le fonctionnement des sorts dépend de la liste de magie utilisée.
+Il est important de les encoder correctement.
+Les prêtres utilisent la liste "Divin" pour encoder leurs sorts et les mages hermétiques
+doivent utiliser la liste "Hermétique".
+
+Apprendre un sort déjà appris pour un autre règne coûte 1 point d'aventure de moins.
+La fiche appliquera le bonus si plusieurs sorts ont le même nom.
+
+Pour les mages hermétiques, les sorts sont des talents classiques
+et doivent être créés depuis la colonne X du tab des talents avant de pouvoir
+être sélectionnés comme nom du sort.
+
+## Mettre à jour une fiche existante
 
 D'abord, téléchargez la version voulue pour la fiche.
 Ouvrez cette page vierge, cliquez sur le bouton "Importer une ancienne fiche"
@@ -45,7 +87,7 @@ le point de sauvegarde pour vous.
 La nouvelle version se trouve dans vos téléchargements si votre browser ne vous a
 pas demandé où sauvegarder la fiche.
 
-### Compiler depuis le code source
+## Compiler depuis le code source
 
 Pour produire la fiche dynamique, vous devez d'abord télécharger les librairies
 javascript et css avec [yarn](https://classic.yarnpkg.com/en/docs/install/)
