@@ -39,11 +39,13 @@ function is_dark_mode() {
 }
 
 function enable_dark_mode() {
-    DarkReader.enable({
-        brightness: 100,
-        contrast: 100,
-        sepia: 0
-    })
+    const fixes = {
+        invert: [],
+        css: "#svg-simulacres path {fill: ${black} !important;}",
+        ignoreInlineStyle: [],
+        ignoreImageAnalysis: []
+    }
+    DarkReader.enable({brightness: 100, contrast: 100, sepia: 0}, fixes)
     $("#dark-mode").addClass("d-none")
     $("#light-mode").removeClass("d-none")
 }
@@ -54,8 +56,12 @@ function disable_dark_mode() {
     $("#dark-mode").removeClass("d-none")
 }
 
-$("#light-mode").on("click", _ => {disable_dark_mode()})
-$("#dark-mode").on("click", _ => {enable_dark_mode()})
+$("#light-mode").on("click", _ => {
+    disable_dark_mode()
+})
+$("#dark-mode").on("click", _ => {
+    enable_dark_mode()
+})
 
 /* Tooltip initializations */
 $(_ => {
