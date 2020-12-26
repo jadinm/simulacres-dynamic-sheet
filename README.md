@@ -34,11 +34,11 @@ pas demandé où sauvegarder la fiche.
 ### Gestion des points d'aventure
 
 Pour avoir une estimation fiable des points d'aventure,
-il faut compléter les paramètres dans le tab "PA".
+il faut compléter les paramètres dans l'onglet' "PA".
 
 ### Gestion des talents
 
-Pour monter un talent, il suffit de le changer de colonne dans le tab des talents.
+Pour monter un talent, il suffit de le changer de colonne dans l'onglet des talents.
 Certains mouvements de talent ne sont pas possible, par exemple, il n'y a pas de
 sens de déplacer "Athlétisme" (niveau 0 de base) au niveau -4.
 
@@ -48,7 +48,7 @@ sinon le calcul des points d'aventure restants ne fonctionnera pas.
 
 ### Gestion des jets pré-encodés
 
-Dans le tab "Jets", vous pouvez créer des jets pré-encodés, basés sur un talent.
+Dans l'onglet "Jets", vous pouvez créer des jets pré-encodés, basés sur un talent.
 
 Une fois encodés, vous pouvez lancer le jet en cliquant sur l'image des dés.
 Les résultats du jet s'afficheront et vous pourrez appliquer
@@ -70,7 +70,7 @@ Apprendre un sort déjà appris pour un autre règne coûte 1 point d'aventure d
 La fiche appliquera le bonus si plusieurs sorts ont le même nom.
 
 Pour les mages hermétiques, les sorts sont des talents classiques
-et doivent être créés depuis la colonne X du tab des talents avant de pouvoir
+et doivent être créés depuis la colonne X de l'onglet des talents avant de pouvoir
 être sélectionnés comme nom du sort.
 
 ## Mettre à jour une fiche existante
@@ -118,7 +118,7 @@ $ python3 compile.py -h
 
 ## Plugins
 
-Vous pouvez insérer de nouveaux tabs dans la fiche en créant et en important des plugins.
+Vous pouvez insérer de nouveaux onglets dans la fiche en créant et en important des plugins.
 
 ### Importer un plugin
 
@@ -151,8 +151,8 @@ dans votre fiche. Il n'y a pas besoin de créer une nouvelle fiche.
 Nous fixons quelques conventions pour les plugins.
 Chaque composante doit inclure une classe appropriée :
 
-- Le bouton du tab : ``plugin-button``
-- Le tab lui-même : ``plugin-tab``
+- Le bouton de l'onglet : ``plugin-button``
+- L'onglet lui-même : ``plugin-tab``
 - Le code css associé : ``plugin-css``
 - Le code javascript associé : ``plugin-js``
 
