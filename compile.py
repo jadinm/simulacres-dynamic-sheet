@@ -1,9 +1,14 @@
 import argparse
 import base64
+import mimetypes
 import os
 import re
+from pathlib import Path
 
 from jinja2 import Environment, PackageLoader, select_autoescape, Markup
+
+SRC_DIR = os.path.dirname(os.path.abspath(__file__))
+TEMPLATE_DIR = os.path.join(SRC_DIR, "templates")
 
 V7 = "7"
 V8 = "8"
@@ -21,17 +26,28 @@ parser.add_argument("--universe", help="Universe of the adventure", choices=[MED
                     default=MED_FANTASY)
 args = parser.parse_args()
 
-regex_background_url = re.compile(r"background(-image)?:url\([\w./:]+\)")
+regex_url = re.compile(r"url\(([\w\\./\-_]+)\)")
 
 
 def include_static(name):
+    def replace_local_urls(match):
+        path = os.path.join(os.path.abspath(os.path.join(TEMPLATE_DIR, os.path.dirname(name))), match.group(1))
+        if not os.path.exists(path):
+            print("[Warning] Path {} does not exists".format(path))
+            return ""
+        mime, encoding = mimetypes.guess_type(Path(path), False)
+        with open(path, "rb") as local_file:
+            return "url(data:{}{};base64,{})" \
+                .format(mime, ";charset={}".format(encoding) if encoding is not None else "",
+                        base64.b64encode(local_file.read()).decode())
+
     with open(os.path.join(html_dir, name)) as fileobj:
         lines = []
         for line in fileobj.readlines():
             if "# sourceMappingURL=" in line:
                 continue
-            # Remove links to background images
-            lines.append(regex_background_url.sub("", line))
+            # Replace links to background images and fonts
+            lines.append(regex_url.sub(replace_local_urls, line))
         return Markup("".join(lines))
 
 
