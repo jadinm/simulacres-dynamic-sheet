@@ -50,15 +50,23 @@
 
 <body>
 
-<div class="container-fluid main-container">
+<div class="container-fluid main-container px-4">
     <!-- Logo -->
-    <h1 class="mt-1 row text-center align-middle justify-content-center">
-        <svg height="1.5em" width="7em" class="input-prefix" data-toggle="tooltip" data-html="true"
-             data-placement="bottom"
-             title="Simulacres©™ - le jeu de rôle élémentaire a été créé par Pierre Rosenthal. Les règles de Simulacres © sont soumises à copyright et Simulacres™ est une marque déposée.">
-            <use xlink:href="#svg-simulacres"></use>
-        </svg>
-    </h1>
+    <div class="row align-middle justify-content-between">
+        <div class="col-md-1 col-2"></div>
+        <h1 class="mt-1 text-center">
+            <svg height="1.5em" width="7em" class="input-prefix" data-toggle="tooltip" data-html="true"
+                 data-placement="bottom"
+                 title="Simulacres©™ - le jeu de rôle élémentaire a été créé par Pierre Rosenthal. Les règles de Simulacres © sont soumises à copyright et Simulacres™ est une marque déposée.">
+                <use xlink:href="#svg-simulacres"></use>
+            </svg>
+        </h1>
+        <div class="col-md-1 col-2 justify-content-center align-middle zero-clipboard">
+            <div id="dark-mode" class="btn btn-dark rounded-lg col-12 px-0 mx-0"><i class="fas fa-moon"></i></div>
+            <div id="light-mode" class="btn btn-light rounded-lg col-12 d-none px-0 mx-0"><i class="fas fa-sun"></i>
+            </div>
+        </div>
+    </div>
 
     <!-- Basic information -->
     {% include "bio.html" %}
@@ -66,105 +74,107 @@
     <!-- Components, means, realms and energies -->
     {% include "base_stats.html" %}
 
-    <ul id="nav-tabs" class="nav nav-tabs" role="tablist">
-        <li class="nav-item">
-            <a class="nav-link active" data-toggle="tab" href="#status-tab" role="tab" aria-controls="home"
-               aria-selected="true">
-                Status
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#roll-tab" role="tab" aria-controls="profile"
-               aria-selected="false">
-                Jets
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#talent-tab" role="tab" aria-controls="profile"
-               aria-selected="false">
-                Talents
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#equipment-tab" role="tab" aria-controls="profile"
-               aria-selected="false">
-                Équipement
-            </a>
-        </li>
-        {% if universe == med_fantasy %}
+    <div class="border border-heavy rounded-lg pb-2">
+        <ul id="nav-tabs" class="nav nav-tabs" role="tablist">
             <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#magic-tab" role="tab" aria-controls="profile"
-                   aria-selected="false">
-                    Magie
+                <a class="nav-link active" data-toggle="tab" href="#status-tab" role="tab" aria-controls="home"
+                   aria-selected="true">
+                    Status
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#ki-tab" role="tab" aria-controls="profile"
+                <a class="nav-link" data-toggle="tab" href="#roll-tab" role="tab" aria-controls="profile"
                    aria-selected="false">
-                    Ki
+                    Jets
                 </a>
             </li>
-        {% elif universe == captain_voodoo %}
             <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#magic-tab" role="tab" aria-controls="profile"
+                <a class="nav-link" data-toggle="tab" href="#talent-tab" role="tab" aria-controls="profile"
                    aria-selected="false">
-                    Magie
+                    Talents
                 </a>
             </li>
-        {% endif %}
-        <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#adventure-points-tab" role="tab" aria-controls="profile"
-               aria-selected="false">
-                PA
-            </a>
-        </li>
-    </ul>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#equipment-tab" role="tab" aria-controls="profile"
+                   aria-selected="false">
+                    Équipement
+                </a>
+            </li>
+            {% if universe == med_fantasy %}
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#magic-tab" role="tab" aria-controls="profile"
+                       aria-selected="false">
+                        Magie
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#ki-tab" role="tab" aria-controls="profile"
+                       aria-selected="false">
+                        Ki
+                    </a>
+                </li>
+            {% elif universe == captain_voodoo %}
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#magic-tab" role="tab" aria-controls="profile"
+                       aria-selected="false">
+                        Magie
+                    </a>
+                </li>
+            {% endif %}
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#adventure-points-tab" role="tab" aria-controls="profile"
+                   aria-selected="false">
+                    PA
+                </a>
+            </li>
+        </ul>
 
-    <div id="tabs" class="tab-content">
-        <!-- Status tab -->
-        {% if localisation %}
-            {% include "localized_status_tab.html" %}
-        {% else %}
-            {% include "status_tab.html" %}
-        {% endif %}
+        <div id="tabs" class="container-fluid tab-content px-2 pt-1">
+            <!-- Status tab -->
+            {% if localisation %}
+                {% include "localized_status_tab.html" %}
+            {% else %}
+                {% include "status_tab.html" %}
+            {% endif %}
 
-        <!-- Quick rolls -->
-        {% include "roll_tab.html" %}
+            <!-- Quick rolls -->
+            {% include "roll_tab.html" %}
 
-        <!-- Talents -->
-        {% include "talent_tab.html" %}
+            <!-- Talents -->
+            {% include "talent_tab.html" %}
 
-        <!-- Equipment -->
-        {% include "equipment_tab.html" %}
+            <!-- Equipment -->
+            {% include "equipment_tab.html" %}
 
-        {% if universe == med_fantasy %}
-            <!-- Magic -->
-            {% include "magic_tab.html" %}
+            {% if universe == med_fantasy %}
+                <!-- Magic -->
+                {% include "magic_tab.html" %}
 
-            <!-- Ki board -->
-            {% include "ki_tab.html" %}
-        {% elif universe == captain_voodoo %}
-            <!-- Magic -->
-            {% include "magic_tab.html" %}
-        {% endif %}
+                <!-- Ki board -->
+                {% include "ki_tab.html" %}
+            {% elif universe == captain_voodoo %}
+                <!-- Magic -->
+                {% include "magic_tab.html" %}
+            {% endif %}
 
-        <!-- Adventure Point Tracking -->
-        {% include "adventure_points.html" %}
+            <!-- Adventure Point Tracking -->
+            {% include "adventure_points.html" %}
+        </div>
     </div>
 
-    <div class="form-row row mt-3 ml-0 mr-2">
-        <button id="save-page" type="submit" class="btn btn-primary rounded col-12 pb-2 pt-2">
+    <div class="form-row row col-12 mt-3 m-0 p-0">
+        <button id="save-page" type="submit" class="btn btn-primary rounded col-12 px-0 mx-0">
             Sauvegarder
         </button>
     </div>
-    <div class="form-row row mb-1 ml-0 mr-0">
-        <div class="input-group col-sm-6">
+    <div class="form-row row col-12 mb-1 m-0 p-0">
+        <div class="input-group col-sm-6 mx-0 px-0">
             <div class="custom-file">
                 <input type="file" class="custom-file-input" id="import-page" accept="text/html">
                 <label class="custom-file-label" for="import-page">Importer une ancienne fiche</label>
             </div>
         </div>
-        <div class="input-group col-sm-6">
+        <div class="input-group col-sm-6 mx-0 px-0">
             <div class="custom-file">
                 <input type="file" class="custom-file-input" id="import-plugin" accept="text/html"
                        aria-describedby="import-plugin-desc">
@@ -174,7 +184,7 @@
     </div>
 
     <!-- Footer -->
-    <footer class="d-flex row mr-2">
+    <footer class="d-flex row col-12 mb-1 m-0 p-0">
         <div class="ml-auto ">
             <small>
                 Retrouvez le projet sur

@@ -29,5 +29,5 @@ input {
 
 /* Change thickness of bootstrap borders */
 .border-heavy {
-    border: 2px solid #dee2e6 !important;
+    border: 3px solid #dee2e6 !important;
 }

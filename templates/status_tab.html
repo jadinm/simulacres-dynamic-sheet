@@ -1,6 +1,6 @@
-<div id="status-tab" class="tab-pane fade show active row ml-5">
-    <div class="row justify-content-center mt-1">
-        <div class="col-lg-3 col-md-4 col-sm-6">
+<div id="status-tab" class="tab-pane fade show active justify-content-center">
+    <div class="row col-12 justify-content-center">
+        <div class="col-lg-3 col-md-4 col-sm-6 ml-1">
             <!-- HP, breath and psychic balance -->
             {% if version == V7 %}
                 <div class="row">
@@ -38,7 +38,7 @@
             <div class="row">
                 <label for="rest">Jours de repos</label>
             </div>
-            <div class="row">
+            <div class="row mb-md-0 mb-3">
                 <input id="rest" data-slider-id="rest-slider" type="text" data-slider-min="0"
                        data-slider-max="7"
                        data-slider-step="1" data-slider-value="0" class="input-slider"
@@ -47,7 +47,7 @@
         </div>
         <div class="col-xl-3 col-md-4 col-sm-6 ml-md-1">
             <!-- Protection summary -->
-            <div class="row">
+            <div class="row pl-1">
                 <label for="armor">Armure</label>
             </div>
             <div class="row mt-1 md-form form-sm m-0 input-with-pre-icon" style="width: 200px">

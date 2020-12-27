@@ -1,6 +1,6 @@
-<div id="ki-tab" class="tab-pane fade row my-1 container-fluid">
+<div id="ki-tab" class="tab-pane fade row container-fluid m-0 pt-2">
     <!-- Energy -->
-    <div class="row form-row mt-2 md-form p-0 m-0">
+    <div class="row col-12 form-row md-form p-0 m-0">
         <div class="col-md-3 input-with-pre-icon">
             <svg height="3em" width="2em" class="input-prefix">
                 <use xlink:href="#svg-ki"></use>
@@ -10,9 +10,9 @@
         </div>
     </div>
     <!-- Power levels -->
-    <div class="row mt-2 ml-1"><b>Niveaux de pouvoirs débloqués pour chaque talent de moine</b></div>
-    <div class="table-responsive-xl col-12">
-        <table class="table table-hover my-1">
+    <div class="row col-12 mt-2"><b>Niveaux de pouvoirs débloqués pour chaque talent de moine</b></div>
+    <div class="table-responsive-xl col-12 m-0 p-0">
+        <table class="table table-hover m-0 p-0">
             <thead>
             <tr>
                 <th scope="col" class="col-3" style="width: 30%; min-width: 300px">Nom</th>
@@ -22,12 +22,12 @@
             </thead>
             <tbody id="ki-table" class="sortable-list">
             <tr id="ki-x" hidden>
-                <td class="md-form my-0 py-0 align-middle row">
+                <td class="row col-12 md-form m-0 p-0 align-middle">
                     <label for="ki-x-name"></label>
                     <select class="show-tick form-control talent-select selectpicker" data-live-search="true"
                             id="ki-x-name" data-style="col-8 ml-5 align-middle">
                     </select>
-                    <i class="fas fa-arrows-alt prefix mt-2 ml-1" style="font-size: 1.5em;"></i>
+                    <i class="fas fa-arrows-alt prefix mt-3 ml-1" style="font-size: 1.5em;"></i>
                 </td>
                 <td class="md-form my-0 py-0 align-middle">
                     <input id="ki-x-level" class="ki-level form-control text-center"
@@ -43,7 +43,7 @@
             </tbody>
         </table>
     </div>
-    <div class="row ml-2 mr-1">
+    <div class="row col-12">
         <div class="col-lg-2 col-md-4 row">
             <div class="col-6 px-0 mx-0">
                 <button id="add-ki" class="btn btn-success btn-block">

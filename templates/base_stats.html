@@ -1,4 +1,4 @@
-<div class="row my-1">
+<div class="row my-1 mx-0 px-0 justify-content-center">
     {% if version == V7 %}
         {% set max_component = 7 %}
         {% set max_means = 5 %}
@@ -61,323 +61,337 @@
         {% endif %}
     {% endif %}
     <!-- Components and means -->
-    <div class="table-responsive-xl col-lg-6">
-        <table class="table table-hover my-1">
-            <thead>
-            <tr>
-                <th scope="col" class="align-middle">
-                    <div class="text-right">Moyens</div>
-                    Composantes
-                </th>
-                <th scope="col" class="align-middle md-form input-with-pre-icon">
-                    <div data-toggle="tooltip" data-placement="top" title="Perception">
-                        <svg height="3em" width="2em" class="input-prefix">
-                            <use xlink:href="#svg-perception"></use>
-                        </svg>
-                        <input class="form-control means text-center" id="perception" name="perception" type="number"
-                               value="1" min="1" max="{{ max_means }}">
-                    </div>
-                </th>
-                <th scope="col" class="align-middle md-form input-with-pre-icon">
-                    <div data-toggle="tooltip" data-placement="top" title="Action">
-                        <svg height="3em" width="2em" class="input-prefix">
-                            <use xlink:href="#svg-action"></use>
-                        </svg>
-                        <input class="form-control means text-center" id="action" name="action" type="number" value="1"
-                               min="1" max="{{ max_means }}">
-                    </div>
-                </th>
-                {% if matrix_4x4 %}
+    <div class="col-lg-6 my-1 mx-0 px-0">
+        <div class="table-responsive-xl card shadow-none border border-heavy rounded-lg m-0 p-0">
+            <table class="table table-hover m-0 p-0">
+                <thead>
+                <tr>
+                    <th scope="col" class="align-middle">
+                        <div class="text-right"><b>Moyens</b></div>
+                        <b>Composantes</b>
+                    </th>
                     <th scope="col" class="align-middle md-form input-with-pre-icon">
-                        <div data-toggle="tooltip" data-placement="top" title="Désir">
+                        <div data-toggle="tooltip" data-placement="top" title="Perception">
                             <svg height="3em" width="2em" class="input-prefix">
-                                <use xlink:href="#svg-desire"></use>
+                                <use xlink:href="#svg-perception"></use>
                             </svg>
-                            <input class="form-control means text-center" id="desire" name="desire" type="number"
+                            <input class="form-control means text-center" id="perception" name="perception"
+                                   type="number"
                                    value="1" min="1" max="{{ max_means }}">
                         </div>
                     </th>
-                {% endif %}
-                <th scope="col" class="align-middle md-form input-with-pre-icon">
-                    <div data-toggle="tooltip" data-placement="top" title="Résistance">
-                        <svg height="3em" width="2em" class="input-prefix">
-                            <use xlink:href="#svg-resistance"></use>
-                        </svg>
-                        <input class="form-control means text-center" id="resistance" name="resistance" type="number"
-                               value="1" min="1" max="{{ max_means }}">
-                    </div>
-                </th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <th scope="row" class="align-middle md-form input-with-pre-icon">
-                    <div data-toggle="tooltip" data-placement="top" title="Corps">
-                        <svg height="3em" width="2em" class="input-prefix">
-                            <use xlink:href="#svg-body"></use>
-                        </svg>
-                        <input class="form-control component text-center" id="body" name="body" type="number" value="3"
-                               min="3" max="{{ max_component }}">
-                    </div>
-                </th>
-                <td class="align-middle text-center" id="body-perception" data-toggle="tooltip" data-html="true"
-                    data-placement="right"
-                    title="{{ tooltip_body_perception }}"></td>
-                <td class="align-middle text-center" id="body-action" data-toggle="tooltip" data-html="true"
-                    data-placement="right"
-                    title="{{ tooltip_body_action }}"></td>
-                {% if matrix_4x4 %}
-                    <td class="align-middle text-center" id="body-desire" data-toggle="tooltip" data-html="true"
-                        data-placement="right"
-                        title="{{ tooltip_body_desire }}"></td>
-                {% endif %}
-                <td class="align-middle text-center" id="body-resistance" data-toggle="tooltip" data-html="true"
-                    data-placement="right"
-                    title="{{ tooltip_body_resistance }}"></td>
-            </tr>
-            {% if matrix_4x4 %}
-                <tr>
-                    <th scope="row" class="align-middle md-form input-with-pre-icon">
-                        <div data-toggle="tooltip" data-placement="top" title="Instincts">
+                    <th scope="col" class="align-middle md-form input-with-pre-icon">
+                        <div data-toggle="tooltip" data-placement="top" title="Action">
                             <svg height="3em" width="2em" class="input-prefix">
-                                <use xlink:href="#svg-instincts"></use>
+                                <use xlink:href="#svg-action"></use>
                             </svg>
-                            <input class="form-control component text-center" id="instincts" name="instincts"
-                                   type="number" value="3" min="3" max="{{ max_component }}">
+                            <input class="form-control means text-center" id="action" name="action" type="number"
+                                   value="1"
+                                   min="1" max="{{ max_means }}">
                         </div>
                     </th>
-                    <td class="align-middle text-center" id="instincts-perception" data-toggle="tooltip"
-                        data-html="true" data-placement="right"
-                        title="{{ tooltip_instincts_perception }}"></td>
-                    <td class="align-middle text-center" id="instincts-action" data-toggle="tooltip"
-                        data-html="true" data-placement="right"
-                        title="{{ tooltip_instincts_action }}"></td>
-                    <td class="align-middle text-center" id="instincts-desire" data-toggle="tooltip"
-                        data-html="true" data-placement="right"
-                        title="{{ tooltip_instincts_desire }}"></td>
-                    <td class="align-middle text-center" id="instincts-resistance" data-toggle="tooltip"
-                        data-html="true" data-placement="right"
-                        title="{{ tooltip_instincts_resistance }}"></td>
+                    {% if matrix_4x4 %}
+                        <th scope="col" class="align-middle md-form input-with-pre-icon">
+                            <div data-toggle="tooltip" data-placement="top" title="Désir">
+                                <svg height="3em" width="2em" class="input-prefix">
+                                    <use xlink:href="#svg-desire"></use>
+                                </svg>
+                                <input class="form-control means text-center" id="desire" name="desire" type="number"
+                                       value="1" min="1" max="{{ max_means }}">
+                            </div>
+                        </th>
+                    {% endif %}
+                    <th scope="col" class="align-middle md-form input-with-pre-icon">
+                        <div data-toggle="tooltip" data-placement="top" title="Résistance">
+                            <svg height="3em" width="2em" class="input-prefix">
+                                <use xlink:href="#svg-resistance"></use>
+                            </svg>
+                            <input class="form-control means text-center" id="resistance" name="resistance"
+                                   type="number"
+                                   value="1" min="1" max="{{ max_means }}">
+                        </div>
+                    </th>
                 </tr>
-            {% endif %}
-            <tr>
-                <th scope="row" class="align-middle md-form input-with-pre-icon">
-                    <div data-toggle="tooltip" data-placement="top" title="Cœur">
-                        <svg height="3em" width="2em" class="input-prefix">
-                            <use xlink:href="#svg-heart"></use>
-                        </svg>
-                        <input class="form-control component text-center" id="heart" name="heart" type="number"
-                               value="3" min="3" max="{{ max_component }}">
-                    </div>
-                </th>
-                <td class="align-middle text-center" id="heart-perception" data-toggle="tooltip" data-html="true"
-                    data-placement="right" title="{{ tooltip_heart_perception }}"></td>
-                <td class="align-middle text-center" id="heart-action" data-toggle="tooltip" data-html="true"
-                    data-placement="right" title="{{ tooltip_heart_action }}"></td>
-                {% if matrix_4x4 %}
-                    <td class="align-middle text-center" id="heart-desire" data-toggle="tooltip" data-html="true"
+                </thead>
+                <tbody>
+                <tr>
+                    <th scope="row" class="align-middle md-form input-with-pre-icon">
+                        <div data-toggle="tooltip" data-placement="top" title="Corps">
+                            <svg height="3em" width="2em" class="input-prefix">
+                                <use xlink:href="#svg-body"></use>
+                            </svg>
+                            <input class="form-control component text-center" id="body" name="body" type="number"
+                                   value="3"
+                                   min="3" max="{{ max_component }}">
+                        </div>
+                    </th>
+                    <td class="align-middle text-center" id="body-perception" data-toggle="tooltip" data-html="true"
                         data-placement="right"
-                        title="{{ tooltip_heart_desire }}"></td>
-                {% endif %}
-                <td class="align-middle text-center" id="heart-resistance" data-toggle="tooltip" data-html="true"
-                    data-placement="right" title="{{ tooltip_heart_resistance }}"></td>
-            </tr>
-            <tr>
-                <th scope="row" class="align-middle md-form input-with-pre-icon">
-                    <div data-toggle="tooltip" data-placement="top" title="Esprit">
-                        <svg height="3em" width="2em" class="input-prefix">
-                            <use xlink:href="#svg-mind"></use>
-                        </svg>
-                        <input class="form-control component text-center" id="mind" name="mind" type="number" value="3"
-                               min="3" max="{{ max_component }}">
-                    </div>
-                </th>
-                <td class="align-middle text-center" id="mind-perception" data-toggle="tooltip" data-html="true"
-                    data-placement="right" title="{{ tooltip_mind_perception }}"></td>
-                <td class="align-middle text-center" id="mind-action" data-toggle="tooltip" data-html="true"
-                    data-placement="right" title="{{ tooltip_mind_action }}"></td>
+                        title="{{ tooltip_body_perception }}"></td>
+                    <td class="align-middle text-center" id="body-action" data-toggle="tooltip" data-html="true"
+                        data-placement="right"
+                        title="{{ tooltip_body_action }}"></td>
+                    {% if matrix_4x4 %}
+                        <td class="align-middle text-center" id="body-desire" data-toggle="tooltip" data-html="true"
+                            data-placement="right"
+                            title="{{ tooltip_body_desire }}"></td>
+                    {% endif %}
+                    <td class="align-middle text-center" id="body-resistance" data-toggle="tooltip" data-html="true"
+                        data-placement="right"
+                        title="{{ tooltip_body_resistance }}"></td>
+                </tr>
                 {% if matrix_4x4 %}
-                    <td class="align-middle text-center" id="mind-desire" data-toggle="tooltip" data-html="true"
-                        data-placement="right" title="{{ tooltip_mind_desire }}"></td>
+                    <tr>
+                        <th scope="row" class="align-middle md-form input-with-pre-icon">
+                            <div data-toggle="tooltip" data-placement="top" title="Instincts">
+                                <svg height="3em" width="2em" class="input-prefix">
+                                    <use xlink:href="#svg-instincts"></use>
+                                </svg>
+                                <input class="form-control component text-center" id="instincts" name="instincts"
+                                       type="number" value="3" min="3" max="{{ max_component }}">
+                            </div>
+                        </th>
+                        <td class="align-middle text-center" id="instincts-perception" data-toggle="tooltip"
+                            data-html="true" data-placement="right"
+                            title="{{ tooltip_instincts_perception }}"></td>
+                        <td class="align-middle text-center" id="instincts-action" data-toggle="tooltip"
+                            data-html="true" data-placement="right"
+                            title="{{ tooltip_instincts_action }}"></td>
+                        <td class="align-middle text-center" id="instincts-desire" data-toggle="tooltip"
+                            data-html="true" data-placement="right"
+                            title="{{ tooltip_instincts_desire }}"></td>
+                        <td class="align-middle text-center" id="instincts-resistance" data-toggle="tooltip"
+                            data-html="true" data-placement="right"
+                            title="{{ tooltip_instincts_resistance }}"></td>
+                    </tr>
                 {% endif %}
-                <td class="align-middle text-center" id="mind-resistance" data-toggle="tooltip" data-html="true"
-                    data-placement="right" title="{{ tooltip_mind_resistance }}"></td>
-            </tr>
-            </tbody>
-        </table>
+                <tr>
+                    <th scope="row" class="align-middle md-form input-with-pre-icon">
+                        <div data-toggle="tooltip" data-placement="top" title="Cœur">
+                            <svg height="3em" width="2em" class="input-prefix">
+                                <use xlink:href="#svg-heart"></use>
+                            </svg>
+                            <input class="form-control component text-center" id="heart" name="heart" type="number"
+                                   value="3" min="3" max="{{ max_component }}">
+                        </div>
+                    </th>
+                    <td class="align-middle text-center" id="heart-perception" data-toggle="tooltip" data-html="true"
+                        data-placement="right" title="{{ tooltip_heart_perception }}"></td>
+                    <td class="align-middle text-center" id="heart-action" data-toggle="tooltip" data-html="true"
+                        data-placement="right" title="{{ tooltip_heart_action }}"></td>
+                    {% if matrix_4x4 %}
+                        <td class="align-middle text-center" id="heart-desire" data-toggle="tooltip" data-html="true"
+                            data-placement="right"
+                            title="{{ tooltip_heart_desire }}"></td>
+                    {% endif %}
+                    <td class="align-middle text-center" id="heart-resistance" data-toggle="tooltip" data-html="true"
+                        data-placement="right" title="{{ tooltip_heart_resistance }}"></td>
+                </tr>
+                <tr>
+                    <th scope="row" class="align-middle md-form input-with-pre-icon">
+                        <div data-toggle="tooltip" data-placement="top" title="Esprit">
+                            <svg height="3em" width="2em" class="input-prefix">
+                                <use xlink:href="#svg-mind"></use>
+                            </svg>
+                            <input class="form-control component text-center" id="mind" name="mind" type="number"
+                                   value="3"
+                                   min="3" max="{{ max_component }}">
+                        </div>
+                    </th>
+                    <td class="align-middle text-center" id="mind-perception" data-toggle="tooltip" data-html="true"
+                        data-placement="right" title="{{ tooltip_mind_perception }}"></td>
+                    <td class="align-middle text-center" id="mind-action" data-toggle="tooltip" data-html="true"
+                        data-placement="right" title="{{ tooltip_mind_action }}"></td>
+                    {% if matrix_4x4 %}
+                        <td class="align-middle text-center" id="mind-desire" data-toggle="tooltip" data-html="true"
+                            data-placement="right" title="{{ tooltip_mind_desire }}"></td>
+                    {% endif %}
+                    <td class="align-middle text-center" id="mind-resistance" data-toggle="tooltip" data-html="true"
+                        data-placement="right" title="{{ tooltip_mind_resistance }}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <!-- Realms -->
-    <div class="col-lg-2 col-md-3 col-sm-4 mt-4">
-        <div class="row m-0">
+    <div class="col-lg-2 col-md-3 col-sm-4 mt-1 mx-0">
+        <div class="card shadow-none border border-heavy rounded-lg px-1 py-2">
+            <div class="row ml-2 m-0">
+                {% if version == V7 %}
+                    <b>Règnes</b>
+                {% else %}
+                    <b>Cibles</b>
+                {% endif %}
+            </div>
             {% if version == V7 %}
-                <b>Règnes</b>
+                <div class="row m-0">
+                    <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
+                         data-placement="right" title="Minéral">
+                        <svg height="3em" width="2em" class="input-prefix">
+                            <use xlink:href="#svg-mineral"></use>
+                        </svg>
+                        <label for="mineral" hidden></label>
+                        <input class="form-control realm text-center" id="mineral" name="mineral" type="number"
+                               value="0"
+                               min="{{ min_realm }}" max="{{ max_realm }}">
+                    </div>
+                </div>
+                <div class="row m-0">
+                    <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
+                         data-placement="right" title="Végétal">
+                        <svg height="3em" width="2em" class="input-prefix">
+                            <use xlink:href="#svg-vegetal"></use>
+                        </svg>
+                        <label for="vegetal" hidden></label>
+                        <input class="form-control realm text-center" id="vegetal" name="vegetal" type="number"
+                               value="0"
+                               min="{{ min_realm }}" max="{{ max_realm }}">
+                    </div>
+                </div>
+                <div class="row m-0">
+                    <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
+                         data-placement="right" title="Animal">
+                        <svg height="3em" width="2em" class="input-prefix">
+                            <use xlink:href="#svg-animal"></use>
+                        </svg>
+                        <label for="animal" hidden></label>
+                        <input class="form-control realm text-center" id="animal" name="animal" type="number" value="0"
+                               min="{{ min_realm }}" max="{{ max_realm }}">
+                    </div>
+                </div>
             {% else %}
-                <b>Cibles</b>
+                <div class="row m-0">
+                    <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
+                         data-placement="right" title="Nature">
+                        <svg height="3em" width="2em" class="input-prefix">
+                            <use xlink:href="#svg-vegetal"></use>
+                        </svg>
+                        <label for="nature" hidden></label>
+                        <input class="form-control realm text-center" id="nature" name="nature" type="number" value="0"
+                               min="{{ min_realm }}" max="{{ max_realm }}">
+                    </div>
+                </div>
+            {% endif %}
+            <div class="row m-0">
+                <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
+                     data-placement="right" title="Humanoïde">
+                    <svg height="3em" width="2em" class="input-prefix">
+                        <use xlink:href="#svg-humanoid"></use>
+                    </svg>
+                    <label for="humanoid" hidden></label>
+                    <input class="form-control realm text-center" id="humanoid" name="humanoid" type="number" value="0"
+                           min="{{ min_realm }}" max="{{ max_realm }}">
+                </div>
+            </div>
+            {% if version == V7 %}
+                <div class="row m-0">
+                    <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
+                         data-placement="right" title="Mécanique">
+                        <svg height="3em" width="2em" class="input-prefix">
+                            <use xlink:href="#svg-mechanical"></use>
+                        </svg>
+                        <label for="mechanical" hidden></label>
+                        <input class="form-control realm text-center" id="mechanical" name="mechanic" type="number"
+                               value="0" min="{{ min_realm }}" max="{{ max_realm }}">
+                    </div>
+                </div>
+                <div class="row m-0">
+                    <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
+                         data-placement="right" title="Néant">
+                        <svg height="3em" width="2em" class="input-prefix">
+                            <use xlink:href="#svg-void"></use>
+                        </svg>
+                        <label for="void" hidden></label>
+                        <input class="form-control realm text-center" id="void" name="void" type="number" value="-1"
+                               min="-1" max="-1" disabled>
+                    </div>
+                </div>
+            {% else %}
+                <div class="row m-0">
+                    <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
+                         data-placement="right" title="Artificiel">
+                        <svg height="3em" width="2em" class="input-prefix">
+                            <use xlink:href="#svg-mechanical"></use>
+                        </svg>
+                        <label for="artificial" hidden></label>
+                        <input class="form-control realm text-center" id="artificial" name="artificial" type="number"
+                               value="0" min="{{ min_realm }}" max="{{ max_realm }}">
+                    </div>
+                </div>
+                <div class="row m-0">
+                    <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
+                         data-placement="right" title="Surnaturel">
+                        <svg height="3em" width="2em" class="input-prefix">
+                            <use xlink:href="#svg-supernatural"></use>
+                        </svg>
+                        <label for="supernatural" hidden></label>
+                        <input class="form-control realm text-center" id="supernatural" name="supernatural"
+                               type="number"
+                               value="0" min="{{ min_realm }}" max="{{ max_realm }}">
+                    </div>
+                </div>
             {% endif %}
         </div>
-        {% if version == V7 %}
-            <div class="row m-0">
-                <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
-                     data-placement="right" title="Minéral">
-                    <svg height="3em" width="2em" class="input-prefix">
-                        <use xlink:href="#svg-mineral"></use>
-                    </svg>
-                    <label for="mineral" hidden></label>
-                    <input class="form-control realm text-center" id="mineral" name="mineral" type="number" value="0"
-                           min="{{ min_realm }}" max="{{ max_realm }}">
-                </div>
-            </div>
-            <div class="row m-0">
-                <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
-                     data-placement="right" title="Végétal">
-                    <svg height="3em" width="2em" class="input-prefix">
-                        <use xlink:href="#svg-vegetal"></use>
-                    </svg>
-                    <label for="vegetal" hidden></label>
-                    <input class="form-control realm text-center" id="vegetal" name="vegetal" type="number" value="0"
-                           min="{{ min_realm }}" max="{{ max_realm }}">
-                </div>
-            </div>
-            <div class="row m-0">
-                <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
-                     data-placement="right" title="Animal">
-                    <svg height="3em" width="2em" class="input-prefix">
-                        <use xlink:href="#svg-animal"></use>
-                    </svg>
-                    <label for="animal" hidden></label>
-                    <input class="form-control realm text-center" id="animal" name="animal" type="number" value="0"
-                           min="{{ min_realm }}" max="{{ max_realm }}">
-                </div>
-            </div>
-        {% else %}
-            <div class="row m-0">
-                <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
-                     data-placement="right" title="Nature">
-                    <svg height="3em" width="2em" class="input-prefix">
-                        <use xlink:href="#svg-vegetal"></use>
-                    </svg>
-                    <label for="nature" hidden></label>
-                    <input class="form-control realm text-center" id="nature" name="nature" type="number" value="0"
-                           min="{{ min_realm }}" max="{{ max_realm }}">
-                </div>
-            </div>
-        {% endif %}
-        <div class="row m-0">
-            <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
-                 data-placement="right" title="Humanoïde">
-                <svg height="3em" width="2em" class="input-prefix">
-                    <use xlink:href="#svg-humanoid"></use>
-                </svg>
-                <label for="humanoid" hidden></label>
-                <input class="form-control realm text-center" id="humanoid" name="humanoid" type="number" value="0"
-                       min="{{ min_realm }}" max="{{ max_realm }}">
-            </div>
-        </div>
-        {% if version == V7 %}
-            <div class="row m-0">
-                <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
-                     data-placement="right" title="Mécanique">
-                    <svg height="3em" width="2em" class="input-prefix">
-                        <use xlink:href="#svg-mechanical"></use>
-                    </svg>
-                    <label for="mechanical" hidden></label>
-                    <input class="form-control realm text-center" id="mechanical" name="mechanic" type="number"
-                           value="0" min="{{ min_realm }}" max="{{ max_realm }}">
-                </div>
-            </div>
-            <div class="row m-0">
-                <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
-                     data-placement="right" title="Néant">
-                    <svg height="3em" width="2em" class="input-prefix">
-                        <use xlink:href="#svg-void"></use>
-                    </svg>
-                    <label for="void" hidden></label>
-                    <input class="form-control realm text-center" id="void" name="void" type="number" value="-1"
-                           min="-1" max="-1" disabled>
-                </div>
-            </div>
-        {% else %}
-            <div class="row m-0">
-                <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
-                     data-placement="right" title="Artificiel">
-                    <svg height="3em" width="2em" class="input-prefix">
-                        <use xlink:href="#svg-mechanical"></use>
-                    </svg>
-                    <label for="artificial" hidden></label>
-                    <input class="form-control realm text-center" id="artificial" name="artificial" type="number"
-                           value="0" min="{{ min_realm }}" max="{{ max_realm }}">
-                </div>
-            </div>
-            <div class="row m-0">
-                <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
-                     data-placement="right" title="Surnaturel">
-                    <svg height="3em" width="2em" class="input-prefix">
-                        <use xlink:href="#svg-supernatural"></use>
-                    </svg>
-                    <label for="supernatural" hidden></label>
-                    <input class="form-control realm text-center" id="supernatural" name="supernatural" type="number"
-                           value="0" min="{{ min_realm }}" max="{{ max_realm }}">
-                </div>
-            </div>
-        {% endif %}
     </div>
 
     <!-- Energies -->
-    <div class="col-lg-2 col-md-3 col-sm-4 mt-4">
-        <div class="row m-0"><b>Énergies</b></div>
-        <div class="row m-0">
-            <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
-                 data-placement="left" title="Puissance">
-                <svg height="3em" width="2em" class="input-prefix">
-                    <use xlink:href="#svg-power"></use>
-                </svg>
-                <label for="power" hidden></label>
-                <input class="form-control energy text-center" id="power" name="power" type="number" value="0"
-                       min="0" max="3">
-            </div>
-        </div>
-        <div class="row m-0">
-            <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
-                 data-placement="left" title="Rapidité">
-                <svg height="3em" width="2em" class="input-prefix">
-                    <use xlink:href="#svg-speed"></use>
-                </svg>
-                <label for="speed" hidden></label>
-                <input class="form-control energy text-center" id="speed" name="speed" type="number" value="0"
-                       min="0" max="3">
-            </div>
-        </div>
-        <div class="row m-0">
-            <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
-                 data-placement="left" title="Précision">
-                <svg height="3em" width="2em" class="input-prefix">
-                    <use xlink:href="#svg-precision"></use>
-                </svg>
-                <label for="precision" hidden></label>
-                <input class="form-control energy text-center" id="precision" name="precision" type="number"
-                       value="0" min="0" max="3">
-            </div>
-        </div>
-        {% if version == V8 %}
+    <div class="col-lg-2 col-md-3 col-sm-4 mt-1 px-0 mx-0">
+        <div class="card shadow-none border border-heavy rounded-lg px-1 py-2 mx-0">
+            <div class="row ml-2 m-0"><b>Énergies</b></div>
             <div class="row m-0">
                 <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
-                     data-placement="left" title="Héroïsme">
+                     data-placement="left" title="Puissance">
                     <svg height="3em" width="2em" class="input-prefix">
-                        <use xlink:href="#svg-heroism"></use>
+                        <use xlink:href="#svg-power"></use>
                     </svg>
-                    <label for="heroism" hidden></label>
-                    <input class="form-control special-energy text-center" id="heroism" name="heroism" type="number"
+                    <label for="power" hidden></label>
+                    <input class="form-control energy text-center" id="power" name="power" type="number" value="0"
+                           min="0" max="3">
+                </div>
+            </div>
+            <div class="row m-0">
+                <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
+                     data-placement="left" title="Rapidité">
+                    <svg height="3em" width="2em" class="input-prefix">
+                        <use xlink:href="#svg-speed"></use>
+                    </svg>
+                    <label for="speed" hidden></label>
+                    <input class="form-control energy text-center" id="speed" name="speed" type="number" value="0"
+                           min="0" max="3">
+                </div>
+            </div>
+            <div class="row m-0">
+                <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
+                     data-placement="left" title="Précision">
+                    <svg height="3em" width="2em" class="input-prefix">
+                        <use xlink:href="#svg-precision"></use>
+                    </svg>
+                    <label for="precision" hidden></label>
+                    <input class="form-control energy text-center" id="precision" name="precision" type="number"
                            value="0" min="0" max="3">
                 </div>
             </div>
-        {% endif %}
+            {% if version == V8 %}
+                <div class="row m-0">
+                    <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
+                         data-placement="left" title="Héroïsme">
+                        <svg height="3em" width="2em" class="input-prefix">
+                            <use xlink:href="#svg-heroism"></use>
+                        </svg>
+                        <label for="heroism" hidden></label>
+                        <input class="form-control special-energy text-center" id="heroism" name="heroism" type="number"
+                               value="0" min="0" max="3">
+                    </div>
+                </div>
+            {% endif %}
+        </div>
     </div>
-    <div class="col-lg-2 col-md-3 col-sm-4 mt-4">
-        <div class="row mt-3 justify-content-center p-2">
+    <div class="col-lg-2 col-md-3 col-sm-4">
+        <div class="row justify-content-center mt-1 px-2 pb-2">
             <img id="character-image" class="img-responsive rounded-lg" style="object-fit: cover; width: 100%"/>
         </div>
-        <div class="row justify-content-center p-2">
+        <div class="row justify-content-center px-2 pb-2">
             <div class="input-group">
                 <div class="custom-file">
                     <input type="file" class="custom-file-input" id="import-image" accept="image/*"
