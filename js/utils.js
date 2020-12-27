@@ -41,7 +41,21 @@ function is_dark_mode() {
 function enable_dark_mode() {
     const fixes = {
         invert: [],
-        css: "#svg-simulacres path {fill: ${black} !important;}",
+        css: "#svg-simulacres path {\n" +
+            "    fill: ${black} !important;\n" +
+            "}\n" +
+            ".bs-tooltip-auto[x-placement^=bottom] .arrow::before, .bs-tooltip-bottom .arrow::before {\n" +
+            "    border-bottom-color: ${white} !important;\n" +
+            "}\n" +
+            ".bs-tooltip-auto[x-placement^=top] .arrow::before, .bs-tooltip-top .arrow::before {\n" +
+            "    border-top-color: ${white} !important;\n" +
+            "}\n" +
+            ".bs-tooltip-auto[x-placement^=left] .arrow::before, .bs-tooltip-left .arrow::before {\n" +
+            "    border-left-color: ${white} !important;\n" +
+            "}\n" +
+            ".bs-tooltip-auto[x-placement^=right] .arrow::before, .bs-tooltip-right .arrow::before {\n" +
+            "    border-right-color: ${white} !important;\n" +
+            "}",
         ignoreInlineStyle: [],
         ignoreImageAnalysis: []
     }
