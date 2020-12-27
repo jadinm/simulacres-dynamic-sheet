@@ -516,8 +516,10 @@ function slider_value_changed(input) {
 $(_ => {
     activate_slider($("#roll-dialog-modifier")[0], slider_value_changed, _ => void 0,
         {tooltip: "always"})
-    activate_slider($("#roll-dialog-effect-modifier")[0], slider_value_changed, _ => void 0,
-        {tooltip: "always"})
+    const effect_modifier = $("#roll-dialog-effect-modifier")
+    if (effect_modifier.length > 0)
+        activate_slider(effect_modifier[0], slider_value_changed, _ => void 0,
+            {tooltip: "always"})
 })
 
 /* Quick roll button */
