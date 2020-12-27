@@ -409,11 +409,8 @@ function trigger_roll(max_value = old_max_value, talent_level = old_talent_level
     const select_effect_modifier = $("#roll-dialog-effect-modifier")
 
     // Hide everything and show it afterwards if needed
-    $(select_modifier.slider("getElement")).hide()
-    $(select_effect_modifier.slider("getElement")).hide()
-    $(".roll-dialog-effect-hide").addClass("d-none")
-    $("#roll-dialog-modifier-label").addClass("d-none")
-    $("#roll-dialog-effect-modifier-label").addClass("d-none")
+    const roll_effect_divs = $(".roll-dialog-effect-hide")
+    roll_effect_divs.addClass("d-none")
 
     if (max_value) {
         const result = $("#roll-dialog-result")
@@ -451,12 +448,8 @@ function trigger_roll(max_value = old_max_value, talent_level = old_talent_level
         select_effect_modifier.slider("setValue", 0)
         select_modifier.slider("refresh", {useCurrentValue: true})
         select_effect_modifier.slider("refresh", {useCurrentValue: true})
-        $(select_modifier.slider("getElement")).show()
-        if (is_v7)
-            $(select_effect_modifier.slider("getElement")).show()
 
-        const effect_divs = $(".roll-dialog-effect-hide")
-        effect_divs.removeClass("d-none")
+        roll_effect_divs.removeClass("d-none")
 
         if (is_v7) {
             // Show the actual effect instead of [A] or [B+2]
@@ -478,9 +471,6 @@ function trigger_roll(max_value = old_max_value, talent_level = old_talent_level
         $("#roll-dialog-effect").html(effect.replaceAll(effect_margin_regex,
             "$1<span class='roll-dialog-margin'>" + margin + "</span>$3"))
 
-        $("#roll-dialog-modifier-label").removeClass("d-none")
-        if (is_v7)
-            $("#roll-dialog-effect-modifier-label").removeClass("d-none")
     } else {
         $("#roll-dialog-result-label").html("Résultat du jet de 2d6 = ")
         $("#roll-dialog-result").html(dice_value)

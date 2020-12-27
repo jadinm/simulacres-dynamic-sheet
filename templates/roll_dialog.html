@@ -17,42 +17,46 @@
                             <span id="roll-dialog-result-label"></span><span id="roll-dialog-result"></span>
                         </div>
                     </div>
-                    <div id="roll-dialog-details"></div>
-                    <div class="row mx-1">
+                    <div id="roll-dialog-details" class="roll-dialog-effect-hide"></div>
+                    <div class="row mx-1 roll-dialog-effect-hide">
                         <!-- Warn user about current malus here -->
                         <span id="roll-dialog-penalties" style="white-space: pre-line;"></span>
                     </div>
-                    <div class="row mx-1">
+                    <div class="row mx-1 roll-dialog-effect-hide">
                         <label id="roll-dialog-modifier-label" for="roll-dialog-modifier">
                             Modificateur à la MR (ex. énergies investies)&nbsp;
                         </label>
                     </div>
-                    <div class="row mx-1 mb-5">
+                    <div class="row mx-1 mb-5 roll-dialog-effect-hide">
                         <input id="roll-dialog-modifier" data-slider-id="roll-dialog-modifier-slider" type="text"
                                data-slider-min="-9" data-slider-max="9" data-slider-step="1" data-slider-value="0"
                                class="input-slider" data-slider-tooltip-position="bottom"/>
                     </div>
-                    <div class="row mx-1">
-                        <label id="roll-dialog-effect-modifier-label" for="roll-dialog-effect-modifier">
-                            Modificateur aux dés d'effet (ex. armure cible)&nbsp;
-                        </label>
-                    </div>
-                    <div class="row mx-1">
-                        <input id="roll-dialog-effect-modifier" data-slider-id="roll-dialog-effect-modifier-slider"
-                               type="text" data-slider-min="-9" data-slider-max="9" data-slider-step="1"
-                               data-slider-value="0" class="input-slider" data-slider-tooltip-position="bottom"/>
-                    </div>
+                    {% if version == V7 %}
+                        <div class="row mx-1 roll-dialog-effect-hide">
+                            <label id="roll-dialog-effect-modifier-label" for="roll-dialog-effect-modifier">
+                                Modificateur aux dés d'effet (ex. armure cible)&nbsp;
+                            </label>
+                        </div>
+                        <div class="row mx-1 roll-dialog-effect-hide">
+                            <input id="roll-dialog-effect-modifier" data-slider-id="roll-dialog-effect-modifier-slider"
+                                   type="text" data-slider-min="-9" data-slider-max="9" data-slider-step="1"
+                                   data-slider-value="0" class="input-slider" data-slider-tooltip-position="bottom"/>
+                        </div>
+                    {% endif %}
                     <hr class="roll-dialog-effect-hide"/>
                     <div class="roll-dialog-effect-hide row mx-1">Effet:</div>
                     <div id="roll-dialog-effect" class="row mx-1 roll-dialog-effect-hide"
                          style="white-space: pre-line;"></div>
                     <hr/>
-                    <div class="row md-form mx-1 d-none">
-                        <label for="roll-dialog-invested-precision">
-                            Précision utilisée pour augmenter la chance de succès critique
-                        </label>
-                        <input class="special-energy form-control" id="roll-dialog-invested-precision"
-                               type="number" value="0" min="0" max="0">
+                    <div class="m-0 p-0 roll-dialog-effect-hide">
+                        <div class="row md-form mx-1 d-none">
+                            <label for="roll-dialog-invested-precision">
+                                Précision utilisée pour augmenter la chance de succès critique
+                            </label>
+                            <input class="special-energy form-control" id="roll-dialog-invested-precision"
+                                   type="number" value="0" min="0" max="0">
+                        </div>
                     </div>
                     <div class="row mx-1">
                         Le jet nécessite parfois de lancer un autre dé pour localiser l'effet ou
@@ -101,8 +105,7 @@
                                         6: Une des jambes au contact* et la jambe gauche à distance
 
                                         Sur un 6, au contact, il faut relancer 1d6. Si le résultat est pair, il s'agit
-                                        de la
-                                        droite et sinon la gauche.
+                                        de la droite et sinon la gauche.
                                     </div>
                                 </div>
                                 {% set active = "" %}
