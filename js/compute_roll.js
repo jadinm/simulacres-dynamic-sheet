@@ -491,12 +491,11 @@ function trigger_roll(max_value = old_max_value, talent_level = old_talent_level
 function slider_value_changed(input) {
     return modifier => {
         const result_span = $("#roll-dialog-result")
-        const result = parseInt(result_span[0].getAttribute("value"))
-        let margin = result + modifier
-        if (critical_failure)
-            margin = Math.min(0, margin)
+        let margin = parseInt(result_span[0].getAttribute("value"))
 
         if (input.id === "roll-dialog-modifier") { // Modify the MR only for MR modifier
+            if (!critical_failure)
+                margin += modifier
             result_span.html(margin)
             // Toggle failure or success
             set_result_label(margin)
@@ -506,6 +505,8 @@ function slider_value_changed(input) {
             // Replace DSS and DES in effect
             $(".roll-dialog-dss").html(compute_dss(margin))
             $(".roll-dialog-des").html(compute_des(margin))
+        } else {
+            margin = parseInt(result_span.text())
         }
 
         // Update with scaled effect in the text
@@ -514,7 +515,8 @@ function slider_value_changed(input) {
             const column = elem.getAttribute("column")
             let column_modifier = elem.getAttribute("modifier")
             column_modifier = column_modifier.length > 0 ? parseInt(column_modifier) : 0
-            const effect_value = (margin > 0) ? compute_effect(effect_dices + margin, column, column_modifier) : 0
+            const effect_value = (margin > 0) ?
+                compute_effect(effect_dices + margin + modifier, column, column_modifier) : 0
             $(elem).html(effect_value)
         })
         return modifier
