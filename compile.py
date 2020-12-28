@@ -4,7 +4,6 @@ import logging
 import mimetypes
 import os
 import re
-from pathlib import Path
 
 from jinja2 import Environment, PackageLoader, select_autoescape, Markup
 
@@ -40,7 +39,7 @@ def include_static(name):
             logging.warning("Path '{}' does not exists".format(path))
             return ""
         logging.debug("Replacing '{}' by its content found at '{}'".format(match.group(0), path))
-        mime, encoding = mimetypes.guess_type(Path(path), False)
+        mime, encoding = mimetypes.guess_type(path, False)
         with open(path, "rb") as local_file:
             return "url(data:{}{};base64,{})" \
                 .format(mime, ";charset={}".format(encoding) if encoding is not None else "",
