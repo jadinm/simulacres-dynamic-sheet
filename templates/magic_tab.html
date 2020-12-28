@@ -460,16 +460,16 @@
                                     </svg>
                                 </label>
                             </div>
-                            <div class="custom-control custom-radio custom-control-inline">
-                                <input type="radio" class="custom-control-input spell-formula-elem"
-                                       id="spell-x-mechanical" name="spell-x-realm">
-                                <label class="custom-control-label" for="spell-x-mechanical">
-                                    <svg height="1em" width="1em" class="input-prefix">
-                                        <use xlink:href="#svg-mechanical"></use>
-                                    </svg>
-                                </label>
-                            </div>
                             {% if version == V7 %}
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" class="custom-control-input spell-formula-elem"
+                                           id="spell-x-mechanical" name="spell-x-realm">
+                                    <label class="custom-control-label" for="spell-x-mechanical">
+                                        <svg height="1em" width="1em" class="input-prefix">
+                                            <use xlink:href="#svg-mechanical"></use>
+                                        </svg>
+                                    </label>
+                                </div>
                                 <div class="custom-control custom-radio custom-control-inline">
                                     <input type="radio" class="custom-control-input spell-formula-elem"
                                            id="spell-x-void" name="spell-x-realm">
@@ -480,6 +480,15 @@
                                     </label>
                                 </div>
                             {% else %}
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" class="custom-control-input spell-formula-elem"
+                                           id="spell-x-artificial" name="spell-x-realm">
+                                    <label class="custom-control-label" for="spell-x-artificial">
+                                        <svg height="1em" width="1em" class="input-prefix">
+                                            <use xlink:href="#svg-mechanical"></use>
+                                        </svg>
+                                    </label>
+                                </div>
                                 <div class="custom-control custom-radio custom-control-inline">
                                     <input type="radio" class="custom-control-input spell-formula-elem"
                                            id="spell-x-supernatural" name="spell-x-realm">

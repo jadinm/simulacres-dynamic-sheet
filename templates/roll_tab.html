@@ -151,16 +151,16 @@
                                 </svg>
                             </label>
                         </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input roll-formula-elem"
-                                   id="roll-x-mechanical" name="roll-x-realm">
-                            <label class="custom-control-label" for="roll-x-mechanical">
-                                <svg height="1em" width="1em" class="input-prefix">
-                                    <use xlink:href="#svg-mechanical"></use>
-                                </svg>
-                            </label>
-                        </div>
                         {% if version == V7 %}
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" class="custom-control-input roll-formula-elem"
+                                       id="roll-x-mechanical" name="roll-x-realm">
+                                <label class="custom-control-label" for="roll-x-mechanical">
+                                    <svg height="1em" width="1em" class="input-prefix">
+                                        <use xlink:href="#svg-mechanical"></use>
+                                    </svg>
+                                </label>
+                            </div>
                             <div class="custom-control custom-radio custom-control-inline">
                                 <input type="radio" class="custom-control-input roll-formula-elem"
                                        id="roll-x-void" name="roll-x-realm">
@@ -171,6 +171,15 @@
                                 </label>
                             </div>
                         {% else %}
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" class="custom-control-input roll-formula-elem"
+                                       id="roll-x-artificial" name="roll-x-realm">
+                                <label class="custom-control-label" for="roll-x-artificial">
+                                    <svg height="1em" width="1em" class="input-prefix">
+                                        <use xlink:href="#svg-mechanical"></use>
+                                    </svg>
+                                </label>
+                            </div>
                             <div class="custom-control custom-radio custom-control-inline">
                                 <input type="radio" class="custom-control-input roll-formula-elem"
                                        id="roll-x-supernatural" name="roll-x-realm">
