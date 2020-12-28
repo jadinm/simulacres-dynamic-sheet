@@ -18,6 +18,10 @@ $("select.talent-select").each((i, select) => {
     $(select).parents('.bootstrap-select').first().replaceWith($(select))
 })
 
+/* Remove existing summernote */
+
+$(".note-editor.note-frame").remove()
+
 /* Update field value attributes as the user writes so that it will be saved in the HTML */
 
 function add_save_to_dom_listeners(base = $(document)) {
@@ -144,6 +148,18 @@ function import_data(src_html, dst_html) {
         }
     })
 
+    // Update all text areas
+    src_html.find("textarea.summernote").each((i, old_input) => {
+        if (old_input.id && old_input.id.length > 0) {
+            const old_input_sel = "#" + old_input.id
+            let new_input = dst_html.find(old_input_sel)
+            new_input.val(src_html.find(old_input).val())
+
+            // Update associated summernote
+            new_input.summernote("code", new_input.val())
+        }
+    })
+
     // Update all list selections of talents
     dst_html.find("select.talent-select").each((i, elem) => {
         update_talent_select(dst_html.find(elem))
@@ -188,8 +204,10 @@ function import_data(src_html, dst_html) {
 
     // Check correct radio buttons
     src_html.find("input:checked").each((i, old_input) => {
-        const new_input = dst_html.find("#" + old_input.id)
-        new_input.click().trigger("click")
+        if (old_input.id && old_input.id.length > 0) { // Avoid summernote inputs
+            const new_input = dst_html.find("#" + old_input.id)
+            new_input.click().trigger("click")
+        }
     })
 
     // Update the image if any

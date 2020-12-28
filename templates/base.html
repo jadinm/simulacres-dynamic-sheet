@@ -10,17 +10,25 @@
     <style>{{ include_static("../node_modules/bootstrap-slider/dist/css/bootstrap-slider.min.css") }}</style>
     <style>{{ include_static("../node_modules/bootstrap-select/dist/css/bootstrap-select.min.css") }}</style>
     <style>{{ include_static("../node_modules/@fortawesome/fontawesome-free/css/all.min.css") }}</style>
+    <style>{{ include_static("../node_modules/summernote/dist/summernote-bs4.min.css") }}</style>
 
     <!-- Custom styles -->
     <style>
         /* Set the font (must be here because of the relative path to the font */
         body {
-            font-family: Augusta, serif;
+            font-family: Augusta, "Linux Libertine", serif;
         }
 
         @font-face {
             font-family: Augusta;
             src: url("data:application/truetype;charset=utf-8;base64,{{ augusta_font }}") format("truetype");
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: "Linux Libertine";
+            src: url("data:application/truetype;charset=utf-8;base64,{{ linux_libertine_font }}") format("truetype");
             font-weight: normal;
             font-style: normal;
         }
@@ -33,6 +41,7 @@
     <style>{{ include_static("../css/talent.css") }}</style>
     <style>{{ include_static("../css/spells.css") }}</style>
     <style>{{ include_static("../css/rolls.css") }}</style>
+    <style>{{ include_static("../css/background.css") }}</style>
 
     <script>{{ include_static("../node_modules/jquery/dist/jquery.min.js") }}</script>
     <script>{{ include_static("../node_modules/popper.js/dist/umd/popper.min.js") }}</script>
@@ -45,6 +54,8 @@
     <script>{{ include_static("../node_modules/sortablejs/dist/sortable.umd.js") }}</script>
     <script>{{ include_static("../node_modules/jquery-sortablejs/jquery-sortable.js") }}</script>
     <script>{{ include_static("../node_modules/@fortawesome/fontawesome-free/js/all.min.js") }}</script>
+    <script>{{ include_static("../node_modules/summernote/dist/summernote-bs4.min.js") }}</script>
+    <script>{{ include_static("../node_modules/summernote/dist/lang/summernote-fr-FR.min.js") }}</script>
     <script>{{ include_static("../node_modules/darkreader/darkreader.js") }}</script>
 </head>
 
@@ -127,6 +138,12 @@
                     PA
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#background-tab" role="tab" aria-controls="profile"
+                   aria-selected="false">
+                    Historique
+                </a>
+            </li>
         </ul>
 
         <div id="tabs" class="container-fluid tab-content px-2 pt-1">
@@ -159,6 +176,9 @@
 
             <!-- Adventure Point Tracking -->
             {% include "adventure_points.html" %}
+
+            <!-- Background -->
+            {% include "background.html" %}
         </div>
     </div>
 
@@ -302,5 +322,6 @@
     <script id="default-talents">default_talents = {x: [], "-4": [], "-2": [], "0": []}</script>
 {% endif %}
 <script>{{ include_static("../js/talent.js") }}</script>
+<script>{{ include_static("../js/background.js") }}</script>
 
 </html>

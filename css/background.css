@@ -1,0 +1,19 @@
+.note-editor {
+    width: 100%;
+}
+
+/* Change summernote link dialog checkboxes */
+.link-dialog .form-check-input {
+    margin-left: -3rem;
+}
+
+/* Remove ugly shadows around every button */
+.note-editor .btn.note-btn.btn-light {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+/* Set font of paragraphs to a more readable font than Augusta */
+.note-editor p {
+    font-family: "Linux Libertine", serif;
+}
