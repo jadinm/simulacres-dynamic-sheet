@@ -138,7 +138,7 @@ Pour le moment nous avons les plugins suivants :
     "page": "Le contenu de la page"
   }
   ```
-  Pour qu'il fonctionne, le serveur cible envoyer le header
+  Pour qu'il fonctionne, le serveur cible doit envoyer le header
   'Access-Control-Allow-Origin: *' avec sa réponse.
 
 ### Mettre à jour un plugin
