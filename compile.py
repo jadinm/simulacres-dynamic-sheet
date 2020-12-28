@@ -1,5 +1,6 @@
 import argparse
 import base64
+import logging
 import mimetypes
 import os
 import re
@@ -24,7 +25,10 @@ parser.add_argument("--matrix-4x4", help="Add instincts and desire to the stat m
                     action='store_true')
 parser.add_argument("--universe", help="Universe of the adventure", choices=[MED_FANTASY, CAPTAIN_VOODOO, "Autre"],
                     default=MED_FANTASY)
+parser.add_argument("-v", "--verbose", help="Increase output verbosity", action="store_true")
 args = parser.parse_args()
+if args.verbose:
+    logging.basicConfig(level=logging.DEBUG)
 
 regex_url = re.compile(r"url\(([\w\\./\-_]+)\)")
 
@@ -33,8 +37,9 @@ def include_static(name):
     def replace_local_urls(match):
         path = os.path.join(os.path.abspath(os.path.join(TEMPLATE_DIR, os.path.dirname(name))), match.group(1))
         if not os.path.exists(path):
-            print("[Warning] Path {} does not exists".format(path))
+            logging.warning("Path '{}' does not exists".format(path))
             return ""
+        logging.debug("Replacing '{}' by its content found at '{}'".format(match.group(0), path))
         mime, encoding = mimetypes.guess_type(Path(path), False)
         with open(path, "rb") as local_file:
             return "url(data:{}{};base64,{})" \
