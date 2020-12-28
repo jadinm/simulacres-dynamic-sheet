@@ -8,10 +8,10 @@
                     </h2>
                 </div>
                 <div class="modal-body align-middle">
-                    <div class="row mx-1" id="roll-dialog-critical">
+                    <div id="roll-dialog-critical" class="row mx-1 roll-dialog-precision-hide">
                         <!-- In case of critical -->
                     </div>
-                    <div class="row mx-1">
+                    <div class="row mx-1 roll-dialog-precision-hide">
                         <!-- Show the cause of the roll -->
                         <div>
                             <span id="roll-dialog-result-label"></span><span id="roll-dialog-result"></span>
@@ -50,12 +50,19 @@
                          style="white-space: pre-line;"></div>
                     <hr/>
                     <div class="m-0 p-0 roll-dialog-effect-hide">
-                        <div class="row md-form mx-1 d-none">
-                            <label for="roll-dialog-invested-precision">
-                                Précision utilisée pour augmenter la chance de succès critique
-                            </label>
-                            <input class="special-energy form-control" id="roll-dialog-invested-precision"
-                                   type="number" value="0" min="0" max="0">
+                        <div class="row md-form form-row mx-1 d-none">
+                            <div class="col-10">
+                                <label for="roll-dialog-invested-precision">
+                                    Précision utilisée pour augmenter la chance de succès critique
+                                </label>
+                                <input class="special-energy form-control" id="roll-dialog-invested-precision"
+                                       type="number" value="0" min="0" max="0">
+                            </div>
+                            <div class="col-2">
+                                <div id="roll-dialog-invested-precision-validate" class="btn btn-success rounded-lg">
+                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="row mx-1">

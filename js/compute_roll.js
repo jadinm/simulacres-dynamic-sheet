@@ -49,7 +49,7 @@ function add_row_listeners(row = $(document)) {
 
         // Do the actual roll
         const value = parseInt(row_elem(button[0], "value").text()) // Recover max value
-        trigger_roll(value, difficulty, row_elem(button[0], "effect").val())
+        trigger_roll(true, value, difficulty, row_elem(button[0], "effect").val())
         $('#roll-dialog').modal()
     })
     row.find(".roll-formula-elem").on("click", roll_changed)
@@ -357,8 +357,8 @@ let old_effect = ""
 let critical_failure = false
 let critical_success = false
 
-function trigger_roll(max_value = old_max_value, talent_level = old_talent_level,
-                      effect = old_effect) {
+function trigger_roll(select_precision = true, max_value = old_max_value,
+                      talent_level = old_talent_level, effect = old_effect) {
     // Save the current roll parameters
     old_max_value = max_value
     old_talent_level = talent_level
@@ -378,7 +378,8 @@ function trigger_roll(max_value = old_max_value, talent_level = old_talent_level
     let modifier = 0
     critical_failure = false
     critical_success = false
-    let precision = parseInt($("#roll-dialog-invested-precision").val())
+    const precision_input = $("#roll-dialog-invested-precision")
+    let precision = parseInt(precision_input.val())
     precision = isNaN(precision) ? 0 : precision
     if (dice_value === 12) {
         critical_div.html("<b class='text-danger'>Échec critique... :'(</b>")
@@ -411,6 +412,8 @@ function trigger_roll(max_value = old_max_value, talent_level = old_talent_level
     // Hide everything and show it afterwards if needed
     const roll_effect_divs = $(".roll-dialog-effect-hide")
     roll_effect_divs.addClass("d-none")
+    const to_hide_if_precision = $(".roll-dialog-precision-hide")
+    to_hide_if_precision.removeClass("d-none")
 
     if (max_value) {
         const result = $("#roll-dialog-result")
@@ -449,7 +452,13 @@ function trigger_roll(max_value = old_max_value, talent_level = old_talent_level
         select_modifier.slider("refresh", {useCurrentValue: true})
         select_effect_modifier.slider("refresh", {useCurrentValue: true})
 
-        roll_effect_divs.removeClass("d-none")
+        if (select_precision && !precision_input.parent().parent().hasClass("d-none")) {
+            // We hide effects until the the precision investment is chosen
+            to_hide_if_precision.addClass("d-none")
+            precision_input.parent().parent().parent().removeClass("d-none")
+        } else {
+            roll_effect_divs.removeClass("d-none")
+        }
 
         if (is_v7) {
             // Show the actual effect instead of [A] or [B+2]
@@ -528,7 +537,7 @@ $("#roll-2d6").on("click", _ => {
     // Reset precision
     $("#roll-dialog-invested-precision").val("0")
     // Trigger roll
-    trigger_roll(null, 0)
+    trigger_roll(false, null, 0)
     $('#roll-dialog').modal()
 })
 
@@ -540,13 +549,14 @@ $("#precision").on("change", event => {
     const invested_precision = $("#roll-dialog-invested-precision")
     invested_precision[0].setAttribute("max", value)
     if (value > 0) {
-        invested_precision.parent().removeClass("d-none")
+        invested_precision.parent().parent().removeClass("d-none")
     } else {
-        invested_precision.parent().addClass("d-none")
+        invested_precision.parent().parent().addClass("d-none")
     }
 })
 
-$("#roll-dialog-invested-precision").on("change", _ => {
+$("#roll-dialog-invested-precision-validate").on("click", _ => {
     // Trigger the same roll but with the correct precision
-    trigger_roll()
+    trigger_roll(false)
+    $(".roll-dialog-precision-hide").removeClass("d-none")
 })
