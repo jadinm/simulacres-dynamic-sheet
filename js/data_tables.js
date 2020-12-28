@@ -31,17 +31,11 @@ function add_row(table, new_elem, fixed_idx = null) {
         new_id = fixed_idx
     }
 
-    new_elem.find("*[id*=-x-]").each((i, elem) => {
-        elem.id = elem.id.replace("-x-", "-" + new_id + "-")
-    })
-    new_elem.find("*[name*=-x-]").each((i, elem) => {
-        elem.setAttribute("name", elem.getAttribute("name").replace("-x-", "-" + new_id + "-"))
-    })
-    new_elem.find("*[for*=-x-]").each((i, elem) => {
-        elem.setAttribute("for", elem.getAttribute("for").replace("-x-", "-" + new_id + "-"))
-    })
-    new_elem.find("*[data-slider-id*=-x-]").each((i, elem) => {
-        elem.setAttribute("data-slider-id", elem.getAttribute("data-slider-id").replace("-x-", "-" + new_id + "-"))
+    // Replace all '-x-' in the attributes of the new row
+    $.each(["id", "name", "for", "data-slider-id", "aria-labelledby", "data-target", "aria-controls"], (i, attr) => {
+        new_elem.find("*[" + attr + "*=-x-]").each((i, elem) => {
+            elem.setAttribute(attr, elem.getAttribute(attr).replace("-x-", "-" + new_id + "-"))
+        })
     })
     new_elem[0].id = new_elem[0].id.replace("-x", "-" + new_id)
     table.append(new_elem)
@@ -75,7 +69,7 @@ $("#add-ki").on("click", (event, idx = null) => { // Add parameter for forced in
 
 /* Sortable handling */
 
-$('#roll-table,#spell-table,#focus-table,#magical-equipment-table,#equipment-table,#ki-table').each((i, elem) => {
+$('#roll-table,#spell-table,#focus-table,#magical-equipment-table,#equipment-table,#ki-table,#note-table').each((i, elem) => {
     $(elem).sortable({
         handle: '.fa-arrows-alt',
         dragoverBubble: true,
@@ -88,7 +82,7 @@ $('#roll-table,#spell-table,#focus-table,#magical-equipment-table,#equipment-tab
 
 /* Remove */
 
-$('#roll-table-remove,#spell-table-remove,#focus-table-remove,#magical-equipment-table-remove,#equipment-table-remove,#ki-table-remove').each((i, elem) => {
+$('#roll-table-remove,#spell-table-remove,#focus-table-remove,#magical-equipment-table-remove,#equipment-table-remove,#ki-table-remove,#note-table-remove').each((i, elem) => {
     $(elem).sortable({
         group: elem.id.replace("-remove", ""), // So that it can delete the appropriate table items
         ghostClass: "remove-drop",
