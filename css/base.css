@@ -31,3 +31,8 @@ input {
 .border-heavy {
     border: 3px solid #dee2e6 !important;
 }
+
+/* Make handles clickable on every pixel */
+.fa-arrows-alt {
+    display: block;
+}
