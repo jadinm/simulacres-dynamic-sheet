@@ -6,7 +6,7 @@ function compute_component_means_cost() {
     // Components
     let sum_points = 0
     $(".component").each((i, elem) => {
-        sum_points += parseInt(elem.value)
+        sum_points += (parseInt(elem.value) || 0)
     })
     if (sum_points > start_components)
         consumed_points += (sum_points - start_components) * component_ap_cost
@@ -14,7 +14,7 @@ function compute_component_means_cost() {
     // Means
     sum_points = 0
     $(".means").each((i, elem) => {
-        sum_points += parseInt(elem.value)
+        sum_points += (parseInt(elem.value) || 0)
     })
     if (sum_points > start_means)
         consumed_points += (sum_points - start_means) * means_ap_cost

@@ -23,7 +23,7 @@ function add_row(table, new_elem, fixed_idx = null) {
             let old_value = elem.id.split("-").pop()
             if (old_value === "x")
                 old_value = "-1"
-            max_tr_id = Math.max(parseInt(old_value), max_tr_id)
+            max_tr_id = Math.max(parseInt(old_value) || 0, max_tr_id)
         })
         new_id = max_tr_id + 1
     } else {

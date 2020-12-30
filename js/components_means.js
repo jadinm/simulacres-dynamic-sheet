@@ -12,7 +12,7 @@ function update_sum(event) {
         const sum_id = components.includes(id) ? "#" + id + "-" + others[i] : "#" + others[i] + "-" + id
         const other_elem = $("#" + others[i])
         if (other_elem.length > 0)
-            $(sum_id)[0].innerText = parseInt(value) + parseInt(other_elem[0].value)
+            $(sum_id)[0].innerText = (parseInt(value) || 0) + (parseInt(other_elem[0].value) || 0)
     }
 }
 

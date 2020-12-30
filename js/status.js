@@ -46,14 +46,14 @@ function get_armor_penalty() {
         return penalty != null ? penalty : 0
     }
 
-    const armors = $.map($(".armor"), element => parseInt(element.value))
+    const armors = $.map($(".armor"), element => (parseInt(element.value) || 0))
     let armor_sum = 0
     for (let i = 0; i < armors.length; i++) {
         armor_sum += armors[i] << 0
     }
 
     // Take shield into account
-    const shield = parseInt($("#shield").val())
+    const shield = parseInt($("#shield").val()) || 0
     if (!isNaN(shield) && shield > 0) {
         // Check if shield talent exists and is above 0
         const shield_talent = $(".talent input[value='Bouclier']")
@@ -83,7 +83,7 @@ $("#shield").on("change", _ => {
 /* Update constitution on resistance change */
 base_hp = localized_hp ? 3 : 4
 $("#resistance").on("change", event => {
-    const value = parseInt(event.target.value)
+    const value = parseInt(event.target.value) || 0
     const trunk = $("#hp-trunk")
     const right_leg = $("#hp-right-leg")
     const left_leg = $("#hp-left-leg")
@@ -109,7 +109,7 @@ $("#resistance").on("change", event => {
 /* Update PS and EP max values depending on respectively heart and mind values */
 
 function update_body_energy(component, body_energy) {
-    const value = parseInt(component.value)
+    const value = parseInt(component.value) || 0
     const current_max = slider_max(body_energy[0])
     if (value >= 5 && !$(component).hasClass("bonus-applied")) { // Higher value to update
         set_slider_max(body_energy, current_max + 1)
