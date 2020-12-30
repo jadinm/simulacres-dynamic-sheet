@@ -47,7 +47,8 @@ function compute_status_cost() {
 function talents_cost() {
     let consumed_points = 0
     $(".talent").each((i, elem) => {
-        consumed_points += talent_cost(elem)
+        if (!elem.hasAttribute("hidden"))
+            consumed_points += talent_cost(elem)
     })
     return consumed_points
 }
