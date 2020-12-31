@@ -39,6 +39,32 @@ function talent_cost(talent, list = null) {
     return cost
 }
 
+function update_select(select, elements) {
+    const is_template = select[0].id.includes("-x-")
+
+    // Find the selected option
+    let selected_options = !is_template ? select.selectpicker('val') : []
+    if (!Array.isArray(selected_options))
+        selected_options = [selected_options]
+    select.empty()
+
+    // Sort it
+    elements.sort((a, b) => {
+        return a.localeCompare(b) // Sort correctly accents
+    }).each((i, elem) => {
+        let new_option = "<option value='" + elem + "'"
+        if (selected_options.includes(elem)) // Keep selection
+            new_option += " selected='selected'"
+        new_option += ">" + elem + "</option>"
+        select.append(new_option)
+    })
+
+    if (!is_template) {// Ignore template lines
+        select.selectpicker("refresh")
+    }
+    changed_page = true
+}
+
 /**
  * Update the select options based on a talent list
  */
@@ -54,25 +80,8 @@ function update_talent_select(select) {
     const talent_list = $(talent_list_selector).filter((i, e) => {
         return e.value && e.value.length > 0
             && (only_from == null || talent_base_level($(e).parents(".talent")[0]) === only_from)
-    })
-    select.empty()
-
-    // Sort it
-    talent_list.sort((a, b) => {
-        return a.value.localeCompare(b.value) // Sort correctly accents
-    }).each((i, elem) => {
-        let new_option = "<option value='" + elem.value + "'"
-        if (selected_options.includes(elem.value)) // Keep selection
-            new_option += " selected='selected'"
-        new_option += ">" + elem.value + "</option>"
-        select.append(new_option)
-    })
-
-    if (!is_template) {// Ignore template lines
-        select.selectpicker("refresh")
-    }
-
-    changed_page = true
+    }).map((i, e) => e.value)
+    update_select(select, talent_list)
 }
 
 function add_talent(list, fixed_id = null) {

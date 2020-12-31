@@ -9,7 +9,7 @@ function add_row_listeners(row = $(document)) {
     row.find(".spell-name").on("change", _ => {
         compute_remaining_ap()
     })
-    row.find(".spell-list").on("change", list_changed)
+    row.find(".spell-list").on("changed.bs.select", list_changed)
     row.find(".spell-formula-elem").on("click", event => {
         update_spell_value(row_elem(event.target, "value"))
     })
@@ -62,6 +62,18 @@ function add_row_listeners(row = $(document)) {
     })
 }
 
+function get_magical_energies() {
+    return $("input.magical-energy").map((i, input) => {
+        return $("label[for='" + input.id + "']").text()
+    }).filter((i, elem) => {
+        return elem && elem.length > 0
+    })
+}
+
+function init_spell_list(input) {
+    update_select($(input), get_magical_energies())
+}
+
 function compute_formula(row) {
     const elements = ["component", "means", "realm"]
     let sum = 0
@@ -77,7 +89,8 @@ function compute_formula(row) {
 }
 
 function is_hermetic_spell(value_div) {
-    return row_elem(value_div, "list").val().trim() === hermetic_energy
+    const value = row_elem(value_div, "list").val()
+    return value && value.trim() === hermetic_energy
 }
 
 function update_spell_value(value_div) {
@@ -129,10 +142,10 @@ function list_changed(event) {
     name.removeClass("d-none")
     handle.removeClass("d-none")
     difficulty.parent().removeClass("d-none")
-    if (event.target.value.trim() === priest_energy) {
+    if ($(event.target).val() && $(event.target).val().trim() === priest_energy) {
         slider.val(10).slider("setValue", 10).slider("refresh", {useCurrentValue: true}).slider("disable")
         $(slider.slider("getElement")).parent().addClass("d-none")
-    } else if (event.target.value.trim() === hermetic_energy) {
+    } else if ($(event.target).val() && $(event.target).val().trim() === hermetic_energy) {
         slider.val(10).slider("setValue", 10).slider("refresh", {useCurrentValue: true}).slider("disable")
         $(slider.slider("getElement")).parent().addClass("d-none")
         hermetic_difficulty.parent().removeClass("d-none")
@@ -192,7 +205,7 @@ function roll_changed(event) {
 
 /* Triggers */
 
-$(".realm,.component,.realm," + talent_list_selector).on("change", _ => {
+$(".realm,.component,.means," + talent_list_selector).on("change", _ => {
     // Update all of the spell values
     $(".spell-value").each((i, elem) => {
         update_spell_value($(elem))
@@ -233,6 +246,11 @@ $(_ => {
     $('.spell-difficulty-input').each((i, input) => {
         activate_slider(input, show_difficulty_builder)
     })
+
+    // Initialize spell lists
+    $(".spell-list").each((i, input) => {
+        init_spell_list(input)
+    })
 })
 
 /* Add buttons */
@@ -252,9 +270,8 @@ $("#add-spell").on("click", (event, idx = null) => { // Add parameter for forced
     const new_id = add_row(table, new_spell, idx)
     activate_slider(new_spell.find("#spell-" + new_id + "-difficulty-input")[0], show_difficulty_builder)
 
-    const select = new_spell.find("#spell-" + new_id + "-talent")
-    select.selectpicker()
-
+    new_spell.find("#spell-" + new_id + "-talent").selectpicker()
+    new_spell.find("#spell-" + new_id + "-list").selectpicker()
     add_row_listeners(new_spell)
 })
 

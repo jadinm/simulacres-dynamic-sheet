@@ -14,7 +14,7 @@ window.onbeforeunload = function () {
 
 $("select[id*='-x-']").selectpicker("destroy")  // Remove hidden select pickers for cloning
 
-$("select.talent-select").each((i, select) => {
+$("select.talent-select, select.spell-list").each((i, select) => {
     $(select).parents('.bootstrap-select').first().replaceWith($(select))
 })
 
@@ -184,6 +184,7 @@ function import_data(src_html, dst_html) {
         }
     })
     dst_html.find(".talent-select.adventure-points-select").trigger("changed.bs.select")
+    dst_html.find("select.spell-list").trigger("changed.bs.select")
 
     // Preserve order of sortable elements
     dst_html.find(".sortable-list").each((i, elem) => {
