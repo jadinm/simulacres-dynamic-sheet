@@ -45,13 +45,16 @@
             character_name = "Anonyme"
 
         // Export to server
+        let data = new FormData()
+        data.append("name", character_name)
+        data.append("page", page)
         const url = $("#plugin-export-to-server-url").val()
         $.ajax({
             url: url,
             method: "POST",
-            contentType: "multipart/form-data",
-            dataType: null,
-            data: {"name": character_name, "page": page},
+            data: data,
+            processData: false,
+            contentType: false,
             success: _ => {
                 $("#plugin-export-to-server-alert-message").text("La page a été exportée")
                 $("#plugin-export-to-server-alert").removeClass("d-none").removeClass("alert-danger")
