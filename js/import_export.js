@@ -168,19 +168,11 @@ function import_data(src_html, dst_html) {
     // Select the correct element in the list
     src_html.find("select").each((i, old_select) => {
         // Find the correct option
-        const selection = src_html.find("select#" + old_select.id + " option:selected")
-        if (selection.length > 0) {
+        const selection = src_html.find("select#" + old_select.id + " option:selected").map((i, elem) => $(elem).val()).toArray()
+        if (selection.length > 0 && !old_select[0].id.includes("-x-")) {
             // Set this option on the new document
             const new_select = dst_html.find("#" + old_select.id)
-            new_select.children().each((j, option) => {
-                option.removeAttribute("selected")
-                if (selection.filter("option[value='" + option.value + "']").length > 0) {
-                    option.setAttribute("selected", "selected")
-                }
-            })
-            if (!new_select[0].id.includes("-x-")) {// Ignore template lines
-                new_select.selectpicker("refresh")
-            }
+            new_select.selectpicker("val", selection)
         }
     })
     dst_html.find(".talent-select.adventure-points-select").trigger("changed.bs.select")
