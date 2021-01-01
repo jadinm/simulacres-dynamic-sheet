@@ -132,6 +132,13 @@
                         Magie
                     </a>
                 </li>
+            {% elif version == V7 %}
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#magic-tab" role="tab" aria-controls="profile"
+                       aria-selected="false">
+                        Sorts
+                    </a>
+                </li>
             {% endif %}
             <li class="nav-item">
                 <a class="nav-link" data-toggle="tab" href="#adventure-points-tab" role="tab" aria-controls="profile"
@@ -178,6 +185,9 @@
                 {% include "ki_tab.html" %}
             {% elif universe == captain_voodoo %}
                 <!-- Magic -->
+                {% include "magic_tab.html" %}
+            {% elif version == V7 %}
+                <!-- Magic (for spell list) -->
                 {% include "magic_tab.html" %}
             {% endif %}
 
