@@ -1,0 +1,37 @@
+<li id="plugin-button-other-world" class="plugin-button nav-item">
+    <a class="nav-link" data-toggle="tab" href="#plugin-tab-other-world" role="tab" aria-controls="profile"
+       aria-selected="false">
+        Énergies magiques du monde
+    </a>
+</li>
+
+<div id="plugin-tab-other-world" class="plugin-tab tab-pane fade row my-1 container-fluid m-0">
+    <div class="row col-12 form-row mt-2 md-form p-0 m-0">
+        <div class="col-md-2 input-with-pre-icon">
+            <svg height="3em" width="2em" class="input-prefix">
+                <use xlink:href="#svg-void"></use>
+            </svg>
+            <label for="plugin-other-world-magic">Magie</label>
+            <!--
+                Adding the classes "special-energy" and "magical-energy" is necessary
+                for adventure point computation
+             -->
+            <input class="special-energy magical-energy form-control text-center" id="plugin-other-world-magic"
+                   type="number" value="0" min="0" max="3">
+        </div>
+    </div>
+</div>
+
+<script id="plugin-js-example" class="plugin-js">
+    /* Trigger Adventure Point computation on change of your magic energy level */
+    $("#plugin-other-world-magic").on("change", compute_remaining_ap)
+
+    /* This will add the following talents on the page if they are not already there */
+    default_talents = {
+        x: ["Art magique"],
+        "-4": ["Armes normales"],
+        "-2": ["Armes légères", "Bouclier"],
+        "0": ["Athlétisme", "Bagarre", "Observation"]
+    }
+    add_missing_talents(default_talents)
+</script>

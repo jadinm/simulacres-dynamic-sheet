@@ -128,8 +128,12 @@ dans le [dossier plugin](plugins) ou un que vous aurez créé
 Le bouton pour importer un plugin se trouve en bas de la fiche.
 Pour le moment nous avons les plugins suivants :
 
-- Le [plugin exemple](plugins/plugin_example.html) pour le test et la documentation
-- Le [plugin d'export](plugins/plugin_export_to_server.html) de fiche vers un server distant
+- Un [plugin exemple](plugins/plugin_example.html) pour le test et la documentation.
+- Un [plugin rajoutant des talents et des énergies magiques](plugins/plugin_other_world.html)
+  à une fiche de base (peu importe la version). Ce plugin sert d'exemple
+  pour construire une fiche SimulacreS d'un univers de campagne
+  autre que Malienda ou Capitaine Vaudou.
+- Un [plugin d'export](plugins/plugin_export_to_server.html) de fiche vers un server distant
   qui permet d'envoyer le contenu de la fiche à une URL
   en faisant une requête POST qui contient les données suivantes :
   ```json
