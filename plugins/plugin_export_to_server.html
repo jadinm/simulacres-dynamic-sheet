@@ -36,6 +36,12 @@
     })
 
     /* Export character page */
+    const alert = $("#plugin-export-to-server-alert")
+    function hide_message() {
+        setTimeout(_ => {
+            alert.addClass("d-none")
+        }, 10000)
+    }
     $("#plugin-export-to-server-export").on("click", _ => {
         const page = "<!DOCTYPE html><html lang=\"fr\">" + $("html").html() + "</html>"
 
@@ -57,8 +63,8 @@
             contentType: false,
             success: _ => {
                 $("#plugin-export-to-server-alert-message").text("La page a été exportée")
-                $("#plugin-export-to-server-alert").removeClass("d-none").removeClass("alert-danger")
-                    .addClass("alert-success")
+                alert.removeClass("d-none").removeClass("alert-danger").addClass("alert-success")
+                hide_message()
             },
             error: (jqXHR, textStatus, errorThrown) => {
                 // Failed to export data
@@ -73,8 +79,8 @@
                 }
                 text += "."
                 $("#plugin-export-to-server-alert-message").text(text)
-                $("#plugin-export-to-server-alert").removeClass("d-none").removeClass("alert-success")
-                    .addClass("alert-danger")
+                alert.removeClass("d-none").removeClass("alert-success").addClass("alert-danger")
+                hide_message()
             }
         })
     })
