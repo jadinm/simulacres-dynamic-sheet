@@ -529,8 +529,12 @@ function slider_value_changed(input) {
             // Replace DSS and DES in effect
             $(".roll-dialog-dss").html(compute_dss(margin))
             $(".roll-dialog-des").html(compute_des(margin))
+            const effect_modifier_div = $("#roll-dialog-effect-modifier")
+            if (effect_modifier_div.length > 0)
+                effect_modifier = parseInt(effect_modifier_div.val())
         } else {
             margin = parseInt(result_span.text())
+            effect_modifier = modifier
         }
 
         // Update with scaled effect in the text
@@ -540,7 +544,7 @@ function slider_value_changed(input) {
             let column_modifier = elem.getAttribute("modifier")
             column_modifier = column_modifier.length > 0 ? parseInt(column_modifier) : 0
             const effect_value = (margin > 0) ?
-                compute_effect(effect_dices + margin + modifier, column, column_modifier) : 0
+                compute_effect(effect_dices + margin + effect_modifier, column, column_modifier) : 0
             $(elem).html(effect_value)
         })
         return modifier
