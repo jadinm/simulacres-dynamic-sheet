@@ -333,7 +333,7 @@ effect_table = {
 effect_upgrade = {A: 1, B: 1, C: 2, D: 2, E: 2, F: 2, G: 3, H: 3, I: 4, J: 4, K: 6}
 
 function compute_effect(dices, column, modifier) {
-    const total = parseInt(dices) + (modifier.length > 0 ? parseInt(modifier) : 0)
+    const total = dices + modifier
     if (total < 0)
         return 0
     if (total > 26) {
