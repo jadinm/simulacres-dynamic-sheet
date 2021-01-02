@@ -363,7 +363,7 @@ function set_result_label(margin) {
     }
 }
 
-const effect_column_regex = /(\W)?\[([ABCDEFGHIJK])([+-]\d+)?]/gi
+const effect_column_regex = /(^|\W)\[([ABCDEFGHIJK])([+-]\d+)?](\W|$)/gi
 const effect_margin_regex = /(^|\W)(MR)(\W|$)/gi
 const effect_dss_regex = /(^|\W)(DSS)(\W|$)/gi
 const effect_des_regex = /(^|\W)(DES)(\W|$)/gi
@@ -479,23 +479,30 @@ function trigger_roll(select_precision = true, max_value = old_max_value,
 
         if (is_v7) {
             // Show the actual effect instead of [A] or [B+2]
-            effect = effect.replaceAll(effect_column_regex, (match, p1, p2, p3) => {
-                p1 = typeof p1 === "undefined" ? "" : "&nbsp;"
-                p3 = typeof p3 === "undefined" ? "" : p3
-                const effect_value = (margin > 0) ? compute_effect(effect_dices + margin, p2, p3) : 0
-                return p1 + "<span class='roll-dialog-effect' value='" + effect_dices + "' column='" + p2 + "' " +
-                    "modifier='" + p3 + "'>" + effect_value + "</span>"
+            effect = effect.replaceAll(effect_column_regex, (match, prefix, column, modifier, suffix) => {
+                prefix = prefix.replace(" ", "&nbsp;")
+                modifier = typeof modifier === "undefined" ? 0 : parseInt(modifier)
+                const effect_value = (margin > 0) ? compute_effect(effect_dices + margin, column, modifier) : 0
+                suffix = suffix.replace(" ", "&nbsp;")
+                return prefix + "<span class='roll-dialog-effect' value='" + effect_dices
+                    + "' column='" + column + "' " + "modifier='" + modifier + "'>" + effect_value + "</span>" + suffix
             })
         } else {
             // Update with the DSS if "DSS" is in the text
-            effect = effect.replaceAll(effect_dss_regex,
-                "$1<span class='roll-dialog-dss'>" + dss + "</span>$3")
-            effect = effect.replaceAll(effect_des_regex,
-                "$1<span class='roll-dialog-des'>" + des + "</span>$3")
+            effect = effect.replaceAll(effect_dss_regex, (match, prefix, _, suffix) => {
+                return prefix.replace(" ", "&nbsp;") + "<span class='roll-dialog-dss'>" + dss + "</span>"
+                    + suffix.replace(" ", "&nbsp;")
+            })
+            effect = effect.replaceAll(effect_des_regex, (match, prefix, _, suffix) => {
+                return prefix.replace(" ", "&nbsp;") + "<span class='roll-dialog-des'>" + des + "</span>"
+                    + suffix.replace(" ", "&nbsp;")
+            })
         }
         // Update with the MR if "MR" is in the text
-        $("#roll-dialog-effect").html(effect.replaceAll(effect_margin_regex,
-            "$1<span class='roll-dialog-margin'>" + margin + "</span>$3"))
+        $("#roll-dialog-effect").html(effect.replaceAll(effect_margin_regex, (match, prefix, _, suffix) => {
+            return prefix.replace(" ", "&nbsp;") + "<span class='roll-dialog-margin'>" + margin + "</span>"
+                + suffix.replace(" ", "&nbsp;")
+        }))
 
     } else {
         $("#roll-dialog-result-label").html("Résultat du jet de 2d6 = ")
@@ -508,6 +515,7 @@ function slider_value_changed(input) {
     return modifier => {
         const result_span = $("#roll-dialog-result")
         let margin = parseInt(result_span[0].getAttribute("value"))
+        let effect_modifier = 0
 
         if (input.id === "roll-dialog-modifier") { // Modify the MR only for MR modifier
             if (!critical_failure)
