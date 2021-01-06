@@ -2,16 +2,25 @@
     <div class="modal fade bd-modal-lg" id="roll-dialog" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h2 class="modal-title">
-                        Résultat du jet
-                    </h2>
+                <div class="modal-header justify-content-between">
+                    <div>
+                        <button id="roll-dialog-history-backward" class="btn btn-light">
+                            <i class="fas fa-angle-double-left"></i>
+                        </button>
+                    </div>
+                    <span id="roll-dialog-title" class="modal-title text-center">
+                    </span>
+                    <div>
+                        <button id="roll-dialog-history-forward" class="btn btn-light">
+                            <i class="fas fa-angle-double-right"></i>
+                        </button>
+                    </div>
                 </div>
                 <div class="modal-body align-middle">
-                    <div id="roll-dialog-critical" class="row mx-1 roll-dialog-precision-hide">
+                    <div id="roll-dialog-critical" class="row mx-1">
                         <!-- In case of critical -->
                     </div>
-                    <div class="row mx-1 roll-dialog-precision-hide">
+                    <div class="row mx-1">
                         <!-- Show the cause of the roll -->
                         <div>
                             <span id="roll-dialog-result-label"></span><span id="roll-dialog-result"></span>
@@ -48,7 +57,7 @@
                     <div class="roll-dialog-effect-hide row mx-1">Effet:</div>
                     <div id="roll-dialog-effect" class="row mx-1 roll-dialog-effect-hide"
                          style="white-space: pre-line;"></div>
-                    <hr class="roll-dialog-precision-hide"/>
+                    <hr/>
                     <div class="m-0 p-0 roll-dialog-effect-hide">
                         <div class="row md-form form-row mx-1 d-none">
                             <div class="col-10">
@@ -57,11 +66,6 @@
                                 </label>
                                 <input class="special-energy form-control" id="roll-dialog-invested-precision"
                                        type="number" value="0" min="0" max="0">
-                            </div>
-                            <div class="col-2">
-                                <div id="roll-dialog-invested-precision-validate" class="btn btn-success rounded-lg">
-                                    <i class="fa fa-check" aria-hidden="true"></i>
-                                </div>
                             </div>
                         </div>
                     </div>
