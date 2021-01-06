@@ -663,6 +663,8 @@ $("#precision").on("change", event => {
 })
 
 $("#roll-dialog-invested-precision").on("change", _ => {
+    if (!current_roll)
+        return
     // Trigger the same roll but with the correct precision
     current_roll.update_precision()
     current_roll.show_roll()
@@ -677,6 +679,8 @@ function current_roll_idx() {
 }
 
 $("#roll-dialog-history-backward").on("click", _ => {
+    if (!current_roll)
+        return
     const idx = current_roll_idx() - 1
     if (idx >= 0) {
         last_rolls[idx].show_roll()
@@ -684,6 +688,8 @@ $("#roll-dialog-history-backward").on("click", _ => {
 })
 
 $("#roll-dialog-history-forward").on("click", _ => {
+    if (!current_roll)
+        return
     const idx = current_roll_idx() + 1
     if (idx < last_rolls.length) {
         last_rolls[idx].show_roll()
