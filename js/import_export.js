@@ -69,6 +69,8 @@ $("#save-page").on("click", function (_) {
 
     changed_page = false
 })
+/* Remove the mdbootstrap button effects if any */
+$(".waves-ripple").remove()
 
 /**
  * Update tabs, reset the first tab as the default one
