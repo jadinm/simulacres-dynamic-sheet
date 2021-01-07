@@ -1,6 +1,12 @@
 # Fiche dynamique pour [SimulacreS](https://www.facebook.com/groups/1501312836787784/)
 
-La fiche utilise les règles de campagne de
+Simulacres©™ - le jeu de rôle élémentaire a été créé par Pierre Rosenthal.
+Les règles de Simulacres © sont soumises à copyright et Simulacres™ est une marque déposée.
+
+Ce projet génère des fiches de personnages dynamiques concues pour faciliter la gestion d'un personnage
+dans une campagne de Simulacres mais il ne s'agit pas de matériel officiel.
+
+Ce projet supporte les règles de campagne de
 [SimulacreS version 7](https://www.facebook.com/groups/Simulacres/permalink/1512926132293121/)
 avec les éléments suivants en plus :
 - les points de vie localisés, l'armure localisée et le bouclier
@@ -11,7 +17,7 @@ avec les éléments suivants en plus :
 - la proposition de règle non officielle sur
   [le combat à deux armes](https://www.facebook.com/groups/Simulacres/permalink/2507313226187735/) par Karl Karas.
 
-Elle supporte aussi les règles de campagne de
+Ce projet supporte aussi les règles de campagne de
 [SimulacreS version 8](https://www.facebook.com/groups/Simulacres/permalink/2324033054515754/)
 avec les éléments suivants en plus :
 - les talents détaillés et l'armure
@@ -36,7 +42,7 @@ pas demandé où sauvegarder la fiche.
 ### Gestion des points d'aventure
 
 Pour avoir une estimation fiable des points d'aventure,
-il faut compléter les paramètres dans l'onglet' "PA".
+il faut compléter les paramètres dans l'onglet "PA".
 
 ### Gestion des talents
 
