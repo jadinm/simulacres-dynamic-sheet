@@ -448,7 +448,7 @@ class Roll {
         }
         if (this.critical_dices.length === 0) {
             const additional_dices = this.talent_level >= 0 ? this.talent_level : 0
-            roll_dices(1 + additional_dices, this.critical_dices)
+            roll_dices(1 + additional_dices, 6, this.critical_dices)
         }
         return this.critical_dices.reduce((a, b) => {
             return a + b;
