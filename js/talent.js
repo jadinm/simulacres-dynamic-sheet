@@ -69,17 +69,16 @@ function update_select(select, elements) {
  * Update the select options based on a talent list
  */
 function update_talent_select(select) {
-    const is_template = select[0].id.includes("-x-")
-    // Find the selected option
-    let selected_options = !is_template ? select.selectpicker('val') : []
-    if (!Array.isArray(selected_options))
-        selected_options = [selected_options]
-
     // Recover talent list, potentially filtered
     const only_from = select[0].getAttribute("data-talent-filter-origin-level")
+    let only_at_levels = select[0].getAttribute("data-talent-filter-current-level")
+    if (only_at_levels != null)
+        only_at_levels = only_at_levels.split(",")
     const talent_list = $(talent_list_selector).filter((i, e) => {
+        const talent = $(e).parents(".talent")[0]
         return e.value && e.value.length > 0
-            && (only_from == null || talent_base_level($(e).parents(".talent")[0]) === only_from)
+            && (only_from == null || talent_base_level(talent) === only_from)
+            && (only_at_levels == null || only_at_levels.includes(talent_level(talent)))
     }).map((i, e) => e.value)
     update_select(select, talent_list)
 }
@@ -115,7 +114,7 @@ function add_talent(list, fixed_id = null) {
         update_talent_select($(elem))
     })
     // Update rolls
-    $(".roll-value").each((i, elem) => {
+    $(".roll-value,.dual_wielding-value").each((i, elem) => {
         update_roll_value($(elem))
     })
     // Update armor penalty
@@ -177,8 +176,13 @@ function update_talent_tooltip(talent, target_list = null) {
 function update_talent(event) {
     update_talent_tooltip(event.item, event.to)
 
+    // Update all list selections of talents that are changed when a talent level is changed
+    $("select.talent-select[data-talent-filter-current-level]").each((i, elem) => {
+        update_talent_select($(elem))
+    })
+
     // Update rolls
-    $(".roll-value").each((i, elem) => {
+    $(".roll-value,.dual_wielding-value").each((i, elem) => {
         update_roll_value($(elem))
     })
 
@@ -227,7 +231,7 @@ $('.remove-talent').sortable({
         $(event.item).remove()
 
         // Update rolls
-        $(".roll-value").each((i, elem) => {
+        $(".roll-value,.dual_wielding-value").each((i, elem) => {
             update_roll_value($(elem))
         })
 

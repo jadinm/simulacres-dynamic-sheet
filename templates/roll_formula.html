@@ -1,0 +1,169 @@
+<div class="row">
+    <div class="custom-control custom-radio custom-control-inline">
+        <input type="radio" class="custom-control-input {{ row_type }}-formula-elem"
+               id="{{ row_type }}-x-body" name="{{ row_type }}-x-component">
+        <label class="custom-control-label" for="{{ row_type }}-x-body">
+            <svg height="1em" width="1em" class="input-prefix">
+                <use xlink:href="#svg-body"></use>
+            </svg>
+        </label>
+    </div>
+    {% if matrix_4x4 %}
+        <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" class="custom-control-input {{ row_type }}-formula-elem"
+                   id="{{ row_type }}-x-instincts" name="{{ row_type }}-x-component">
+            <label class="custom-control-label" for="{{ row_type }}-x-instincts">
+                <svg height="1em" width="1em" class="input-prefix">
+                    <use xlink:href="#svg-instincts"></use>
+                </svg>
+            </label>
+        </div>
+    {% endif %}
+    <div class="custom-control custom-radio custom-control-inline">
+        <input type="radio" class="custom-control-input {{ row_type }}-formula-elem"
+               id="{{ row_type }}-x-heart" name="{{ row_type }}-x-component">
+        <label class="custom-control-label" for="{{ row_type }}-x-heart">
+            <svg height="1em" width="1em" class="input-prefix">
+                <use xlink:href="#svg-heart"></use>
+            </svg>
+        </label>
+    </div>
+    <div class="custom-control custom-radio custom-control-inline">
+        <input type="radio" class="custom-control-input {{ row_type }}-formula-elem"
+               id="{{ row_type }}-x-mind" name="{{ row_type }}-x-component">
+        <label class="custom-control-label" for="{{ row_type }}-x-mind">
+            <svg height="1em" width="1em" class="input-prefix">
+                <use xlink:href="#svg-mind"></use>
+            </svg>
+        </label>
+    </div>
+</div>
+<div class="row">
+    <div class="custom-control custom-radio custom-control-inline">
+        <input type="radio" class="custom-control-input {{ row_type }}-formula-elem"
+               id="{{ row_type }}-x-perception" name="{{ row_type }}-x-means">
+        <label class="custom-control-label" for="{{ row_type }}-x-perception">
+            <svg height="1em" width="1em" class="input-prefix">
+                <use xlink:href="#svg-perception"></use>
+            </svg>
+        </label>
+    </div>
+    <div class="custom-control custom-radio custom-control-inline">
+        <input type="radio" class="custom-control-input {{ row_type }}-formula-elem"
+               id="{{ row_type }}-x-action" name="{{ row_type }}-x-means">
+        <label class="custom-control-label" for="{{ row_type }}-x-action">
+            <svg height="1em" width="1em" class="input-prefix">
+                <use xlink:href="#svg-action"></use>
+            </svg>
+        </label>
+    </div>
+    {% if matrix_4x4 %}
+        <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" class="custom-control-input {{ row_type }}-formula-elem"
+                   id="{{ row_type }}-x-desire" name="{{ row_type }}-x-means">
+            <label class="custom-control-label" for="{{ row_type }}-x-desire">
+                <svg height="1em" width="1em" class="input-prefix">
+                    <use xlink:href="#svg-desire"></use>
+                </svg>
+            </label>
+        </div>
+    {% endif %}
+    <div class="custom-control custom-radio custom-control-inline">
+        <input type="radio" class="custom-control-input {{ row_type }}-formula-elem"
+               id="{{ row_type }}-x-resistance" name="{{ row_type }}-x-means">
+        <label class="custom-control-label" for="{{ row_type }}-x-resistance">
+            <svg height="1em" width="1em" class="input-prefix">
+                <use xlink:href="#svg-resistance"></use>
+            </svg>
+        </label>
+    </div>
+</div>
+<div class="row">
+    {% if version == V7 %}
+        <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" class="custom-control-input {{ row_type }}-formula-elem"
+                   id="{{ row_type }}-x-mineral" name="{{ row_type }}-x-realm">
+            <label class="custom-control-label" for="{{ row_type }}-x-mineral">
+                <svg height="1em" width="1em" class="input-prefix">
+                    <use xlink:href="#svg-mineral"></use>
+                </svg>
+            </label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" class="custom-control-input {{ row_type }}-formula-elem"
+                   id="{{ row_type }}-x-vegetal" name="{{ row_type }}-x-realm">
+            <label class="custom-control-label" for="{{ row_type }}-x-vegetal">
+                <svg height="1em" width="1em" class="input-prefix">
+                    <use xlink:href="#svg-vegetal"></use>
+                </svg>
+            </label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" class="custom-control-input {{ row_type }}-formula-elem"
+                   id="{{ row_type }}-x-animal" name="{{ row_type }}-x-realm">
+            <label class="custom-control-label" for="{{ row_type }}-x-animal">
+                <svg height="1em" width="1em" class="input-prefix">
+                    <use xlink:href="#svg-animal"></use>
+                </svg>
+            </label>
+        </div>
+    {% else %}
+        <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" class="custom-control-input {{ row_type }}-formula-elem"
+                   id="{{ row_type }}-x-nature" name="{{ row_type }}-x-realm">
+            <label class="custom-control-label" for="{{ row_type }}-x-nature">
+                <svg height="1em" width="1em" class="input-prefix">
+                    <use xlink:href="#svg-vegetal"></use>
+                </svg>
+            </label>
+        </div>
+    {% endif %}
+    <div class="custom-control custom-radio custom-control-inline">
+        <input type="radio" class="custom-control-input {{ row_type }}-formula-elem"
+               id="{{ row_type }}-x-humanoid" name="{{ row_type }}-x-realm">
+        <label class="custom-control-label" for="{{ row_type }}-x-humanoid">
+            <svg height="1em" width="1em" class="input-prefix">
+                <use xlink:href="#svg-humanoid"></use>
+            </svg>
+        </label>
+    </div>
+    {% if version == V7 %}
+        <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" class="custom-control-input {{ row_type }}-formula-elem"
+                   id="{{ row_type }}-x-mechanical" name="{{ row_type }}-x-realm">
+            <label class="custom-control-label" for="{{ row_type }}-x-mechanical">
+                <svg height="1em" width="1em" class="input-prefix">
+                    <use xlink:href="#svg-mechanical"></use>
+                </svg>
+            </label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" class="custom-control-input {{ row_type }}-formula-elem"
+                   id="{{ row_type }}-x-void" name="{{ row_type }}-x-realm">
+            <label class="custom-control-label" for="{{ row_type }}-x-void">
+                <svg height="1em" width="1em" class="input-prefix">
+                    <use xlink:href="#svg-void"></use>
+                </svg>
+            </label>
+        </div>
+    {% else %}
+        <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" class="custom-control-input {{ row_type }}-formula-elem"
+                   id="{{ row_type }}-x-artificial" name="{{ row_type }}-x-realm">
+            <label class="custom-control-label" for="{{ row_type }}-x-artificial">
+                <svg height="1em" width="1em" class="input-prefix">
+                    <use xlink:href="#svg-mechanical"></use>
+                </svg>
+            </label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" class="custom-control-input {{ row_type }}-formula-elem"
+                   id="{{ row_type }}-x-supernatural" name="{{ row_type }}-x-realm">
+            <label class="custom-control-label" for="{{ row_type }}-x-supernatural">
+                <svg height="1em" width="1em" class="input-prefix">
+                    <use xlink:href="#svg-supernatural"></use>
+                </svg>
+            </label>
+        </div>
+    {% endif %}
+</div>

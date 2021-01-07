@@ -4,6 +4,7 @@ env:
   PYTHON_SCRIPT: compile.py
   V7_BASE_FINAL_FILENAME: simulacres_v7_fiche_perso.html
   V7_LOCALISATION_FINAL_FILENAME: simulacres_v7_localisation_fiche_perso.html
+  V7_LOCALISATION_DUAL_FINAL_FILENAME: simulacres_v7_localisation_deux_armes_fiche_perso.html
   V8_BASE_FINAL_FILENAME: simulacres_v8_fiche_perso.html
   V8_BASE_4x4_FINAL_FILENAME: simulacres_v8_fiche_perso_4x4.html
   V8_MINIMAL_FINAL_FILENAME: simulacres_v8_fiche_perso_minimale.html
@@ -29,6 +30,7 @@ jobs:
           python3 -m pip install -r requirements.txt
           python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V7_BASE_FINAL_FILENAME }}
           python3 ${{ env.PYTHON_SCRIPT }} --localisation target/${{ env.V7_LOCALISATION_FINAL_FILENAME }}
+          python3 ${{ env.PYTHON_SCRIPT }} --localisation --dual-wielding target/${{ env.V7_LOCALISATION_DUAL_FINAL_FILENAME }}
           python3 ${{ env.PYTHON_SCRIPT }} --version 8 target/${{ env.V8_BASE_FINAL_FILENAME }}
           python3 ${{ env.PYTHON_SCRIPT }} --version 8 --universe "Autre" target/${{ env.V8_MINIMAL_FINAL_FILENAME }}
           python3 ${{ env.PYTHON_SCRIPT }} --version 8 --universe "Capitaine Vaudou" target/${{ env.V8_CAPTAIN_VOODOO_FINAL_FILENAME }}
@@ -46,6 +48,11 @@ jobs:
         with:
           name: ${{ env.V7_LOCALISATION_FINAL_FILENAME }}
           path: target/${{ env.V7_LOCALISATION_FINAL_FILENAME }}
+      - name: Upload the v7 sheet with localisation and dual wielding
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.V7_LOCALISATION_DUAL_FINAL_FILENAME }}
+          path: target/${{ env.V7_LOCALISATION_DUAL_FINAL_FILENAME }}
 
       - name: Upload the base v8 sheet
         uses: actions/upload-artifact@v2

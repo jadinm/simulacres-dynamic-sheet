@@ -8,6 +8,8 @@ avec les éléments suivants en plus :
 - les utilisations optionnelles des énergies classiques
   (voir [Casus Belli HS n°16](http://confrerie-acier.chez-alice.fr/localisation%20armures%20et%20autres.htm)),
 - la voie du moine (voir [Casus Belli LPC n°25](http://joueursdurepaire.free.fr/casus_belli/cb_LPC25.html)).
+- la proposition de règle non officielle sur
+  [le combat à deux armes](https://www.facebook.com/groups/Simulacres/permalink/2507313226187735/) par Karl Karas.
 
 Elle supporte aussi les règles de campagne de
 [SimulacreS version 8](https://www.facebook.com/groups/Simulacres/permalink/2324033054515754/)

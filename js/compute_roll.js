@@ -35,6 +35,7 @@ function add_row_listeners(row = $(document)) {
         // Find either spell difficulty or talent level to detect critical rolls
         let difficulty
         let roll_reason
+        let critical_increase = 0
         const spell_difficulty = row_elem(button[0], "difficulty")
         if (spell_difficulty.length > 0 && !is_hermetic_spell(button[0])) { // Spell
             difficulty = parseInt(spell_difficulty.text())
@@ -44,6 +45,14 @@ function add_row_listeners(row = $(document)) {
             const talent = talent_select.find("option:selected").val()
             difficulty = parseInt(talent_level($(".talent input[value='" + talent + "']")))
             roll_reason = talent
+
+            // Dual wielding
+            const tap_talent_select = row_elem(button[0], "tap-talent")
+            if (tap_talent_select.length > 0) {
+                const tap_talent = tap_talent_select.find("option:selected").val()
+                roll_reason = "Combat à deux armes: " + talent + " & " + tap_talent
+                critical_increase += 1
+            }
         }
         difficulty = isNaN(difficulty) ? 0 : difficulty
 
@@ -52,11 +61,12 @@ function add_row_listeners(row = $(document)) {
 
         // Do the actual roll
         const value = parseInt(row_elem(button[0], "value").text()) // Recover max value
-        new Roll(roll_reason, value, difficulty, row_elem(button[0], "effect").val()).show_roll()
+        new Roll(roll_reason, value, difficulty, row_elem(button[0], "effect").val(),
+            critical_increase).show_roll()
         $('#roll-dialog').modal()
     })
-    row.find(".roll-formula-elem").on("click", roll_changed)
-    row.find(".roll-talent").each((i, elem) => {
+    row.find(".roll-formula-elem,.dual_wielding-formula-elem").on("click", roll_changed)
+    row.find(".roll-talent,.dual_wielding-talent,.dual_wielding-tap-talent").each((i, elem) => {
         if (!elem.id.includes("-x-")) {
             $(elem).on("changed.bs.select", e => {
                 roll_changed(e)
@@ -196,6 +206,22 @@ function update_roll_value(value_div) {
             sum += parseInt(level)
     }
 
+    // Dual wielding: check tap talent level for penalty
+    let tap_talent = row_elem(value_div[0], "tap-talent")
+    tap_talent = tap_talent.val()
+    if (tap_talent) {
+        const tap_talent_div = $(".talent input[value='" + tap_talent + "']")
+        if (tap_talent_div.length === 0)
+            sum = "X"
+        else {
+            const level = talent_level(tap_talent_div[0])
+            if (level === "x")
+                sum = "X"
+            else // Fixed penalty of using dual wielding
+                sum += parseInt(level) - 2
+        }
+    }
+
     // Update
     value_div.text(sum)
     row_elem(value_div[0], "dice")[0].removeAttribute("hidden")
@@ -214,7 +240,7 @@ $(".realm,.component,.means," + talent_list_selector).on("change", _ => {
         update_spell_value($(elem))
     })
     // Update all the rolls
-    $(".roll-value").each((i, elem) => {
+    $(".roll-value,.dual_wielding-value").each((i, elem) => {
         update_roll_value($(elem))
     })
 })
@@ -293,6 +319,23 @@ $("#add-roll").on("click", (event, idx = null) => { // Add parameter for forced 
     add_row_listeners()
 })
 
+$("#add-dual_wielding").on("click", (event, idx = null) => { // Add parameter for forced index
+    const new_row = $("#dual_wielding-x").clone(true, false)
+
+    const new_id = add_row($("#dual_wielding-table"), new_row, idx)
+    const select = new_row.find("#dual_wielding-" + new_id + "-talent")
+    select.selectpicker()
+    const select_tap = new_row.find("#dual_wielding-" + new_id + "-tap-talent")
+    select_tap.selectpicker()
+
+    // Reset all the listeners
+    new_row.find("input").each((i, elem) => {
+        elem.value = ""
+        $(elem).trigger("change")
+    })
+    add_row_listeners()
+})
+
 /* Actual roll */
 
 function roll_dices(number = 2, type = 6, dices = null) {
@@ -354,7 +397,8 @@ let current_roll = null
 
 class Roll {
     constructor(reason = "", max_value = NaN, talent_level = 0, effect = "",
-                base_dices = [], critical_dices = [], precision = NaN, effect_dices = []) {
+                critical_increase = 0, base_dices = [], critical_dices = [],
+                precision = NaN, effect_dices = []) {
         this.reason = reason
         this.max_value = max_value
         this.talent_level = talent_level
@@ -363,6 +407,7 @@ class Roll {
         this.critical_dices = critical_dices
         this.effect_dices = effect_dices
 
+        this.critical_increase = critical_increase
         this.precision = precision
         if (!this.precision_chosen())
             this.update_precision()
@@ -465,7 +510,7 @@ class Roll {
 
     is_critical_success() {
         const precision = this.precision == null ? 0 : this.precision
-        return this.dice_value() <= 2 + this.talent_level + precision
+        return this.dice_value() <= 2 + this.talent_level + precision + this.critical_increase
     }
 
     show_roll() {
