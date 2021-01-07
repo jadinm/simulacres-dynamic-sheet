@@ -80,6 +80,7 @@ function update_talent_select(select) {
             && (only_from == null || talent_base_level(talent) === only_from)
             && (only_at_levels == null || only_at_levels.includes(talent_level(talent)))
     }).map((i, e) => e.value)
+    talent_list.push("")
     update_select(select, talent_list)
 }
 
