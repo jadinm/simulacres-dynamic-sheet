@@ -2,6 +2,7 @@
 
 function hp_update(event) {
     const value = parseInt(event.target.value)
+    const max_value = parseInt(event.target.getAttribute("data-slider-max"))
     const slider = $($(event.target).slider("getElement"))
     const handle = slider.find(".slider-handle.custom")
     const selection = slider.find(".slider-selection")
@@ -9,7 +10,7 @@ function hp_update(event) {
     if (value === 0) {
         handle.removeClass('full').removeClass('unease').addClass('dead')
         selection.removeClass('full').removeClass('unease')
-    } else if (value <= 1) {
+    } else if (max_value - value >= 2) {
         handle.removeClass('full').addClass('unease').removeClass('dead')
         selection.removeClass('full').addClass('unease')
     } else {
@@ -19,9 +20,11 @@ function hp_update(event) {
     // Recompute minimum unease
     let unease_sum = 0
     const hp_sliders = $(".hp.input-slider")
-    for (let i = 0; i < hp_sliders.length; i++)
-        if (hp_sliders[i].value <= 1)
+    for (let i = 0; i < hp_sliders.length; i++) {
+        const max_value = parseInt(hp_sliders[i].getAttribute("data-slider-max"))
+        if (max_value - parseInt(hp_sliders[i].value) >= 2)
             unease_sum += 1
+    }
     set_slider_min($("#unease"), unease_sum)
 }
 
