@@ -4,29 +4,29 @@ const talent_list_selector = ".talent input[id*='-name']"
 
 /* Spell-related */
 
-function add_row_listeners(row = $(document)) {
-    add_save_to_dom_listeners(row)
-    row.find(".spell-name").on("change", _ => {
+function add_row_listeners(line = $(document)) {
+    add_save_to_dom_listeners(line)
+    line.find(".spell-name").on("change", _ => {
         compute_remaining_ap()
     })
-    row.find(".spell-list").on("changed.bs.select", list_changed)
-    row.find(".spell-formula-elem").on("click", event => {
+    line.find(".spell-list").on("changed.bs.select", list_changed)
+    line.find(".spell-formula-elem").on("click", event => {
         update_spell_value(row_elem(event.target, "value"))
     })
-    row.find(".spell-difficulty-input").on("change", event => {
+    line.find(".spell-difficulty-input").on("change", event => {
         update_spell_value(row_elem(event.target, "value"))
     })
-    row.find(".hermetic-difficulty").on("change", event => {
+    line.find(".hermetic-difficulty").on("change", event => {
         update_spell_value(row_elem(event.target, "value"))
     })
-    row.find(".spell-talent").each((i, elem) => {
+    line.find(".spell-talent").each((i, elem) => {
         if (!elem.id.includes("-x-")) {
             $(elem).on("changed.bs.select", e => {
                 update_spell_value(row_elem(e.target, "value"))
             })
         }
     })
-    row.find(".row-roll-trigger").on("click", event => {
+    line.find(".row-roll-trigger").on("click", event => {
         // Find the real target of the click
         let button = $(event.target)
         if (!button.hasClass("row-roll-trigger"))
@@ -37,6 +37,7 @@ function add_row_listeners(row = $(document)) {
         let roll_reason
         let critical_increase = 0
         const spell_difficulty = row_elem(button[0], "difficulty")
+        const formula_elements = compute_formula(row(button[0]))[1]
         if (spell_difficulty.length > 0 && !is_hermetic_spell(button[0])) { // Spell
             difficulty = parseInt(spell_difficulty.text())
             roll_reason = row_elem(button[0], "name").val()
@@ -62,11 +63,11 @@ function add_row_listeners(row = $(document)) {
         // Do the actual roll
         const value = parseInt(row_elem(button[0], "value").text()) // Recover max value
         new Roll(roll_reason, value, difficulty, row_elem(button[0], "effect").val(),
-            critical_increase).show_roll()
+            critical_increase, formula_elements).show_roll()
         $('#roll-dialog').modal()
     })
-    row.find(".roll-formula-elem,.dual_wielding-formula-elem").on("click", roll_changed)
-    row.find(".roll-talent,.dual_wielding-talent,.dual_wielding-tap-talent").each((i, elem) => {
+    line.find(".roll-formula-elem,.dual_wielding-formula-elem").on("click", roll_changed)
+    line.find(".roll-talent,.dual_wielding-talent,.dual_wielding-tap-talent").each((i, elem) => {
         if (!elem.id.includes("-x-")) {
             $(elem).on("changed.bs.select", e => {
                 roll_changed(e)
@@ -90,15 +91,17 @@ function init_spell_list(input) {
 function compute_formula(row) {
     const elements = ["component", "means", "realm"]
     let sum = 0
+    const checked_elements = []
     for (let i = 0; i < elements.length; i++) {
         const elem_name = row[0].id + "-" + elements[i]
         const checked_elem = $("input[name=" + elem_name + "]:checked")
         if (checked_elem.length === 0)
-            return null  // Not a full formula
+            return [null, []]  // Not a full formula
+        checked_elements.push(checked_elem)
         const base_array = checked_elem[0].id.split("-")
         sum += parseInt($("#" + base_array[base_array.length - 1]).val())
     }
-    return sum
+    return [sum, checked_elements]
 }
 
 function is_hermetic_spell(value_div) {
@@ -110,7 +113,7 @@ function update_spell_value(value_div) {
     let sum = 0
 
     // Recover component, means and realm
-    const formula = compute_formula(row(value_div[0]))
+    const formula = compute_formula(row(value_div[0]))[0]
     sum += formula
 
     // Recover difficulty
@@ -186,7 +189,7 @@ function update_roll_value(value_div) {
     let sum = 0
 
     // Recover component, means and realm
-    const formula = compute_formula(row(value_div[0]))
+    const formula = compute_formula(row(value_div[0]))[0]
     sum += formula
 
     // Add talent if any
@@ -397,9 +400,10 @@ let current_roll = null
 
 class Roll {
     constructor(reason = "", max_value = NaN, talent_level = 0, effect = "",
-                critical_increase = 0, base_dices = [], critical_dices = [],
-                precision = NaN, effect_dices = []) {
+                critical_increase = 0, formula_elements = [], base_dices = [],
+                critical_dices = [], precision = NaN, effect_dices = []) {
         this.reason = reason
+        this.formula_elements = formula_elements
         this.max_value = max_value
         this.talent_level = talent_level
         this.effect = effect
@@ -634,9 +638,20 @@ class Roll {
             $("#roll-dialog-details").html("(" + this.base_dices[0] + " + " + this.base_dices[1] + ")")
         }
 
-        $("#roll-dialog-title").html("<h2 class='text-center'>"
-            + ((this.reason.length > 0) ? this.reason : "Résultat du jet")
-            + "</h2><sm class='text-center'>" + this.timestamp.toLocaleString("fr-FR") + "</sm>")
+        let title = "<h2>" + ((this.reason.length > 0) ? this.reason : "Résultat du jet")
+            + "</h2>"
+        if (this.formula_elements.length > 0) {
+            title += "<h4>"
+            for (let i = 0; i < this.formula_elements.length; i++) {
+                const symbol = $("label[for='" + this.formula_elements[i][0].id+ "'] svg").get(0)
+                title += symbol.outerHTML
+                if (i !== this.formula_elements.length - 1)
+                    title += "&nbsp;+&nbsp;"
+            }
+            title += "</h4>"
+        }
+        $("#roll-dialog-title").html(title
+            + "<sm class='text-center'>" + this.timestamp.toLocaleString("fr-FR") + "</sm>")
     }
 }
 
