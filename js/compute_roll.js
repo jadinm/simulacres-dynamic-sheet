@@ -514,7 +514,8 @@ class Roll {
 
     is_critical_success() {
         const precision = this.precision == null ? 0 : this.precision
-        return this.dice_value() <= 2 + this.talent_level + precision + this.critical_increase
+        // talents at level -4 and -2 trigger a critical roll at the same probability as talents at level 0
+        return this.dice_value() <= 2 + Math.max(0, this.talent_level) + precision + this.critical_increase
     }
 
     show_roll() {
