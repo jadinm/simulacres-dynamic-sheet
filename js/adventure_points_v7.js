@@ -64,7 +64,7 @@ function compute_remaining_ap() {
             const spell_list = row_elem(elem, "list")[0].value.trim()
             if (spell_list === priest_energy)
                 consumed_points += ki_divine_spell_ap_cost - realm_modifier // Priest and monk have level 0 spell directly
-            else if (spell_list.length > 0 && spell_list !== hermetic_energy)
+            else if (spell_list.length > 0 && spell_list !== hermetic_energy && spell_list !== instinctive_magic)
                 consumed_points += mage_spell_ap_cost - realm_modifier // Mages have -4 level spells at start
         }
     })

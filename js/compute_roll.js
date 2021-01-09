@@ -85,7 +85,9 @@ function get_magical_energies() {
 }
 
 function init_spell_list(input) {
-    update_select($(input), get_magical_energies())
+    const list = get_magical_energies()
+    list.push(instinctive_magic)
+    update_select($(input), list)
 }
 
 const hobbit_regexes = [/[Hh]obbits?/, /[Tt]inigens?/, /[Pp]etites [Gg]ens/, /[Pp]etites? [Pp]ersonnes?/,
@@ -176,7 +178,7 @@ function list_changed(event) {
     name.removeClass("d-none")
     handle.removeClass("d-none")
     difficulty.parent().removeClass("d-none")
-    if ($(event.target).val() && $(event.target).val().trim() === priest_energy) {
+    if ($(event.target).val() && ([priest_energy, instinctive_magic].includes($(event.target).val().trim()))) {
         slider.val(10).slider("setValue", 10).slider("refresh", {useCurrentValue: true}).slider("disable")
         $(slider.slider("getElement")).parent().addClass("d-none")
     } else if ($(event.target).val() && $(event.target).val().trim() === hermetic_energy) {
