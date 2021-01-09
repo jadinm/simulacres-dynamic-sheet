@@ -63,7 +63,7 @@ function add_row_listeners(line = $(document)) {
         // Do the actual roll
         const value = parseInt(row_elem(button[0], "value").text()) // Recover max value
         new Roll(roll_reason, value, difficulty, row_elem(button[0], "effect").val(),
-            critical_increase, formula_elements).show_roll()
+            critical_increase, formula_elements).trigger_roll()
         $('#roll-dialog').modal()
     })
     line.find(".roll-formula-elem,.dual_wielding-formula-elem").on("click", roll_changed)
@@ -427,6 +427,10 @@ class Roll {
         last_rolls.push(this)
     }
 
+    roll_dices(number, type, dices) {
+        return roll_dices(number, type, dices)
+    }
+
     column_effect(column, modifier) {
         const total = this.margin() + this.effect_value() + this.effect_modifier + modifier
         if (this.margin() < 0 || total < 0)
@@ -474,7 +478,7 @@ class Roll {
     dice_value() {
         if (this.base_dices.length === 0) {
             // Roll needed
-            roll_dices(2, 6, this.base_dices)
+            this.roll_dices(2, 6, this.base_dices)
         }
         return this.base_dices.reduce((a, b) => {
             return a + b;
@@ -484,7 +488,7 @@ class Roll {
     effect_value() {
         if (is_v7 && this.effect_dices.length === 0) {
             // Roll needed
-            roll_dices(2, 6, this.effect_dices)
+            this.roll_dices(2, 6, this.effect_dices)
         }
         return this.effect_dices.reduce((a, b) => {
             return a + b;
@@ -497,7 +501,7 @@ class Roll {
         }
         if (this.critical_dices.length === 0) {
             const additional_dices = this.talent_level >= 0 ? this.talent_level : 0
-            roll_dices(1 + additional_dices, 6, this.critical_dices)
+            this.roll_dices(1 + additional_dices, 6, this.critical_dices)
         }
         return this.critical_dices.reduce((a, b) => {
             return a + b;
@@ -654,6 +658,10 @@ class Roll {
         $("#roll-dialog-title").html(title
             + "<sm class='text-center'>" + this.timestamp.toLocaleString("fr-FR") + "</sm>")
     }
+
+    trigger_roll() {
+        this.show_roll()
+    }
 }
 
 function slider_value_changed(input) {
@@ -705,7 +713,7 @@ $("#roll-2d6").on("click", _ => {
     // Reset precision
     $("#roll-dialog-invested-precision").val("0")
     // Trigger roll
-    new Roll().show_roll()
+    new Roll().trigger_roll()
     $('#roll-dialog').modal()
 })
 
