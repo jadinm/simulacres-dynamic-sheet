@@ -44,7 +44,7 @@ $(".talent-select.adventure-points-select").on("changed.bs.select", (e, clickedI
 
     const talents = $(".talent").filter((_, elem) => {
         for (let i = 0; i < talents_to_update.length; i++) {
-            if ($(elem).find("input[value='" + talents_to_update[i] + "']").length > 0)
+            if (talent_from_name(talents_to_update[i], $(elem)).length > 0)
                 return true
         }
         return false

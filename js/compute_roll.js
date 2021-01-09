@@ -46,7 +46,7 @@ function add_row_listeners(line = $(document)) {
         } else { // Talent
             const talent_select = row_elem(button[0], "talent")
             const talent = talent_select.find("option:selected").val()
-            difficulty = parseInt(talent_level($(".talent input[value='" + talent + "']")))
+            difficulty = parseInt(talent_level(talent_from_name(talent)))
             roll_reason = talent
 
             // Dual wielding
@@ -155,7 +155,7 @@ function update_spell_value(value_div) {
         // Recover associated talent level
         const name = row_elem(value_div[0], "talent").val()
         if (name.length !== 0) {
-            const level = parseInt(talent_level($(".talent input[value='" + name + "']")))
+            const level = parseInt(talent_level(talent_from_name(name)))
             if (isNaN(level)) {
                 sum = "X"
             } else {
@@ -225,7 +225,7 @@ function update_roll_value(value_div) {
         return
     talent = talent.val()
 
-    const talent_div = $(".talent input[value='" + talent + "']")
+    const talent_div = talent_from_name(talent)
     if (talent_div.length === 0)
         sum = "X"
     else {
@@ -240,7 +240,7 @@ function update_roll_value(value_div) {
     let tap_talent = row_elem(value_div[0], "tap-talent")
     tap_talent = tap_talent.val()
     if (tap_talent) {
-        const tap_talent_div = $(".talent input[value='" + tap_talent + "']")
+        const tap_talent_div = talent_from_name(tap_talent)
         if (tap_talent_div.length === 0)
             sum = "X"
         else {

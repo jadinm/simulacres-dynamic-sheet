@@ -2,6 +2,10 @@
 
 regex_talent_from_id = /talent_(x|(?:-4)|(?:-2)|0)\d*/
 
+function talent_from_name(name, from_elem = $(document)) {
+    return from_elem.find("input[value='" + name.replace("'", "\\'") + "']")
+}
+
 function talent_level(talent, target_list = null) {
     const list = (target_list) ? target_list : $(talent).parents(".talent-list")[0]
     if (list == null)
@@ -52,7 +56,7 @@ function update_select(select, elements) {
     elements.sort((a, b) => {
         return a.localeCompare(b) // Sort correctly accents
     }).each((i, elem) => {
-        let new_option = "<option value='" + elem + "'"
+        let new_option = "<option value=\"" + elem + "\""
         if (selected_options.includes(elem)) // Keep selection
             new_option += " selected='selected'"
         new_option += ">" + elem + "</option>"
@@ -140,7 +144,7 @@ function add_missing_talents(talents) {
     // Insert missing default talent if they do not exist
     for (const [level, level_talents] of Object.entries(talents)) {
         for (const talent of level_talents) {
-            if ($("input[value=\"" + talent + "\"]").length === 0) {
+            if (talent_from_name(talent).length === 0) {
                 const elem = add_talent($("#talents_" + level)).find("input")
                 elem.val(talent)
                 elem.trigger("change")
