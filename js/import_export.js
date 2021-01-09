@@ -41,6 +41,8 @@ function add_save_to_dom_listeners(base = $(document)) {
     })
 
     base.find("select").on("changed.bs.select", (e, clickedIndex, newValue, oldValue) => {
+        if (e.target.id.includes("-x-"))
+            return
         let current_value = $(e.target).selectpicker('val')
         if (!Array.isArray(current_value))
             current_value = [current_value]

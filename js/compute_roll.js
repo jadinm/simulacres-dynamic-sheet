@@ -172,7 +172,7 @@ function update_spell_value(value_div) {
 function list_changed(event) {
     // Fix the level to 0 if divine or ki energies
     const slider = row_elem(event.target, "difficulty-input")
-    if (slider.length === 0 || slider[0].id.includes("spell-x-"))
+    if (slider.length === 0 || slider[0].id.includes("-x-"))
         return
 
     const difficulty = row_elem(event.target, "difficulty")
