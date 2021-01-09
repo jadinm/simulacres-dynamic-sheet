@@ -215,7 +215,7 @@ $('.talent-list').each((i, elem) => {
         onEnd: update_talent,
         onMove: (e, _) => {
             // Prevent moves that have an invalid PA cost
-            if (isNaN(talent_cost(e.dragged, e.to))) {
+            if (!$(e.to).hasClass("remove-talent") && isNaN(talent_cost(e.dragged, e.to))) {
                 return false
             }
             return e.willInsertAfter ? 1 : -1
