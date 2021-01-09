@@ -88,6 +88,20 @@ function init_spell_list(input) {
     update_select($(input), get_magical_energies())
 }
 
+const hobbit_regexes = [/[Hh]obbits?/, /[Tt]inigens?/, /[Pp]etites [Gg]ens/, /[Pp]etites? [Pp]ersonnes?/,
+    /[Tt]omt[eé]s?/]
+
+function is_hobbit() {
+    const race = $("#race").val()
+    if (!race || race.length === 0)
+        return false
+    for (let i in hobbit_regexes) {
+        if (race.match(hobbit_regexes[i]) != null)
+            return true
+    }
+    return false
+}
+
 function compute_formula(row) {
     const elements = ["component", "means", "realm"]
     let sum = 0
@@ -99,7 +113,11 @@ function compute_formula(row) {
             return [null, []]  // Not a full formula
         checked_elements.push(checked_elem)
         const base_array = checked_elem[0].id.split("-")
-        sum += parseInt($("#" + base_array[base_array.length - 1]).val())
+        const formula_base_name = base_array[base_array.length - 1]
+        if (formula_base_name === "resistance" && is_hobbit()) {
+            sum += 1 // Hobbits have an increased resistance
+        }
+        sum += parseInt($("#" + formula_base_name).val())
     }
     return [sum, checked_elements]
 }
@@ -237,7 +255,7 @@ function roll_changed(event) {
 
 /* Triggers */
 
-$(".realm,.component,.means," + talent_list_selector).on("change", _ => {
+$("#race,.realm,.component,.means," + talent_list_selector).on("change", _ => {
     // Update all of the spell values
     $(".spell-value").each((i, elem) => {
         update_spell_value($(elem))
@@ -599,9 +617,20 @@ class Roll {
                 effect_text = "<div class='row mx-1'>DSS =&nbsp;<span class='roll-dialog-dss'>" + this.dss()
                     + "</span></div><div class='row mx-1'>DES =&nbsp;<span class='roll-dialog-des'>" + this.des() + "</span></div>"
             }
+
+            let racial_bonus = ""
+            for (let i in this.formula_elements) {
+                const base_array = this.formula_elements[i][0].id.split("-")
+                const formula_base_name = base_array[base_array.length - 1]
+                if (formula_base_name === "resistance" && is_hobbit()) {
+                    racial_bonus = " (bonus racial déjà appliqué)" +
+                        "</div><div class='row mx-1'>Ce jet est raté s'il s'agit de résister à l'hypnose ou aux illusions"
+                }
+            }
+
             $("#roll-dialog-details").html("<div class='row mx-1'>Somme des 2d6 = " + this.dice_value()
                 + " (" + this.base_dices[0] + " + " + this.base_dices[1] + ")</div><div class='row mx-1'>Valeur seuil = "
-                + (this.max_value + this.unease) + "</div>" + text_end + effect_text)
+                + (this.max_value + this.unease) + racial_bonus + "</div>" + text_end + effect_text)
 
             // Reset additional modifiers
             select_modifier.slider("setValue", this.margin_modifier)
@@ -648,7 +677,7 @@ class Roll {
         if (this.formula_elements.length > 0) {
             title += "<h4>"
             for (let i = 0; i < this.formula_elements.length; i++) {
-                const symbol = $("label[for='" + this.formula_elements[i][0].id+ "'] svg").get(0)
+                const symbol = $("label[for='" + this.formula_elements[i][0].id + "'] svg").get(0)
                 title += symbol.outerHTML
                 if (i !== this.formula_elements.length - 1)
                     title += "&nbsp;+&nbsp;"
