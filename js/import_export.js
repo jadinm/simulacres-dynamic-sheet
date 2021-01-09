@@ -171,7 +171,7 @@ function import_data(src_html, dst_html) {
     src_html.find("select").each((i, old_select) => {
         // Find the correct option
         const selection = src_html.find("select#" + old_select.id + " option:selected").map((i, elem) => $(elem).val()).toArray()
-        if (selection.length > 0 && !old_select[0].id.includes("-x-")) {
+        if (selection.length > 0 && !old_select.id.includes("-x-")) {
             // Set this option on the new document
             const new_select = dst_html.find("#" + old_select.id)
             new_select.selectpicker("val", selection)
