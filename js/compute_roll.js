@@ -38,9 +38,11 @@ function add_row_listeners(line = $(document)) {
         let critical_increase = 0
         const spell_difficulty = row_elem(button[0], "difficulty")
         const formula_elements = compute_formula(row(button[0]))[1]
+        let margin_throttle = NaN
         if (spell_difficulty.length > 0 && !is_hermetic_spell(button[0])) { // Spell
             difficulty = parseInt(spell_difficulty.text())
             roll_reason = row_elem(button[0], "name").val()
+            margin_throttle = is_instinctive_magic(button[0]) ? 1 : NaN
         } else { // Talent
             const talent_select = row_elem(button[0], "talent")
             const talent = talent_select.find("option:selected").val()
@@ -63,7 +65,7 @@ function add_row_listeners(line = $(document)) {
         // Do the actual roll
         const value = parseInt(row_elem(button[0], "value").text()) // Recover max value
         new Roll(roll_reason, value, difficulty, row_elem(button[0], "effect").val(),
-            critical_increase, formula_elements).trigger_roll()
+            critical_increase, formula_elements, margin_throttle).trigger_roll()
         $('#roll-dialog').modal()
     })
     line.find(".roll-formula-elem,.dual_wielding-formula-elem").on("click", roll_changed)
@@ -127,6 +129,11 @@ function compute_formula(row) {
 function is_hermetic_spell(value_div) {
     const value = row_elem(value_div, "list").val()
     return value && value.trim() === hermetic_energy
+}
+
+function is_instinctive_magic(value_div) {
+    const value = row_elem(value_div, "list").val()
+    return value && value.trim() === instinctive_magic
 }
 
 function update_spell_value(value_div) {
@@ -420,11 +427,12 @@ let current_roll = null
 
 class Roll {
     constructor(reason = "", max_value = NaN, talent_level = 0, effect = "",
-                critical_increase = 0, formula_elements = [], base_dices = [],
-                critical_dices = [], precision = NaN, effect_dices = []) {
+                critical_increase = 0, formula_elements = [], margin_throttle = NaN,
+                base_dices = [], critical_dices = [], precision = NaN, effect_dices = []) {
         this.reason = reason
         this.formula_elements = formula_elements
         this.max_value = max_value
+        this.margin_throttle = margin_throttle
         this.talent_level = talent_level
         this.effect = effect
         this.base_dices = base_dices
@@ -483,7 +491,8 @@ class Roll {
     margin() {
         if (this.is_critical_failure()) // Cannot have more than 0 in case of critical failure
             return 0
-        return this.pre_modifier_margin() + this.margin_modifier
+        const margin = this.pre_modifier_margin() + this.margin_modifier
+        return isNaN(this.margin_throttle) ? margin : Math.min(this.margin_throttle, margin)
     }
 
     precision_chosen() {
@@ -608,15 +617,16 @@ class Roll {
             set_result_label(this.margin())
 
             let effect_dices_sum = 0
-            let effect_text
+            let effect_text = isNaN(this.margin_throttle) ? "" : "<div class='row mx-1'>La marge maximum est de "
+                + this.margin_throttle + "</div>"
             if (is_v7) {
                 // Roll the two additional dices
                 effect_dices_sum = this.effect_value()
-                effect_text = "<div class='row mx-1'>Dés d'effet = " + effect_dices_sum
+                effect_text += "<div class='row mx-1'>Dés d'effet = " + effect_dices_sum
                     + " (" + this.effect_dices[0] + " + " + this.effect_dices[1] + ")</div>"
             } else {
                 // DSS = MR // 3 and DES = 0 or (1 if 4 <= ME <= 6) or (2 if ME >= 7)
-                effect_text = "<div class='row mx-1'>DSS =&nbsp;<span class='roll-dialog-dss'>" + this.dss()
+                effect_text += "<div class='row mx-1'>DSS =&nbsp;<span class='roll-dialog-dss'>" + this.dss()
                     + "</span></div><div class='row mx-1'>DES =&nbsp;<span class='roll-dialog-des'>" + this.des() + "</span></div>"
             }
 
