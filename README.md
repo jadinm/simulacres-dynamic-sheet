@@ -81,6 +81,14 @@ Pour les mages hermétiques, les sorts sont des talents classiques
 et doivent être créés depuis la colonne X de l'onglet des talents avant de pouvoir
 être sélectionnés comme nom du sort.
 
+Les mages non-hermétiques ont le droit de lancer des sorts non appris
+en magie instinctive pour peu qu'ils ne dépensent que des EP, qu'ils aient le niveau
+d'énergie nécessaire au sort et que ce dernier soit inférieur ou égal au niveau du
+talent d'Art Magique. La difficulté du lancer est de 0 mais sa marge de
+réussite ne peut être supérieure à 1. Pour pré-encoder des sorts que vous compter
+lancer en magie instinctive, vous pouvez utiliser la liste "Magie Instinctive"
+qui fixe tous ces détails pour vous et ne vous décompte pas de PA pour ce sort.
+
 ## Mettre à jour une fiche existante
 
 D'abord, téléchargez la version voulue pour la fiche.
