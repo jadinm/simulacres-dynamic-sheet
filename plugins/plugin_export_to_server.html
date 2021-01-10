@@ -26,62 +26,75 @@
     </div>
 </div>
 
-<script id="plugin-js-export-to-server" class="plugin-js">
-    // Fix graphical bug with the label overlapping the default value
-    $("#plugin-export-to-server-url").trigger("change")
-
-    /* Hide alert */
-    $("#plugin-export-to-server-alert-button").on("click", _ => {
-        $("#plugin-export-to-server-alert").addClass("d-none")
-    })
-
-    /* Export character page */
-    const alert = $("#plugin-export-to-server-alert")
-    function hide_message() {
-        setTimeout(_ => {
-            alert.addClass("d-none")
-        }, 10000)
+<style id="plugin-css-export-to-server" class="plugin-css">
+    /* Set font of url to a more readable font than Augusta */
+    #plugin-export-to-server-url {
+        font-family: "Linux Libertine", serif;
     }
-    $("#plugin-export-to-server-export").on("click", _ => {
-        const page = "<!DOCTYPE html><html lang=\"fr\">" + $("html").html() + "</html>"
+</style>
 
-        // Retrieve the name of the character
-        let character_name = $("input#character-name")[0].value
-        if (character_name === null || character_name.length === 0)
-            character_name = "Anonyme"
+<script id="plugin-js-export-to-server" class="plugin-js">
+    // We create a new block to avoid errors in case of redeclaration of global variables
+    // This can happen if this plugin is imported twice
+    $(_ => {
+        // Fix graphical bug with the label overlapping the default value
+        $("#plugin-export-to-server-url").trigger("change")
 
-        // Export to server
-        let data = new FormData()
-        data.append("name", character_name)
-        data.append("page", page)
-        const url = $("#plugin-export-to-server-url").val()
-        $.ajax({
-            url: url,
-            method: "POST",
-            data: data,
-            processData: false,
-            contentType: false,
-            success: _ => {
-                $("#plugin-export-to-server-alert-message").text("La page a été exportée")
-                alert.removeClass("d-none").removeClass("alert-danger").addClass("alert-success")
-                hide_message()
-            },
-            error: (jqXHR, textStatus, errorThrown) => {
-                // Failed to export data
-                let text = "La fiche n'a été exportée."
-                if (errorThrown)
-                    text += " " + errorThrown + "."
-                else if (textStatus === "error" && jqXHR.readyState !== 4) {
-                    text += " Cela peut arriver si le serveur n'est pas joignable" +
-                        " ou s'il n'a pas ajouté le header 'Access-Control-Allow-Origin: *' à sa réponse"
-                } else {
-                    text += " La raison est '" + textStatus + "'"
+        /* Hide alert */
+        $("#plugin-export-to-server-alert-button").on("click", _ => {
+            $("#plugin-export-to-server-alert").addClass("d-none")
+        })
+
+        /* Export character page */
+        const alert = $("#plugin-export-to-server-alert")
+        alert.addClass("d-none") // Hide old alerts
+        function hide_message() {
+            setTimeout(_ => {
+                alert.addClass("d-none")
+            }, 10000)
+        }
+
+        $("#plugin-export-to-server-export").on("click", _ => {
+            const page = "<!DOCTYPE html><html lang=\"fr\">" + $("html").html() + "</html>"
+
+            // Retrieve the name of the character
+            let character_name = $("input#character-name")[0].value
+            if (character_name === null || character_name.length === 0)
+                character_name = "Anonyme"
+
+            // Export to server
+            let data = new FormData()
+            data.append("name", character_name)
+            data.append("page", page)
+            const url = $("#plugin-export-to-server-url").val()
+            $.ajax({
+                url: url,
+                method: "POST",
+                data: data,
+                processData: false,
+                contentType: false,
+                success: _ => {
+                    $("#plugin-export-to-server-alert-message").text("La page a été exportée")
+                    alert.removeClass("d-none").removeClass("alert-danger").addClass("alert-success")
+                    hide_message()
+                },
+                error: (jqXHR, textStatus, errorThrown) => {
+                    // Failed to export data
+                    let text = "La fiche n'a été exportée."
+                    if (errorThrown)
+                        text += " " + errorThrown + "."
+                    else if (textStatus === "error" && jqXHR.readyState !== 4) {
+                        text += " Cela peut arriver si le serveur n'est pas joignable" +
+                            " ou s'il n'a pas ajouté le header 'Access-Control-Allow-Origin: *' à sa réponse"
+                    } else {
+                        text += " La raison est '" + textStatus + "'"
+                    }
+                    text += "."
+                    $("#plugin-export-to-server-alert-message").text(text)
+                    alert.removeClass("d-none").removeClass("alert-success").addClass("alert-danger")
+                    hide_message()
                 }
-                text += "."
-                $("#plugin-export-to-server-alert-message").text(text)
-                alert.removeClass("d-none").removeClass("alert-success").addClass("alert-danger")
-                hide_message()
-            }
+            })
         })
     })
 </script>
