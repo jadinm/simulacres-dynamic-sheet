@@ -10,7 +10,7 @@ function hp_update(event) {
     if (value === 0) {
         handle.removeClass('full').removeClass('unease').addClass('dead')
         selection.removeClass('full').removeClass('unease')
-    } else if (max_value - value >= 2) {
+    } else if (max_value - value >= 2 || max_value <= 1) {
         handle.removeClass('full').addClass('unease').removeClass('dead')
         selection.removeClass('full').addClass('unease')
     } else {
@@ -22,7 +22,7 @@ function hp_update(event) {
     const hp_sliders = $(".hp.input-slider")
     for (let i = 0; i < hp_sliders.length; i++) {
         const max_value = parseInt(hp_sliders[i].getAttribute("data-slider-max"))
-        if (max_value - parseInt(hp_sliders[i].value) >= 2)
+        if (max_value - parseInt(hp_sliders[i].value) >= 2 || max_value <= 1)
             unease_sum += 1
     }
     set_slider_min($("#unease"), unease_sum)
@@ -199,8 +199,10 @@ $("[id^=increment-hp]").on("click", e => {
     const hp_id = e.target.id.split("increment-")[1]
     const hp = $("#" + hp_id)
     const current_max = slider_max(hp[0])
-    if (current_max < 8)
+    if (current_max < 8) {
         set_slider_max(hp, current_max + 1)
+        hp_update({target: hp[0]})
+    }
 
     // Adventure points
     compute_remaining_ap()
@@ -209,8 +211,10 @@ $("[id^=decrement-hp]").on("click", e => {
     const hp_id = e.target.id.split("decrement-")[1]
     const hp = $("#" + hp_id)
     const current_max = slider_max(hp[0])
-    if (current_max > 1)
+    if (current_max > 1) {
         set_slider_max(hp, current_max - 1)
+        hp_update({target: hp[0]})
+    }
 
     // Adventure points
     compute_remaining_ap()
