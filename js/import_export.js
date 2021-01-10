@@ -3,6 +3,8 @@
  */
 
 let changed_page = false
+const modifiable_sliders = ["hp-head", "hp-trunk", "hp-right-arm", "hp-left-arm", "hp-right-leg", "hp-left-leg",
+    "breath", "psychic"]
 
 /* Remind the user that they need to save the page if they changed anything */
 window.onbeforeunload = function () {
@@ -138,6 +140,12 @@ function import_data(src_html, dst_html) {
                     }
                     update_talent({item: row[0], to: list[0]})
                 }
+            }
+
+            // Update the maximum through sliders that can change their maximum: HP/PS/EP
+            const old_max = parseInt(old_input.getAttribute("data-slider-max"))
+            if (new_input.length > 0 && modifiable_sliders.includes(new_input[0].id) && !isNaN(old_max)) {
+                set_slider_max(new_input, old_max)
             }
 
             // Refresh modified sliders
