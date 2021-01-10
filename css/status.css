@@ -63,3 +63,8 @@
     background-color: white;
     border-radius: 50%;
 }
+
+/* Mark body parts as buttons */
+.clickable.btn-link.hp-link:hover {
+    color: #1266F1;
+}

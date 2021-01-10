@@ -84,27 +84,52 @@ $("#shield").on("change", _ => {
 })
 
 /* Update constitution on resistance change */
-base_hp = localized_hp ? 3 : 4
+const light_bonus_class = "light-bonus-applied"
+const heavy_bonus_class = "heavy-bonus-applied"
 $("#resistance").on("change", event => {
+    const target = $(event.target)
     const value = parseInt(event.target.value) || 0
     const trunk = $("#hp-trunk")
     const right_leg = $("#hp-right-leg")
     const left_leg = $("#hp-left-leg")
     const unease = $("#unease")
+    const current_trunk_max = slider_max(trunk[0])
+    const current_right_leg_max = slider_max(right_leg[0])
+    const current_left_leg_max = slider_max(left_leg[0])
     if (value <= 1) { // Weak constitution
-        set_slider_max(trunk, base_hp)
-        set_slider_max(right_leg, base_hp)
-        set_slider_max(left_leg, base_hp)
+        if (target.hasClass(light_bonus_class)) { // from normal to weak
+            target.removeClass(light_bonus_class)
+            set_slider_max(trunk, current_trunk_max - 1)
+        } else if (target.hasClass(heavy_bonus_class)) { // from heavy to weak
+            target.removeClass(heavy_bonus_class)
+            set_slider_max(trunk, current_trunk_max - 2)
+            set_slider_max(right_leg, current_right_leg_max - 1)
+            set_slider_max(left_leg, current_left_leg_max - 1)
+        }
         set_slider_max(unease, 4)
     } else if (value === 2) { // Normal constitution
-        set_slider_max(trunk, base_hp + 1)
-        set_slider_max(right_leg, base_hp)
-        set_slider_max(left_leg, base_hp)
+        if (target.hasClass(heavy_bonus_class)) { // from strong to normal
+            target.removeClass(heavy_bonus_class)
+            set_slider_max(trunk, current_trunk_max - 1)
+            set_slider_max(right_leg, current_right_leg_max - 1)
+            set_slider_max(left_leg, current_left_leg_max - 1)
+        } else if (!target.hasClass(light_bonus_class)) { // from weak to normal
+            set_slider_max(trunk, current_trunk_max + 1)
+        }
+        target.addClass(light_bonus_class)
         set_slider_max(unease, 5)
     } else { // Strong constitution
-        set_slider_max(trunk, base_hp + 2)
-        set_slider_max(right_leg, base_hp + 1)
-        set_slider_max(left_leg, base_hp + 1)
+        if (target.hasClass(light_bonus_class)) { // from normal to strong
+            target.removeClass(light_bonus_class)
+            set_slider_max(trunk, current_trunk_max + 1)
+            set_slider_max(right_leg, current_right_leg_max + 1)
+            set_slider_max(left_leg, current_left_leg_max + 1)
+        } else if (!target.hasClass(heavy_bonus_class)) { // from weak to strong
+            set_slider_max(trunk, current_trunk_max + 2)
+            set_slider_max(right_leg, current_right_leg_max + 1)
+            set_slider_max(left_leg, current_left_leg_max + 1)
+        }
+        target.addClass(heavy_bonus_class)
         set_slider_max(unease, 6)
     }
 })
@@ -170,8 +195,9 @@ $("#decrement-psychic").on("click", _ => {
     // Adventure points
     compute_remaining_ap()
 })
-$("#increment-hp").on("click", _ => {
-    const hp = $("#hp-trunk")
+$("[id^=increment-hp]").on("click", e => {
+    const hp_id = e.target.id.split("increment-")[1]
+    const hp = $("#" + hp_id)
     const current_max = slider_max(hp[0])
     if (current_max < 8)
         set_slider_max(hp, current_max + 1)
@@ -179,8 +205,9 @@ $("#increment-hp").on("click", _ => {
     // Adventure points
     compute_remaining_ap()
 })
-$("#decrement-hp").on("click", _ => {
-    const hp = $("#hp-trunk")
+$("[id^=decrement-hp]").on("click", e => {
+    const hp_id = e.target.id.split("decrement-")[1]
+    const hp = $("#" + hp_id)
     const current_max = slider_max(hp[0])
     if (current_max > 1)
         set_slider_max(hp, current_max - 1)
@@ -241,6 +268,19 @@ $(_ => {
                 $("#unease-value").text(unease)
                 return text
             }
+        })
+
+        $(".hp-link").on("click", e => {
+            let dialog_id = e.target.getAttribute("data-target")
+            if (dialog_id == null) {
+                const parent = $(e.target).parents(".hp-link")
+                if (parent.length > 0)
+                    dialog_id = $(e.target).parents(".hp-link")[0].getAttribute("data-target")
+            }
+            if (dialog_id == null)
+                return
+            // Start dialog to update the HP of the zone
+            $(dialog_id).modal()
         })
     }
 
