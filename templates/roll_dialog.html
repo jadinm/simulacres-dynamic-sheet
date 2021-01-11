@@ -31,11 +31,51 @@
                         <!-- Warn user about current malus here -->
                         <span id="roll-dialog-penalties" style="white-space: pre-line;"></span>
                     </div>
-                    <div class="row mx-1 roll-dialog-effect-hide">
-                        <label id="roll-dialog-modifier-label" for="roll-dialog-modifier">
-                            Modificateur à la MR (ex. énergies investies)&nbsp;
-                        </label>
-                    </div>
+                    {% if version == V8 %}
+                        <div class="row mx-1 roll-dialog-effect-hide">
+                            <b id="roll-dialog-energy-investment" class="d-none"><br/>Energies investies</b>
+                        </div>
+                        <div class="row mx-1 roll-dialog-effect-hide">
+                            <div class="align-middle md-form input-with-pre-icon col-4 m-0 d-none" data-toggle="tooltip"
+                                 data-placement="bottom" title="Puissance investie">
+                                <svg height="3em" width="2em" class="input-prefix">
+                                    <use xlink:href="#svg-power"></use>
+                                </svg>
+                                <label for="roll-dialog-power" hidden></label>
+                                <input class="roll-dialog-energy form-control text-center" id="roll-dialog-power"
+                                       type="number" value="0" min="0" max="0">
+                            </div>
+                            <div class="align-middle md-form input-with-pre-icon col-4 m-0 d-none" data-toggle="tooltip"
+                                 data-placement="bottom" title="Rapidité investie">
+                                <svg height="3em" width="2em" class="input-prefix">
+                                    <use xlink:href="#svg-speed"></use>
+                                </svg>
+                                <label for="roll-dialog-speed" hidden></label>
+                                <input class="roll-dialog-energy form-control text-center" id="roll-dialog-speed"
+                                       type="number" value="0" min="0" max="0">
+                            </div>
+                            <div class="align-middle md-form input-with-pre-icon col-4 m-0 d-none" data-toggle="tooltip"
+                                 data-placement="bottom" title="Précision investie">
+                                <svg height="3em" width="2em" class="input-prefix">
+                                    <use xlink:href="#svg-precision"></use>
+                                </svg>
+                                <label for="roll-dialog-precision" hidden></label>
+                                <input class="roll-dialog-energy form-control text-center" id="roll-dialog-precision"
+                                       type="number" value="0" min="0" max="0">
+                            </div>
+                        </div>
+                        <div class="row mx-1 roll-dialog-effect-hide">
+                            <label id="roll-dialog-modifier-label" for="roll-dialog-modifier">
+                                Modificateur circonstanciel&nbsp;
+                            </label>
+                        </div>
+                    {% else %}
+                        <div class="row mx-1 roll-dialog-effect-hide">
+                            <label id="roll-dialog-modifier-label" for="roll-dialog-modifier">
+                                Modificateur à la MR (ex. énergies investies)&nbsp;
+                            </label>
+                        </div>
+                    {% endif %}
                     <div class="row mx-1 mb-5 roll-dialog-effect-hide">
                         <input id="roll-dialog-modifier" data-slider-id="roll-dialog-modifier-slider" type="text"
                                data-slider-min="-9" data-slider-max="9" data-slider-step="1" data-slider-value="0"
@@ -58,21 +98,30 @@
                     <div id="roll-dialog-effect" class="row mx-1 roll-dialog-effect-hide"
                          style="white-space: pre-line;"></div>
                     <hr/>
-                    <div class="m-0 p-0 roll-dialog-effect-hide">
-                        <div class="row md-form form-row mx-1 d-none">
-                            <div class="col-10">
-                                <label for="roll-dialog-invested-precision">
-                                    Précision utilisée pour augmenter la chance de succès critique
-                                </label>
-                                <input class="special-energy form-control" id="roll-dialog-invested-precision"
-                                       type="number" value="0" min="0" max="0">
+                    {% if version == V7 %}
+                        <div class="m-0 p-0 roll-dialog-effect-hide">
+                            <div class="row mx-1">
+                                <div class="align-middle md-form input-with-pre-icon col-10 m-0 d-none">
+                                    <svg height="3em" width="2em" class="input-prefix">
+                                        <use xlink:href="#svg-precision"></use>
+                                    </svg>
+                                    <label for="roll-dialog-precision">
+                                        Précision utilisée pour augmenter la chance de succès critique
+                                    </label>
+                                    <input class="roll-dialog-energy form-control" id="roll-dialog-precision"
+                                           type="number" value="0" min="0" max="0">
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    {% endif %}
                     <div class="row mx-1">
-                        Le jet nécessite parfois de lancer un autre dé pour localiser l'effet ou
-                        pour augmenter la MR en cas de réussite quand le test passe
-                        si on a investi des points de puissance pour ça:
+                        {% if version == V7 %}
+                            Le jet nécessite parfois de lancer un autre dé pour localiser l'effet ou
+                            pour augmenter la MR en cas de réussite quand le test passe
+                            si on a investi des points de puissance pour ça:
+                        {% else %}
+                            Le jet nécessite parfois de lancer un autre dé:
+                        {% endif %}
                     </div>
                     <div class="row mx-1">
                         <div id="roll-dialog-1d6" class="btn btn-info"><i class="fas fa-dice-six"></i></div>

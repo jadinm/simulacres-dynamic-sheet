@@ -59,8 +59,8 @@ function add_row_listeners(line = $(document)) {
         }
         difficulty = isNaN(difficulty) ? 0 : difficulty
 
-        // Reset precision
-        $("#roll-dialog-invested-precision").val("0")
+        // Reset all invested energies
+        $(".roll-dialog-energy").val(0)
 
         // Do the actual roll
         const value = parseInt(row_elem(button[0], "value").text()) // Recover max value
@@ -426,7 +426,7 @@ let current_roll = null
 class Roll {
     constructor(reason = "", max_value = NaN, talent_level = 0, effect = "",
                 critical_increase = 0, formula_elements = [], margin_throttle = NaN,
-                base_dices = [], critical_dices = [], precision = NaN, effect_dices = []) {
+                base_dices = [], critical_dices = [], effect_dices = [], power_dices = []) {
         this.reason = reason
         this.formula_elements = formula_elements
         this.max_value = max_value
@@ -438,9 +438,11 @@ class Roll {
         this.effect_dices = effect_dices
 
         this.critical_increase = critical_increase
-        this.precision = precision
-        if (!this.precision_chosen())
-            this.update_precision()
+        this.precision = NaN
+        this.power = NaN
+        this.power_dices = []
+        this.speed = NaN
+        this.update_energies()
 
         this.unease = get_unease()
         this.armor_penalty = get_armor_penalty()
@@ -458,8 +460,8 @@ class Roll {
     }
 
     column_effect(column, modifier) {
-        const total = this.margin() + this.effect_value() + this.effect_modifier + modifier
-        if (this.margin() < 0 || total < 0)
+        const total = this.post_test_margin() + this.effect_value() + this.effect_modifier + modifier
+        if (this.post_test_margin() < 0 || total < 0)
             return 0
         if (total > 26) {
             const additional_ranges = Math.floor((total - 26) / 4) + 1
@@ -469,13 +471,13 @@ class Roll {
     }
 
     dss() {
-        return this.margin() > 0 ? Math.floor(this.margin() / 3) : 0
+        return this.post_test_margin() > 0 ? Math.floor(this.post_test_margin() / 3) : 0
     }
 
     des() {
-        if (-6 <= this.margin() && this.margin() <= -4)
+        if (-6 <= this.post_test_margin() && this.post_test_margin() <= -4)
             return 1
-        else if (this.margin() <= -7)
+        else if (this.post_test_margin() <= -7)
             return 2
         return 0
     }
@@ -489,17 +491,46 @@ class Roll {
     margin() {
         if (this.is_critical_failure()) // Cannot have more than 0 in case of critical failure
             return 0
-        const margin = this.pre_modifier_margin() + this.margin_modifier
+        const energy_modifier = is_v7 ? 0 : this.power + this.speed + this.precision
+        const margin = this.pre_modifier_margin() + this.margin_modifier + energy_modifier
         return isNaN(this.margin_throttle) ? margin : Math.min(this.margin_throttle, margin)
     }
 
-    precision_chosen() {
-        return !isNaN(this.precision)
+    post_test_margin() {
+        return this.is_success() ? this.margin() + this.power_value() : this.margin()
     }
 
-    update_precision() {
-        const precision_input = $("#roll-dialog-invested-precision")
-        this.precision = parseInt(precision_input.val())
+    update_energies(force_update = false) {
+        const precision_input = $("#roll-dialog-precision")
+        if (precision_input.length > 0) {
+            if (isNaN(this.precision) || force_update) {
+                this.precision = parseInt(precision_input.val())
+            } else { // Update input
+                precision_input.val(this.precision)
+            }
+        } else {
+            this.precision = 0
+        }
+        const power_input = $("#roll-dialog-power")
+        if (power_input.length > 0) {
+            if (isNaN(this.power) || force_update) {
+                this.power = parseInt(power_input.val())
+            } else {
+                power_input.val(this.power)
+            }
+        } else {
+            this.power = 0
+        }
+        const speed_input = $("#roll-dialog-speed")
+        if (speed_input.length > 0) {
+            if (isNaN(this.speed) || force_update) {
+                this.speed = parseInt(speed_input.val())
+            } else {
+                speed_input.val(this.speed)
+            }
+        } else {
+            this.speed = 0
+        }
     }
 
     dice_value() {
@@ -535,6 +566,18 @@ class Roll {
         }, 0);
     }
 
+    power_value() {
+        if (!this.is_success())
+            return 0
+        if (this.power_dices.length === 0) {
+            // Power can only be increased up to 3 => roll all the dices directly
+            this.roll_dices(3, 6, this.power_dices)
+        }
+        return this.power_dices.slice(0, this.power).reduce((a, b) => {
+            return a + b;
+        }, 0);
+    }
+
     is_talent_roll() {
         return !isNaN(this.max_value)
     }
@@ -547,6 +590,11 @@ class Roll {
         const precision = this.precision == null ? 0 : this.precision
         // talents at level -4 and -2 trigger a critical roll at the same probability as talents at level 0
         return this.dice_value() <= 2 + Math.max(0, this.talent_level) + precision + this.critical_increase
+    }
+
+    is_success() {
+        return !this.is_critical_failure()
+            && (this.margin() > 0 || this.margin() === 0 && !is_v7 || this.is_critical_success())
     }
 
     show_roll() {
@@ -575,9 +623,7 @@ class Roll {
         let modifier = 0
         critical_failure = false
         critical_success = false
-        const precision_input = $("#roll-dialog-invested-precision")
-        if (!this.precision_chosen())
-            this.precision = parseInt(precision_input.val())
+        this.update_energies()
         if (this.is_critical_failure()) {
             critical_div.html("<b class='text-danger'>Échec critique... :'(</b>")
             text_end = "<div class='row mx-1'>La marge est maximum 0 et c'est un échec</div>"
@@ -609,10 +655,10 @@ class Roll {
 
         if (this.is_talent_roll()) {
             const result = $("#roll-dialog-result")
-            result[0].setAttribute("value", this.margin().toString())
-            result.html(this.margin())
+            result[0].setAttribute("value", this.post_test_margin().toString())
+            result.html(this.post_test_margin())
 
-            set_result_label(this.margin())
+            set_result_label(this.post_test_margin())
 
             let effect_dices_sum = 0
             let effect_text = isNaN(this.margin_throttle) ? "" : "<div class='row mx-1'>La marge maximum est de "
@@ -623,6 +669,11 @@ class Roll {
                 effect_text += "<div class='row mx-1'>Dés d'effet = " + effect_dices_sum
                     + " (" + this.effect_dices[0] + " + " + this.effect_dices[1] + ")</div>"
             } else {
+                if (this.is_success() && this.power > 0 && this.power_value() >= 0) {
+                    effect_text += "<div class='row mx-1'>" + this.power + "d6 de puissance rajoutés = "
+                        + this.power_value() + " (" + this.power_dices.slice(0, this.power).join(" + ") + ")</div>"
+                }
+
                 // DSS = MR // 3 and DES = 0 or (1 if 4 <= ME <= 6) or (2 if ME >= 7)
                 effect_text += "<div class='row mx-1'>DSS =&nbsp;<span class='roll-dialog-dss'>" + this.dss()
                     + "</span></div><div class='row mx-1'>DES =&nbsp;<span class='roll-dialog-des'>" + this.des() + "</span></div>"
@@ -655,7 +706,7 @@ class Roll {
                 effect = effect.replaceAll(effect_column_regex, (match, prefix, column, modifier, suffix) => {
                     prefix = prefix.replace(" ", "&nbsp;")
                     modifier = typeof modifier === "undefined" ? 0 : parseInt(modifier)
-                    const effect_value = (this.margin() > 0) ? this.column_effect(column, modifier) : 0
+                    const effect_value = this.is_success() ? this.column_effect(column, modifier) : 0
                     suffix = suffix.replace(" ", "&nbsp;")
                     return prefix + "<span class='roll-dialog-effect' column='" + column + "' " + "modifier='" + modifier + "'>" + effect_value + "</span>" + suffix
                 })
@@ -672,7 +723,8 @@ class Roll {
             }
             // Update with the MR if "MR" is in the text
             $("#roll-dialog-effect").html(effect.replaceAll(effect_margin_regex, (match, prefix, _, suffix) => {
-                return prefix.replace(" ", "&nbsp;") + "<span class='roll-dialog-margin'>" + this.margin() + "</span>"
+                return prefix.replace(" ", "&nbsp;")
+                    + "<span class='roll-dialog-margin'>" + this.post_test_margin() + "</span>"
                     + suffix.replace(" ", "&nbsp;")
             }))
 
@@ -712,12 +764,12 @@ function slider_value_changed(input) {
         const result_span = $("#roll-dialog-result")
         if (input.id === "roll-dialog-modifier") { // Modify the MR only for MR modifier
             current_roll.margin_modifier = modifier
-            result_span.html(current_roll.margin())
+            result_span.html(current_roll.post_test_margin())
             // Toggle failure or success
-            set_result_label(current_roll.margin())
+            set_result_label(current_roll.post_test_margin())
 
             // Replace MR in effect
-            $(".roll-dialog-margin").html(current_roll.margin())
+            $(".roll-dialog-margin").html(current_roll.post_test_margin())
             // Replace DSS and DES in effect
             $(".roll-dialog-dss").html(current_roll.dss())
             $(".roll-dialog-des").html(current_roll.des())
@@ -749,32 +801,48 @@ $(_ => {
 /* Quick roll button */
 
 $("#roll-2d6").on("click", _ => {
-    // Reset precision
-    $("#roll-dialog-invested-precision").val("0")
+    // Reset invested energies
+    $(".roll-dialog-energy").val(0)
     // Trigger roll
     new Roll().trigger_roll()
     $('#roll-dialog').modal()
 })
 
 /* Precision energy */
-$("#precision").on("change", event => {
+$(".energy").on("change", event => {
     let value = parseInt(event.target.value)
     if (isNaN(value))
         value = 0
-    const invested_precision = $("#roll-dialog-invested-precision")
-    invested_precision[0].setAttribute("max", value)
+    const elem_id = "#roll-dialog-" + event.target.id
+    const invested = $(elem_id)
+    if (invested.length === 0)
+        return
+    const title = $("#roll-dialog-energy-investment")
+
+    // Update max investment value
+    invested[0].setAttribute("max", value)
     if (value > 0) {
-        invested_precision.parent().parent().removeClass("d-none")
+        invested.parent().removeClass("d-none")
+        if (title.length > 0) {
+            title.removeClass("d-none")
+        }
     } else {
-        invested_precision.parent().parent().addClass("d-none")
+        invested.parent().addClass("d-none")
+        if (title.length > 0) {
+            const available_energies = $(".energy").filter((_, e) => {
+                return parseInt(e.value) > 0
+            })
+            if (available_energies.length === 0)
+                title.addClass("d-none")
+        }
     }
 })
 
-$("#roll-dialog-invested-precision").on("change", _ => {
+$(".roll-dialog-energy").on("change", _ => {
     if (!current_roll)
         return
     // Trigger the same roll but with the correct precision
-    current_roll.update_precision()
+    current_roll.update_energies(true)
     current_roll.show_roll()
 })
 
