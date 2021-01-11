@@ -9,7 +9,7 @@ function talent_from_name(name, from_elem = $(document)) {
 function talent_level(talent, target_list = null) {
     const list = (target_list) ? target_list : $(talent).parents(".talent-list")[0]
     if (list == null)
-        return "x"
+        return "0"
     return list.id.replace("talents_", "")
 }
 
