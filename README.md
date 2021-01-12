@@ -156,6 +156,9 @@ Pour le moment nous avons les plugins suivants :
   à une fiche de base (peu importe la version). Ce plugin sert d'exemple
   pour construire une fiche SimulacreS d'un univers de campagne
   autre que Malienda ou Capitaine Vaudou.
+- Un [plugin rajoutant une énergie magique](plugins/plugin_generic_world.html)
+  à une fiche de base (peu importe la version) sans rajouter d'onglet.
+  Il montre aussi comment changer la police.
 - Un [plugin d'export](plugins/plugin_export_to_server.html) de fiche vers un server distant
   qui permet d'envoyer le contenu de la fiche à une URL
   en faisant une requête POST qui contient les données suivantes :
