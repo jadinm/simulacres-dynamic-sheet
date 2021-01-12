@@ -17,6 +17,8 @@ let talent_increment_cost = {
     "0": {x: NaN, "-4": NaN, "-2": NaN, "0": 0, "1": 5, "2": 25, "3": 65},
     "1": {x: NaN, "-4": NaN, "-2": NaN, "0": NaN, "1": 0, "2": 20, "3": 60}
 }
+let talent_increment_cost_discovery_2 = 0
+let talent_increment_cost_discovery_3 = 0
 let indirect_x_to_0_raise_cost = 1
 let advised_talent_save = 1
 let mage_spell_ap_cost = talent_increment_cost["x"]["-4"]

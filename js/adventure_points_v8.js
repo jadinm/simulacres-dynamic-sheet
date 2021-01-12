@@ -24,6 +24,8 @@ talent_increment_cost = {
     "0": {x: NaN, "-4": NaN, "-2": NaN, "0": 0, "1": 5, "2": 25, "3": 50},
     "1": {x: NaN, "-4": NaN, "-2": NaN, "0": NaN, "1": 0, "2": 20, "3": 45}
 }
+let talent_increment_cost_discovery_2 = 35
+let talent_increment_cost_discovery_3 = 45
 let indirect_x_to_0_raise_cost = 0 // No penalty
 let advised_talent_save = 0 // No bonus
 let mage_spell_ap_cost = 0  // No special cost, a spell is a talent

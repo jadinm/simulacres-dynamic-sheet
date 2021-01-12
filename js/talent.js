@@ -42,6 +42,12 @@ function talent_cost(talent, list = null) {
     }
 
     let cost = talent_increment_cost[old_value][current_value]
+    if (discovery && current_value === "2")
+        cost = talent_increment_cost[old_value]["1"] + talent_increment_cost_discovery_2
+    else if (discovery && current_value === "3")
+        cost = talent_increment_cost[old_value]["1"] + talent_increment_cost_discovery_2 + talent_increment_cost_discovery_3
+    else
+        cost = talent_increment_cost[old_value][current_value]
 
     if (talent_x_inefficient_raise().includes(talent_name) && parseInt(current_value) >= 0) {
         // 6 PA were consumed to raise this talent from X to 0 instead of 5
@@ -252,7 +258,7 @@ $('.talent-list').each((i, elem) => {
             }
             if (!$(e.to).hasClass("remove-talent") && discovery
                 && (talent_base_level(e.dragged) === "0" && e.to.id !== "talents_0"
-                || talent_base_level(e.dragged) === "1" && e.to.id === "talents_0")) {
+                    || talent_base_level(e.dragged) === "1" && e.to.id === "talents_0")) {
                 return false
             }
             return e.willInsertAfter ? 1 : -1
