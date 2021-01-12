@@ -78,8 +78,13 @@ $("#dark-mode").on("click", _ => {
     enable_dark_mode()
 })
 
-/* Tooltip initializations */
+function number_filter(value, min, max) {
+    return /^-?\d*$/.test(value) && (value === "" || max == null || isNaN(max) || parseInt(value) <= max)
+        && (value === "" || min == null || isNaN(min) || parseInt(value) >= min)
+}
+
 $(_ => {
+    /* Tooltip initializations */
     $('[data-toggle="tooltip"]:visible').tooltip()
     $('button[data-toggle="tooltip"]').tooltip()
     $('.absorption').parent().tooltip()
@@ -91,4 +96,15 @@ $(_ => {
     } else {
         disable_dark_mode()
     }
+
+    // Install input filters on number inputs
+    $("input[type='number']").on("input keydown keyup mousedown mouseup select contextmenu drop", function () {
+        if (number_filter(this.value, this.getAttribute("min"), this.getAttribute("max"))) {
+            this.oldValue = this.value
+        } else if (this.hasOwnProperty("oldValue")) {
+            this.value = this.oldValue
+        } else {
+            this.value = ""
+        }
+    })
 })
