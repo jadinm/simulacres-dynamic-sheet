@@ -417,6 +417,10 @@
     {% if matrix_4x4 %}
         matrix_4x4 = true
     {% endif %}
+    let discovery = false
+    {% if discovery %}
+        discovery = true
+    {% endif %}
 </script>
 <script>{{ include_static("../js/utils.js") }}</script>
 <script>{{ include_static("../js/import_export.js") }}</script>

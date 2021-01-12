@@ -26,6 +26,8 @@ parser.add_argument("--matrix-4x4", help="Add instincts and desire to the stat m
                     action='store_true')
 parser.add_argument("--universe", help="Universe of the adventure", choices=[MED_FANTASY, CAPTAIN_VOODOO, "Autre"],
                     default=MED_FANTASY)
+parser.add_argument("--discovery", help="Discovery mode of SimulacreS (only supported for version 8)",
+                    action='store_true')
 parser.add_argument("-v", "--verbose", help="Increase output verbosity", action="store_true")
 args = parser.parse_args()
 if args.verbose:
@@ -80,6 +82,7 @@ compiled_html = template.render({"augusta_font": augusta_font, "linux_libertine_
                                  "localisation": args.localisation and args.version == V7, "universe": args.universe,
                                  "matrix_4x4": args.version == V7 or args.matrix_4x4,
                                  "dual_wielding": args.version == V7 and args.dual_wielding,
+                                 "discovery": args.discovery and args.version == V8,
                                  "V7": V7, "V8": V8, "captain_voodoo": CAPTAIN_VOODOO, "med_fantasy": MED_FANTASY})
 
 # Replacing external file content

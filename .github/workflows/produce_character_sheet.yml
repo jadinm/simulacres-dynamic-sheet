@@ -11,6 +11,8 @@ env:
   V8_MINIMAL_4x4_FINAL_FILENAME: simulacres_v8_fiche_perso_minimale_4x4.html
   V8_CAPTAIN_VOODOO_FINAL_FILENAME: simulacres_v8_fiche_perso_capitaine_vaudou.html
   V8_CAPTAIN_4x4_VOODOO_FINAL_FILENAME: simulacres_v8_fiche_perso_capitaine_vaudou_4x4.html
+  V8_DISCOVERY_FINAL_FILENAME: simulacres_v8_fiche_perso_minimale_decouverte.html
+  V8_DISCOVERY_4x4_FINAL_FILENAME: simulacres_v8_fiche_perso_minimale_decouverte_4x4.html
 
 jobs:
   produce_character_sheet:
@@ -33,9 +35,11 @@ jobs:
           python3 ${{ env.PYTHON_SCRIPT }} --localisation --dual-wielding target/${{ env.V7_LOCALISATION_DUAL_FINAL_FILENAME }}
           python3 ${{ env.PYTHON_SCRIPT }} --version 8 target/${{ env.V8_BASE_FINAL_FILENAME }}
           python3 ${{ env.PYTHON_SCRIPT }} --version 8 --universe "Autre" target/${{ env.V8_MINIMAL_FINAL_FILENAME }}
+          python3 ${{ env.PYTHON_SCRIPT }} --version 8 --universe "Autre" --discovery target/${{ env.V8_DISCOVERY_FINAL_FILENAME }}
           python3 ${{ env.PYTHON_SCRIPT }} --version 8 --universe "Capitaine Vaudou" target/${{ env.V8_CAPTAIN_VOODOO_FINAL_FILENAME }}
           python3 ${{ env.PYTHON_SCRIPT }} --version 8 --matrix-4x4 target/${{ env.V8_BASE_4x4_FINAL_FILENAME }}
           python3 ${{ env.PYTHON_SCRIPT }} --version 8 --matrix-4x4 --universe "Autre" target/${{ env.V8_MINIMAL_4x4_FINAL_FILENAME }}
+          python3 ${{ env.PYTHON_SCRIPT }} --version 8 --matrix-4x4 --universe "Autre" --discovery target/${{ env.V8_DISCOVERY_4x4_FINAL_FILENAME }}
           python3 ${{ env.PYTHON_SCRIPT }} --version 8 --matrix-4x4 --universe "Capitaine Vaudou" target/${{ env.V8_CAPTAIN_4x4_VOODOO_FINAL_FILENAME }}
 
       - name: Upload the base v7 sheet
@@ -85,3 +89,13 @@ jobs:
         with:
           name: ${{ env.V8_CAPTAIN_4x4_VOODOO_FINAL_FILENAME }}
           path: target/${{ env.V8_CAPTAIN_4x4_VOODOO_FINAL_FILENAME }}
+      - name: Upload the minimal v8 sheet in discovery mode
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.V8_DISCOVERY_FINAL_FILENAME }}
+          path: target/${{ env.V8_DISCOVERY_FINAL_FILENAME }}
+      - name: Upload the minimal v8 sheet in discovery mode with 4x4 matrix
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.V8_DISCOVERY_4x4_FINAL_FILENAME }}
+          path: target/${{ env.V8_DISCOVERY_4x4_FINAL_FILENAME }}

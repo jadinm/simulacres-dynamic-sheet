@@ -1,6 +1,6 @@
 /* This file handles the talent lists */
 
-regex_talent_from_id = /talent_(x|(?:-4)|(?:-2)|0)\d*/
+regex_talent_from_id = /talent_(x|(?:-4)|(?:-2)|0|1)\d*/
 
 function talent_from_name(name, from_elem = $(document)) {
     return from_elem.find("input[value='" + name.replace("'", "\\'") + "']")
@@ -20,6 +20,16 @@ function talent_base_level(talent) {
 function talent_cost(talent, list = null) {
     const current_value = talent_level(talent, list)
     let old_value = talent_base_level(talent)
+
+    if (discovery) { // V8-only
+        if (old_value === "0") {
+            // Trick, "aptitudes (+0 talents)" const the same as moving a talent from X -> 0
+            old_value = "x"
+        } else if (old_value === "1") {
+            // Trick, "discovery talents (+1 talents)" cost the same as moving a talent from -4 -> 0
+            old_value = "-4"
+        }
+    }
 
     const talent_name = $(talent).find("input").val()
     if (work_talents().includes(talent_name)) {
@@ -89,6 +99,8 @@ function update_talent_select(select) {
 }
 
 function add_talent(list, fixed_id = null) {
+    if (list.length === 0)
+        return $()
     const initial_level = list[0].id.replace("talents_", "")
 
     // Find new id
@@ -113,6 +125,8 @@ function add_talent(list, fixed_id = null) {
     $(new_talent).tooltip()
 
     list.children().last().before(new_talent)
+    // Update talent tooltip if needed
+    update_talent_tooltip(new_talent[0])
 
     // Update all list selections of talents
     $("select.talent-select").each((i, elem) => {
@@ -124,6 +138,9 @@ function add_talent(list, fixed_id = null) {
     })
     // Update armor penalty
     recompute_armor_penalty()
+
+    if (discovery)
+        compute_remaining_ap()
     return new_talent
 }
 
@@ -138,6 +155,9 @@ $("#add-talent--2").on("click", (event, idx = null) => { // Add parameter to fix
 })
 $("#add-talent-0").on("click", (event, idx = null) => { // Add parameter to fix the id
     add_talent($("#talents_0"), idx)
+})
+$("#add-talent-1").on("click", (event, idx = null) => { // Add parameter to fix the id
+    add_talent($("#talents_1"), idx)
 })
 
 function add_missing_talents(talents) {
@@ -162,18 +182,30 @@ function update_talent_tooltip(talent, target_list = null) {
         const old_level = talent_base_level(talent)
         const cost = talent_cost(talent)
         if (!isNaN(cost)) {
-            talent.setAttribute("data-original-title",
-                "Talent " + old_level.toUpperCase() + " à la base <br />" + "Coût: " + talent_cost(talent) + " PA")
-            $(talent).find(".talent-origin").text("< " + old_level.toUpperCase())
+            if (discovery) {
+                talent.setAttribute("data-original-title", "Coût: " + talent_cost(talent) + " PA")
+            } else {
+                talent.setAttribute("data-original-title",
+                    "Talent " + old_level.toUpperCase() + " à la base <br />" + "Coût: " + talent_cost(talent) + " PA")
+                $(talent).find(".talent-origin").text("< " + old_level.toUpperCase())
+            }
         } else {
             talent.setAttribute("data-original-title",
                 "Talent " + old_level.toUpperCase() + " à la base <br />" + "Mouvement invalide")
             $(talent).find(".talent-origin").text("< " + old_level.toUpperCase() + " (Mouvement invalide)")
         }
-        $(talent).addClass("increased-talent").tooltip({disabled: false})
+        if (!discovery) {
+            $(talent).addClass("increased-talent")
+        }
+        $(talent).tooltip({disabled: false})
     } else {
         talent.setAttribute("data-original-title", "")
-        $(talent).removeClass("increased-talent").tooltip({disabled: true})
+        if (discovery) {
+            talent.setAttribute("data-original-title", "Coût: " + talent_cost(talent) + " PA")
+            $(talent).tooltip({disabled: false})
+        } else {
+            $(talent).removeClass("increased-talent").tooltip({disabled: true})
+        }
         $(talent).find(".talent-origin").text("")
     }
 }
@@ -216,6 +248,11 @@ $('.talent-list').each((i, elem) => {
         onMove: (e, _) => {
             // Prevent moves that have an invalid PA cost
             if (!$(e.to).hasClass("remove-talent") && isNaN(talent_cost(e.dragged, e.to))) {
+                return false
+            }
+            if (!$(e.to).hasClass("remove-talent") && discovery
+                && (talent_base_level(e.dragged) === "0" && e.to.id !== "talents_0"
+                || talent_base_level(e.dragged) === "1" && e.to.id === "talents_0")) {
                 return false
             }
             return e.willInsertAfter ? 1 : -1

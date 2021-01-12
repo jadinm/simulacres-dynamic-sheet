@@ -116,29 +116,57 @@
             </select>
         </div>
     {% else %}
-        <div class="row col-12 mt-2">
-            Le métier sélectionné par le joueur donne accès à certains talents dits "de métier" qui sont montés à 0
-            lors de la création du personnage et d'autres sont montés à 1. Le tout sans dépenser de PA.
-        </div>
+        {% if discovery %}
+            <div class="row col-12 mt-2">
+                Le métier sélectionné par le joueur donne accès à certains talents et une spécialité
+                lors de la création du personnage. Le tout sans dépenser de PA.
+            </div>
+            <div class="row col-12 mt-2 px-0 mx-0">
+                Sélectionnez les talents de métier et la spécialité
+            </div>
+            <div class="row col-12 md-form pl-0 pr-2 mx-0">
+                <select class="show-tick form-control talent-select selectpicker adventure-points-select"
+                        data-live-search="true" id="work-main-talent" data-style="col-12 align-middle" multiple
+                        title="Talents de métier et spécialité">
+                </select>
+            </div>
+        {% else %}
+            <div class="row col-12 mt-2">
+                Le métier sélectionné par le joueur donne accès à certains talents dits "de métier" qui sont montés à 0
+                lors de la création du personnage et d'autres sont montés à 1. Le tout sans dépenser de PA.
+            </div>
+            <div class="row col-12 mt-2 px-0 mx-0">
+                Sélectionnez les talents de métier qui ont été montés à 1 à la création
+            </div>
+            <div class="row col-12 md-form pl-0 pr-2 mx-0">
+                <select class="show-tick form-control talent-select selectpicker adventure-points-select"
+                        data-live-search="true" id="work-main-talent" data-style="col-12 align-middle" multiple
+                        title="Talents de métier montés à 1 à la création">
+                </select>
+            </div>
+        {% endif %}
+    {% endif %}
+    {% if discovery %}
         <div class="row col-12 mt-2 px-0 mx-0">
-            Sélectionnez les talents de métier qui ont été montés à 1 à la création
+            Sélectionnez les autres aptitudes à la création
         </div>
         <div class="row col-12 md-form pl-0 pr-2 mx-0">
             <select class="show-tick form-control talent-select selectpicker adventure-points-select"
-                    data-live-search="true" id="work-main-talent" data-style="col-12 align-middle" multiple
-                    title="Talents de métier montés à 1 à la création">
+                    data-live-search="true" id="work-talents" data-style="col-12 align-middle" multiple
+                    title="Aptitudes à la création">
+            </select>
+        </div>
+    {% else %}
+        <div class="row col-12 mt-2 px-0 mx-0">
+            Sélectionnez les autres talents de métier qui ont été montés à 0 à la création
+        </div>
+        <div class="row col-12 md-form pl-0 pr-2 mx-0">
+            <select class="show-tick form-control talent-select selectpicker adventure-points-select"
+                    data-live-search="true" id="work-talents" data-style="col-12 align-middle" multiple
+                    title="Talents de métier montés à 0 à la création">
             </select>
         </div>
     {% endif %}
-    <div class="row col-12 mt-2 px-0 mx-0">
-        Sélectionnez les autres talents de métier qui ont été montés à 0 à la création
-    </div>
-    <div class="row col-12 md-form pl-0 pr-2 mx-0">
-        <select class="show-tick form-control talent-select selectpicker adventure-points-select"
-                data-live-search="true" id="work-talents" data-style="col-12 align-middle" multiple
-                title="Talents de métier montés à 0 à la création">
-        </select>
-    </div>
     {% if version == V7 %}
         <div class="row col-12 mt-2 px-0 mx-0">
             Il y a également des talents conseillés pour chaque métier. Les prendre à la création du personnage
