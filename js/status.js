@@ -162,7 +162,7 @@ $("#instincts").on("change", event => {
 $("#increment-breath").on("click", _ => {
     const breath = $("#breath")
     const current_max = slider_max(breath[0])
-    if (current_max < 8)
+    if (current_max < 8 && is_v7 || current_max < 7 && !is_v7)
         set_slider_max(breath, current_max + 1)
 
     // Adventure points
@@ -180,7 +180,7 @@ $("#decrement-breath").on("click", _ => {
 $("#increment-psychic").on("click", _ => {
     const psychic = $("#psychic")
     const current_max = slider_max(psychic[0])
-    if (current_max < 8)
+    if (current_max < 8 && is_v7 || current_max < 7 && !is_v7)
         set_slider_max(psychic, current_max + 1)
 
     // Adventure points
@@ -199,7 +199,7 @@ $("[id^=increment-hp]").on("click", e => {
     const hp_id = e.target.id.split("increment-")[1]
     const hp = $("#" + hp_id)
     const current_max = slider_max(hp[0])
-    if (current_max < 8) {
+    if (current_max < 8 && is_v7 || current_max < 7 && !is_v7) {
         set_slider_max(hp, current_max + 1)
         hp_update({target: hp[0]})
     }
