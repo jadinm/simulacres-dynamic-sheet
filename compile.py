@@ -69,21 +69,25 @@ env.globals['include_static'] = include_static
 
 # Parsing fonts
 
-with open(os.path.join(html_dir, "../font/augusta.regular.ttf"), "rb") as extern_file:
-    augusta_font = base64.b64encode(extern_file.read()).decode()
-
-with open(os.path.join(html_dir, "../font/linux_libertine.regular.ttf"), "rb") as extern_file:
-    ll_font = base64.b64encode(extern_file.read()).decode()
+params = {}
+for root, dirs, filenames in os.walk(os.path.join(html_dir, "../font")):
+    for filename in filenames:
+        if filename[-4:] != ".ttf":
+            continue
+        with open(os.path.join(root, filename), "rb") as extern_file:
+            params[filename.split(".")[0] + "_font"] = base64.b64encode(extern_file.read()).decode()
 
 # Build html sheet
 
+params.update({
+    "version": args.version, "localisation": args.localisation and args.version == V7, "universe": args.universe,
+    "matrix_4x4": args.version == V7 or args.matrix_4x4,
+    "dual_wielding": args.version == V7 and args.dual_wielding,
+    "discovery": args.discovery and args.version == V8,
+    "V7": V7, "V8": V8, "captain_voodoo": CAPTAIN_VOODOO, "med_fantasy": MED_FANTASY
+})
 template = env.get_template('base.html')
-compiled_html = template.render({"augusta_font": augusta_font, "linux_libertine_font": ll_font, "version": args.version,
-                                 "localisation": args.localisation and args.version == V7, "universe": args.universe,
-                                 "matrix_4x4": args.version == V7 or args.matrix_4x4,
-                                 "dual_wielding": args.version == V7 and args.dual_wielding,
-                                 "discovery": args.discovery and args.version == V8,
-                                 "V7": V7, "V8": V8, "captain_voodoo": CAPTAIN_VOODOO, "med_fantasy": MED_FANTASY})
+compiled_html = template.render(params)
 
 # Replacing external file content
 
