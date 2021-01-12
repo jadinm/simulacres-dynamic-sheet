@@ -30,3 +30,8 @@
 #roll-dialog-effect-modifier-slider .slider-handle {
     background: black;
 }
+
+/* Mark body parts as buttons */
+.clickable.btn-link.roll-link:hover {
+    color: #1266F1;
+}
