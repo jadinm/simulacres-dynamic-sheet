@@ -56,6 +56,17 @@ function add_save_to_dom_listeners(base = $(document)) {
         })
         changed_page = true
     })
+
+    // Install input filters on number inputs
+    base.find("input[type='number']").on("input keydown keyup mousedown mouseup select contextmenu drop", function () {
+        if (number_filter(this.value, this.getAttribute("min"), this.getAttribute("max"))) {
+            this.oldValue = this.value
+        } else if (this.hasOwnProperty("oldValue")) {
+            this.value = this.oldValue
+        } else {
+            this.value = ""
+        }
+    })
 }
 
 add_save_to_dom_listeners()
