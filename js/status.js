@@ -94,8 +94,8 @@ $("#resistance").on("change", event => {
     const left_leg = $("#hp-left-leg")
     const unease = $("#unease")
     const current_trunk_max = slider_max(trunk[0])
-    const current_right_leg_max = slider_max(right_leg[0])
-    const current_left_leg_max = slider_max(left_leg[0])
+    const current_right_leg_max = right_leg.length > 0 ? slider_max(right_leg[0]) : 0
+    const current_left_leg_max = left_leg.length > 0 ? slider_max(left_leg[0]) : 0
     if (value <= 1) { // Weak constitution
         if (target.hasClass(light_bonus_class)) { // from normal to weak
             target.removeClass(light_bonus_class)
