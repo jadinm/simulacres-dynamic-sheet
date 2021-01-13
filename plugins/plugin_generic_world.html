@@ -15,7 +15,7 @@
 <script id="plugin-js-generic-world" class="plugin-js">
     $(_ => {
         /* Adds your energy to the list of base energies if not already present */
-        let elem = $("#plugin-generic-world-magic")
+        let elem = $("#plugin-generic-world-energy")
         if (elem.length === 0) {
             const energy_list = $("#power").parents("div.card")
             const row = energy_list.children().last().clone(true, false)
