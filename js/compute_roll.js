@@ -482,17 +482,15 @@ class Roll {
         return 0
     }
 
-    pre_modifier_margin() {
-        if (this.is_critical_failure()) // Cannot have more than 0 in case of critical failure
-            return 0
-        return this.max_value + this.unease - this.dice_value() + this.critical_value()
+    max_threshold() {
+        const energy_modifier = is_v7 ? 0 : this.power + this.speed + this.precision + this.margin_modifier
+        return this.max_value + this.unease + energy_modifier
     }
 
     margin() {
         if (this.is_critical_failure()) // Cannot have more than 0 in case of critical failure
             return 0
-        const energy_modifier = is_v7 ? 0 : this.power + this.speed + this.precision
-        const margin = this.pre_modifier_margin() + this.margin_modifier + energy_modifier
+        const margin = this.max_threshold() - this.dice_value() + this.critical_value()
         return isNaN(this.margin_throttle) ? margin : Math.min(this.margin_throttle, margin)
     }
 
@@ -500,37 +498,26 @@ class Roll {
         return this.is_success() ? this.margin() + this.power_value() : this.margin()
     }
 
-    update_energies(force_update = false) {
-        const precision_input = $("#roll-dialog-precision")
-        if (precision_input.length > 0) {
-            if (isNaN(this.precision) || force_update) {
-                this.precision = parseInt(precision_input.val())
+    update_energy(input, current_value, force_update = false) {
+        if (input.length > 0) {
+            if (isNaN(current_value) || force_update) {
+                current_value = parseInt(input.val())
             } else { // Update input
-                precision_input.val(this.precision)
+                input.val(current_value)
             }
         } else {
-            this.precision = 0
+            current_value = 0
         }
+        return current_value
+    }
+
+    update_energies(force_update = false) {
         const power_input = $("#roll-dialog-power")
-        if (power_input.length > 0) {
-            if (isNaN(this.power) || force_update) {
-                this.power = parseInt(power_input.val())
-            } else {
-                power_input.val(this.power)
-            }
-        } else {
-            this.power = 0
-        }
+        this.power = this.update_energy(power_input, this.power, force_update)
         const speed_input = $("#roll-dialog-speed")
-        if (speed_input.length > 0) {
-            if (isNaN(this.speed) || force_update) {
-                this.speed = parseInt(speed_input.val())
-            } else {
-                speed_input.val(this.speed)
-            }
-        } else {
-            this.speed = 0
-        }
+        this.speed = this.update_energy(speed_input, this.speed, force_update)
+        const precision_input = $("#roll-dialog-precision")
+        this.precision = this.update_energy(precision_input, this.precision, force_update)
     }
 
     dice_value() {
@@ -613,7 +600,7 @@ class Roll {
         return text + "&nbsp;"
     }
 
-    show_roll() {
+    show_roll(ignore_sliders = false) {
         // Update current roll
         current_roll = this
         // Show roll navigation
@@ -667,7 +654,6 @@ class Roll {
 
         // Hide everything and show it afterwards if needed
         const roll_effect_divs = $(".roll-dialog-effect-hide")
-        roll_effect_divs.addClass("d-none")
 
         if (this.is_talent_roll()) {
             const result = $("#roll-dialog-result")
@@ -686,7 +672,7 @@ class Roll {
                     + this.dice_buttons("effect_dices", this.effect_dices) + "</div>"
             } else {
                 if (this.is_success() && this.power > 0 && this.power_value() >= 0) {
-                    effect_text += "<div class='row mx-1 align-middle'>" + this.power + "d6 de puissance rajoutés = "
+                    effect_text += "<div id='roll-dialog-power-test' class='row mx-1 align-middle'>" + this.power + "d6 de puissance rajoutés = "
                         + this.power_value() + this.dice_buttons("power_dices", this.power_dices.slice(0, this.power)) + "</div>"
                 }
 
@@ -706,14 +692,17 @@ class Roll {
             }
 
             $("#roll-dialog-details").html("<div class='row mx-1 align-middle'>Somme des 2d6 = " + this.dice_value()
-                + this.dice_buttons("base_dices", this.base_dices) + "</div><div class='row mx-1 align-middle'>Valeur seuil = "
-                + (this.max_value + this.unease) + racial_bonus + "</div>" + text_end + effect_text)
+                + this.dice_buttons("base_dices", this.base_dices)
+                + "</div><div class='row mx-1 align-middle'>Valeur seuil =&nbsp;<span id='roll-dialog-threshold'>"
+                + this.max_threshold() + "</span>" + racial_bonus + "</div>" + text_end + effect_text)
 
             // Reset additional modifiers
-            select_modifier.slider("setValue", this.margin_modifier)
-            select_effect_modifier.slider("setValue", this.effect_modifier)
-            select_modifier.slider("refresh", {useCurrentValue: true})
-            select_effect_modifier.slider("refresh", {useCurrentValue: true})
+            if (ignore_sliders) {
+                select_modifier.slider("setValue", this.margin_modifier)
+                select_effect_modifier.slider("setValue", this.effect_modifier)
+                select_modifier.slider("refresh", {useCurrentValue: true})
+                select_effect_modifier.slider("refresh", {useCurrentValue: true})
+            }
             roll_effect_divs.removeClass("d-none")
 
             let effect = this.effect
@@ -745,6 +734,7 @@ class Roll {
             }))
 
         } else {
+            roll_effect_divs.addClass("d-none")
             $("#roll-dialog-result-label").html("Résultat du jet de 2d6 = ")
             $("#roll-dialog-result").html(this.dice_value())
             $("#roll-dialog-details").html(this.dice_buttons("base_dices", this.base_dices)).removeClass("d-none")
@@ -793,18 +783,9 @@ function slider_value_changed(input) {
         if (!current_roll)
             return modifier
 
-        const result_span = $("#roll-dialog-result")
         if (input.id === "roll-dialog-modifier") { // Modify the MR only for MR modifier
             current_roll.margin_modifier = modifier
-            result_span.html(current_roll.post_test_margin())
-            // Toggle failure or success
-            set_result_label(current_roll.post_test_margin())
-
-            // Replace MR in effect
-            $(".roll-dialog-margin").html(current_roll.post_test_margin())
-            // Replace DSS and DES in effect
-            $(".roll-dialog-dss").html(current_roll.dss())
-            $(".roll-dialog-des").html(current_roll.des())
+            current_roll.show_roll()
         } else {
             current_roll.effect_modifier = modifier
         }
