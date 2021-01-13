@@ -3,6 +3,8 @@
 regex_talent_from_id = /talent_(x|(?:-4)|(?:-2)|0|1)\d*/
 
 function talent_from_name(name, from_elem = $(document)) {
+    if (name == null)
+        return $()
     return from_elem.find("input[value='" + name.replace("'", "\\'") + "']")
 }
 

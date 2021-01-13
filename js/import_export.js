@@ -109,7 +109,7 @@ function reset_tab_selection(html) {
 function import_data(src_html, dst_html) {
     // Retrieve and copy all of the input values of the src_html
     const table_row_input_id = /(.+)-(\d+)-.+/
-    const talent_input_id = /(x|(?:-4)|(?:-2)|0)(\d+)-name/
+    const talent_input_id = /(x|(?:-4)|(?:-2)|0|1)(\d+)-name/
 
     src_html.find("input").each((i, old_input) => {
         if (old_input.id && old_input.id.length > 0) {
