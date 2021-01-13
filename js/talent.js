@@ -218,6 +218,13 @@ function update_talent_tooltip(talent, target_list = null) {
     }
 }
 
+$(_ => {
+    $(".talent").each((i, elem) => {
+        if (elem.getAttribute("hidden") == null)
+            update_talent_tooltip(elem)
+    })
+})
+
 function update_talent(event) {
     update_talent_tooltip(event.item, event.to)
 
