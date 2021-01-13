@@ -122,7 +122,7 @@ $ yarn
 
 Après, vous avez besoin de certaines libraires python que vous pouvez
 télécharger avec la commande suivante.
-Ce projet supporte les versions de python à partir de 3.5.
+Ce projet supporte les versions de python à partir de 3.8.
 
 ```console
 $ pip3 install -r requirements.txt

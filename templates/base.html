@@ -158,6 +158,9 @@
                     Notes
                 </a>
             </li>
+            {% for button in plugins.buttons %}
+                {{ button | safe }}
+            {% endfor %}
         </ul>
 
         <div id="tabs" class="container-fluid tab-content px-2 pt-1">
@@ -199,6 +202,10 @@
 
             <!-- Notes -->
             {% include "notes.html" %}
+
+            {% for tab in plugins.tabs %}
+                {{ tab | safe }}
+            {% endfor %}
         </div>
     </div>
 
@@ -446,5 +453,12 @@
 <script>{{ include_static("../js/talent.js") }}</script>
 <script>{{ include_static("../js/background.js") }}</script>
 <script>{{ include_static("../js/notes.js") }}</script>
+
+{% for css_block in plugins.css_blocks %}
+    {{ css_block | safe }}
+{% endfor %}
+{% for js_block in plugins.js_blocks %}
+    {{ js_block | safe }}
+{% endfor %}
 
 </html>

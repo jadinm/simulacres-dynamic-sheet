@@ -4,6 +4,8 @@ import logging
 import mimetypes
 import os
 import re
+from typing import List, Dict
+from bs4 import BeautifulSoup
 
 from jinja2 import Environment, PackageLoader, select_autoescape, Markup
 
@@ -28,6 +30,7 @@ parser.add_argument("--universe", help="Universe of the adventure", choices=[MED
                     default=MED_FANTASY)
 parser.add_argument("--discovery", help="Discovery mode of SimulacreS (only supported for version 8)",
                     action='store_true')
+parser.add_argument("--plugin", help="Add the plugin at the following path", action='extend', nargs="*", default=[])
 parser.add_argument("-v", "--verbose", help="Increase output verbosity", action="store_true")
 args = parser.parse_args()
 if args.verbose:
@@ -36,8 +39,8 @@ if args.verbose:
 regex_url = re.compile(r"url\(([\w\\./\-_]+)\)")
 
 
-def include_static(name):
-    def replace_local_urls(match):
+def include_static(name: str) -> Markup:
+    def replace_local_urls(match: re.Match) -> str:
         path = os.path.join(os.path.abspath(os.path.join(TEMPLATE_DIR, os.path.dirname(name))), match.group(1))
         if not os.path.exists(path):
             logging.warning("Path '{}' does not exists".format(path))
@@ -57,6 +60,34 @@ def include_static(name):
             # Replace links to background images and fonts
             lines.append(regex_url.sub(replace_local_urls, line))
         return Markup("".join(lines))
+
+
+# Plugin parsing
+
+def process_plugins(plugins: List[str]) -> Dict[str, List[str]]:
+    buttons = []
+    tabs = []
+    css_blocks = []
+    js_blocks = []
+    print(plugins)
+    for plugin in plugins:
+        with open(plugin) as plugin_obj:
+            bs_parser = BeautifulSoup(plugin_obj.read(), features="html5lib")
+            for button in bs_parser.find_all(class_="plugin-button"):
+                buttons.append(str(button))
+            for tab in bs_parser.find_all(class_="plugin-tab"):
+                tabs.append(str(tab))
+            for css in bs_parser.find_all(class_="plugin-css"):
+                css_blocks.append(str(css))
+            for js in bs_parser.find_all(class_="plugin-js"):
+                js_blocks.append(str(js))
+
+    return {
+        "buttons": buttons,
+        "tabs": tabs,
+        "css_blocks": css_blocks,
+        "js_blocks": js_blocks
+    }
 
 
 # Jinja settings
@@ -84,7 +115,8 @@ params.update({
     "matrix_4x4": args.version == V7 or args.matrix_4x4,
     "dual_wielding": args.version == V7 and args.dual_wielding,
     "discovery": args.discovery and args.version == V8,
-    "V7": V7, "V8": V8, "captain_voodoo": CAPTAIN_VOODOO, "med_fantasy": MED_FANTASY
+    "V7": V7, "V8": V8, "captain_voodoo": CAPTAIN_VOODOO, "med_fantasy": MED_FANTASY,
+    "plugins": process_plugins(args.plugin)
 })
 template = env.get_template('base.html')
 compiled_html = template.render(params)
