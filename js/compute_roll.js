@@ -439,9 +439,12 @@ class Roll {
 
         this.critical_increase = critical_increase
         this.precision = NaN
+        this.optional_precision = NaN
         this.power = NaN
+        this.optional_power = NaN
         this.power_dices = []
         this.speed = NaN
+        this.optional_speed = NaN
         this.update_energies()
 
         this.unease = get_unease()
@@ -483,8 +486,7 @@ class Roll {
     }
 
     max_threshold() {
-        const energy_modifier = is_v7 ? 0 : this.power + this.speed + this.precision + this.margin_modifier
-        return this.max_value + this.unease + energy_modifier
+        return this.max_value + this.unease + this.power + this.speed + this.precision + this.margin_modifier
     }
 
     margin() {
@@ -514,10 +516,16 @@ class Roll {
     update_energies(force_update = false) {
         const power_input = $("#roll-dialog-power")
         this.power = this.update_energy(power_input, this.power, force_update)
+        const optional_power_input = $("#roll-dialog-optional-power")
+        this.optional_power = optional_power_input.length > 0 ? this.update_energy(optional_power_input, this.optional_power, force_update) : this.power
         const speed_input = $("#roll-dialog-speed")
         this.speed = this.update_energy(speed_input, this.speed, force_update)
+        const optional_speed_input = $("#roll-dialog-optional-speed")
+        this.optional_speed = optional_speed_input.length > 0 ? this.update_energy(optional_speed_input, this.optional_speed, force_update) : this.speed
         const precision_input = $("#roll-dialog-precision")
         this.precision = this.update_energy(precision_input, this.precision, force_update)
+        const optional_precision_input = $("#roll-dialog-optional-precision")
+        this.optional_precision = optional_precision_input.length > 0 ? this.update_energy(optional_precision_input, this.optional_precision, force_update) : this.precision
     }
 
     dice_value() {
@@ -560,7 +568,7 @@ class Roll {
             // Power can only be increased up to 3 => roll all the dices directly
             this.roll_dices(3, 6, this.power_dices)
         }
-        return this.power_dices.slice(0, this.power).reduce((a, b) => {
+        return this.power_dices.slice(0, this.optional_power).reduce((a, b) => {
             return a + b;
         }, 0);
     }
@@ -574,7 +582,7 @@ class Roll {
     }
 
     is_critical_success() {
-        const precision = this.precision == null ? 0 : this.precision
+        const precision = this.optional_precision == null ? 0 : this.optional_precision
         // talents at level -4 and -2 trigger a critical roll at the same probability as talents at level 0
         return this.dice_value() <= 2 + Math.max(0, this.talent_level) + precision + this.critical_increase
     }
@@ -665,17 +673,16 @@ class Roll {
             let effect_dices_sum = 0
             let effect_text = isNaN(this.margin_throttle) ? "" : "<div class='row mx-1 align-middle'>La marge maximum est de "
                 + this.margin_throttle + "</div>"
+            if (this.is_success() && this.optional_power > 0 && this.power_value() >= 0) {
+                effect_text += "<div id='roll-dialog-power-test' class='row mx-1 align-middle'>" + this.optional_power + "d6 de puissance rajoutés = "
+                    + this.power_value() + this.dice_buttons("power_dices", this.power_dices.slice(0, this.optional_power)) + "</div>"
+            }
             if (is_v7) {
                 // Roll the two additional dices
                 effect_dices_sum = this.effect_value()
                 effect_text += "<div class='row mx-1 align-middle'>Dés d'effet = " + effect_dices_sum
                     + this.dice_buttons("effect_dices", this.effect_dices) + "</div>"
             } else {
-                if (this.is_success() && this.power > 0 && this.power_value() >= 0) {
-                    effect_text += "<div id='roll-dialog-power-test' class='row mx-1 align-middle'>" + this.power + "d6 de puissance rajoutés = "
-                        + this.power_value() + this.dice_buttons("power_dices", this.power_dices.slice(0, this.power)) + "</div>"
-                }
-
                 // DSS = MR // 3 and DES = 0 or (1 if 4 <= ME <= 6) or (2 if ME >= 7)
                 effect_text += "<div class='row mx-1 align-middle'>DSS =&nbsp;<span class='roll-dialog-dss'>" + this.dss()
                     + "</span></div><div class='row mx-1 align-middle'>DES =&nbsp;<span class='roll-dialog-des'>" + this.des() + "</span></div>"
@@ -826,27 +833,29 @@ $(".energy").on("change", event => {
     let value = parseInt(event.target.value)
     if (isNaN(value))
         value = 0
-    const elem_id = "#roll-dialog-" + event.target.id
-    const invested = $(elem_id)
-    if (invested.length === 0)
-        return
-    const title = $("#roll-dialog-energy-investment")
+    const elem_ids = ["#roll-dialog-" + event.target.id, "#roll-dialog-optional-" + event.target.id]
+    for (let i in elem_ids) {
+        const invested = $(elem_ids[i])
+        if (invested.length === 0)
+            continue
+        const title = $(".roll-dialog-energy-investment")
 
-    // Update max investment value
-    invested[0].setAttribute("max", value)
-    if (value > 0) {
-        invested.parent().removeClass("d-none")
-        if (title.length > 0) {
-            title.removeClass("d-none")
-        }
-    } else {
-        invested.parent().addClass("d-none")
-        if (title.length > 0) {
-            const available_energies = $(".energy").filter((_, e) => {
-                return parseInt(e.value) > 0
-            })
-            if (available_energies.length === 0)
-                title.addClass("d-none")
+        // Update max investment value
+        invested[0].setAttribute("max", value)
+        if (value > 0) {
+            invested.parent().removeClass("d-none")
+            if (title.length > 0) {
+                title.removeClass("d-none")
+            }
+        } else {
+            invested.parent().addClass("d-none")
+            if (title.length > 0) {
+                const available_energies = $(".energy").filter((_, e) => {
+                    return parseInt(e.value) > 0
+                })
+                if (available_energies.length === 0)
+                    title.addClass("d-none")
+            }
         }
     }
 })
