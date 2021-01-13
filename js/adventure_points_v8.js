@@ -34,6 +34,7 @@ let spell_same_realm_discount = 0  // No special cost, a spell is a talent
 
 let power_level_ap_cost = 5 // From 1 to 2 and from 2 to 3
 
+
 function compute_remaining_ap() {
     let consumed_points = compute_component_means_cost() + compute_status_cost()
 
@@ -50,10 +51,10 @@ function compute_remaining_ap() {
     // Health cost
     const health = $("#hp-trunk")
     let max_health = slider_max(health[0])
-    const resistance = parseInt($("#resistance").val())
-    if (resistance === 2) {
+    const resistance_div = $("#resistance")
+    if (resistance_div.hasClass("light-bonus-applied")) {
         max_health -= 1
-    } else if (resistance >= 3) {
+    } else if (resistance_div.hasClass("heavy-bonus-applied")) {
         max_health -= 2
     }
     const diff = max_health - start_hp
