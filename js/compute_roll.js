@@ -39,7 +39,8 @@ function add_row_listeners(line = $(document)) {
         const spell_difficulty = row_elem(button[0], "difficulty")
         const formula_elements = compute_formula(row(button[0]))[1]
         let margin_throttle = NaN
-        if (spell_difficulty.length > 0 && !is_hermetic_spell(button[0])) { // Spell
+        const is_magic = spell_difficulty.length > 0
+        if (is_magic && !is_hermetic_spell(button[0])) { // Spell
             difficulty = parseInt(spell_difficulty.text())
             roll_reason = row_elem(button[0], "name").val()
             margin_throttle = is_instinctive_magic(button[0]) ? 1 : NaN
@@ -57,6 +58,12 @@ function add_row_listeners(line = $(document)) {
                 critical_increase += 1
             }
         }
+        let spell_distance = ""
+        let spell_duration = ""
+        if (is_magic) {
+            spell_duration = row_elem(button[0], "time").val()
+            spell_distance = row_elem(button[0], "distance").val()
+        }
         difficulty = isNaN(difficulty) ? 0 : difficulty
 
         // Reset all invested energies
@@ -65,7 +72,8 @@ function add_row_listeners(line = $(document)) {
         // Do the actual roll
         const value = parseInt(row_elem(button[0], "value").text()) // Recover max value
         new Roll(roll_reason, value, difficulty, row_elem(button[0], "effect").val(),
-            critical_increase, formula_elements, margin_throttle).trigger_roll()
+            critical_increase, formula_elements, margin_throttle, is_magic, spell_distance,
+            spell_duration).trigger_roll()
         $('#roll-dialog').modal()
     })
     line.find(".roll-formula-elem,.dual_wielding-formula-elem").on("click", roll_changed)
@@ -426,6 +434,7 @@ let current_roll = null
 class Roll {
     constructor(reason = "", max_value = NaN, talent_level = 0, effect = "",
                 critical_increase = 0, formula_elements = [], margin_throttle = NaN,
+                is_magic = false, distance = "", duration = "",
                 base_dices = [], critical_dices = [], effect_dices = [], power_dices = []) {
         this.reason = reason
         this.formula_elements = formula_elements
@@ -437,12 +446,17 @@ class Roll {
         this.critical_dices = critical_dices
         this.effect_dices = effect_dices
 
+        this.is_magic = is_magic
+        this.distance = distance // Spell parameter increased by power
+        this.duration = duration // Spell parameter decreased by speed
+
         this.critical_increase = critical_increase
         this.precision = NaN
         this.optional_precision = NaN
         this.power = NaN
         this.optional_power = NaN
         this.power_dices = power_dices
+        this.magic_power = NaN
         this.speed = NaN
         this.optional_speed = NaN
         this.update_energies()
@@ -518,6 +532,8 @@ class Roll {
         this.power = this.update_energy(power_input, this.power, force_update)
         const optional_power_input = $("#roll-dialog-optional-power")
         this.optional_power = optional_power_input.length > 0 ? this.update_energy(optional_power_input, this.optional_power, force_update) : this.power
+        const magic_power_input = $("#roll-dialog-magic-power")
+        this.magic_power = magic_power_input.length > 0 ? this.update_energy(magic_power_input, this.magic_power, force_update) : 0
         const speed_input = $("#roll-dialog-speed")
         this.speed = this.update_energy(speed_input, this.speed, force_update)
         const optional_speed_input = $("#roll-dialog-optional-speed")
@@ -662,8 +678,15 @@ class Roll {
 
         // Hide everything and show it afterwards if needed
         const roll_effect_divs = $(".roll-dialog-effect-hide")
+        const roll_magic_divs = $(".roll-dialog-magic-hide")
 
         if (this.is_talent_roll()) {
+            roll_effect_divs.removeClass("d-none")
+            if (this.is_magic)
+                roll_magic_divs.removeClass("d-none")
+            else
+                roll_magic_divs.addClass("d-none")
+
             const result = $("#roll-dialog-result")
             result[0].setAttribute("value", this.post_test_margin().toString())
             result.html(this.post_test_margin())
@@ -710,7 +733,6 @@ class Roll {
                 select_modifier.slider("refresh", {useCurrentValue: true})
                 select_effect_modifier.slider("refresh", {useCurrentValue: true})
             }
-            roll_effect_divs.removeClass("d-none")
 
             let effect = this.effect
             if (is_v7) {
@@ -733,15 +755,32 @@ class Roll {
                         + suffix.replace(" ", "&nbsp;")
                 })
             }
+            effect = "<div class='row mx-1 align-middle'>Effet:</div><div class='row mx-1 align-middle'>" +
+                effect.replaceAll(effect_margin_regex, (match, prefix, _, suffix) => {
+                    return prefix.replace(" ", "&nbsp;")
+                        + "<span class='roll-dialog-margin'>" + this.post_test_margin() + "</span>"
+                        + suffix.replace(" ", "&nbsp;")
+                }) + "</div>";
+
+            if (this.is_magic && this.distance.length > 0) {
+                const distance = this.distance.replaceAll(/\d+/gi, (match) => {
+                    return String(parseInt(match) * Math.pow(2, this.magic_power))
+                })
+                effect = "<div class='row mx-1 align-middle'>Portée: " + distance + "</div>" + effect
+            }
+            if (this.is_magic && this.duration.length > 0) {
+                const duration = this.duration.replace(/\d+/gi, (match) => {
+                    return String(parseInt(match) / Math.pow(2, this.optional_speed))
+                })
+                effect = "<div class='row mx-1 align-middle'>Durée d'incantation: " + duration + "</div>" + effect
+            }
+
             // Update with the MR if "MR" is in the text
-            $("#roll-dialog-effect").html(effect.replaceAll(effect_margin_regex, (match, prefix, _, suffix) => {
-                return prefix.replace(" ", "&nbsp;")
-                    + "<span class='roll-dialog-margin'>" + this.post_test_margin() + "</span>"
-                    + suffix.replace(" ", "&nbsp;")
-            }))
+            $("#roll-dialog-effect").html(effect)
 
         } else {
             roll_effect_divs.addClass("d-none")
+            roll_magic_divs.addClass("d-none")
             $("#roll-dialog-result-label").html("Résultat du jet de 2d6 = ")
             $("#roll-dialog-result").html(this.dice_value())
             $("#roll-dialog-details").html(this.dice_buttons("base_dices", this.base_dices)).removeClass("d-none")
@@ -833,7 +872,8 @@ $(".energy").on("change", event => {
     let value = parseInt(event.target.value)
     if (isNaN(value))
         value = 0
-    const elem_ids = ["#roll-dialog-" + event.target.id, "#roll-dialog-optional-" + event.target.id]
+    const elem_ids = ["#roll-dialog-" + event.target.id, "#roll-dialog-optional-" + event.target.id,
+        "#roll-dialog-magic-" + event.target.id]
     for (let i in elem_ids) {
         const invested = $(elem_ids[i])
         if (invested.length === 0)

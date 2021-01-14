@@ -34,14 +34,14 @@
                     <div class="row mx-1 roll-dialog-effect-hide">
                         {% if version == V7 %}
                             <b class="roll-dialog-energy-investment d-none">
-                                <br/>Energies investies pour augmenter la marge de 1
+                                <br/>Energies investies
                             </b>
                         {% else %}
                             <b class="roll-dialog-energy-investment d-none"><br/>Energies investies</b>
                         {% endif %}
                     </div>
-                    <div class="row mx-1 roll-dialog-effect-hide">
-                        <div class="align-middle md-form input-with-pre-icon col-4 m-0 d-none" data-toggle="tooltip"
+                    <div class="row md-form form-row mx-1 mt-2 mb-0 roll-dialog-effect-hide">
+                        <div class="align-middle input-with-pre-icon col-4 m-0 d-none" data-toggle="tooltip"
                              data-placement="bottom"
                                 {% if version == V7 %}
                              title="Puissance investie pour augmenter la marge"
@@ -51,11 +51,13 @@
                             <svg height="3em" width="2em" class="input-prefix">
                                 <use xlink:href="#svg-power"></use>
                             </svg>
-                            <label for="roll-dialog-power" hidden></label>
+                            {% if version == V7 %}
+                            <label for="roll-dialog-power">MR + 1</label>
+                            {% endif %}
                             <input class="roll-dialog-energy form-control text-center" id="roll-dialog-power"
                                    type="number" value="0" min="0" max="0">
                         </div>
-                        <div class="align-middle md-form input-with-pre-icon col-4 m-0 d-none" data-toggle="tooltip"
+                        <div class="align-middle input-with-pre-icon col-4 m-0 d-none" data-toggle="tooltip"
                              data-placement="bottom"
                                 {% if version == V7 %}
                              title="Rapidité investie pour augmenter la marge"
@@ -65,11 +67,13 @@
                             <svg height="3em" width="2em" class="input-prefix">
                                 <use xlink:href="#svg-speed"></use>
                             </svg>
-                            <label for="roll-dialog-speed" hidden></label>
+                            {% if version == V7 %}
+                            <label for="roll-dialog-speed">MR + 1</label>
+                            {% endif %}
                             <input class="roll-dialog-energy form-control text-center" id="roll-dialog-speed"
                                    type="number" value="0" min="0" max="0">
                         </div>
-                        <div class="align-middle md-form input-with-pre-icon col-4 m-0 d-none" data-toggle="tooltip"
+                        <div class="align-middle input-with-pre-icon col-4 m-0 d-none" data-toggle="tooltip"
                              data-placement="bottom"
                                 {% if version == V7 %}
                              title="Précision investie pour augmenter la marge"
@@ -79,47 +83,56 @@
                             <svg height="3em" width="2em" class="input-prefix">
                                 <use xlink:href="#svg-precision"></use>
                             </svg>
-                            <label for="roll-dialog-precision" hidden></label>
+                            {% if version == V7 %}
+                            <label for="roll-dialog-precision">MR + 1</label>
+                            {% endif %}
                             <input class="roll-dialog-energy form-control text-center" id="roll-dialog-precision"
                                    type="number" value="0" min="0" max="0">
                         </div>
                     </div>
                     {% if version == V7 %}
-                        <div class="row mx-1 roll-dialog-effect-hide">
-                            <b class="roll-dialog-energy-investment d-none">
-                                Energies investies selon les règles optionnelles
-                            </b>
-                        </div>
-                        <div class="row mx-1 roll-dialog-effect-hide">
-                            <div class="align-middle md-form input-with-pre-icon col-4 m-0 d-none" data-toggle="tooltip"
+                        <div class="row md-form form-row mx-1 mt-2 mb-0 roll-dialog-effect-hide">
+                            <div class="align-middle input-with-pre-icon col-4 m-0 d-none" data-toggle="tooltip"
                                  data-placement="bottom"
                                  title="Puissance investie pour augmenter la marge de 1d6 en cas de réussite">
                                 <svg height="3em" width="2em" class="input-prefix">
                                     <use xlink:href="#svg-power"></use>
                                 </svg>
-                                <label for="roll-dialog-optional-power" hidden></label>
+                                <label for="roll-dialog-optional-power">MR + 1d6 (si réussi)</label>
                                 <input class="roll-dialog-energy form-control text-center"
                                        id="roll-dialog-optional-power" type="number" value="0" min="0" max="0">
                             </div>
-                            <div class="align-middle md-form input-with-pre-icon col-4 m-0 d-none" data-toggle="tooltip"
+                            <div class="align-middle input-with-pre-icon col-4 m-0 d-none" data-toggle="tooltip"
                                  data-placement="bottom" title="Rapidité investie pour diminuer le temps de l'action">
                                 <svg height="3em" width="2em" class="input-prefix">
                                     <use xlink:href="#svg-speed"></use>
                                 </svg>
-                                <label for="roll-dialog-optional-speed" hidden></label>
+                                <label for="roll-dialog-optional-speed">Temps / 2</label>
                                 <input class="roll-dialog-energy form-control text-center"
                                        id="roll-dialog-optional-speed" type="number" value="0" min="0" max="0">
                             </div>
-                            <div class="align-middle md-form input-with-pre-icon col-4 m-0 d-none"
+                            <div class="align-middle input-with-pre-icon col-4 m-0 d-none"
                                  data-toggle="tooltip" data-placement="bottom"
                                  title="Précision investie pour augmenter le seuil de succès critique">
                                 <svg height="3em" width="2em" class="input-prefix">
                                     <use xlink:href="#svg-precision"></use>
                                 </svg>
-                                <label for="roll-dialog-optional-precision" hidden></label>
+                                <label for="roll-dialog-optional-precision">Seuil critique + 1</label>
                                 <input class="roll-dialog-energy form-control text-center"
                                        id="roll-dialog-optional-precision"
                                        type="number" value="0" min="0" max="0">
+                            </div>
+                        </div>
+                        <div class="row md-form form-row mx-1 mt-2 mb-0 roll-dialog-magic-hide">
+                            <div class="align-middle input-with-pre-icon col-4 m-0 d-none" data-toggle="tooltip"
+                                 data-placement="bottom"
+                                 title="Puissance investie pour augmenter la portée ou rayon d'un sort">
+                                <svg height="3em" width="2em" class="input-prefix">
+                                    <use xlink:href="#svg-power"></use>
+                                </svg>
+                                <label for="roll-dialog-magic-power">Distance &times; 2</label>
+                                <input class="roll-dialog-energy form-control text-center"
+                                       id="roll-dialog-magic-power" type="number" value="0" min="0" max="0">
                             </div>
                         </div>
                     {% endif %}
@@ -146,15 +159,12 @@
                         </div>
                     {% endif %}
                     <hr class="roll-dialog-effect-hide"/>
-                    <div class="roll-dialog-effect-hide row mx-1">Effet:</div>
-                    <div id="roll-dialog-effect" class="row mx-1 roll-dialog-effect-hide"
+                    <div id="roll-dialog-effect" class="roll-dialog-effect-hide"
                          style="white-space: pre-line;"></div>
                     <hr/>
                     <div class="row mx-1">
                         {% if version == V7 %}
-                            Le jet nécessite parfois de lancer un autre dé pour localiser l'effet ou
-                            pour augmenter la MR en cas de réussite quand le test passe
-                            si on a investi des points de puissance pour ça:
+                            Le jet nécessite parfois de lancer un autre dé, par exemple pour localiser l'effet:
                         {% else %}
                             Le jet nécessite parfois de lancer un autre dé:
                         {% endif %}

@@ -35,3 +35,8 @@
 .clickable.btn-link.roll-link:hover {
     color: #1266F1;
 }
+
+/* Make small labels more readable */
+#roll-dialog label {
+    font-family: "Linux Libertine", serif;
+}
