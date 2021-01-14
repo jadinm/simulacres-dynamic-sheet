@@ -14,8 +14,9 @@ function destroy_summernote(note) {
 }
 
 $("#add-note").on("click", (event, idx = null) => { // Add parameter for forced index
-    const new_note = $("#note-x").clone(true, true)
+    const new_note = $("#note-x").clone(true, false)
     add_row($("#note-table"), new_note, idx)
+    add_row_listeners(new_note)
     add_summernote_listeners(new_note)
     new_note.find(".note-body").on('show.bs.collapse', _ => toggle_show_button(new_note, true))
         .on('hide.bs.collapse', _ => toggle_show_button(new_note, false))
