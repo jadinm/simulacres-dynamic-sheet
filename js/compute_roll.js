@@ -442,7 +442,7 @@ class Roll {
         this.optional_precision = NaN
         this.power = NaN
         this.optional_power = NaN
-        this.power_dices = []
+        this.power_dices = power_dices
         this.speed = NaN
         this.optional_speed = NaN
         this.update_energies()
