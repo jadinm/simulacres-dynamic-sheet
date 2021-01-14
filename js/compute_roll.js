@@ -420,6 +420,12 @@ function set_result_label(margin) {
     }
 }
 
+function has_any_base_energy() {
+    return $("#power, #speed, #precision").filter((i, elem) => {
+        return elem.value && parseInt(elem.value) > 0
+    }).length > 0
+}
+
 const effect_column_regex = /(^|\W)\[([ABCDEFGHIJK])([+-]\d+)?](\W|$)/gi
 const effect_margin_regex = /(^|\W)(MR)(\W|$)/gi
 const effect_dss_regex = /(^|\W)(DSS)(\W|$)/gi
@@ -467,6 +473,8 @@ class Roll {
 
         this.margin_modifier = 0
         this.effect_modifier = 0
+
+        this.energy_investment_validated = !this.is_talent_roll() || !has_any_base_energy()
 
         // Add to the list of rolls
         last_rolls.push(this)
@@ -656,11 +664,11 @@ class Roll {
         critical_failure = false
         critical_success = false
         this.update_energies()
-        if (this.is_critical_failure()) {
+        if (this.energy_investment_validated && this.is_critical_failure()) {
             critical_div.html("<b class='text-danger'>Échec critique... :'(</b>")
             text_end = "<div class='row mx-1 align-middle'>La marge est maximum 0 et c'est un échec</div>"
             critical_failure = true
-        } else if (this.is_critical_success()) {
+        } else if (this.energy_investment_validated && this.is_critical_success()) {
             critical_div.html("<b class='text-success'>Succès critique !</b>")
             modifier = this.critical_value()
             text_end = "<div class='row mx-1 align-middle'>" + this.critical_dices.length + "d6 ajouté" + ((this.critical_dices.length > 1) ? "s" : "")
@@ -693,27 +701,37 @@ class Roll {
                 roll_magic_divs.addClass("d-none")
 
             const result = $("#roll-dialog-result")
-            result[0].setAttribute("value", this.post_test_margin().toString())
-            result.html(this.post_test_margin())
-
-            set_result_label(this.post_test_margin())
-
-            let effect_dices_sum = 0
+            const energy_inputs = $(".roll-dialog-energy")
             let effect_text = isNaN(this.margin_throttle) ? "" : "<div class='row mx-1 align-middle'>La marge maximum est de "
                 + this.margin_throttle + "</div>"
-            if (this.is_success() && this.optional_power > 0 && this.power_value() >= 0) {
-                effect_text += "<div id='roll-dialog-power-test' class='row mx-1 align-middle'>" + this.optional_power + "d6 de puissance rajoutés = "
-                    + this.power_value() + this.dice_buttons("power_dices", this.power_dices.slice(0, this.optional_power)) + "</div>"
-            }
-            if (is_v7) {
-                // Roll the two additional dices
-                effect_dices_sum = this.effect_value()
-                effect_text += "<div class='row mx-1 align-middle'>Dés d'effet = " + effect_dices_sum
-                    + this.dice_buttons("effect_dices", this.effect_dices) + "</div>"
+            if (this.energy_investment_validated) {
+                const validate_button = $("#roll-dialog-validate")
+                validate_button.addClass("d-none")
+                energy_inputs.attr("disabled", "disabled")
+
+                result[0].setAttribute("value", this.post_test_margin().toString())
+                result.html(this.post_test_margin())
+
+                set_result_label(this.post_test_margin())
+
+                let effect_dices_sum = 0
+                if (this.is_success() && this.optional_power > 0 && this.power_value() >= 0) {
+                    effect_text += "<div id='roll-dialog-power-test' class='row mx-1 align-middle'>" + this.optional_power + "d6 de puissance rajoutés = "
+                        + this.power_value() + this.dice_buttons("power_dices", this.power_dices.slice(0, this.optional_power)) + "</div>"
+                }
+                if (is_v7) {
+                    // Roll the two additional dices
+                    effect_dices_sum = this.effect_value()
+                    effect_text += "<div class='row mx-1 align-middle'>Dés d'effet = " + effect_dices_sum
+                        + this.dice_buttons("effect_dices", this.effect_dices) + "</div>"
+                } else {
+                    // DSS = MR // 3 and DES = 0 or (1 if 4 <= ME <= 6) or (2 if ME >= 7)
+                    effect_text += "<div class='row mx-1 align-middle'>DSS =&nbsp;<span class='roll-dialog-dss'>" + this.dss()
+                        + "</span></div><div class='row mx-1 align-middle'>DES =&nbsp;<span class='roll-dialog-des'>" + this.des() + "</span></div>"
+                }
             } else {
-                // DSS = MR // 3 and DES = 0 or (1 if 4 <= ME <= 6) or (2 if ME >= 7)
-                effect_text += "<div class='row mx-1 align-middle'>DSS =&nbsp;<span class='roll-dialog-dss'>" + this.dss()
-                    + "</span></div><div class='row mx-1 align-middle'>DES =&nbsp;<span class='roll-dialog-des'>" + this.des() + "</span></div>"
+                result.html("")
+                energy_inputs.removeAttr("disabled", "disabled")
             }
 
             let racial_bonus = ""
@@ -726,10 +744,18 @@ class Roll {
                 }
             }
 
-            $("#roll-dialog-details").html("<div class='row mx-1 align-middle'>Somme des 2d6 = " + this.dice_value()
-                + this.dice_buttons("base_dices", this.base_dices)
-                + "</div><div class='row mx-1 align-middle'>Valeur seuil =&nbsp;<span id='roll-dialog-threshold'>"
-                + this.max_threshold() + "</span>" + racial_bonus + "</div>" + text_end + effect_text)
+            const details = $("#roll-dialog-details")
+            if (this.energy_investment_validated) {
+                details.html("<div class='row mx-1 align-middle'>Somme des 2d6 = " + this.dice_value()
+                    + this.dice_buttons("base_dices", this.base_dices)
+                    + "</div><div class='row mx-1 align-middle'>Valeur seuil =&nbsp;<span id='roll-dialog-threshold'>"
+                    + this.max_threshold() + "</span>" + racial_bonus + "</div>" + text_end + effect_text)
+                $("#roll-dialog-result-label").removeClass("d-none")
+            } else {
+                details.html("<div class='row mx-1 align-middle'>Valeur seuil =&nbsp;<span id='roll-dialog-threshold'>"
+                    + this.max_threshold() + "</span>" + racial_bonus + "</div>" + text_end + effect_text)
+                $("#roll-dialog-result-label").addClass("d-none")
+            }
 
             // Reset additional modifiers
             if (ignore_sliders) {
@@ -738,34 +764,41 @@ class Roll {
                 select_modifier.slider("refresh", {useCurrentValue: true})
                 select_effect_modifier.slider("refresh", {useCurrentValue: true})
             }
+            if (this.energy_investment_validated) {
+                $(".roll-dialog-slider").removeClass("d-none")
+            } else {
+                $(".roll-dialog-slider").addClass("d-none")
+            }
 
             let effect = this.effect
-            if (is_v7) {
-                // Show the actual effect instead of [A] or [B+2]
-                effect = effect.replaceAll(effect_column_regex, (match, prefix, column, modifier, suffix) => {
-                    prefix = prefix.replace(" ", "&nbsp;")
-                    modifier = typeof modifier === "undefined" ? 0 : parseInt(modifier)
-                    const effect_value = this.is_success() ? this.column_effect(column, modifier) : 0
-                    suffix = suffix.replace(" ", "&nbsp;")
-                    return prefix + "<span class='roll-dialog-effect' column='" + column + "' " + "modifier='" + modifier + "'>" + effect_value + "</span>" + suffix
-                })
-            } else {
-                // Update with the DSS if "DSS" is in the text
-                effect = effect.replaceAll(effect_dss_regex, (match, prefix, _, suffix) => {
-                    return prefix.replace(" ", "&nbsp;") + "<span class='roll-dialog-dss'>" + this.dss() + "</span>"
-                        + suffix.replace(" ", "&nbsp;")
-                })
-                effect = effect.replaceAll(effect_des_regex, (match, prefix, _, suffix) => {
-                    return prefix.replace(" ", "&nbsp;") + "<span class='roll-dialog-des'>" + this.des() + "</span>"
-                        + suffix.replace(" ", "&nbsp;")
-                })
-            }
-            effect = "<div class='row mx-1 align-middle'>Effet:</div><div class='row mx-1 align-middle'>" +
-                effect.replaceAll(effect_margin_regex, (match, prefix, _, suffix) => {
+            if (this.energy_investment_validated) {
+                if (is_v7) {
+                    // Show the actual effect instead of [A] or [B+2]
+                    effect = effect.replaceAll(effect_column_regex, (match, prefix, column, modifier, suffix) => {
+                        prefix = prefix.replace(" ", "&nbsp;")
+                        modifier = typeof modifier === "undefined" ? 0 : parseInt(modifier)
+                        const effect_value = this.is_success() ? this.column_effect(column, modifier) : 0
+                        suffix = suffix.replace(" ", "&nbsp;")
+                        return prefix + "<span class='roll-dialog-effect' column='" + column + "' " + "modifier='" + modifier + "'>" + effect_value + "</span>" + suffix
+                    })
+                } else {
+                    // Update with the DSS if "DSS" is in the text
+                    effect = effect.replaceAll(effect_dss_regex, (match, prefix, _, suffix) => {
+                        return prefix.replace(" ", "&nbsp;") + "<span class='roll-dialog-dss'>" + this.dss() + "</span>"
+                            + suffix.replace(" ", "&nbsp;")
+                    })
+                    effect = effect.replaceAll(effect_des_regex, (match, prefix, _, suffix) => {
+                        return prefix.replace(" ", "&nbsp;") + "<span class='roll-dialog-des'>" + this.des() + "</span>"
+                            + suffix.replace(" ", "&nbsp;")
+                    })
+                }
+                effect = effect.replaceAll(effect_margin_regex, (match, prefix, _, suffix) => {
                     return prefix.replace(" ", "&nbsp;")
                         + "<span class='roll-dialog-margin'>" + this.post_test_margin() + "</span>"
                         + suffix.replace(" ", "&nbsp;")
-                }) + "</div>";
+                });
+            }
+            effect = "<div class='row mx-1 align-middle'>Effet:</div><div class='row mx-1 align-middle'>" + effect + "</div>"
 
             if (this.is_magic && this.distance.length > 0) {
                 const distance = this.distance.replaceAll(/\d+/gi, (match) => {
@@ -958,4 +991,11 @@ $("#roll-dialog-history-forward").on("click", _ => {
     if (idx < last_rolls.length) {
         last_rolls[idx].show_roll()
     }
+})
+
+$("#roll-dialog-validate").on("click", _ => {
+    if (!current_roll)
+        return
+    current_roll.energy_investment_validated = true
+    current_roll.show_roll()
 })

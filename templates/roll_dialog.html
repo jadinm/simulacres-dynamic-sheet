@@ -21,7 +21,7 @@
                         <!-- In case of critical -->
                     </div>
                     <div class="row mx-1">
-                        <!-- Show the cause of the roll -->
+                        <!-- Show the result of the roll -->
                         <div>
                             <span id="roll-dialog-result-label"></span><span id="roll-dialog-result"></span>
                         </div>
@@ -32,13 +32,7 @@
                         <span id="roll-dialog-penalties" style="white-space: pre-line;"></span>
                     </div>
                     <div class="row mx-1 roll-dialog-effect-hide">
-                        {% if version == V7 %}
-                            <b class="roll-dialog-energy-investment d-none">
-                                <br/>Energies investies
-                            </b>
-                        {% else %}
-                            <b class="roll-dialog-energy-investment d-none"><br/>Energies investies</b>
-                        {% endif %}
+                        <b class="roll-dialog-energy-investment d-none"><br/>Energies investies</b>
                     </div>
                     <div class="row md-form form-row mx-1 mt-2 mb-0 roll-dialog-effect-hide">
                         <div class="align-middle input-with-pre-icon col-4 m-0 d-none" data-toggle="tooltip"
@@ -136,23 +130,28 @@
                             </div>
                         </div>
                     {% endif %}
-                    <div class="row mx-1 roll-dialog-effect-hide">
+                    <div id="roll-dialog-validate" class="row mx-1 roll-dialog-effect-hide justify-content-center mt-2">
+                        <div class="btn btn-success rounded-lg">
+                            Valider &nbsp;<i class="fas fa-dice fa-2x rounded-lg"></i>
+                        </div>
+                    </div>
+                    <div class="row mx-1 roll-dialog-effect-hide roll-dialog-slider">
                         <label id="roll-dialog-modifier-label" for="roll-dialog-modifier">
                             Modificateur circonstanciel&nbsp;
                         </label>
                     </div>
-                    <div class="row mx-1 mb-5 roll-dialog-effect-hide">
+                    <div class="row mx-1 mb-5 roll-dialog-effect-hide roll-dialog-slider">
                         <input id="roll-dialog-modifier" data-slider-id="roll-dialog-modifier-slider" type="text"
                                data-slider-min="-9" data-slider-max="9" data-slider-step="1" data-slider-value="0"
                                class="input-slider" data-slider-tooltip-position="bottom"/>
                     </div>
                     {% if version == V7 %}
-                        <div class="row mx-1 roll-dialog-effect-hide">
+                        <div class="row mx-1 roll-dialog-effect-hide roll-dialog-slider">
                             <label id="roll-dialog-effect-modifier-label" for="roll-dialog-effect-modifier">
                                 Modificateur aux dés d'effet (ex. armure cible)&nbsp;
                             </label>
                         </div>
-                        <div class="row mx-1 roll-dialog-effect-hide">
+                        <div class="row mx-1 roll-dialog-effect-hide roll-dialog-slider">
                             <input id="roll-dialog-effect-modifier" data-slider-id="roll-dialog-effect-modifier-slider"
                                    type="text" data-slider-min="-9" data-slider-max="9" data-slider-step="1"
                                    data-slider-value="0" class="input-slider" data-slider-tooltip-position="bottom"/>
