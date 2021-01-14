@@ -542,6 +542,11 @@ class Roll {
         this.precision = this.update_energy(precision_input, this.precision, force_update)
         const optional_precision_input = $("#roll-dialog-optional-precision")
         this.optional_precision = optional_precision_input.length > 0 ? this.update_energy(optional_precision_input, this.optional_precision, force_update) : this.precision
+
+        /* Update remaining max on energies */
+        update_max_invested_energies($("#power")[0])
+        update_max_invested_energies($("#speed")[0])
+        update_max_invested_energies($("#precision")[0])
     }
 
     dice_value() {
@@ -867,28 +872,47 @@ $("#roll-2d6").on("click", _ => {
     $('#roll-dialog').modal()
 })
 
-/* Precision energy */
+/* Energies */
+
+function get_energy_investment_inputs(energy_input) {
+    const id = energy_input.id
+    return $("#roll-dialog-" + id + ", #roll-dialog-optional-" + id + ", #roll-dialog-magic-" + id)
+}
+
+function update_max_invested_energies(energy_input) {
+    let value = parseInt(energy_input.value)
+    if (isNaN(value))
+        value = 0
+    const elems = get_energy_investment_inputs(energy_input)
+    let remaining = value
+    elems.each((i, invested) => {
+        let current_value = parseInt(invested.value)
+        if (isNaN(current_value))
+            current_value = 0
+        remaining -= current_value
+    })
+    elems.each((i, invested) => {
+        let current_value = parseInt(invested.value)
+        if (isNaN(current_value))
+            current_value = 0
+        // Update max investment value
+        invested.setAttribute("max", current_value + remaining)
+    })
+}
+
 $(".energy").on("change", event => {
     let value = parseInt(event.target.value)
     if (isNaN(value))
         value = 0
-    const elem_ids = ["#roll-dialog-" + event.target.id, "#roll-dialog-optional-" + event.target.id,
-        "#roll-dialog-magic-" + event.target.id]
-    for (let i in elem_ids) {
-        const invested = $(elem_ids[i])
-        if (invested.length === 0)
-            continue
+    get_energy_investment_inputs(event.target).each((i, invested) => {
         const title = $(".roll-dialog-energy-investment")
-
-        // Update max investment value
-        invested[0].setAttribute("max", value)
         if (value > 0) {
-            invested.parent().removeClass("d-none")
+            $(invested).parent().removeClass("d-none")
             if (title.length > 0) {
                 title.removeClass("d-none")
             }
         } else {
-            invested.parent().addClass("d-none")
+            $(invested).parent().addClass("d-none")
             if (title.length > 0) {
                 const available_energies = $(".energy").filter((_, e) => {
                     return parseInt(e.value) > 0
@@ -897,7 +921,8 @@ $(".energy").on("change", event => {
                     title.addClass("d-none")
             }
         }
-    }
+    })
+    update_max_invested_energies(event.target)
 })
 
 $(".roll-dialog-energy").on("change", e => {
