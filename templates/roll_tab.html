@@ -104,11 +104,7 @@
                 </td>
                 <td class="my-0 py-0 roll-formula align-middle">
                     {% with row_type = "roll" %}
-                        {% if version == V8 and not matrix_4x4 %}
-                            {% include "roll_formula_3x3_vertical.html" %}
-                        {% else %}
-                            {% include "roll_formula.html" %}
-                        {% endif %}
+                        {% include "roll_formula.html" %}
                     {% endwith %}
                 </td>
                 <td class="my-0 py-0 text-center align-middle">
