@@ -56,3 +56,8 @@ $(".talent-select.adventure-points-select").on("changed.bs.select", (e, clickedI
     }
     compute_remaining_ap()
 })
+
+$("#investment-table td[data-toggle='tooltip']").each((i, elem) => {
+    console.log(elem)
+    $(elem).tooltip()
+})
