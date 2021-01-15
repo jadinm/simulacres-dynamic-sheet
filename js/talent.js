@@ -190,9 +190,7 @@ function update_talent_tooltip(talent, target_list = null) {
         const old_level = talent_base_level(talent)
         const cost = talent_cost(talent)
         if (!isNaN(cost)) {
-            if (discovery) {
-                talent.setAttribute("data-original-title", "Coût: " + talent_cost(talent) + " PA")
-            } else {
+            if (!discovery) {
                 talent.setAttribute("data-original-title",
                     "Talent " + old_level.toUpperCase() + " à la base <br />" + "Coût: " + talent_cost(talent) + " PA")
                 $(talent).find(".talent-origin").text("< " + old_level.toUpperCase())
@@ -202,16 +200,10 @@ function update_talent_tooltip(talent, target_list = null) {
                 "Talent " + old_level.toUpperCase() + " à la base <br />" + "Mouvement invalide")
             $(talent).find(".talent-origin").text("< " + old_level.toUpperCase() + " (Mouvement invalide)")
         }
-        if (!discovery) {
-            $(talent).addClass("increased-talent")
-        }
         $(talent).tooltip({disabled: false})
     } else {
         talent.setAttribute("data-original-title", "")
-        if (discovery) {
-            talent.setAttribute("data-original-title", "Coût: " + talent_cost(talent) + " PA")
-            $(talent).tooltip({disabled: false})
-        } else {
+        if (!discovery) {
             $(talent).removeClass("increased-talent").tooltip({disabled: true})
         }
         $(talent).find(".talent-origin").text("")
@@ -263,11 +255,6 @@ $('.talent-list').each((i, elem) => {
         onMove: (e, _) => {
             // Prevent moves that have an invalid PA cost
             if (!$(e.to).hasClass("remove-talent") && isNaN(talent_cost(e.dragged, e.to))) {
-                return false
-            }
-            if (!$(e.to).hasClass("remove-talent") && discovery
-                && (talent_base_level(e.dragged) === "0" && e.to.id !== "talents_0"
-                    || talent_base_level(e.dragged) === "1" && e.to.id === "talents_0")) {
                 return false
             }
             return e.willInsertAfter ? 1 : -1
