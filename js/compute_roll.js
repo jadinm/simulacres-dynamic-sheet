@@ -711,7 +711,12 @@ class Roll {
             if (this.energy_investment_validated) {
                 const validate_button = $("#roll-dialog-validate")
                 validate_button.addClass("d-none")
-                energy_inputs.attr("disabled", "disabled")
+                const heroism = $("#heroism")
+                if (heroism.length === 0 || parseInt(heroism.val()) === 0) {
+                    energy_inputs.attr("disabled", "disabled")
+                } else { // You can invest in other energies with heroism
+                    energy_inputs.removeAttr("disabled", "disabled")
+                }
 
                 result[0].setAttribute("value", this.post_test_margin().toString())
                 result.html(this.post_test_margin())
@@ -737,6 +742,10 @@ class Roll {
                 result.html("")
                 energy_inputs.removeAttr("disabled", "disabled")
             }
+
+            $(".energy").each((i, elem) => {
+                update_energy_investment_list(elem)
+            })
 
             let racial_bonus = ""
             for (let i in this.formula_elements) {
@@ -920,11 +929,16 @@ function get_energy_investment_inputs(energy_input) {
 }
 
 function update_max_invested_energies(energy_input) {
+    const heroism = $("#heroism")
+    let heroism_value = heroism.length > 0 ? parseInt(heroism.val()) : 0
+    if (isNaN(heroism_value) || !current_roll || !current_roll.energy_investment_validated)
+        heroism_value = 0
+    heroism_value = Math.min(2, heroism_value)
     let value = parseInt(energy_input.value)
     if (isNaN(value))
         value = 0
     const elems = get_energy_investment_inputs(energy_input)
-    let remaining = value
+    let remaining = Math.max(value, heroism_value)
     elems.each((i, invested) => {
         let current_value = parseInt(invested.value)
         if (isNaN(current_value))
@@ -936,17 +950,19 @@ function update_max_invested_energies(energy_input) {
         if (isNaN(current_value))
             current_value = 0
         // Update max investment value
-        invested.setAttribute("max", current_value + remaining)
+        invested.setAttribute("max", current_value + Math.max(0, remaining))
     })
 }
 
-$(".energy").on("change", event => {
-    let value = parseInt(event.target.value)
+function update_energy_investment_list(input) {
+    let value = parseInt(input.value)
     if (isNaN(value))
         value = 0
-    get_energy_investment_inputs(event.target).each((i, invested) => {
+    get_energy_investment_inputs(input).each((i, invested) => {
         const title = $(".roll-dialog-energy-investment")
-        if (value > 0) {
+        const heroism = $("#heroism")
+        if (value > 0 || current_roll && current_roll.energy_investment_validated && heroism.length > 0 && parseInt(heroism.val()) > 0 && current_roll.is_success()) {
+            // If you have heroism, you can invest in one or two points in any energy that you want in case of success
             $(invested).parent().removeClass("d-none")
             if (title.length > 0) {
                 title.removeClass("d-none")
@@ -962,7 +978,11 @@ $(".energy").on("change", event => {
             }
         }
     })
-    update_max_invested_energies(event.target)
+    update_max_invested_energies(input)
+}
+
+$(".energy").on("change", event => {
+    update_energy_investment_list(event.target)
 })
 
 $(".roll-dialog-energy").on("change", e => {
