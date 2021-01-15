@@ -241,6 +241,15 @@ function import_data(src_html, dst_html) {
     const old_image = src_html.find("#character-image")
     if (old_image.length > 0)
         dst_html.find("#character-image")[0].src = old_image[0].src
+
+    // Update all of the spell values
+    $(".spell-value").each((i, elem) => {
+        update_spell_value($(elem))
+    })
+    // Update all the rolls
+    $(".roll-value,.dual_wielding-value").each((i, elem) => {
+        update_roll_value($(elem))
+    })
 }
 
 function insert_or_replace_block(block, parent) {
