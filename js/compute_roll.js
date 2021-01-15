@@ -745,14 +745,17 @@ class Roll {
             }
 
             const details = $("#roll-dialog-details")
+            const threshold_name = discovery ? "Valeur du test <=" : "Valeur seuil ="
             if (this.energy_investment_validated) {
                 details.html("<div class='row mx-1 align-middle'>Somme des 2d6 = " + this.dice_value()
                     + this.dice_buttons("base_dices", this.base_dices)
-                    + "</div><div class='row mx-1 align-middle'>Valeur seuil =&nbsp;<span id='roll-dialog-threshold'>"
+                    + "</div><div class='row mx-1 align-middle'>" + threshold_name
+                    + "&nbsp;<span id='roll-dialog-threshold'>"
                     + this.max_threshold() + "</span>" + racial_bonus + "</div>" + text_end + effect_text)
                 $("#roll-dialog-result-label").removeClass("d-none")
             } else {
-                details.html("<div class='row mx-1 align-middle'>Valeur seuil =&nbsp;<span id='roll-dialog-threshold'>"
+                details.html("<div class='row mx-1 align-middle'>" + threshold_name
+                    + "&nbsp;<span id='roll-dialog-threshold'>"
                     + this.max_threshold() + "</span>" + racial_bonus + "</div>" + text_end + effect_text)
                 $("#roll-dialog-result-label").addClass("d-none")
             }

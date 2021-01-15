@@ -137,7 +137,11 @@
                     </div>
                     <div class="row mx-1 roll-dialog-effect-hide roll-dialog-slider">
                         <label id="roll-dialog-modifier-label" for="roll-dialog-modifier">
-                            Modificateur circonstanciel&nbsp;
+                            {% if version == V8 %}
+                                Modificateur
+                            {% else %}
+                                Modificateur circonstanciel&nbsp;
+                            {% endif %}
                         </label>
                     </div>
                     <div class="row mx-1 mb-5 roll-dialog-effect-hide roll-dialog-slider">
