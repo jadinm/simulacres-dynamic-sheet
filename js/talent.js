@@ -194,6 +194,7 @@ function update_talent_tooltip(talent, target_list = null) {
                 talent.setAttribute("data-original-title",
                     "Talent " + old_level.toUpperCase() + " à la base <br />" + "Coût: " + talent_cost(talent) + " PA")
                 $(talent).find(".talent-origin").text("< " + old_level.toUpperCase())
+                $(talent).addClass("increased-talent")
             }
         } else {
             talent.setAttribute("data-original-title",
