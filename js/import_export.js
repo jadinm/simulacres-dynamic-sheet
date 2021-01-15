@@ -36,9 +36,14 @@ function add_save_to_dom_listeners(base = $(document)) {
         event.target.setAttribute("data-slider-value", event.target.value)
         changed_page = true
     })
-    base.find("input[type=\"radio\"]").on("click", event => {
-        $("input[name='" + event.target.name + "']").removeAttr("checked")
-        event.target.setAttribute("checked", "")
+    base.find("input[type=\"checkbox\"]").on("click", event => {
+        const already_present = event.target.getAttribute("checked") != null
+        $("input[name='" + event.target.name + "']").prop("checked", false).removeAttr("checked")
+
+        if (!already_present) { // Do not check if the same element was selected twice
+            event.target.setAttribute("checked", "")
+            $(event.target).prop("checked", true)
+        }
         changed_page = true
     })
 
