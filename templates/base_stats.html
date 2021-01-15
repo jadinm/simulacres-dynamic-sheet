@@ -370,7 +370,12 @@
             {% endif %}
             <div class="row m-0">
                 <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
-                     data-placement="right" title="Humanoïde">
+                     data-placement="right"
+                        {% if universe == med_fantasy %}
+                     title="Humanoïde"
+                        {% else %}
+                     title="Humain"
+                        {% endif %}>
                     <svg height="3em" width="2em" class="input-prefix">
                         <use xlink:href="#svg-humanoid"></use>
                     </svg>
