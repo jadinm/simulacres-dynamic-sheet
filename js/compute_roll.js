@@ -765,7 +765,7 @@ class Roll {
             }
 
             // Reset additional modifiers
-            if (ignore_sliders) {
+            if (!ignore_sliders) {
                 select_modifier.slider("setValue", this.margin_modifier)
                 select_effect_modifier.slider("setValue", this.effect_modifier)
                 select_modifier.slider("refresh", {useCurrentValue: true})
@@ -876,7 +876,7 @@ function slider_value_changed(input) {
 
         if (input.id === "roll-dialog-modifier") { // Modify the MR only for MR modifier
             current_roll.margin_modifier = modifier
-            current_roll.show_roll()
+            current_roll.show_roll(true)
         } else {
             current_roll.effect_modifier = modifier
         }
