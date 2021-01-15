@@ -6,15 +6,18 @@
         </div>
         <div class="col-sm-3">
             <input class="form-control" id="race" name="race" type="text" value="">
-            <label for="race">Race/Peuple</label>
+            <label for="race">Nation/Ethnie</label>
         </div>
-        <div class="col-sm-2 mt-lg-2 text-center">
-            PA non dépensés: <span id="remaining-adventure-points"></span>
-        </div>
-        <div class="col-sm-2">
-            <input class="form-control" id="luck-points" name="character-name" type="number" value="0" min="0" max="3">
-            <label for="luck-points">PC</label>
-        </div>
+        {% if not discovery %}
+            <div class="col-sm-2 mt-lg-2 text-center">
+                PA non dépensés: <span id="remaining-adventure-points"></span>
+            </div>
+            <div class="col-sm-2">
+                <input class="form-control" id="luck-points" name="character-name" type="number" value="0" min="0"
+                       max="3">
+                <label for="luck-points">PC</label>
+            </div>
+        {% endif %}
     </div>
     <div class="row form-row mb-0 mt-1 md-form">
         <div class="col-sm-2">

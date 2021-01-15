@@ -69,9 +69,9 @@ Dans la version 7, "MR" et les colonnes d'effets tels que [A-2] et [D] seront re
 
 #### Petites Gens
 
-Les joueurs de la race des "Petites Gens" (ou "Hobbits") ont droit à un bonus de +1 à la résistance
+Les joueurs de l'ethnie des "Petites Gens" (ou "Hobbits") ont droit à un bonus de +1 à la résistance
 lors d'un jet l'impiquant (à l'exception des jets de résistance à l'hypnose et aux illusions).
-Ce bonus sera intégré dans les jets si la race a une des valeurs suivantes:
+Ce bonus sera intégré dans les jets si l'ethnie a une des valeurs suivantes:
 "Hobbit", "Tinigens", "Petites Gens", "Petites Personnes", "Tomte".
 
 ### Gestion des sorts (version 7 uniquement)
