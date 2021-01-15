@@ -61,158 +61,253 @@
         {% endif %}
     {% endif %}
     <!-- Components and means -->
-    <div class="col-lg-6 my-1 mx-0 px-0">
-        <div class="table-responsive-xl card shadow-none border border-heavy rounded-lg m-0 p-0">
-            <table class="table table-hover m-0 p-0">
-                <thead>
-                <tr>
-                    <th scope="col" class="align-middle">
-                        <div class="text-right"><b>Moyens</b></div>
-                        <b>Composantes</b>
-                    </th>
-                    <th scope="col" class="align-middle md-form input-with-pre-icon">
-                        <div data-toggle="tooltip" data-placement="top" title="Perception">
+    {% if discovery %}
+        <div class="col-lg-2 col-md-3 col-sm-4 mt-1 mx-0">
+            <div class="card shadow-none border border-heavy rounded-lg px-1 py-2 mx-0">
+                <div class="row ml-2 m-0"><b>Composantes</b></div>
+                <div class="row m-0">
+                    <div class="align-middle md-form input-with-pre-icon col-12 m-0"
+                         data-toggle="tooltip" data-placement="left" title="Corps">
+                        <svg height="3em" width="2em" class="input-prefix">
+                            <use xlink:href="#svg-body"></use>
+                        </svg>
+                        <input class="form-control component text-center" id="body" name="body" type="number"
+                               value="3"
+                               min="3" max="{{ max_component }}">
+                    </div>
+                </div>
+                {% if matrix_4x4 %}
+                    <div class="row m-0">
+                        <div class="align-middle md-form input-with-pre-icon col-12 m-0"
+                             data-toggle="tooltip" data-placement="left" title="Instincts">
                             <svg height="3em" width="2em" class="input-prefix">
-                                <use xlink:href="#svg-perception"></use>
+                                <use xlink:href="#svg-instincts"></use>
                             </svg>
-                            <input class="form-control means text-center" id="perception" name="perception"
-                                   type="number"
-                                   value="1" min="1" max="{{ max_means }}">
+                            <input class="form-control component text-center" id="instincts" name="instincts"
+                                   type="number" value="3" min="3" max="{{ max_component }}">
                         </div>
-                    </th>
-                    <th scope="col" class="align-middle md-form input-with-pre-icon">
-                        <div data-toggle="tooltip" data-placement="top" title="Action">
+                    </div>
+                {% endif %}
+                <div class="row m-0">
+                    <div class="align-middle md-form input-with-pre-icon col-12 m-0"
+                         data-toggle="tooltip" data-placement="left" title="Cœur">
+                        <svg height="3em" width="2em" class="input-prefix">
+                            <use xlink:href="#svg-heart"></use>
+                        </svg>
+                        <input class="form-control component text-center" id="heart" name="heart" type="number"
+                               value="3" min="3" max="{{ max_component }}">
+                    </div>
+                </div>
+                <div class="row m-0">
+                    <div class="align-middle md-form input-with-pre-icon col-12 m-0"
+                         data-toggle="tooltip" data-placement="left" title="Esprit">
+                        <svg height="3em" width="2em" class="input-prefix">
+                            <use xlink:href="#svg-mind"></use>
+                        </svg>
+                        <input class="form-control component text-center" id="mind" name="mind" type="number"
+                               value="3" min="3" max="{{ max_component }}">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-3 col-sm-4 mt-1 mx-0">
+            <div class="card shadow-none border border-heavy rounded-lg px-1 py-2 mx-0">
+                <div class="row ml-2 m-0"><b>Moyens</b></div>
+                <div class="row m-0">
+                    <div class="align-middle md-form input-with-pre-icon col-12 m-0"
+                         data-toggle="tooltip" data-placement="right" title="Perception">
+                        <svg height="3em" width="2em" class="input-prefix">
+                            <use xlink:href="#svg-perception"></use>
+                        </svg>
+                        <input class="form-control means text-center" id="perception" name="perception"
+                               type="number" value="1" min="1" max="{{ max_means }}">
+                    </div>
+                </div>
+                <div class="row m-0">
+                    <div class="align-middle md-form input-with-pre-icon col-12 m-0"
+                         data-toggle="tooltip" data-placement="right" title="Action">
+                        <svg height="3em" width="2em" class="input-prefix">
+                            <use xlink:href="#svg-action"></use>
+                        </svg>
+                        <input class="form-control means text-center" id="action" name="action" type="number"
+                               value="1" min="1" max="{{ max_means }}">
+                    </div>
+                </div>
+                {% if matrix_4x4 %}
+                    <div class="row m-0">
+                        <div class="align-middle md-form input-with-pre-icon col-12 m-0"
+                             data-toggle="tooltip" data-placement="right" title="Désir">
                             <svg height="3em" width="2em" class="input-prefix">
-                                <use xlink:href="#svg-action"></use>
+                                <use xlink:href="#svg-desire"></use>
                             </svg>
-                            <input class="form-control means text-center" id="action" name="action" type="number"
-                                   value="1"
-                                   min="1" max="{{ max_means }}">
+                            <input class="form-control means text-center" id="desire" name="desire"
+                                   type="number" value="1" min="1" max="{{ max_means }}">
                         </div>
-                    </th>
-                    {% if matrix_4x4 %}
+                    </div>
+                {% endif %}
+                <div class="row m-0">
+                    <div class="align-middle md-form input-with-pre-icon col-12 m-0"
+                         data-toggle="tooltip" data-placement="right" title="Résistance">
+                        <svg height="3em" width="2em" class="input-prefix">
+                            <use xlink:href="#svg-resistance"></use>
+                        </svg>
+                        <input class="form-control means text-center" id="resistance" name="resistance"
+                               type="number" value="1" min="1" max="{{ max_means }}">
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="col-lg-6 my-1 mx-0 px-0">
+            <div class="table-responsive-xl card shadow-none border border-heavy rounded-lg m-0 p-0">
+                <table class="table table-hover m-0 p-0">
+                    <thead>
+                    <tr>
+                        <th scope="col" class="align-middle">
+                            <div class="text-right"><b>Moyens</b></div>
+                            <b>Composantes</b>
+                        </th>
                         <th scope="col" class="align-middle md-form input-with-pre-icon">
-                            <div data-toggle="tooltip" data-placement="top" title="Désir">
+                            <div data-toggle="tooltip" data-placement="top" title="Perception">
                                 <svg height="3em" width="2em" class="input-prefix">
-                                    <use xlink:href="#svg-desire"></use>
+                                    <use xlink:href="#svg-perception"></use>
                                 </svg>
-                                <input class="form-control means text-center" id="desire" name="desire" type="number"
+                                <input class="form-control means text-center" id="perception" name="perception"
+                                       type="number" value="1" min="1" max="{{ max_means }}">
+                            </div>
+                        </th>
+                        <th scope="col" class="align-middle md-form input-with-pre-icon">
+                            <div data-toggle="tooltip" data-placement="top" title="Action">
+                                <svg height="3em" width="2em" class="input-prefix">
+                                    <use xlink:href="#svg-action"></use>
+                                </svg>
+                                <input class="form-control means text-center" id="action" name="action" type="number"
                                        value="1" min="1" max="{{ max_means }}">
                             </div>
                         </th>
-                    {% endif %}
-                    <th scope="col" class="align-middle md-form input-with-pre-icon">
-                        <div data-toggle="tooltip" data-placement="top" title="Résistance">
-                            <svg height="3em" width="2em" class="input-prefix">
-                                <use xlink:href="#svg-resistance"></use>
-                            </svg>
-                            <input class="form-control means text-center" id="resistance" name="resistance"
-                                   type="number"
-                                   value="1" min="1" max="{{ max_means }}">
-                        </div>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <th scope="row" class="align-middle md-form input-with-pre-icon">
-                        <div data-toggle="tooltip" data-placement="top" title="Corps">
-                            <svg height="3em" width="2em" class="input-prefix">
-                                <use xlink:href="#svg-body"></use>
-                            </svg>
-                            <input class="form-control component text-center" id="body" name="body" type="number"
-                                   value="3"
-                                   min="3" max="{{ max_component }}">
-                        </div>
-                    </th>
-                    <td class="align-middle text-center" id="body-perception" data-toggle="tooltip" data-html="true"
-                        data-placement="right"
-                        title="{{ tooltip_body_perception }}"></td>
-                    <td class="align-middle text-center" id="body-action" data-toggle="tooltip" data-html="true"
-                        data-placement="right"
-                        title="{{ tooltip_body_action }}"></td>
-                    {% if matrix_4x4 %}
-                        <td class="align-middle text-center" id="body-desire" data-toggle="tooltip" data-html="true"
-                            data-placement="right"
-                            title="{{ tooltip_body_desire }}"></td>
-                    {% endif %}
-                    <td class="align-middle text-center" id="body-resistance" data-toggle="tooltip" data-html="true"
-                        data-placement="right"
-                        title="{{ tooltip_body_resistance }}"></td>
-                </tr>
-                {% if matrix_4x4 %}
-                    <tr>
-                        <th scope="row" class="align-middle md-form input-with-pre-icon">
-                            <div data-toggle="tooltip" data-placement="top" title="Instincts">
+                        {% if matrix_4x4 %}
+                            <th scope="col" class="align-middle md-form input-with-pre-icon">
+                                <div data-toggle="tooltip" data-placement="top" title="Désir">
+                                    <svg height="3em" width="2em" class="input-prefix">
+                                        <use xlink:href="#svg-desire"></use>
+                                    </svg>
+                                    <input class="form-control means text-center" id="desire" name="desire"
+                                           type="number" value="1" min="1" max="{{ max_means }}">
+                                </div>
+                            </th>
+                        {% endif %}
+                        <th scope="col" class="align-middle md-form input-with-pre-icon">
+                            <div data-toggle="tooltip" data-placement="top" title="Résistance">
                                 <svg height="3em" width="2em" class="input-prefix">
-                                    <use xlink:href="#svg-instincts"></use>
+                                    <use xlink:href="#svg-resistance"></use>
                                 </svg>
-                                <input class="form-control component text-center" id="instincts" name="instincts"
-                                       type="number" value="3" min="3" max="{{ max_component }}">
+                                <input class="form-control means text-center" id="resistance" name="resistance"
+                                       type="number" value="1" min="1" max="{{ max_means }}">
                             </div>
                         </th>
-                        <td class="align-middle text-center" id="instincts-perception" data-toggle="tooltip"
-                            data-html="true" data-placement="right"
-                            title="{{ tooltip_instincts_perception }}"></td>
-                        <td class="align-middle text-center" id="instincts-action" data-toggle="tooltip"
-                            data-html="true" data-placement="right"
-                            title="{{ tooltip_instincts_action }}"></td>
-                        <td class="align-middle text-center" id="instincts-desire" data-toggle="tooltip"
-                            data-html="true" data-placement="right"
-                            title="{{ tooltip_instincts_desire }}"></td>
-                        <td class="align-middle text-center" id="instincts-resistance" data-toggle="tooltip"
-                            data-html="true" data-placement="right"
-                            title="{{ tooltip_instincts_resistance }}"></td>
                     </tr>
-                {% endif %}
-                <tr>
-                    <th scope="row" class="align-middle md-form input-with-pre-icon">
-                        <div data-toggle="tooltip" data-placement="top" title="Cœur">
-                            <svg height="3em" width="2em" class="input-prefix">
-                                <use xlink:href="#svg-heart"></use>
-                            </svg>
-                            <input class="form-control component text-center" id="heart" name="heart" type="number"
-                                   value="3" min="3" max="{{ max_component }}">
-                        </div>
-                    </th>
-                    <td class="align-middle text-center" id="heart-perception" data-toggle="tooltip" data-html="true"
-                        data-placement="right" title="{{ tooltip_heart_perception }}"></td>
-                    <td class="align-middle text-center" id="heart-action" data-toggle="tooltip" data-html="true"
-                        data-placement="right" title="{{ tooltip_heart_action }}"></td>
-                    {% if matrix_4x4 %}
-                        <td class="align-middle text-center" id="heart-desire" data-toggle="tooltip" data-html="true"
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row" class="align-middle md-form input-with-pre-icon">
+                            <div data-toggle="tooltip" data-placement="top" title="Corps">
+                                <svg height="3em" width="2em" class="input-prefix">
+                                    <use xlink:href="#svg-body"></use>
+                                </svg>
+                                <input class="form-control component text-center" id="body" name="body" type="number"
+                                       value="3"
+                                       min="3" max="{{ max_component }}">
+                            </div>
+                        </th>
+                        <td class="align-middle text-center" id="body-perception" data-toggle="tooltip" data-html="true"
                             data-placement="right"
-                            title="{{ tooltip_heart_desire }}"></td>
-                    {% endif %}
-                    <td class="align-middle text-center" id="heart-resistance" data-toggle="tooltip" data-html="true"
-                        data-placement="right" title="{{ tooltip_heart_resistance }}"></td>
-                </tr>
-                <tr>
-                    <th scope="row" class="align-middle md-form input-with-pre-icon">
-                        <div data-toggle="tooltip" data-placement="top" title="Esprit">
-                            <svg height="3em" width="2em" class="input-prefix">
-                                <use xlink:href="#svg-mind"></use>
-                            </svg>
-                            <input class="form-control component text-center" id="mind" name="mind" type="number"
-                                   value="3"
-                                   min="3" max="{{ max_component }}">
-                        </div>
-                    </th>
-                    <td class="align-middle text-center" id="mind-perception" data-toggle="tooltip" data-html="true"
-                        data-placement="right" title="{{ tooltip_mind_perception }}"></td>
-                    <td class="align-middle text-center" id="mind-action" data-toggle="tooltip" data-html="true"
-                        data-placement="right" title="{{ tooltip_mind_action }}"></td>
+                            title="{{ tooltip_body_perception }}"></td>
+                        <td class="align-middle text-center" id="body-action" data-toggle="tooltip" data-html="true"
+                            data-placement="right"
+                            title="{{ tooltip_body_action }}"></td>
+                        {% if matrix_4x4 %}
+                            <td class="align-middle text-center" id="body-desire" data-toggle="tooltip" data-html="true"
+                                data-placement="right"
+                                title="{{ tooltip_body_desire }}"></td>
+                        {% endif %}
+                        <td class="align-middle text-center" id="body-resistance" data-toggle="tooltip" data-html="true"
+                            data-placement="right"
+                            title="{{ tooltip_body_resistance }}"></td>
+                    </tr>
                     {% if matrix_4x4 %}
-                        <td class="align-middle text-center" id="mind-desire" data-toggle="tooltip" data-html="true"
-                            data-placement="right" title="{{ tooltip_mind_desire }}"></td>
+                        <tr>
+                            <th scope="row" class="align-middle md-form input-with-pre-icon">
+                                <div data-toggle="tooltip" data-placement="top" title="Instincts">
+                                    <svg height="3em" width="2em" class="input-prefix">
+                                        <use xlink:href="#svg-instincts"></use>
+                                    </svg>
+                                    <input class="form-control component text-center" id="instincts" name="instincts"
+                                           type="number" value="3" min="3" max="{{ max_component }}">
+                                </div>
+                            </th>
+                            <td class="align-middle text-center" id="instincts-perception" data-toggle="tooltip"
+                                data-html="true" data-placement="right"
+                                title="{{ tooltip_instincts_perception }}"></td>
+                            <td class="align-middle text-center" id="instincts-action" data-toggle="tooltip"
+                                data-html="true" data-placement="right"
+                                title="{{ tooltip_instincts_action }}"></td>
+                            <td class="align-middle text-center" id="instincts-desire" data-toggle="tooltip"
+                                data-html="true" data-placement="right"
+                                title="{{ tooltip_instincts_desire }}"></td>
+                            <td class="align-middle text-center" id="instincts-resistance" data-toggle="tooltip"
+                                data-html="true" data-placement="right"
+                                title="{{ tooltip_instincts_resistance }}"></td>
+                        </tr>
                     {% endif %}
-                    <td class="align-middle text-center" id="mind-resistance" data-toggle="tooltip" data-html="true"
-                        data-placement="right" title="{{ tooltip_mind_resistance }}"></td>
-                </tr>
-                </tbody>
-            </table>
+                    <tr>
+                        <th scope="row" class="align-middle md-form input-with-pre-icon">
+                            <div data-toggle="tooltip" data-placement="top" title="Cœur">
+                                <svg height="3em" width="2em" class="input-prefix">
+                                    <use xlink:href="#svg-heart"></use>
+                                </svg>
+                                <input class="form-control component text-center" id="heart" name="heart" type="number"
+                                       value="3" min="3" max="{{ max_component }}">
+                            </div>
+                        </th>
+                        <td class="align-middle text-center" id="heart-perception" data-toggle="tooltip"
+                            data-html="true" data-placement="right" title="{{ tooltip_heart_perception }}"></td>
+                        <td class="align-middle text-center" id="heart-action" data-toggle="tooltip" data-html="true"
+                            data-placement="right" title="{{ tooltip_heart_action }}"></td>
+                        {% if matrix_4x4 %}
+                            <td class="align-middle text-center" id="heart-desire" data-toggle="tooltip"
+                                data-html="true" data-placement="right" title="{{ tooltip_heart_desire }}"></td>
+                        {% endif %}
+                        <td class="align-middle text-center" id="heart-resistance" data-toggle="tooltip"
+                            data-html="true"
+                            data-placement="right" title="{{ tooltip_heart_resistance }}"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="align-middle md-form input-with-pre-icon">
+                            <div data-toggle="tooltip" data-placement="top" title="Esprit">
+                                <svg height="3em" width="2em" class="input-prefix">
+                                    <use xlink:href="#svg-mind"></use>
+                                </svg>
+                                <input class="form-control component text-center" id="mind" name="mind" type="number"
+                                       value="3"
+                                       min="3" max="{{ max_component }}">
+                            </div>
+                        </th>
+                        <td class="align-middle text-center" id="mind-perception" data-toggle="tooltip" data-html="true"
+                            data-placement="right" title="{{ tooltip_mind_perception }}"></td>
+                        <td class="align-middle text-center" id="mind-action" data-toggle="tooltip" data-html="true"
+                            data-placement="right" title="{{ tooltip_mind_action }}"></td>
+                        {% if matrix_4x4 %}
+                            <td class="align-middle text-center" id="mind-desire" data-toggle="tooltip" data-html="true"
+                                data-placement="right" title="{{ tooltip_mind_desire }}"></td>
+                        {% endif %}
+                        <td class="align-middle text-center" id="mind-resistance" data-toggle="tooltip" data-html="true"
+                            data-placement="right" title="{{ tooltip_mind_resistance }}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
+    {% endif %}
 
     <!-- Realms -->
     <div class="col-lg-2 col-md-3 col-sm-4 pl-4 pr-2 mt-1 mx-0">
