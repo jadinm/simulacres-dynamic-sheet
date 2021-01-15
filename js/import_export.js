@@ -26,6 +26,11 @@ $(".note-editor.note-frame").remove()
 
 /* Update field value attributes as the user writes so that it will be saved in the HTML */
 
+function check_radio(elem) {
+    elem.setAttribute("checked", "")
+    $(elem).prop("checked", true)
+}
+
 function add_save_to_dom_listeners(base = $(document)) {
 
     base.find("input").on("change", event => {
@@ -41,8 +46,7 @@ function add_save_to_dom_listeners(base = $(document)) {
         $("input[name='" + event.target.name + "']").prop("checked", false).removeAttr("checked")
 
         if (!already_present) { // Do not check if the same element was selected twice
-            event.target.setAttribute("checked", "")
-            $(event.target).prop("checked", true)
+            check_radio(event.target)
         }
         changed_page = true
     })
@@ -228,7 +232,8 @@ function import_data(src_html, dst_html) {
     src_html.find("input:checked").each((i, old_input) => {
         if (old_input.id && old_input.id.length > 0) { // Avoid summernote inputs
             const new_input = dst_html.find("#" + old_input.id)
-            new_input.click().trigger("click")
+            if (new_input.length > 0)
+                check_radio(new_input[0])
         }
     })
 
