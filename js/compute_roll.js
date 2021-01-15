@@ -10,7 +10,8 @@ function add_row_listeners(line = $(document)) {
         compute_remaining_ap()
     })
     line.find(".spell-list").on("changed.bs.select", list_changed)
-    line.find(".spell-formula-elem").on("click", event => {
+    line.find(".spell-formula-elem").on("change", event => {
+        event.preventDefault()
         update_spell_value(row_elem(event.target, "value"))
     })
     line.find(".spell-difficulty-input").on("change", event => {
@@ -76,7 +77,10 @@ function add_row_listeners(line = $(document)) {
             spell_duration).trigger_roll()
         $('#roll-dialog').modal()
     })
-    line.find(".roll-formula-elem,.dual_wielding-formula-elem").on("click", roll_changed)
+    line.find(".roll-formula-elem,.dual_wielding-formula-elem").on("change", e => {
+        e.preventDefault()
+        roll_changed(e)
+    })
     line.find(".roll-talent,.dual_wielding-talent,.dual_wielding-tap-talent").each((i, elem) => {
         if (!elem.id.includes("-x-")) {
             $(elem).on("changed.bs.select", e => {

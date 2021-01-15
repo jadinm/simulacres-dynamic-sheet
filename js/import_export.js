@@ -42,10 +42,10 @@ function add_save_to_dom_listeners(base = $(document)) {
         changed_page = true
     })
     base.find("input[type=\"checkbox\"]").on("click", event => {
-        const already_present = event.target.getAttribute("checked") != null
+        const already_present = $(event.target).is(':checked')
         $("input[name='" + event.target.name + "']").prop("checked", false).removeAttr("checked")
 
-        if (!already_present) { // Do not check if the same element was selected twice
+        if (already_present) { // Do not check if the same element was selected twice
             check_radio(event.target)
         }
         changed_page = true
