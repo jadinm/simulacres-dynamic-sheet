@@ -58,6 +58,5 @@ $(".talent-select.adventure-points-select").on("changed.bs.select", (e, clickedI
 })
 
 $("#investment-table td[data-toggle='tooltip']").each((i, elem) => {
-    console.log(elem)
     $(elem).tooltip()
 })
