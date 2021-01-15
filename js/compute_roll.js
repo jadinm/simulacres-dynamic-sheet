@@ -122,7 +122,7 @@ function compute_formula(row) {
         const elem_name = row[0].id + "-" + elements[i]
         const checked_elem = $("input[name=" + elem_name + "]:checked")
         if (checked_elem.length === 0)
-            return [null, []]  // Not a full formula
+            continue  // Allow partial formulas
         checked_elements.push(checked_elem)
         const base_array = checked_elem[0].id.split("-")
         const formula_base_name = base_array[base_array.length - 1]
