@@ -39,45 +39,47 @@
                        data-slider-handle="custom" data-slider-tooltip-position="bottom"/>
             </div>
         </div>
-        <div class="col-xl-3 col-md-4 col-sm-6 ml-md-1">
-            <!-- Protection summary -->
-            <div class="row pl-1">
-                <label for="armor">Armure</label>
-            </div>
-            <div class="row mt-1 md-form form-sm m-0 input-with-pre-icon" style="width: 200px">
-                <svg height="2em" width="2em" class="input-prefix">
-                    <use xlink:href="#svg-chest-armor"></use>
-                </svg>
-                <input type="number" id="armor" class="armor form-control form-control-sm text-center" min="0"
-                       value="0">
-            </div>
+        {% if not discovery %}
+            <div class="col-xl-3 col-md-4 col-sm-6 ml-md-1">
+                <!-- Protection summary -->
+                <div class="row pl-1">
+                    <label for="armor">Armure</label>
+                </div>
+                <div class="row mt-1 md-form form-sm m-0 input-with-pre-icon" style="width: 200px">
+                    <svg height="2em" width="2em" class="input-prefix">
+                        <use xlink:href="#svg-chest-armor"></use>
+                    </svg>
+                    <input type="number" id="armor" class="armor form-control form-control-sm text-center" min="0"
+                           value="0">
+                </div>
 
-            <div class="row mt-1 md-form form-sm m-0 input-with-pre-icon" style="width: 200px">
-                <svg height="2em" width="2em" class="input-prefix">
-                    <use xlink:href="#svg-shield"></use>
-                </svg>
-                <input type="number" id="shield" class="form-control form-control-sm text-center" min="0" max="2"
-                       value="0">
-                <label for="shield" hidden></label>
-            </div>
+                <div class="row mt-1 md-form form-sm m-0 input-with-pre-icon" style="width: 200px">
+                    <svg height="2em" width="2em" class="input-prefix">
+                        <use xlink:href="#svg-shield"></use>
+                    </svg>
+                    <input type="number" id="shield" class="form-control form-control-sm text-center" min="0" max="2"
+                           value="0">
+                    <label for="shield" hidden></label>
+                </div>
 
-            <div class="row mt-1 md-form form-sm m-0 input-with-pre-icon" style="width: 200px">
+                <div class="row mt-1 md-form form-sm m-0 input-with-pre-icon" style="width: 200px">
                 <span class="input-prefix">
                     Gêne
                 </span>
-                <input class="form-control energy text-center" id="armor-penalty-input" type="number"
-                       value="0" min="0">
-                <label for="armor-penalty-input" hidden></label>
-            </div>
+                    <input class="form-control energy text-center" id="armor-penalty-input" type="number"
+                           value="0" min="0">
+                    <label for="armor-penalty-input" hidden></label>
+                </div>
 
-            <div class="row mt-1 md-form form-sm m-0 input-with-pre-icon" style="width: 200px">
+                <div class="row mt-1 md-form form-sm m-0 input-with-pre-icon" style="width: 200px">
                 <span class="input-prefix">
                     Absorption
                 </span>
-                <input class="form-control text-center" id="armor-absorption" type="number"
-                       value="0" min="0">
-                <label for="armor-absorption" hidden></label>
+                    <input class="form-control text-center" id="armor-absorption" type="number"
+                           value="0" min="0">
+                    <label for="armor-absorption" hidden></label>
+                </div>
             </div>
-        </div>
+        {% endif %}
     </div>
 </div>
