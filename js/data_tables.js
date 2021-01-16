@@ -54,6 +54,10 @@ $("#add-magical-equipment").on("click", (event, idx = null) => { // Add paramete
     add_row($("#magical-equipment-table"), $("#magical-equipment-x").clone(true, true), idx)
 })
 
+$("#add-limitedUse-equipment").on("click", (event, idx = null) => { // Add parameter for forced index
+    add_row($("#limitedUse-equipment-table"), $("#limitedUse-equipment-x").clone(true, true), idx)
+})
+
 $("#add-equipment").on("click", (event, idx = null) => { // Add parameter for forced index
     add_row($("#equipment-table"), $("#equipment-x").clone(true, true), idx)
 })
@@ -69,7 +73,7 @@ $("#add-ki").on("click", (event, idx = null) => { // Add parameter for forced in
 
 /* Sortable handling */
 
-$('#roll-table,#spell-table,#focus-table,#magical-equipment-table,#equipment-table,#ki-table,#note-table,#dual_wielding-table').each((i, elem) => {
+$('#roll-table,#spell-table,#focus-table,#magical-equipment-table,#limitedUse-equipment-table,#equipment-table,#ki-table,#note-table,#dual_wielding-table').each((i, elem) => {
     $(elem).sortable({
         handle: '.fa-arrows-alt',
         dragoverBubble: true,
@@ -82,7 +86,7 @@ $('#roll-table,#spell-table,#focus-table,#magical-equipment-table,#equipment-tab
 
 /* Remove */
 
-$('#roll-table-remove,#spell-table-remove,#focus-table-remove,#magical-equipment-table-remove,#equipment-table-remove,#ki-table-remove,#note-table-remove,#dual_wielding-table-remove').each((i, elem) => {
+$('#roll-table-remove,#spell-table-remove,#focus-table-remove,#limitedUse-equipment-table-remove,#magical-equipment-table-remove,#equipment-table-remove,#ki-table-remove,#note-table-remove,#dual_wielding-table-remove').each((i, elem) => {
     $(elem).sortable({
         group: elem.id.replace("-remove", ""), // So that it can delete the appropriate table items
         ghostClass: "remove-drop",
