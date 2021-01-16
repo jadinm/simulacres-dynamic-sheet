@@ -206,7 +206,9 @@ function import_data(src_html, dst_html) {
         if (old_input.id && old_input.id.length > 0) {
             const old_input_sel = "#" + old_input.id
             let new_input = dst_html.find(old_input_sel)
-            new_input.val(src_html.find(old_input).val())
+            let old_value = src_html.find(old_input).val()
+            new_input.val(old_value)
+            new_input.html(old_value)
 
             // Update associated summernote (the editors for the notes are initialized lazily)
             if (!new_input[0].id.includes("note-"))
