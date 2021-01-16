@@ -21,3 +21,7 @@
 .note-editor h1, .note-editor h2, .note-editor h3, .note-editor h4, .note-editor h5, .note-editor h6 {
     font-family: "Augusta", "Linux Libertine", serif;
 }
+
+.note-editor h1 *, .note-editor h2 *, .note-editor h3 *, .note-editor h4 *, .note-editor h5 *, .note-editor h6 * {
+    font-family: "Augusta", "Linux Libertine", serif;
+}
