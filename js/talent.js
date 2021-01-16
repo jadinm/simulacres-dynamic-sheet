@@ -1,11 +1,15 @@
 /* This file handles the talent lists */
 
-regex_talent_from_id = /talent_(x|(?:-4)|(?:-2)|0|1)\d*/
+regex_talent_from_id = /talent_(x|(?:-4)|(?:-2)|0|1)(\d*)/
 
-function talent_from_name(name, from_elem = $(document)) {
+function talent_from_name(name, from_elem = $("#talent-tab")) {
     if (name == null)
         return $()
     return from_elem.find("input[value='" + name.replace("'", "\\'") + "']")
+}
+
+function talent_index(talent) {
+    return parseInt(talent.id.match(regex_talent_from_id)[2])
 }
 
 function talent_level(talent, target_list = null) {

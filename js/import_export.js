@@ -144,10 +144,10 @@ function import_data(src_html, dst_html) {
                     // Add element
                     const button = dst_html.find("#add-talent-" + talent_matching[1])
                     button.trigger("click")
-                    let max_idx = 0
+                    let max_idx = -1
                     let max_id = null
                     $("#talents_" + talent_matching[1]).find("input").each((i, elem) => {
-                        const current_idx = parseInt(elem.id.split("-name")[0].split(talent_matching[1])[1])
+                        const current_idx = talent_index($(elem).parents(".talent")[0])
                         if (current_idx >= max_idx) {
                             max_idx = current_idx
                             max_id = elem.id
@@ -244,8 +244,8 @@ function import_data(src_html, dst_html) {
             let old_b
             if ($(elem).hasClass("talent-list")) {
                 // Sorting talents (ids can defer between versions)
-                old_a = talent_from_name($(a).find("input").val(), src_html).parents(".talent")
-                old_b = talent_from_name($(b).find("input").val(), src_html).parents(".talent")
+                old_a = talent_from_name($(a).find("input").val(), src_html.find("#talent-tab")).parents(".talent")
+                old_b = talent_from_name($(b).find("input").val(), src_html.find("#talent-tab")).parents(".talent")
             } else {
                 old_a = src_html.find("#" + a.id)
                 old_b = src_html.find("#" + b.id)
