@@ -48,8 +48,6 @@ function talent_cost(talent, list = null) {
         cost = talent_increment_cost[old_value]["1"] + talent_increment_cost_discovery_2
     else if (discovery && current_value === "3")
         cost = talent_increment_cost[old_value]["1"] + talent_increment_cost_discovery_2 + talent_increment_cost_discovery_3
-    else
-        cost = talent_increment_cost[old_value][current_value]
 
     if (talent_x_inefficient_raise().includes(talent_name) && parseInt(current_value) >= 0) {
         // 6 PA were consumed to raise this talent from X to 0 instead of 5
@@ -57,7 +55,7 @@ function talent_cost(talent, list = null) {
     }
 
     if (advised_talent().includes(talent_name))
-        return Math.max(0, cost - advised_talent_save)
+        cost = Math.max(0, cost - advised_talent_save)
     return cost
 }
 
@@ -187,12 +185,11 @@ function update_talent_tooltip(talent, target_list = null) {
     const current_level = talent_level(talent, target_list)
     const old_level = talent_base_level(talent)
     if (current_level !== old_level) {
-        const old_level = talent_base_level(talent)
-        const cost = talent_cost(talent)
+        const cost = talent_cost(talent, target_list)
         if (!isNaN(cost)) {
             if (!discovery) {
                 talent.setAttribute("data-original-title",
-                    "Talent " + old_level.toUpperCase() + " à la base <br />" + "Coût: " + talent_cost(talent) + " PA")
+                    "Talent " + old_level.toUpperCase() + " à la base <br />" + "Coût: " + cost + " PA")
                 $(talent).find(".talent-origin").text("< " + old_level.toUpperCase())
                 $(talent).addClass("increased-talent")
             }

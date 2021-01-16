@@ -118,7 +118,7 @@ function reset_tab_selection(html) {
 function import_data(src_html, dst_html) {
     // Retrieve and copy all of the input values of the src_html
     const table_row_input_id = /(.+)-(\d+)-.+/
-    const talent_input_id = /(x|(?:-4)|(?:-2)|0|1)(\d+)-name/
+    const talent_input_id = /^(x|(?:-4)|(?:-2)|0|1)(\d+)-name$/
 
     src_html.find("input").each((i, old_input) => {
         if (old_input.id && old_input.id.length > 0) {
@@ -134,49 +134,70 @@ function import_data(src_html, dst_html) {
                     button.trigger("click", parseInt(matching[2])) // Add a new elem with forced index
                     new_input = dst_html.find(old_input_sel)
                 }
-
-                if (talent_matching && old_input.value.trim().length > 0) {
-                    // Add element
-                    const button = dst_html.find("#add-talent-" + talent_matching[1])
-                    button.trigger("click", parseInt(talent_matching[2])) // Add a new elem with forced index
-                    new_input = dst_html.find(old_input_sel)
-                }
             }
 
             // Check the list of the talent
-            if (talent_matching) {
-                const target_talent_list = src_html.find(old_input).parents(".talent-list")
-                const current_talent_list = dst_html.find(new_input).parents(".talent-list")
-                if (target_talent_list.length > 0 && target_talent_list[0].id !== current_talent_list[0].id) {
-                    // Move to new table if needed
-                    const row = dst_html.find(new_input).parents(".talent")
-                    const list = dst_html.find("#" + target_talent_list[0].id)
-                    const header = list.children().first()
-                    const last_orig_moved = list.find(".talent-origin:not(:empty)").last()
-                    if (last_orig_moved.length > 0) { // Insert after last moved item (to preserve the order)
-                        last_orig_moved.parents(".talent").after(row)
-                    } else {
-                        header.after(row)
-                    }
-                    update_talent({item: row[0], to: list[0]})
+            const talent_name = old_input.value.trim()
+            if (talent_matching && talent_name.length > 0) {
+                new_input = talent_from_name(talent_name)
+                if (new_input.length === 0) {
+                    // Add element
+                    const button = dst_html.find("#add-talent-" + talent_matching[1])
+                    button.trigger("click")
+                    let max_idx = 0
+                    let max_id = null
+                    $("#talents_" + talent_matching[1]).find("input").each((i, elem) => {
+                        const current_idx = parseInt(elem.id.split("-name")[0].split(talent_matching[1])[1])
+                        if (current_idx >= max_idx) {
+                            max_idx = current_idx
+                            max_id = elem.id
+                        }
+                    })
+                    // Just added input
+                    new_input = $("#" + max_id)
                 }
-            }
+                if (new_input.length !== 0) {
+                    const target_talent_list = src_html.find(old_input).parents(".talent-list")
+                    const current_talent_list = dst_html.find(new_input).parents(".talent-list")
+                    if (target_talent_list.length > 0 && target_talent_list[0].id !== current_talent_list[0].id) {
+                        // Move to new table if needed
+                        const row = dst_html.find(new_input).parents(".talent")
+                        const list = dst_html.find("#" + target_talent_list[0].id)
+                        const header = list.children().first()
+                        const last_orig_moved = list.find(".talent-origin:not(:empty)").last()
+                        if (last_orig_moved.length > 0) { // Insert after last moved item (to preserve the order)
+                            last_orig_moved.parents(".talent").after(row)
+                        } else {
+                            header.after(row)
+                        }
+                        // We change the value and trigger the change in case of a listener
+                        new_input.val(old_input.value)
+                        new_input.trigger("change")
 
-            // Update the maximum through sliders that can change their maximum: HP/PS/EP
-            const old_max = parseInt(old_input.getAttribute("data-slider-max"))
-            if (new_input.length > 0 && modifiable_sliders.includes(new_input[0].id) && !isNaN(old_max)) {
-                set_slider_max(new_input, old_max)
-            }
+                        update_talent({item: row[0], to: list[0]})
+                    } else {
+                        // We change the value and trigger the change in case of a listener
+                        new_input.val(old_input.value)
+                        new_input.trigger("change")
+                    }
+                }
+            } else {
+                // Update the maximum through sliders that can change their maximum: HP/PS/EP
+                const old_max = parseInt(old_input.getAttribute("data-slider-max"))
+                if (new_input.length > 0 && modifiable_sliders.includes(new_input[0].id) && !isNaN(old_max)) {
+                    set_slider_max(new_input, old_max)
+                }
 
-            // Refresh modified sliders
-            if (new_input.hasClass("input-slider") && !new_input[0].id.includes("-x-")) {
-                new_input.slider("setValue", old_input.value)
-                new_input.slider("refresh", {useCurrentValue: true})
-            }
+                // Refresh modified sliders
+                if (new_input.hasClass("input-slider") && !new_input[0].id.includes("-x-")) {
+                    new_input.slider("setValue", old_input.value)
+                    new_input.slider("refresh", {useCurrentValue: true})
+                }
 
-            // We change the value and trigger the change in case of a listener
-            new_input.val(old_input.value)
-            new_input.trigger("change")
+                // We change the value and trigger the change in case of a listener
+                new_input.val(old_input.value)
+                new_input.trigger("change")
+            }
         }
     })
 
@@ -219,10 +240,18 @@ function import_data(src_html, dst_html) {
             } else if (b.id === "") {
                 return a.id === "" ? 0 : 1
             }
-            const old_a = src_html.find("#" + a.id)
-            const old_b = src_html.find("#" + b.id)
-            let a_idx = find_index(old_a.parent(), old_a[0])
-            let b_idx = find_index(old_b.parent(), old_b[0])
+            let old_a
+            let old_b
+            if ($(elem).hasClass("talent-list")) {
+                // Sorting talents (ids can defer between versions)
+                old_a = talent_from_name($(a).find("input").val(), src_html).parents(".talent")
+                old_b = talent_from_name($(b).find("input").val(), src_html).parents(".talent")
+            } else {
+                old_a = src_html.find("#" + a.id)
+                old_b = src_html.find("#" + b.id)
+            }
+            const a_idx = find_index(old_a.parent(), old_a[0])
+            const b_idx = find_index(old_b.parent(), old_b[0])
             return a_idx - b_idx
         })
         dst_html.find(elem).append(items)

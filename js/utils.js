@@ -13,8 +13,8 @@ const instinctive_magic = "Magie instinctive"
 function find_index(parent, child) {
 
     let idx = 0
-    parent.children().each((i, child) => {
-        if (child.id === child.id) {
+    parent.children().each((i, elem) => {
+        if (child.id === elem.id) {
             idx = i
         }
     })
