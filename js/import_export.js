@@ -270,7 +270,7 @@ function import_data(src_html, dst_html) {
 
     // Update the image if any
     const old_image = src_html.find("#character-image")
-    if (old_image.length > 0)
+    if (old_image.length > 0 && old_image[0].src && old_image[0].src.length > 0)
         dst_html.find("#character-image")[0].src = old_image[0].src
 
     // Update all of the spell values
