@@ -2,7 +2,7 @@ function toggle_show_button(note, show = true) {
     const svg = note.find("button.note-show-button svg")
     const text_area = note.find("textarea.summernote")
     if (show) {
-        text_area.summernote(summernote_cfg).summernote('fontSize', 18)
+        text_area.summernote(summernote_cfg)
         svg.removeClass("fa-angle-down").addClass("fa-angle-up")
     } else {
         svg.addClass("fa-angle-down").removeClass("fa-angle-up")

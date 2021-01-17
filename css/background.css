@@ -18,6 +18,10 @@
     font-family: "Linux Libertine", serif;
 }
 
+.note-editor p, .note-editor li, .note-editor td {
+    font-size: 18px; /* Defaults all writing to font size 18 instead of 16 */
+}
+
 .note-editor h1, .note-editor h2, .note-editor h3, .note-editor h4, .note-editor h5, .note-editor h6 {
     font-family: "Augusta", "Linux Libertine", serif;
 }
