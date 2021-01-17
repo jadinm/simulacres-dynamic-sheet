@@ -3,8 +3,8 @@
 Simulacres©™ - le jeu de rôle élémentaire a été créé par Pierre Rosenthal.
 Les règles de Simulacres © sont soumises à copyright et Simulacres™ est une marque déposée.
 
-Ce projet génère des fiches de personnages dynamiques concues pour faciliter la gestion d'un personnage
-dans une campagne de Simulacres mais il ne s'agit pas de matériel officiel.
+Ce projet génère des fiches de personnages dynamiques conçues pour faciliter la gestion d'un personnage
+dans une campagne de Simulacres.
 
 Ce projet supporte les règles de campagne de
 [SimulacreS version 7](https://www.facebook.com/groups/Simulacres/permalink/1512926132293121/)
@@ -17,7 +17,7 @@ avec les éléments suivants en plus :
 - la proposition de règle non officielle sur
   [le combat à deux armes](https://www.facebook.com/groups/Simulacres/permalink/2507313226187735/) par Karl Karas.
 
-Ce projet supporte aussi les règles de campagne de
+Ce projet supporte aussi les règles de campagne et de découverte de
 [SimulacreS version 8](https://www.facebook.com/groups/Simulacres/permalink/2324033054515754/)
 avec les éléments suivants en plus :
 - les talents détaillés et l'armure
@@ -70,8 +70,8 @@ Dans la version 7, "MR" et les colonnes d'effets tels que [A-2] et [D] seront re
 #### Petites Gens
 
 Les joueurs de l'ethnie des "Petites Gens" (ou "Hobbits") ont droit à un bonus de +1 à la résistance
-lors d'un jet l'impiquant (à l'exception des jets de résistance à l'hypnose et aux illusions).
-Ce bonus sera intégré dans les jets si l'ethnie a une des valeurs suivantes:
+lors d'un jet l'impliquant (à l'exception des jets de résistance à l'hypnose et aux illusions).
+Ce bonus sera intégré dans les jets si l'ethnie a une des valeurs suivantes :
 "Hobbit", "Tinigens", "Petites Gens", "Petites Personnes", "Tomte".
 
 ### Gestion des sorts (version 7 uniquement)
@@ -92,7 +92,7 @@ Les mages non-hermétiques ont le droit de lancer des sorts non appris
 en magie instinctive pour peu qu'ils ne dépensent que des EP, qu'ils aient le niveau
 d'énergie nécessaire au sort et que ce dernier soit inférieur ou égal au niveau du
 talent d'Art Magique. La difficulté du lancer est de 0 mais sa marge de
-réussite ne peut être supérieure à 1. Pour pré-encoder des sorts que vous compter
+réussite ne peut être supérieure à 1. Pour pré-encoder des sorts que vous comptez
 lancer en magie instinctive, vous pouvez utiliser la liste "Magie Instinctive"
 qui fixe tous ces détails pour vous et ne vous décompte pas de PA pour ce sort.
 
@@ -120,7 +120,7 @@ en exécutant la commande suivante à la racine du projet :
 $ yarn
 ```
 
-Après, vous avez besoin de certaines libraires python que vous pouvez
+Après, vous avez besoin de certaines libraires de Python que vous pouvez
 télécharger avec la commande suivante.
 Ce projet supporte les versions de python à partir de 3.8.
 
@@ -128,7 +128,7 @@ Ce projet supporte les versions de python à partir de 3.8.
 $ pip3 install -r requirements.txt
 ```
 
-Enfin, vous pouvez créez le fichier HTML incluant tout le code en exécutant :
+Enfin, vous pouvez créer le fichier HTML incluant tout le code en exécutant :
 
 ```console
 $ python3 compile.py simulacres_fiche_perso.html
