@@ -480,12 +480,12 @@ class Roll {
         } else {
             roll_effect_divs.addClass("d-none")
             roll_magic_divs.addClass("d-none")
-            $("#roll-dialog-result-label").html("Résultat du jet de 2d6 = ")
+            $("#roll-dialog-result-label").html("Résultat du lancer de 2d6 = ")
             $("#roll-dialog-result").html(this.dice_value())
             $("#roll-dialog-details").html(this.dice_buttons("base_dices", this.base_dices)).removeClass("d-none")
         }
 
-        let title = "<h2>" + ((this.reason.length > 0) ? this.reason : "Résultat du jet")
+        let title = "<h2>" + ((this.reason.length > 0) ? this.reason : "Résultat du lancer")
             + "</h2>"
         if (this.formula_elements.length > 0) {
             title += "<h4>"
