@@ -35,8 +35,8 @@ $.fn.selectpicker.Constructor.BootstrapVersion = '4'
 
 // Dark mode
 
-function is_dark_mode() {
-    return $("#dark-mode").hasClass("d-none")
+function is_dark_mode(page=$(document)) {
+    return page.find("#dark-mode").hasClass("d-none")
 }
 
 function enable_dark_mode() {

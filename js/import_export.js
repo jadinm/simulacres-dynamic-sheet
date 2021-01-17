@@ -281,6 +281,13 @@ function import_data(src_html, dst_html) {
     $(".roll-value,.dual_wielding-value").each((i, elem) => {
         update_roll_value($(elem))
     })
+
+    // Set the same theme
+    if (is_dark_mode(src_html) && !is_dark_mode()) {
+        enable_dark_mode()
+    } else if (!is_dark_mode(src_html) && is_dark_mode()) {
+        disable_dark_mode()
+    }
 }
 
 function insert_or_replace_block(block, parent) {
