@@ -398,7 +398,7 @@ class Roll {
                 const formula_base_name = base_array[base_array.length - 1]
                 if (formula_base_name === "resistance" && is_hobbit()) {
                     racial_bonus = " (bonus racial déjà appliqué)" +
-                        "</div><div class='row mx-1 align-middle'>Ce jet est raté s'il s'agit de résister à l'hypnose ou aux illusions"
+                        "</div><div class='row mx-1 align-middle'>Ce test est raté s'il s'agit de résister à l'hypnose ou aux illusions"
                 }
             }
 

@@ -54,12 +54,12 @@ Vous pouvez ajouter de nouveaux talents à n'importe quelle colonne de X à 0.
 Il est important de créer le talent dans la colonne du niveau du talent de base
 sinon le calcul des points d'aventure restants ne fonctionnera pas.
 
-### Gestion des jets pré-encodés
+### Gestion des tests courants
 
-Dans l'onglet "Jets", vous pouvez créer des jets pré-encodés, basés sur un talent.
+Dans l'onglet "Tests", vous pouvez créer des tests courants, basés ou non sur un talent.
 
-Une fois encodés, vous pouvez lancer le jet en cliquant sur l'image des dés.
-Les résultats du jet s'afficheront et vous pourrez appliquer
+Une fois encodés, vous pouvez lancer le test en cliquant sur l'image des dés.
+Les résultats du test s'afficheront et vous pourrez appliquer
 les différents modificateurs à la marge de réussite
 (comme l'armure de la cible d'une attaque par exemple).
 
@@ -70,8 +70,8 @@ Dans la version 7, "MR" et les colonnes d'effets tels que [A-2] et [D] seront re
 #### Petites Gens
 
 Les joueurs de l'ethnie des "Petites Gens" (ou "Hobbits") ont droit à un bonus de +1 à la résistance
-lors d'un jet l'impliquant (à l'exception des jets de résistance à l'hypnose et aux illusions).
-Ce bonus sera intégré dans les jets si l'ethnie a une des valeurs suivantes :
+lors d'un test l'impliquant (à l'exception des tests de résistance à l'hypnose et aux illusions).
+Ce bonus sera intégré dans les tests si l'ethnie a une des valeurs suivantes :
 "Hobbit", "Tinigens", "Petites Gens", "Petites Personnes", "Tomte".
 
 ### Gestion des sorts (version 7 uniquement)
