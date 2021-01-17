@@ -27,16 +27,6 @@ function talent_cost(talent, list = null) {
     const current_value = talent_level(talent, list)
     let old_value = talent_base_level(talent)
 
-    if (discovery) { // V8-only
-        if (old_value === "0") {
-            // Trick, "aptitudes (+0 talents)" const the same as moving a talent from X -> 0
-            old_value = "x"
-        } else if (old_value === "1") {
-            // Trick, "discovery talents (+1 talents)" cost the same as moving a talent from -4 -> 0
-            old_value = "-4"
-        }
-    }
-
     const talent_name = $(talent).find("input").val()
     if (work_talents().includes(talent_name)) {
         // Check that it is not a work talent
@@ -48,10 +38,6 @@ function talent_cost(talent, list = null) {
     }
 
     let cost = talent_increment_cost[old_value][current_value]
-    if (discovery && current_value === "2")
-        cost = talent_increment_cost[old_value]["1"] + talent_increment_cost_discovery_2
-    else if (discovery && current_value === "3")
-        cost = talent_increment_cost[old_value]["1"] + talent_increment_cost_discovery_2 + talent_increment_cost_discovery_3
 
     if (talent_x_inefficient_raise().includes(talent_name) && parseInt(current_value) >= 0) {
         // 6 PA were consumed to raise this talent from X to 0 instead of 5
@@ -148,9 +134,6 @@ function add_talent(list, fixed_id = null) {
     })
     // Update armor penalty
     recompute_armor_penalty()
-
-    if (discovery)
-        compute_remaining_ap()
     return new_talent
 }
 
