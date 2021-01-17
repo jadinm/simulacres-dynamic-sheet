@@ -31,16 +31,16 @@ jobs:
           python3 -m pip install --upgrade pip
           python3 -m pip install -r requirements.txt
           python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V7_BASE_FINAL_FILENAME }}
-          python3 ${{ env.PYTHON_SCRIPT }} --localisation target/${{ env.V7_LOCALISATION_FINAL_FILENAME }}
-          python3 ${{ env.PYTHON_SCRIPT }} --localisation --dual-wielding target/${{ env.V7_LOCALISATION_DUAL_FINAL_FILENAME }}
-          python3 ${{ env.PYTHON_SCRIPT }} --version 8 target/${{ env.V8_BASE_FINAL_FILENAME }}
-          python3 ${{ env.PYTHON_SCRIPT }} --version 8 --universe "Autre" target/${{ env.V8_MINIMAL_FINAL_FILENAME }}
-          python3 ${{ env.PYTHON_SCRIPT }} --version 8 --universe "Autre" --discovery target/${{ env.V8_DISCOVERY_FINAL_FILENAME }}
-          python3 ${{ env.PYTHON_SCRIPT }} --version 8 --universe "Capitaine Vaudou" target/${{ env.V8_CAPTAIN_VOODOO_FINAL_FILENAME }}
-          python3 ${{ env.PYTHON_SCRIPT }} --version 8 --matrix-4x4 target/${{ env.V8_BASE_4x4_FINAL_FILENAME }}
-          python3 ${{ env.PYTHON_SCRIPT }} --version 8 --matrix-4x4 --universe "Autre" target/${{ env.V8_MINIMAL_4x4_FINAL_FILENAME }}
-          python3 ${{ env.PYTHON_SCRIPT }} --version 8 --matrix-4x4 --universe "Autre" --discovery target/${{ env.V8_DISCOVERY_4x4_FINAL_FILENAME }}
-          python3 ${{ env.PYTHON_SCRIPT }} --version 8 --matrix-4x4 --universe "Capitaine Vaudou" target/${{ env.V8_CAPTAIN_4x4_VOODOO_FINAL_FILENAME }}
+          python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V7_LOCALISATION_FINAL_FILENAME }} --localisation
+          python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V7_LOCALISATION_DUAL_FINAL_FILENAME }} --localisation --dual-wielding
+          python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V8_BASE_FINAL_FILENAME }} --version 8
+          python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V8_MINIMAL_FINAL_FILENAME }} --version 8 --universe "Autre"
+          python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V8_DISCOVERY_FINAL_FILENAME }} --version 8 --universe "Autre" --discovery --plugin plugins/plugin_generic_world.html
+          python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V8_CAPTAIN_VOODOO_FINAL_FILENAME }} --version 8 --universe "Capitaine Vaudou"
+          python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V8_BASE_4x4_FINAL_FILENAME }} --version 8 --matrix-4x4
+          python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V8_MINIMAL_4x4_FINAL_FILENAME }} --version 8 --matrix-4x4 --universe "Autre"
+          python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V8_DISCOVERY_4x4_FINAL_FILENAME }} --version 8 --matrix-4x4 --universe "Autre" --discovery --plugin plugins/plugin_generic_world.html
+          python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V8_CAPTAIN_4x4_VOODOO_FINAL_FILENAME }} --version 8 --matrix-4x4 --universe "Capitaine Vaudou"
 
       - name: Upload the base v7 sheet
         uses: actions/upload-artifact@v2
