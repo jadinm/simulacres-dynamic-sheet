@@ -290,10 +290,11 @@ function import_data(src_html, dst_html) {
     }
 }
 
-function insert_or_replace_block(block, parent) {
+function insert_or_replace_block(block, parent, overwrite = true) {
     const block_selector = "#" + block[0].id
     if ($(block_selector).length > 0) {
-        $(block).replaceAll(block_selector)
+        if (overwrite)
+            $(block).replaceAll(block_selector)
     } else {
         parent.append(block)
     }
@@ -303,8 +304,9 @@ function insert_or_replace_block(block, parent) {
  * Insert the plugins components (button, tab, css and js) into the page
  * If these components match an existing component, they are replaced
  * @param plugin The jQuery object representing the plugin page
+ * @param overwrite whether existing plugin blocks are updated or not
  */
-function insert_or_replace_plugins(plugin) {
+function insert_or_replace_plugins(plugin, overwrite = true) {
     const parent_selectors = {
         ".plugin-tab": "#tabs",
         ".plugin-button": "#nav-tabs",
@@ -313,9 +315,9 @@ function insert_or_replace_plugins(plugin) {
     }
     Object.keys(parent_selectors).forEach((selector, _) => {
         // If it is inside another component
-        plugin.find(selector).each((i, elem) => insert_or_replace_block($(elem), $(parent_selectors[selector])))
+        plugin.find(selector).each((i, elem) => insert_or_replace_block($(elem), $(parent_selectors[selector]), overwrite))
         // If it is an outermost element
-        plugin.filter(selector).each((i, elem) => insert_or_replace_block($(elem), $(parent_selectors[selector])))
+        plugin.filter(selector).each((i, elem) => insert_or_replace_block($(elem), $(parent_selectors[selector]), overwrite))
     })
 
     // Reset tab selection
@@ -341,7 +343,9 @@ $("#import-page").on("change", function (event) {
 
         import_data(old_html, $("html"))
         reset_tab_selection($("html"))
-        insert_or_replace_plugins($(e.target.result))
+        // We insert new plugins from the old character sheet
+        // but we keep the current version of existing plugins
+        insert_or_replace_plugins($(e.target.result), false)
 
         event.target.setAttribute("value", "")
         $(event.target).next().text("Importer une ancienne fiche")
