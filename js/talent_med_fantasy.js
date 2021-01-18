@@ -1,9 +1,9 @@
 default_talents = {
-    x: ["Agriculture", "Alchimie", "Art de la guerre", "Art magique", "Botanique", "Histoire d'Heldor",
+    x: ["Agriculture", "Alchimie", "Art de la guerre", "Art magique", "Botanique", "Histoire",
         "Langue étrangère éloignée", "Lire & Écrire", "Lire sur les lèvres", "Mathématiques", "Navigation",
         "Menuiserie/Ébénisterie", "Minéralogie/Joaillerie", "Poisons", "Serrurerie", "Zoologie"],
     "-4": ["Armes normales", "Arts martiaux/Lutte", "Camouflage", "Commerce/Marchandage", "Coutumes étrangères",
-        "Équitation", "Géographie d'Heldor", "Langue étrangère proche", "Jonglage/Acrobaties", "Maçonnerie",
+        "Équitation", "Géographie", "Langue étrangère proche", "Jonglage/Acrobaties", "Maçonnerie",
         "Médecine", "Musique", "Natation", "Piégeage", "Vol à la tire"],
     "-2": ["Armes légères", "Bouclier", "Bricolage", "Cartographie", "Comédie", "Danse", "Déguisement", "Dessin",
         "Dressage", "Escalade", "Orientation", "Poésie/Contes & Légendes", "Pistage/Chasse/Pêche", "Premiers soins",
