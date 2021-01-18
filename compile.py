@@ -4,9 +4,12 @@ import logging
 import mimetypes
 import os
 import re
+import shlex
+import subprocess
+import sys
 from typing import List, Dict
-from bs4 import BeautifulSoup
 
+from bs4 import BeautifulSoup
 from jinja2 import Environment, PackageLoader, select_autoescape, Markup
 
 SRC_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -69,7 +72,7 @@ def process_plugins(plugins: List[str]) -> Dict[str, List[str]]:
     tabs = []
     css_blocks = []
     js_blocks = []
-    print(plugins)
+    logging.debug("Adding plugins " + ", ".join(plugins))
     for plugin in plugins:
         with open(plugin) as plugin_obj:
             bs_parser = BeautifulSoup(plugin_obj.read(), features="html5lib")
@@ -108,6 +111,14 @@ for root, dirs, filenames in os.walk(os.path.join(html_dir, "../font")):
         with open(os.path.join(root, filename), "rb") as extern_file:
             params[filename.split(".")[0] + "_font"] = base64.b64encode(extern_file.read()).decode()
 
+# Git tag version
+
+try:
+    tag_version = subprocess.check_output(shlex.split("git describe --tags"), cwd=SRC_DIR, universal_newlines=True)[:-1]
+except subprocess.CalledProcessError:
+    logging.error("Cannot get version of the code")
+    sys.exit(1)
+
 # Build html sheet
 
 params.update({
@@ -116,7 +127,7 @@ params.update({
     "dual_wielding": args.version == V7 and args.dual_wielding,
     "discovery": args.discovery and args.version == V8,
     "V7": V7, "V8": V8, "captain_voodoo": CAPTAIN_VOODOO, "med_fantasy": MED_FANTASY,
-    "plugins": process_plugins(args.plugin)
+    "plugins": process_plugins(args.plugin), "tag_version": tag_version
 })
 template = env.get_template('base.html')
 compiled_html = template.render(params)
