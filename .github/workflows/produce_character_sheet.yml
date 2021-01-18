@@ -27,6 +27,7 @@ jobs:
           cmd: install  # yarn install
       - name: Compile Jinja template
         run: |
+          git fetch --prune --unshallow --tags
           mkdir -p target
           python3 -m pip install --upgrade pip
           python3 -m pip install -r requirements.txt
@@ -73,6 +74,11 @@ jobs:
         with:
           name: ${{ env.V8_CAPTAIN_VOODOO_FINAL_FILENAME }}
           path: target/${{ env.V8_CAPTAIN_VOODOO_FINAL_FILENAME }}
+      - name: Upload the minimal v8 sheet in discovery mode
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.V8_DISCOVERY_FINAL_FILENAME }}
+          path: target/${{ env.V8_DISCOVERY_FINAL_FILENAME }}
 
       - name: Upload the base v8 sheet with 4x4 matrix
         uses: actions/upload-artifact@v2
@@ -89,13 +95,134 @@ jobs:
         with:
           name: ${{ env.V8_CAPTAIN_4x4_VOODOO_FINAL_FILENAME }}
           path: target/${{ env.V8_CAPTAIN_4x4_VOODOO_FINAL_FILENAME }}
-      - name: Upload the minimal v8 sheet in discovery mode
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ env.V8_DISCOVERY_FINAL_FILENAME }}
-          path: target/${{ env.V8_DISCOVERY_FINAL_FILENAME }}
       - name: Upload the minimal v8 sheet in discovery mode with 4x4 matrix
         uses: actions/upload-artifact@v2
         with:
           name: ${{ env.V8_DISCOVERY_4x4_FINAL_FILENAME }}
           path: target/${{ env.V8_DISCOVERY_4x4_FINAL_FILENAME }}
+
+      - name: Create release
+        id: create_release
+        if: contains(github.ref, '/tags/')
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: true
+          prerelease: false
+          body_path: next_release_description.md
+
+      - name: Upload the base v7 sheet in release assets
+        if: contains(github.ref, '/tags/')
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_content_type: text/html
+          asset_name: ${{ env.V7_BASE_FINAL_FILENAME }}
+          asset_path: target/${{ env.V7_BASE_FINAL_FILENAME }}
+      - name: Upload the v7 sheet with localisation in release assets
+        if: contains(github.ref, '/tags/')
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_content_type: text/html
+          asset_name: ${{ env.V7_LOCALISATION_FINAL_FILENAME }}
+          asset_path: target/${{ env.V7_LOCALISATION_FINAL_FILENAME }}
+      - name: Upload the v7 sheet with localisation and dual wielding in release assets
+        if: contains(github.ref, '/tags/')
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_content_type: text/html
+          asset_name: ${{ env.V7_LOCALISATION_DUAL_FINAL_FILENAME }}
+          asset_path: target/${{ env.V7_LOCALISATION_DUAL_FINAL_FILENAME }}
+
+      - name: Upload the base v8 sheet in release assets
+        if: contains(github.ref, '/tags/')
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_content_type: text/html
+          asset_name: ${{ env.V8_BASE_FINAL_FILENAME }}
+          asset_path: target/${{ env.V8_BASE_FINAL_FILENAME }}
+      - name: Upload the minimal v8 sheet in release assets
+        if: contains(github.ref, '/tags/')
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_content_type: text/html
+          asset_name: ${{ env.V8_MINIMAL_FINAL_FILENAME }}
+          asset_path: target/${{ env.V8_MINIMAL_FINAL_FILENAME }}
+      - name: Upload the Captain Voodoo sheet in release assets
+        if: contains(github.ref, '/tags/')
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_content_type: text/html
+          asset_name: ${{ env.V8_CAPTAIN_VOODOO_FINAL_FILENAME }}
+          asset_path: target/${{ env.V8_CAPTAIN_VOODOO_FINAL_FILENAME }}
+      - name: Upload the minimal v8 sheet in discovery mode in release assets
+        if: contains(github.ref, '/tags/')
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_content_type: text/html
+          asset_name: ${{ env.V8_DISCOVERY_FINAL_FILENAME }}
+          asset_path: target/${{ env.V8_DISCOVERY_FINAL_FILENAME }}
+
+      - name: Upload the base v8 sheet with 4x4 matrix in release assets
+        if: contains(github.ref, '/tags/')
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_content_type: text/html
+          asset_name: ${{ env.V8_BASE_4x4_FINAL_FILENAME }}
+          asset_path: target/${{ env.V8_BASE_4x4_FINAL_FILENAME }}
+      - name: Upload the minimal v8 sheet with 4x4 matrix in release assets
+        if: contains(github.ref, '/tags/')
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_content_type: text/html
+          asset_name: ${{ env.V8_MINIMAL_4x4_FINAL_FILENAME }}
+          asset_path: target/${{ env.V8_MINIMAL_4x4_FINAL_FILENAME }}
+      - name: Upload the Captain Voodoo sheet with 4x4 matrix in release assets
+        if: contains(github.ref, '/tags/')
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_content_type: text/html
+          asset_name: ${{ env.V8_CAPTAIN_4x4_VOODOO_FINAL_FILENAME }}
+          asset_path: target/${{ env.V8_CAPTAIN_4x4_VOODOO_FINAL_FILENAME }}
+      - name: Upload the minimal v8 sheet in discovery mode with 4x4 matrix in release assets
+        if: contains(github.ref, '/tags/')
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_content_type: text/html
+          asset_name: ${{ env.V8_DISCOVERY_4x4_FINAL_FILENAME }}
+          asset_path: target/${{ env.V8_DISCOVERY_4x4_FINAL_FILENAME }}
