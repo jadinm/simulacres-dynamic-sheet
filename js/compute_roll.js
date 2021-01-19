@@ -9,7 +9,7 @@ function add_row_listeners(line = $(document)) {
     line.find(".spell-name").on("change", _ => {
         compute_remaining_ap()
     })
-    line.find(".spell-list").on("changed.bs.select", list_changed)
+    line.find("select.spell-list").on("changed.bs.select", list_changed)
     line.find(".spell-formula-elem").on("change", event => {
         event.preventDefault()
         update_spell_value(row_elem(event.target, "value"))
@@ -20,7 +20,7 @@ function add_row_listeners(line = $(document)) {
     line.find(".hermetic-difficulty").on("change", event => {
         update_spell_value(row_elem(event.target, "value"))
     })
-    line.find(".spell-talent").each((i, elem) => {
+    line.find("select.spell-talent").each((i, elem) => {
         if (!elem.id.includes("-x-")) {
             $(elem).on("changed.bs.select", e => {
                 update_spell_value(row_elem(e.target, "value"))
@@ -317,7 +317,7 @@ $(_ => {
     })
 
     // Initialize spell lists
-    $(".spell-list").each((i, input) => {
+    $("select.spell-list").each((i, input) => {
         init_spell_list(input)
     })
 })
