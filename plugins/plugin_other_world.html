@@ -40,4 +40,16 @@
         "0": ["Athlétisme", "Bagarre", "Observation"]
     }
     add_missing_talents(default_talents)
+
+    /* Before removing this plugin, we need to update the AP computation and spell lists
+     * because we are removing magical energies
+     */
+    function dispose_plugin_other_world() {
+        $("select.spell-list").each((i, input) => {
+            init_spell_list(input)
+        })
+        compute_remaining_ap()
+    }
+    // Register the function (avoid typos here or the method won't be called)
+    plugin_dispose_methods["other-world"] = dispose_plugin_other_world
 </script>

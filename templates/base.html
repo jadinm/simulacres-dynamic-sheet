@@ -234,28 +234,70 @@
     <footer class="d-flex row col-12 mb-1 m-0 p-0">
         <div class="ml-auto ">
             <small>
-                Projet (version {{ tag_version }}) créé par Mathieu Jadin et disponible sous GPL-3.0 License sur
+                Projet créé par Mathieu Jadin et disponible sous GPL-3.0 License sur
                 <a href="https://github.com/jadinm/simulacres-dynamic-sheet">Github</a>
+                <button class="btn btn-outline-info m-0 p-0 rounded-circle" data-toggle="modal"
+                        data-target="#about-sheet" style="min-width: 1.7em">
+                    <i class="fas fa-info fa-sm"></i>
+                </button>
             </small>
         </div>
     </footer>
 </div>
 
 <!-- Modals -->
+<div class="container">
+    <div class="modal fade bd-modal-lg" id="about-sheet" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="font-family: 'Linux Libertine', serif">
+                <div class="modal-header justify-content-center">
+                    <h4>À propos de votre fiche de personnage dynamique</h4>
+                </div>
+                <div class="modal-body align-middle">
+                    <p class="mx-1">
+                        Si jamais vous rencontrez un problème ou souhaitez faire une suggestion,
+                        n'hésitez pas à en parler "<a
+                            href="https://github.com/jadinm/simulacres-dynamic-sheet/issues/new">en créant une issue</a>".
+                    </p>
+                    <p class="mx-1 align-middle">
+                        S'il s'agit d'un problème, attachez votre fiche ou mentionnez au minimum
+                        les informations présentes ci-dessous ainsi que les étapes pour reproduire votre problème.
+                    </p>
+                    <p class="mx-1 align-middle hide-without-plugin d-none">
+                        Si vous souhaitez supprimer un plugin, cliquez sur le bouton "Supprimer" en vis-à-vis
+                        du plugin que vous souhaitez enlever.
+                    </p>
+                    <hr/>
 
-<!-- Increase Breath -->
-<div class="container">
-    <div class="modal fade bd-modal-lg" id="breath-max-update" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-body align-middle">
-                    <div class="row">
-                        <button id="increment-breath" class="btn btn-success col-6 mx-0 px-0">
-                            Augmenter de 1 le maximum des PS
-                        </button>
-                        <button id="decrement-breath" class="btn btn-danger col-6 mx-0 px-0">
-                            Diminuer de 1 le maximum des PS
-                        </button>
+                    <!-- Software info -->
+                    <div class="row mx-1 align-middle">
+                        <h5>Version:&nbsp;</h5>{{ tag_version }}
+                    </div>
+                    <div class="row mx-1 align-middle">
+                        <h5>Options de compilation</h5>
+                    </div>
+                    {% for key, value in compilation_args.items() %}
+                        {% if key != "output_html" and key != "plugin" and key != "verbose" %}
+                            <div class="row mx-2">
+                                <b>{{ key }}:&nbsp;</b>{{ value }}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                    <hr class="hide-without-plugin d-none"/>
+                    <div class="row mx-1 align-middle hide-without-plugin d-none">
+                        <h5>Liste des plugins</h5>
+                    </div>
+
+                    <!-- List of plugins -->
+                    <div class="row mx-2 hide-without-plugin d-none">
+                        <ul id="about-sheet-plugins" class="list-group-flush col-12">
+                            <li class="list-group-item align-items-center py-1 my-0 d-none">
+                                <div class="d-flex align-items-center my-0 py-0"></div>
+                                <button class="btn btn-danger ml-auto my-0 py-2 plugin-remove">
+                                    Supprimer&nbsp;<i class="fas fa-trash-alt"></i>
+                                </button>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -263,143 +305,8 @@
     </div>
 </div>
 
-<!-- Increase Psychic Balance -->
-<div class="container">
-    <div class="modal fade bd-modal-lg" id="psychic-max-update" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-body align-middle">
-                    <div class="row">
-                        <button id="increment-psychic" class="btn btn-success col-6 mx-0 px-0">
-                            Augmenter de 1 le maximum des EP
-                        </button>
-                        <button id="decrement-psychic" class="btn btn-danger col-6 mx-0 px-0">
-                            Diminuer de 1 le maximum des EP
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Increase Health -->
-<div class="container">
-    <div class="modal fade bd-modal-lg" id="hp-trunk-max-update" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-body align-middle">
-                    <div class="row">
-                        <button id="increment-hp-trunk" class="btn btn-success col-6 mx-0 px-0">
-                            {% if localisation %}
-                                Augmenter de 1 le maximum des PV au torse
-                            {% else %}
-                                Augmenter de 1 le maximum des PV
-                            {% endif %}
-                        </button>
-                        <button id="decrement-hp-trunk" class="btn btn-danger col-6 mx-0 px-0">
-                            {% if localisation %}
-                                Diminuer de 1 le maximum des PV au torse
-                            {% else %}
-                                Diminuer de 1 le maximum des PV
-                            {% endif %}
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="container">
-    <div class="modal fade bd-modal-lg" id="hp-head-max-update" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-body align-middle">
-                    <div class="row">
-                        <button id="increment-hp-head" class="btn btn-success col-6 mx-0 px-0">
-                            Augmenter de 1 le maximum des PV à la tête
-                        </button>
-                        <button id="decrement-hp-head" class="btn btn-danger col-6 mx-0 px-0">
-                            Diminuer de 1 le maximum des PV à la tête
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="container">
-    <div class="modal fade bd-modal-lg" id="hp-right-arm-max-update" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-body align-middle">
-                    <div class="row">
-                        <button id="increment-hp-right-arm" class="btn btn-success col-6 mx-0 px-0">
-                            Augmenter de 1 le maximum des PV au bras droit
-                        </button>
-                        <button id="decrement-hp-right-arm" class="btn btn-danger col-6 mx-0 px-0">
-                            Diminuer de 1 le maximum des PV au bras droit
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="container">
-    <div class="modal fade bd-modal-lg" id="hp-left-arm-max-update" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-body align-middle">
-                    <div class="row">
-                        <button id="increment-hp-left-arm" class="btn btn-success col-6 mx-0 px-0">
-                            Augmenter de 1 le maximum des PV au bras gauche
-                        </button>
-                        <button id="decrement-hp-left-arm" class="btn btn-danger col-6 mx-0 px-0">
-                            Diminuer de 1 le maximum des PV au bras gauche
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="container">
-    <div class="modal fade bd-modal-lg" id="hp-right-leg-max-update" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-body align-middle">
-                    <div class="row">
-                        <button id="increment-hp-right-leg" class="btn btn-success col-6 mx-0 px-0">
-                            Augmenter de 1 le maximum des PV à la jambe droite
-                        </button>
-                        <button id="decrement-hp-right-leg" class="btn btn-danger col-6 mx-0 px-0">
-                            Diminuer de 1 le maximum des PV à la jambe droite
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="container">
-    <div class="modal fade bd-modal-lg" id="hp-left-leg-max-update" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-body align-middle">
-                    <div class="row">
-                        <button id="increment-hp-left-leg" class="btn btn-success col-6 mx-0 px-0">
-                            Augmenter de 1 le maximum des PV à la jambe gauche
-                        </button>
-                        <button id="decrement-hp-left-leg" class="btn btn-danger col-6 mx-0 px-0">
-                            Diminuer de 1 le maximum des PV à la jambe gauche
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<!-- Status -->
+{% include "status_dialogs.html" %}
 
 <!-- Rolls -->
 {% include "roll_dialog.html" %}

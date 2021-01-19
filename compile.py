@@ -127,7 +127,7 @@ params.update({
     "dual_wielding": args.version == V7 and args.dual_wielding,
     "discovery": args.discovery and args.version == V8,
     "V7": V7, "V8": V8, "captain_voodoo": CAPTAIN_VOODOO, "med_fantasy": MED_FANTASY,
-    "plugins": process_plugins(args.plugin), "tag_version": tag_version
+    "plugins": process_plugins(args.plugin), "tag_version": tag_version, "compilation_args": vars(args)
 })
 template = env.get_template('base.html')
 compiled_html = template.render(params)

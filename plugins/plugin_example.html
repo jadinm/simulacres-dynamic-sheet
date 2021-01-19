@@ -27,4 +27,16 @@
     $("#plugin-example-field").on("change", _ => {
         alert("Vous avez changé le texte de l'exemple")
     })
+
+    /* To remove a plugin, it might not always be sufficient to remove every block
+     * Sometimes, additional cleaning is needed depending on the plugin
+     *
+     * To do so, we create a function for that and register it
+     * This function will be called after removing all the blocks of this plugin
+     */
+    function dispose_plugin_example() {
+        alert("Vous avez supprimé le plugin exemple")
+    }
+    // Register the function (avoid typos here or the method won't be called)
+    plugin_dispose_methods["example"] = dispose_plugin_example
 </script>

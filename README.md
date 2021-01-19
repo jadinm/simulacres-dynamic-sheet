@@ -188,8 +188,10 @@ Chaque composante doit inclure une classe appropriée :
 
 Vous pouvez avoir plusieurs blocks de chaque type
 mais chaque block doit avoir un id différent.
-Pour garantir l'unicité de vos ids, préfixez votre id par ``plugin-<plugin-name>-``
-en remplaçant ``<plugin-name>`` par le nom de votre plugin.
+Pour garantir l'unicité de vos ids, préfixez les par
+``<block-class>-<plugin-name>`` en remplaçant ``<plugin-name>``
+par le nom de votre plugin
+et ``<block-class>`` par la classe appropriée choisie dans la liste ci-dessus.
 
 Il est également possible d'écraser des parties de la fiche dynamique avec cette
 méthode en utilisant le même id que le block à écraser

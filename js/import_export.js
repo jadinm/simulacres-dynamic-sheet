@@ -290,6 +290,42 @@ function import_data(src_html, dst_html) {
     }
 }
 
+const plugin_selectors = [".plugin-tab", ".plugin-button", ".plugin-css", ".plugin-js"]
+
+function build_plugin_list() {
+    const plugin_list = $("#about-sheet-plugins")
+
+    // Clean current list
+    plugin_list.children().not(".d-none").remove()
+
+    // Get the list of plugin ids
+    let plugins = []
+    $(plugin_selectors.join(", ")).each((i, elem) => {
+        let plugin_id = elem.id.match(/plugin-(?:tab|button|css|js)-(.+)/)
+        if (plugin_id && plugin_id.length >= 1) {
+            plugin_id = plugin_id[1]
+            if (!plugins.includes(plugin_id))
+                plugins.push(plugin_id)
+        }
+    })
+    plugins = plugins.reverse()
+
+    // Build the list of plugins
+    const template = plugin_list.children().first()
+    for (let i = 0; i < plugins.length; i++) {
+        const new_element = template.clone(true, true)
+        new_element.removeClass("d-none").addClass("d-flex")
+        new_element.children().first().text(plugins[i])
+        plugin_list.append(new_element)
+    }
+
+    // Show the list if any plugin remains
+    if (plugin_list.children().length > 1)
+        $(".hide-without-plugin").removeClass("d-none")
+    else
+        $(".hide-without-plugin").addClass("d-none")
+}
+
 function insert_or_replace_block(block, parent, overwrite = true) {
     const block_selector = "#" + block[0].id
     if ($(block_selector).length > 0) {
@@ -325,6 +361,25 @@ function insert_or_replace_plugins(plugin, overwrite = true) {
 
     // Add default listeners
     add_save_to_dom_listeners()
+
+    // Update plugin list
+    build_plugin_list()
+}
+
+const plugin_dispose_methods = {}
+
+function remove_plugin(plugin_id) {
+    // Remove blocks related to this plugin
+    for (let i = 0; i < plugin_selectors.length; i++) {
+        $("[id*=\"" + plugin_selectors[i].slice(1) + "-" + plugin_id + "\"]").remove()
+    }
+    // Call the dispose method of the plugin if any
+    if (plugin_id in plugin_dispose_methods) {
+        plugin_dispose_methods[plugin_id]()
+        delete plugin_dispose_methods[plugin_id]
+    }
+    // Update plugin list
+    build_plugin_list()
 }
 
 /* Import Character page data */
@@ -405,4 +460,13 @@ $("#import-plugin").on("change", event => {
 
     // Asynchronous read
     reader.readAsText(event.target.files[0])
+})
+
+$(_ => {
+    // Plugin handling
+    $(".plugin-remove").on("click", event => {
+        const plugin_id = $(event.target).parent().children().first().text()
+        remove_plugin(plugin_id)
+    })
+    build_plugin_list()
 })

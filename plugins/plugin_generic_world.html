@@ -26,8 +26,20 @@
 
 <script id="plugin-js-generic-world" class="plugin-js">
     $(_ => {
-        /* Adds your energy to the list of base energies if not already present */
         let elem = $("#plugin-generic-world-energy")
+
+        /* To remove this plugin, it is not sufficient to remove every block
+         * We need to remove the extra energy as well
+         */
+        function dispose_plugin_generic_world() {
+            // Remove extra energy row
+            elem.parents("div.row").first().remove()
+            compute_remaining_ap()
+        }
+        // Register the function (avoid typos here or the method won't be called)
+        plugin_dispose_methods["generic-world"] = dispose_plugin_generic_world
+
+        /* Adds your energy to the list of base energies if not already present */
         if (elem.length === 0) {
             const energy_list = $("#power").parents("div.card")
             const row = energy_list.children().last().clone(true, false)

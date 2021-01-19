@@ -1,0 +1,157 @@
+<!-- Increase Breath -->
+<div class="container">
+    <div class="modal fade bd-modal-lg" id="breath-max-update" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-body align-middle">
+                    <div class="row">
+                        <button id="increment-breath" class="btn btn-success col-6 mx-0 px-0">
+                            Augmenter de 1 le maximum des PS
+                        </button>
+                        <button id="decrement-breath" class="btn btn-danger col-6 mx-0 px-0">
+                            Diminuer de 1 le maximum des PS
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Increase Psychic Balance -->
+<div class="container">
+    <div class="modal fade bd-modal-lg" id="psychic-max-update" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-body align-middle">
+                    <div class="row">
+                        <button id="increment-psychic" class="btn btn-success col-6 mx-0 px-0">
+                            Augmenter de 1 le maximum des EP
+                        </button>
+                        <button id="decrement-psychic" class="btn btn-danger col-6 mx-0 px-0">
+                            Diminuer de 1 le maximum des EP
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Increase Health -->
+<div class="container">
+    <div class="modal fade bd-modal-lg" id="hp-trunk-max-update" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-body align-middle">
+                    <div class="row">
+                        <button id="increment-hp-trunk" class="btn btn-success col-6 mx-0 px-0">
+                            {% if localisation %}
+                                Augmenter de 1 le maximum des PV au torse
+                            {% else %}
+                                Augmenter de 1 le maximum des PV
+                            {% endif %}
+                        </button>
+                        <button id="decrement-hp-trunk" class="btn btn-danger col-6 mx-0 px-0">
+                            {% if localisation %}
+                                Diminuer de 1 le maximum des PV au torse
+                            {% else %}
+                                Diminuer de 1 le maximum des PV
+                            {% endif %}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="modal fade bd-modal-lg" id="hp-head-max-update" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-body align-middle">
+                    <div class="row">
+                        <button id="increment-hp-head" class="btn btn-success col-6 mx-0 px-0">
+                            Augmenter de 1 le maximum des PV à la tête
+                        </button>
+                        <button id="decrement-hp-head" class="btn btn-danger col-6 mx-0 px-0">
+                            Diminuer de 1 le maximum des PV à la tête
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="modal fade bd-modal-lg" id="hp-right-arm-max-update" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-body align-middle">
+                    <div class="row">
+                        <button id="increment-hp-right-arm" class="btn btn-success col-6 mx-0 px-0">
+                            Augmenter de 1 le maximum des PV au bras droit
+                        </button>
+                        <button id="decrement-hp-right-arm" class="btn btn-danger col-6 mx-0 px-0">
+                            Diminuer de 1 le maximum des PV au bras droit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="modal fade bd-modal-lg" id="hp-left-arm-max-update" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-body align-middle">
+                    <div class="row">
+                        <button id="increment-hp-left-arm" class="btn btn-success col-6 mx-0 px-0">
+                            Augmenter de 1 le maximum des PV au bras gauche
+                        </button>
+                        <button id="decrement-hp-left-arm" class="btn btn-danger col-6 mx-0 px-0">
+                            Diminuer de 1 le maximum des PV au bras gauche
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="modal fade bd-modal-lg" id="hp-right-leg-max-update" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-body align-middle">
+                    <div class="row">
+                        <button id="increment-hp-right-leg" class="btn btn-success col-6 mx-0 px-0">
+                            Augmenter de 1 le maximum des PV à la jambe droite
+                        </button>
+                        <button id="decrement-hp-right-leg" class="btn btn-danger col-6 mx-0 px-0">
+                            Diminuer de 1 le maximum des PV à la jambe droite
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="modal fade bd-modal-lg" id="hp-left-leg-max-update" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-body align-middle">
+                    <div class="row">
+                        <button id="increment-hp-left-leg" class="btn btn-success col-6 mx-0 px-0">
+                            Augmenter de 1 le maximum des PV à la jambe gauche
+                        </button>
+                        <button id="decrement-hp-left-leg" class="btn btn-danger col-6 mx-0 px-0">
+                            Diminuer de 1 le maximum des PV à la jambe gauche
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
