@@ -5,19 +5,42 @@ function compute_component_means_cost() {
 
     // Components
     let sum_points = 0
+    let raised_to_6 = 0
     $(".component").each((i, elem) => {
         sum_points += (parseInt(elem.value) || 0)
+        if (parseInt(elem.value) === 6)
+            raised_to_6 += 1
     })
     if (sum_points > start_components)
         consumed_points += (sum_points - start_components) * component_ap_cost
 
+    // V8-only: Add costs for components raised to 6 (but not at the start of the campaign)
+    raised_to_6 -= ($("#components-started-level-6").val() || []).length
+    if (!is_v7 && raised_to_6 > 0)
+        consumed_points += raised_to_6 * (component_5_to_6_ap_cost - component_ap_cost)
+
+    let title = $("#component-title")
+    if (title.length > 0) {
+        title[0].setAttribute("title", "Coût des composantes: " + consumed_points + " PA")
+        title.tooltip("dispose")
+        title.tooltip()
+    }
+
     // Means
     sum_points = 0
+    let means_cost = 0
     $(".means").each((i, elem) => {
         sum_points += (parseInt(elem.value) || 0)
     })
     if (sum_points > start_means)
-        consumed_points += (sum_points - start_means) * means_ap_cost
+        means_cost += (sum_points - start_means) * means_ap_cost
+    consumed_points += means_cost
+    title = $("#means-title")
+    if (title.length > 0) {
+        title[0].setAttribute("title", "Coût des moyens: " + means_cost + " PA")
+        title.tooltip("dispose")
+        title.tooltip()
+    }
     return consumed_points
 }
 
@@ -32,7 +55,14 @@ function compute_status_cost() {
     if ($("#instincts").hasClass("bonus-applied")) { // +1 due to instincts value
         max_breath -= 1
     }
-    consumed_points += (max_breath - start_breath) * breath_ap_cost
+    let diff = (max_breath - start_breath) * breath_ap_cost
+    consumed_points += diff
+    let title = $("#breath-title")
+    if (title.length > 0) {
+        title[0].setAttribute("title", "Coût: " + diff + " PA")
+        title.tooltip("dispose")
+        title.tooltip()
+    }
 
     // Psychic balance
     const psychic = $("#psychic")
@@ -40,7 +70,14 @@ function compute_status_cost() {
     if ($("#mind").hasClass("bonus-applied")) { // +1 due to mind value
         max_psychic -= 1
     }
-    consumed_points += (max_psychic - start_psychic_balance) * psychic_balance_ap_cost
+    diff = (max_psychic - start_psychic_balance) * psychic_balance_ap_cost
+    consumed_points += diff
+    title = $("#psychic-title")
+    if (title.length > 0) {
+        title[0].setAttribute("title", "Coût: " + diff + " PA")
+        title.tooltip("dispose")
+        title.tooltip()
+    }
     return consumed_points
 }
 
@@ -56,9 +93,18 @@ function talents_cost() {
 function monk_power_cost() {
     let consumed_points = 0
     $(".ki-level").each((i, elem) => {
+        let diff = 0
         const value = parseInt(elem.value)
         if (!isNaN(value) && value > 0 && value <= 3) {
-            consumed_points += (value - 1) * power_level_ap_cost
+            diff = (value - 1) * power_level_ap_cost
+            consumed_points += diff
+        }
+
+        let title = row(elem).children().first()
+        if (title.length > 0 && row(elem)[0].id !== "ki-x") {
+            title.each((i, elem) => elem.setAttribute("title", "Coût: " + diff + " PA"))
+            title.tooltip("dispose")
+            title.tooltip()
         }
     })
     return consumed_points

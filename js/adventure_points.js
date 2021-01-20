@@ -102,7 +102,7 @@ function update_spell_select(select) {
         return elem.value && elem.value.length > 0 && (only_at_levels == null || only_at_levels.includes(spell_level))
             && (exclude_spell_lists == null || spell_list == null || !exclude_spell_lists.includes(spell_list))
     }).map((i, elem) => {
-        return {name: elem.value, content: null}
+        return {name: elem.value, content: null, value: elem.id}
     })
     update_select($(select), elements)
 }

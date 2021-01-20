@@ -92,6 +92,7 @@ $('#roll-table-remove,#spell-table-remove,#focus-table-remove,#limitedUse-equipm
         ghostClass: "remove-drop",
         onAdd: event => {
             // Remove the element
+            $(event.item).find("[data-toggle='tooltip']:visible").tooltip("dispose")
             $(event.item).remove()
 
             changed_page = true

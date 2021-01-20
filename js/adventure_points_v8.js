@@ -38,16 +38,6 @@ let power_level_ap_cost = 5 // From 1 to 2 and from 2 to 3
 function compute_remaining_ap() {
     let consumed_points = compute_component_means_cost() + compute_status_cost()
 
-    // Add costs for components raised to 6 (but not at the start of the campaign)
-    let raised_to_6 = 0
-    $(".component").each((i, elem) => {
-        if (parseInt(elem.value) === 6)
-            raised_to_6 += 1
-    })
-    raised_to_6 -= ($("#components-started-level-6").val() || []).length
-    if (raised_to_6 > 0)
-        consumed_points += raised_to_6 * (component_5_to_6_ap_cost - component_ap_cost)
-
     // Health cost
     const health = $("#hp-trunk")
     let max_health = slider_max(health[0])
@@ -57,11 +47,18 @@ function compute_remaining_ap() {
     } else if (resistance_div.hasClass("heavy-bonus-applied")) {
         max_health -= 2
     }
-    const diff = max_health - start_hp
+    let diff = (max_health - start_hp) * health_ap_cost
     if (diff > 0)
-        consumed_points += diff * health_ap_cost
+        consumed_points += diff
+    let title = $("#hp-title")
+    if (title.length > 0) {
+        title[0].setAttribute("title", "Coût: " + diff + " PA")
+        title.tooltip("dispose")
+        title.tooltip()
+    }
 
     // Targets
+    diff = 0
     let target_sum = 0
     $(".realm").each((i, elem) => {
         let value = parseInt(elem.value)
@@ -69,10 +66,19 @@ function compute_remaining_ap() {
             value = 0
         target_sum += value
     })
-    if (target_sum > 0) // Supposed to be a 0-sum
-        consumed_points += target_sum * target_ap_cost
+    if (target_sum > 0) {// Supposed to be a 0-sum
+        diff = target_sum * target_ap_cost
+        consumed_points += diff
+    }
+    title = $("#realm-title")
+    if (title.length > 0) {
+        title[0].setAttribute("title", "Coût des cibles: " + diff + " PA")
+        title.tooltip("dispose")
+        title.tooltip()
+    }
 
     // Energies
+    diff = 0
     let energy_point_increased = 0
     const energies_repartition_level = [0, 0, 0, 0] // Level ranges from 0 to 3
     const special_energies_repartition_level = [0, 0, 0, 0] // Level ranges from 0 to 3
@@ -90,20 +96,27 @@ function compute_remaining_ap() {
     if (energy_point_increased > start_energies) { // To check that at least the 8 starting points were spent
         /* Classic energies */
         for (let level = 0; level < energies_repartition_level.length; level++) {
-            consumed_points += energy_cost_by_level[level] * energies_repartition_level[level]
+            diff += energy_cost_by_level[level] * energies_repartition_level[level]
         }
 
         /* Special energies */
         for (let level = 0; level < special_energies_repartition_level.length; level++) {
-            consumed_points += special_energy_cost_by_level[level] * special_energies_repartition_level[level]
+            diff += special_energy_cost_by_level[level] * special_energies_repartition_level[level]
         }
 
         /* Energy optimisations */
         const start_special_energies_1 = ($("#special-energies-started-level-1").val() || []).length
-        consumed_points -= start_special_energies_1 * (special_energy_cost_by_level[1] - energy_cost_by_level[1])
+        diff -= start_special_energies_1 * (special_energy_cost_by_level[1] - energy_cost_by_level[1])
         const start_energies_2 = ($("#energies-started-level-2").val() || []).length
         const start_energies_1 = start_energies - start_energies_2 * 2
-        consumed_points -= (energy_cost_by_level[2] * start_energies_2 + energy_cost_by_level[1] * start_energies_1)
+        diff -= (energy_cost_by_level[2] * start_energies_2 + energy_cost_by_level[1] * start_energies_1)
+        consumed_points += diff
+    }
+    title = $("#energy-title")
+    if (title.length > 0) {
+        title[0].setAttribute("title", "Coût de toutes les énergies: " + diff + " PA")
+        title.tooltip("dispose")
+        title.tooltip()
     }
 
     // Talents

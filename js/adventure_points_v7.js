@@ -31,6 +31,7 @@ function compute_remaining_ap() {
     let consumed_points = compute_component_means_cost() + compute_status_cost()
 
     // Realm & energies
+    let diff = 0
     let energy_point_increased = 0
     const energies_repartition_level = [0, 0, 0, 0] // Level ranges from 0 to 3
     $(".realm, .energy, .special-energy").each((i, elem) => {
@@ -42,11 +43,19 @@ function compute_remaining_ap() {
     })
     if (energy_point_increased > start_energies) { // To check that at least the 8 starting points were spent
         for (let level = 0; level < energies_repartition_level.length; level++) {
-            consumed_points += energy_cost_by_level[level] * energies_repartition_level[level]
+            diff += energy_cost_by_level[level] * energies_repartition_level[level]
         }
         const start_energies_2 = ($("#energies-started-level-2").val() || []).length
         const start_energies_1 = start_energies - start_energies_2 * 2
-        consumed_points -= (energy_cost_by_level[2] * start_energies_2 + energy_cost_by_level[1] * start_energies_1)
+        diff -= (energy_cost_by_level[2] * start_energies_2 + energy_cost_by_level[1] * start_energies_1)
+        consumed_points += diff
+    }
+    // Update tooltip
+    let title = $("#realm-title, #energy-title")
+    if (title.length > 0) {
+        title.each((i, elem) => elem.setAttribute("title", "Coût de tous les règnes et énergies: " + diff + " PA"))
+        title.tooltip("dispose")
+        title.tooltip()
     }
 
     // Talents
@@ -54,7 +63,12 @@ function compute_remaining_ap() {
 
     // Spells
     const all_names = []
+    const diff_level_2 = talent_increment_cost["x"]["-2"] - talent_increment_cost["x"]["-4"]
+    const spells_raised_2 = ($("#spells-started-level-2").val() || [])
+    const diff_level_0 = talent_increment_cost["x"]["0"] - talent_increment_cost["x"]["-4"]
+    const spells_raised_0 = ($("#spells-started-level-0").val() || [])
     $(".spell-name").each((i, elem) => {
+        diff = 0
         const name = elem.value.trim()
         let realm_modifier = spell_same_realm_discount
         if (name.length > 0) {
@@ -65,16 +79,27 @@ function compute_remaining_ap() {
 
             const spell_list = row_elem(elem, "list")[0].value.trim()
             if (spell_list === priest_energy)
-                consumed_points += ki_divine_spell_ap_cost - realm_modifier // Priest and monk have level 0 spell directly
+                diff += ki_divine_spell_ap_cost - realm_modifier // Priest and monk have level 0 spell directly
             else if (spell_list.length > 0 && spell_list !== hermetic_energy && spell_list !== instinctive_magic)
-                consumed_points += mage_spell_ap_cost - realm_modifier // Mages have -4 level spells at start
+                diff += mage_spell_ap_cost - realm_modifier // Mages have -4 level spells at start
+
+            // Raised at the creation
+            if (spells_raised_0.includes(elem.id))
+                diff += diff_level_0
+            else if (spells_raised_2.includes(elem.id))
+                diff += diff_level_2
+
+            consumed_points += diff
+        }
+
+        // Update tooltip
+        title = row(elem).children().first()
+        if (title.length > 0 && row(elem)[0].id !== "spell-x") {
+            title.each((i, elem) => elem.setAttribute("title", "Coût: " + diff + " PA"))
+            title.tooltip("dispose")
+            title.tooltip()
         }
     })
-    // Spell increased above level 0 at start of the campaign
-    const diff_level_2 = talent_increment_cost["x"]["-2"] - talent_increment_cost["x"]["-4"]
-    consumed_points += diff_level_2 * ($("#spells-started-level-2").val() || []).length
-    const diff_level_0 = talent_increment_cost["x"]["0"] - talent_increment_cost["x"]["-4"]
-    consumed_points += diff_level_0 * ($("#spells-started-level-0").val() || []).length
 
     // Monk powers
     consumed_points += monk_power_cost()

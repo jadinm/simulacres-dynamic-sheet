@@ -164,8 +164,12 @@
                     <thead>
                     <tr>
                         <th scope="col" class="align-middle">
-                            <div class="text-right"><b>Moyens</b></div>
-                            <b>Composantes</b>
+                            <div class="text-right">
+                                <b id="means-title" data-toggle="tooltip" data-placement="top" title="">Moyens</b>
+                            </div>
+                            <b id="component-title" data-toggle="tooltip" data-placement="bottom" title="">
+                                Composantes
+                            </b>
                         </th>
                         <th scope="col" class="align-middle md-form input-with-pre-icon">
                             <div data-toggle="tooltip" data-placement="top" title="Perception">
@@ -313,11 +317,13 @@
     <div class="col-lg-2 col-md-3 col-sm-4 pl-4 pr-2 mt-1 mx-0">
         <div class="card shadow-none border border-heavy rounded-lg px-1 py-2 mx-0">
             <div class="row ml-2 m-0">
-                {% if version == V7 %}
-                    <b>Règnes</b>
-                {% else %}
-                    <b>Cibles</b>
-                {% endif %}
+                <b id="realm-title" data-toggle="tooltip" data-placement="top" title="">
+                    {% if version == V7 %}
+                        Règnes
+                    {% else %}
+                        Cibles
+                    {% endif %}
+                </b>
             </div>
             {% if version == V7 %}
                 <div class="row m-0">
@@ -438,7 +444,9 @@
     <!-- Energies -->
     <div class="col-lg-2 col-md-3 col-sm-4 mt-1 mx-0">
         <div class="card shadow-none border border-heavy rounded-lg px-1 py-2 mx-0">
-            <div class="row ml-2 m-0"><b>Énergies</b></div>
+            <div class="row ml-2 m-0">
+                <b id="energy-title" data-toggle="tooltip" data-placement="top" title="">Énergies</b>
+            </div>
             <div class="row m-0">
                 <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
                      data-placement="left" title="Puissance">

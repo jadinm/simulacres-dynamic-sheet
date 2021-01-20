@@ -97,8 +97,12 @@ $(_ => {
         disable_dark_mode()
     }
 
+    // We enable the use of svg images inside some of the select pickers
     $("select.spell-list, select.component-select, select.special-energy-select, select.realm-energy-select").each((i, elem) => {
         if (!elem.id.includes("-x-"))
-            $(elem).selectpicker({sanitize: false}) // We enable the use of svg images inside
+            $(elem).selectpicker({sanitize: false})
     })
+
+    // Initialize AP computation
+    compute_remaining_ap()
 })
