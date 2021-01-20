@@ -96,4 +96,9 @@ $(_ => {
     } else {
         disable_dark_mode()
     }
+
+    $("select.spell-list").each((i, elem) => {
+        if (!elem.id.includes("-x-"))
+            $(elem).selectpicker({sanitize: false}) // We enable the use of svg images inside
+    })
 })

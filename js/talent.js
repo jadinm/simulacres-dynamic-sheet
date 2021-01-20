@@ -60,12 +60,15 @@ function update_select(select, elements) {
 
     // Sort it
     elements.sort((a, b) => {
-        return a.localeCompare(b) // Sort correctly accents
+        return a.name.localeCompare(b.name) // Sort correctly accents
     }).each((i, elem) => {
-        let new_option = "<option value=\"" + elem + "\""
-        if (selected_options.includes(elem)) // Keep selection
+        let new_option = "<option value=\"" + elem.name + "\""
+        if (elem.content) {// Custom data-content (like images)
+            new_option += " data-content='" + elem.content.replaceAll("'", "&apos;") + "'"
+        }
+        if (selected_options.includes(elem.name)) // Keep selection
             new_option += " selected='selected'"
-        new_option += ">" + elem + "</option>"
+        new_option += ">" + elem.name + "</option>"
         select.append(new_option)
     })
 
@@ -89,8 +92,10 @@ function update_talent_select(select) {
         return e.value && e.value.length > 0
             && (only_from == null || talent_base_level(talent) === only_from)
             && (only_at_levels == null || only_at_levels.includes(talent_level(talent)))
-    }).map((i, e) => e.value)
-    talent_list.push("")
+    }).map((i, e) => {
+        return {name: e.value, content: null}
+    })
+    talent_list.push({name: "", content: null})
     update_select(select, talent_list)
 }
 

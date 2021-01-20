@@ -28,7 +28,7 @@ function talent_x_inefficient_raise() {
     return val
 }
 
-$(".talent-select.adventure-points-select").on("changed.bs.select", (e, clickedIndex, isSelected, previousValue) => {
+$("select.talent-select.adventure-points-select").on("changed.bs.select", (e, clickedIndex, isSelected, previousValue) => {
     // Retrieve all talents that were selected or removed
     let talents_to_update = $(e.target).selectpicker("val")
     if (!Array.isArray(talents_to_update))

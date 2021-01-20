@@ -81,7 +81,7 @@ function add_row_listeners(line = $(document)) {
         e.preventDefault()
         roll_changed(e)
     })
-    line.find(".roll-talent,.dual_wielding-talent,.dual_wielding-tap-talent").each((i, elem) => {
+    line.find("select.roll-talent,select.dual_wielding-talent,select.dual_wielding-tap-talent").each((i, elem) => {
         if (!elem.id.includes("-x-")) {
             $(elem).on("changed.bs.select", e => {
                 roll_changed(e)
@@ -92,15 +92,25 @@ function add_row_listeners(line = $(document)) {
 
 function get_magical_energies() {
     return $("input.magical-energy").map((i, input) => {
-        return $("label[for='" + input.id + "']").text()
+        const energy_image = $(input).parent().find(".input-prefix").clone(true, false)
+        energy_image.removeClass("input-prefix").attr("height", "1em").attr("width", "1em")
+        const energy_name = $("label[for='" + input.id + "']").text()
+        return {
+            name: energy_name,
+            content: energy_image.length > 0 ? energy_image[0].outerHTML + "&nbsp;" + energy_name : null
+        }
     }).filter((i, elem) => {
-        return elem && elem.length > 0
+        return elem.name && elem.name.length > 0
     })
 }
 
 function init_spell_list(input) {
     const list = get_magical_energies()
-    list.push(instinctive_magic)
+    list.push({
+        name: instinctive_magic,
+        content: "<svg height=\"1em\" width=\"1em\">" +
+            "<use xlink:href=\"#svg-instincts\"></use>" +
+            "</svg>&nbsp;" + instinctive_magic})
     update_select($(input), list)
 }
 
@@ -340,7 +350,7 @@ $("#add-spell").on("click", (event, idx = null) => { // Add parameter for forced
     activate_slider(new_spell.find("#spell-" + new_id + "-difficulty-input")[0], show_difficulty_builder)
 
     new_spell.find("#spell-" + new_id + "-talent").selectpicker()
-    new_spell.find("#spell-" + new_id + "-list").selectpicker()
+    new_spell.find("#spell-" + new_id + "-list").selectpicker({sanitize: false})
     add_row_listeners(new_spell)
 })
 
