@@ -44,7 +44,7 @@ function compute_remaining_ap() {
         for (let level = 0; level < energies_repartition_level.length; level++) {
             consumed_points += energy_cost_by_level[level] * energies_repartition_level[level]
         }
-        const start_energies_2 = (parseInt($("#energies-started-level-2").val()) || 0)
+        const start_energies_2 = ($("#energies-started-level-2").val() || []).length
         const start_energies_1 = start_energies - start_energies_2 * 2
         consumed_points -= (energy_cost_by_level[2] * start_energies_2 + energy_cost_by_level[1] * start_energies_1)
     }
@@ -72,9 +72,9 @@ function compute_remaining_ap() {
     })
     // Spell increased above level 0 at start of the campaign
     const diff_level_2 = talent_increment_cost["x"]["-2"] - talent_increment_cost["x"]["-4"]
-    consumed_points += diff_level_2 * (parseInt($("#spells-started-level-2").val()) || 0)
+    consumed_points += diff_level_2 * ($("#spells-started-level-2").val() || []).length
     const diff_level_0 = talent_increment_cost["x"]["0"] - talent_increment_cost["x"]["-4"]
-    consumed_points += diff_level_0 * (parseInt($("#spells-started-level-0").val()) || 0)
+    consumed_points += diff_level_0 * ($("#spells-started-level-0").val() || []).length
 
     // Monk powers
     consumed_points += monk_power_cost()

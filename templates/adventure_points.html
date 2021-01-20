@@ -319,22 +319,20 @@
                 les 4 points d'énergie initiaux.
                 Cela fait économiser 5 PA car passer au niveau 2 demande 10 PA au lieu de 5.
                 En revanche, ce n'est pas possible pour l'héroïsme, les énergies magiques ou spéciales qui ne peuvent
-                être
-                montées qu'à 1, à la création.
+                être montées qu'à 1, à la création.
             </div>
         {% endif %}
         <div class="row col-12 form-row mt-2 md-form p-0 m-0">
-            <div class="col-12">
-                <label for="energies-started-level-2" class="text-truncate">
+            <select id="energies-started-level-2"
+                    class="show-tick form-control realm-energy-select selectpicker adventure-points-select"
+                    data-live-search="true" data-style="col-12 align-middle"
                     {% if version == V7 %}
-                        Nombre de règnes et énergies classiques montés à 2 à la création
+                    title="Règnes et énergies classiques montés à 2 à la création"
                     {% else %}
-                        Nombre d'énergies classiques montées à 2 à la création
+                    title="Énergies classiques montées à 2 à la création"
                     {% endif %}
-                </label>
-                <input class="form-control adventure-points-setting" id="energies-started-level-2" type="number"
-                       value="0" min="0" max="4">
-            </div>
+                    data-filter-current-level="2,3" multiple>
+            </select>
         </div>
         {% if version == V8 %}
             <div class="row col-12 mt-2 px-0 mx-0">
@@ -345,27 +343,24 @@
                 énergie classique.
             </div>
             <div class="row col-12 form-row mt-2 md-form p-0 m-0">
-                <div class="col-12">
-                    <label for="special-energies-started-level-1" class="text-truncate">
-                        Nombre d'énergies spéciales montées à 1 à la création
-                    </label>
-                    <input class="form-control adventure-points-setting" id="special-energies-started-level-1"
-                           type="number"
-                           value="0" min="0" max="4">
-                </div>
+                <select id="special-energies-started-level-1"
+                        class="show-tick form-control special-energy-select selectpicker adventure-points-select"
+                        data-live-search="true" data-style="col-12 align-middle"
+                        title="Énergies spéciales montées à 1 à la création"
+                        data-filter-current-level="1,2,3" multiple>
+                </select>
             </div>
             <div class="row col-12 mt-2 px-0 mx-0">
                 Les composantes peuvent être montées à 6 à la création en utilisant les 13 points initiaux.
                 Cela fait économiser 6 PA car passer de 5 à 6 demande 20 PA au lieu de 14.
             </div>
             <div class="row col-12 form-row mt-2 md-form p-0 m-0">
-                <div class="col-12">
-                    <label for="components-started-level-6" class="text-truncate">
-                        Nombre de composantes montées à 6 à la création
-                    </label>
-                    <input class="form-control adventure-points-setting" id="components-started-level-6" type="number"
-                           value="0" min="0" max="3">
-                </div>
+                <select id="components-started-level-6"
+                        class="show-tick form-control component-select selectpicker adventure-points-select"
+                        data-live-search="true" data-style="align-middle col-12"
+                        title="Composantes montées à 6 à la création"
+                        data-filter-current-level="6" multiple>
+                </select>
             </div>
         {% endif %}
         {% if version == V7 %}
@@ -429,16 +424,20 @@
                 cela coûte 3 PA et pour le passer à 0, cela coûte 5 PA.
             </div>
             <div class="row col-12 form-row mt-2 md-form p-0 m-0">
-                <div class="col-sm-6">
-                    <label for="spells-started-level-2">Nombre de sorts montés à -2 à la création</label>
-                    <input class="form-control adventure-points-setting" id="spells-started-level-2" type="number"
-                           value="0" min="0">
-                </div>
-                <div class="col-sm-6">
-                    <label for="spells-started-level-0">Nombre de sorts montés à 0 à la création</label>
-                    <input class="form-control adventure-points-setting" id="spells-started-level-0" type="number"
-                           value="0" min="0">
-                </div>
+                <select id="spells-started-level-2"
+                        class="show-tick form-control spell-select selectpicker adventure-points-select col-sm-6 col-12"
+                        data-live-search="true" data-style="align-middle"
+                        title="Sorts montés à -2 à la création"
+                        data-filter-current-level="-2,-1,0,1,2"
+                        data-filter-out-list="Divin,Magie instinctive,Hermétique" multiple>
+                </select>
+                <select id="spells-started-level-0"
+                        class="show-tick form-control spell-select selectpicker adventure-points-select col-sm-6 col-12"
+                        data-live-search="true" data-style="align-middle"
+                        title="Sorts montés à 0 à la création"
+                        data-filter-current-level="0,1,2"
+                        data-filter-out-list="Divin,Magie instinctive,Hermétique" multiple>
+                </select>
             </div>
         {% endif %}
     {% endif %}

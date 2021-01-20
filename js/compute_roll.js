@@ -7,6 +7,10 @@ const talent_list_selector = ".talent input[id*='-name']"
 function add_row_listeners(line = $(document)) {
     add_save_to_dom_listeners(line)
     line.find(".spell-name").on("change", _ => {
+        // Update selections of spells
+        $("select.spell-select").each((i, elem) => {
+            update_spell_select(elem)
+        })
         compute_remaining_ap()
     })
     line.find("select.spell-list").on("changed.bs.select", list_changed)
@@ -16,6 +20,10 @@ function add_row_listeners(line = $(document)) {
     })
     line.find(".spell-difficulty-input").on("change", event => {
         update_spell_value(row_elem(event.target, "value"))
+        // Update selections of spells because they depend on the level
+        $("select.spell-select").each((i, elem) => {
+            update_spell_select(elem)
+        })
     })
     line.find(".hermetic-difficulty").on("change", event => {
         update_spell_value(row_elem(event.target, "value"))
@@ -225,6 +233,11 @@ function list_changed(event) {
 
     // Update spell value
     update_spell_value(row_elem(slider[0], "value"))
+
+    // Update spell selects if they don't show a given energy
+    $("select.spell-select").each((i, elem) => {
+        update_spell_select(elem)
+    })
 
     // Update adventure points
     compute_remaining_ap()

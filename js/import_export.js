@@ -16,7 +16,7 @@ window.onbeforeunload = function () {
 
 $("select[id*='-x-']").selectpicker("destroy")  // Remove hidden select pickers for cloning
 
-$("select.talent-select, select.spell-list").each((i, select) => {
+$("select.talent-select, select.spell-list, select.spell-select, select.special-energy-select, select.realm-energy-select, select.component-select").each((i, select) => {
     $(select).parents('.bootstrap-select').first().replaceWith($(select))
 })
 
@@ -194,8 +194,17 @@ function import_data(src_html, dst_html) {
                     new_input.slider("refresh", {useCurrentValue: true})
                 }
 
-                // We change the value and trigger the change in case of a listener
-                new_input.val(old_input.value)
+                if (new_input.hasClass("selectpicker") && old_input.getAttribute("type") === "number") {
+                    // If the old input is a number input and the new one a list, we select the first options
+                    let nbr_options = parseInt(old_input.value)
+                    if (isNaN(nbr_options))
+                        nbr_options = 0
+                    new_input.selectpicker("val",
+                        new_input.find("option").slice(0, nbr_options).map((i, elem) => $(elem).val()).toArray())
+                } else {
+                    // We change the value and trigger the change in case of a listener
+                    new_input.val(old_input.value)
+                }
                 new_input.trigger("change")
             }
         }
@@ -231,8 +240,7 @@ function import_data(src_html, dst_html) {
             new_select.selectpicker("val", selection)
         }
     })
-    dst_html.find(".talent-select.adventure-points-select").trigger("changed.bs.select")
-    dst_html.find("select.spell-list").trigger("changed.bs.select")
+    dst_html.find("select").trigger("changed.bs.select")
 
     // Preserve order of sortable elements
     dst_html.find(".sortable-list").each((i, elem) => {

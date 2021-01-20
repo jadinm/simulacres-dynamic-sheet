@@ -44,7 +44,7 @@ function compute_remaining_ap() {
         if (parseInt(elem.value) === 6)
             raised_to_6 += 1
     })
-    raised_to_6 -= parseInt($("#components-started-level-6").val())
+    raised_to_6 -= ($("#components-started-level-6").val() || []).length
     if (raised_to_6 > 0)
         consumed_points += raised_to_6 * (component_5_to_6_ap_cost - component_ap_cost)
 
@@ -99,9 +99,9 @@ function compute_remaining_ap() {
         }
 
         /* Energy optimisations */
-        const start_special_energies_1 = (parseInt($("#special-energies-started-level-1").val()) || 0)
+        const start_special_energies_1 = ($("#special-energies-started-level-1").val() || []).length
         consumed_points -= start_special_energies_1 * (special_energy_cost_by_level[1] - energy_cost_by_level[1])
-        const start_energies_2 = (parseInt($("#energies-started-level-2").val()) || 0)
+        const start_energies_2 = ($("#energies-started-level-2").val() || []).length
         const start_energies_1 = start_energies - start_energies_2 * 2
         consumed_points -= (energy_cost_by_level[2] * start_energies_2 + energy_cost_by_level[1] * start_energies_1)
     }
