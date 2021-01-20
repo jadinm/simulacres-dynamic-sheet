@@ -20,7 +20,7 @@ function compute_component_means_cost() {
         consumed_points += raised_to_6 * (component_5_to_6_ap_cost - component_ap_cost)
 
     let title = $("#component-title")
-    if (title.length > 0) {
+    if (title.length > 0 && !discovery) {
         title[0].setAttribute("title", "Coût des composantes: " + consumed_points + " PA")
         title.tooltip("dispose")
         title.tooltip()
@@ -36,7 +36,7 @@ function compute_component_means_cost() {
         means_cost += (sum_points - start_means) * means_ap_cost
     consumed_points += means_cost
     title = $("#means-title")
-    if (title.length > 0) {
+    if (title.length > 0 && !discovery) {
         title[0].setAttribute("title", "Coût des moyens: " + means_cost + " PA")
         title.tooltip("dispose")
         title.tooltip()
@@ -58,7 +58,7 @@ function compute_status_cost() {
     let diff = (max_breath - start_breath) * breath_ap_cost
     consumed_points += diff
     let title = $("#breath-title")
-    if (title.length > 0) {
+    if (title.length > 0 && !discovery) {
         title[0].setAttribute("title", "Coût: " + diff + " PA")
         title.tooltip("dispose")
         title.tooltip()
@@ -73,7 +73,7 @@ function compute_status_cost() {
     diff = (max_psychic - start_psychic_balance) * psychic_balance_ap_cost
     consumed_points += diff
     title = $("#psychic-title")
-    if (title.length > 0) {
+    if (title.length > 0 && !discovery) {
         title[0].setAttribute("title", "Coût: " + diff + " PA")
         title.tooltip("dispose")
         title.tooltip()
@@ -101,7 +101,7 @@ function monk_power_cost() {
         }
 
         let title = row(elem).children().first()
-        if (title.length > 0 && row(elem)[0].id !== "ki-x") {
+        if (title.length > 0 && row(elem)[0].id !== "ki-x" && !discovery) {
             title.each((i, elem) => elem.setAttribute("title", "Coût: " + diff + " PA"))
             title.tooltip("dispose")
             title.tooltip()

@@ -51,7 +51,7 @@ function compute_remaining_ap() {
     if (diff > 0)
         consumed_points += diff
     let title = $("#hp-title")
-    if (title.length > 0) {
+    if (title.length > 0 && !discovery) {
         title[0].setAttribute("title", "Coût: " + diff + " PA")
         title.tooltip("dispose")
         title.tooltip()
@@ -71,7 +71,7 @@ function compute_remaining_ap() {
         consumed_points += diff
     }
     title = $("#realm-title")
-    if (title.length > 0) {
+    if (title.length > 0 && !discovery) {
         title[0].setAttribute("title", "Coût des cibles: " + diff + " PA")
         title.tooltip("dispose")
         title.tooltip()
@@ -113,7 +113,7 @@ function compute_remaining_ap() {
         consumed_points += diff
     }
     title = $("#energy-title")
-    if (title.length > 0) {
+    if (title.length > 0 && !discovery) {
         title[0].setAttribute("title", "Coût de toutes les énergies: " + diff + " PA")
         title.tooltip("dispose")
         title.tooltip()

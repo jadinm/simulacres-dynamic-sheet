@@ -52,7 +52,7 @@ function compute_remaining_ap() {
     }
     // Update tooltip
     let title = $("#realm-title, #energy-title")
-    if (title.length > 0) {
+    if (title.length > 0 && !discovery) {
         title.each((i, elem) => elem.setAttribute("title", "Coût de tous les règnes et énergies: " + diff + " PA"))
         title.tooltip("dispose")
         title.tooltip()
@@ -94,7 +94,7 @@ function compute_remaining_ap() {
 
         // Update tooltip
         title = row(elem).children().first()
-        if (title.length > 0 && row(elem)[0].id !== "spell-x") {
+        if (title.length > 0 && row(elem)[0].id !== "spell-x" && !discovery) {
             title.each((i, elem) => elem.setAttribute("title", "Coût: " + diff + " PA"))
             title.tooltip("dispose")
             title.tooltip()
