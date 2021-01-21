@@ -315,8 +315,11 @@ class Roll {
         } else if (this.energy_investment_validated && this.is_critical_success()) {
             critical_div.html("<b class='text-success'>Succès critique !</b>")
             modifier = this.critical_value()
-            text_end = "<div class='row mx-1 align-middle'>" + this.critical_dices.length + "d6 ajouté" + ((this.critical_dices.length > 1) ? "s" : "")
-                + " à la marge d'une valeur de " + modifier + this.dice_buttons("critical_dices", this.critical_dices) + "</div>"
+            if (discovery)
+                text_end = "<div class='row mx-1 align-middle'>Doublez l'effet grâce au succès critique</div>"
+            else
+                text_end = "<div class='row mx-1 align-middle'>" + this.critical_dices.length + "d6 ajouté" + ((this.critical_dices.length > 1) ? "s" : "")
+                    + " à la marge d'une valeur de " + modifier + this.dice_buttons("critical_dices", this.critical_dices) + "</div>"
             critical_success = true
         }
 
@@ -378,7 +381,7 @@ class Roll {
                     effect_dices_sum = this.effect_value()
                     effect_text += "<div class='row mx-1 align-middle'>Dés d'effet = " + effect_dices_sum
                         + this.dice_buttons("effect_dices", this.effect_dices) + "</div>"
-                } else {
+                } else if (!discovery) {
                     // DSS = MR // 3 and DES = 0 or (1 if 4 <= ME <= 6) or (2 if ME >= 7)
                     effect_text += "<div class='row mx-1 align-middle'>DSS =&nbsp;<span class='roll-dialog-dss'>" + this.dss()
                         + "</span></div><div class='row mx-1 align-middle'>DES =&nbsp;<span class='roll-dialog-des'>" + this.des() + "</span></div>"
@@ -403,7 +406,7 @@ class Roll {
             }
 
             const details = $("#roll-dialog-details")
-            const threshold_name = discovery ? "Valeur du test <=" : "Valeur seuil ="
+            const threshold_name = intermediate_discovery ? "Valeur du test <=" : "Valeur seuil ="
             if (this.energy_investment_validated) {
                 details.html("<div class='row mx-1 align-middle'>Somme des 2d6 = " + this.dice_value()
                     + this.dice_buttons("base_dices", this.base_dices)
@@ -574,6 +577,8 @@ function get_energy_investment_inputs(energy_input) {
 }
 
 function update_max_invested_energies(energy_input) {
+    if (discovery)
+        return
     const heroism = $("#heroism")
     let heroism_value = heroism.length > 0 ? parseInt(heroism.val()) : 0
     if (isNaN(heroism_value) || !current_roll || !current_roll.energy_investment_validated)

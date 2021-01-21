@@ -261,7 +261,7 @@ function update_roll_value(value_div) {
     talent = talent.val()
 
     const talent_div = talent_from_name(talent)
-    if (talent_div.length !== 0) {
+    if (talent.length !== 0 && talent_div.length !== 0) {
         const level = talent_level(talent_div[0])
         if (level === "x")
             sum = "X"

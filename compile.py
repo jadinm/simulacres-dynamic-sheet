@@ -31,6 +31,10 @@ parser.add_argument("--matrix-4x4", help="Add instincts and desire to the stat m
                     action='store_true')
 parser.add_argument("--universe", help="Universe of the adventure", choices=[MED_FANTASY, CAPTAIN_VOODOO, "Autre"],
                     default=MED_FANTASY)
+parser.add_argument("--intermediate-discovery",
+                    help="Base rules of SimulacreS with some simplifications like simpler "
+                         " adventure point investment and non-detailed talents (only supported for version 8)",
+                    action='store_true')
 parser.add_argument("--discovery", help="Discovery mode of SimulacreS (only supported for version 8)",
                     action='store_true')
 parser.add_argument("--plugin", help="Add the plugin at the following path", action='extend', nargs="*", default=[])
@@ -126,6 +130,7 @@ params.update({
     "matrix_4x4": args.version == V7 or args.matrix_4x4,
     "dual_wielding": args.version == V7 and args.dual_wielding,
     "discovery": args.discovery and args.version == V8,
+    "intermediate_discovery": (args.discovery or args.intermediate_discovery) and args.version == V8,
     "V7": V7, "V8": V8, "captain_voodoo": CAPTAIN_VOODOO, "med_fantasy": MED_FANTASY,
     "plugins": process_plugins(args.plugin), "tag_version": tag_version, "compilation_args": vars(args)
 })

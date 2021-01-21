@@ -36,7 +36,7 @@
                 </svg>
             </label>
         </div>
-    {% else %}
+    {% elif not discovery %}
         <div class="custom-control custom-radio custom-control-inline">
             <input type="checkbox" class="custom-control-input {{ row_type }}-formula-elem"
                    id="{{ row_type }}-x-nature" name="{{ row_type }}-x-realm">
@@ -98,7 +98,7 @@
                 </svg>
             </label>
         </div>
-    {% else %}
+    {% elif not discovery %}
         <div class="custom-control custom-radio custom-control-inline">
             <input type="checkbox" class="custom-control-input {{ row_type }}-formula-elem"
                    id="{{ row_type }}-x-humanoid" name="{{ row_type }}-x-realm">
@@ -169,7 +169,7 @@
                 </svg>
             </label>
         </div>
-    {% else %}
+    {% elif not discovery %}
         <div class="custom-control custom-radio custom-control-inline">
             <input type="checkbox" class="custom-control-input {{ row_type }}-formula-elem"
                    id="{{ row_type }}-x-artificial" name="{{ row_type }}-x-realm">
@@ -201,7 +201,7 @@
                 </svg>
             </label>
         </div>
-    {% else %}
+    {% elif not discovery %}
         <div class="custom-control custom-radio custom-control-inline invisible">
             <input type="checkbox" class="custom-control-input">
             <label class="custom-control-label" for="{{ row_type }}-x-supernatural">
@@ -219,7 +219,7 @@
             </label>
         </div>
     {% endif %}
-    {% if version == V8 %}
+    {% if version == V8 and not discovery %}
         <div class="custom-control custom-radio custom-control-inline">
             <input type="checkbox" class="custom-control-input {{ row_type }}-formula-elem"
                    id="{{ row_type }}-x-supernatural" name="{{ row_type }}-x-realm">

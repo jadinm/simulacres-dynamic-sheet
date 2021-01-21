@@ -140,12 +140,14 @@
                     </a>
                 </li>
             {% endif %}
-            <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#adventure-points-tab" role="tab" aria-controls="profile"
-                   aria-selected="false">
-                    PA
-                </a>
-            </li>
+            {% if not discovery %}
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#adventure-points-tab" role="tab"
+                       aria-controls="profile" aria-selected="false">
+                        PA
+                    </a>
+                </li>
+            {% endif %}
             <li class="nav-item">
                 <a class="nav-link" data-toggle="tab" href="#background-tab" role="tab" aria-controls="profile"
                    aria-selected="false">
@@ -194,8 +196,10 @@
                 {% include "magic_tab.html" %}
             {% endif %}
 
-            <!-- Adventure Point Tracking -->
-            {% include "adventure_points.html" %}
+            {% if not discovery %}
+                <!-- Adventure Point Tracking -->
+                {% include "adventure_points.html" %}
+            {% endif %}
 
             <!-- Background -->
             {% include "background.html" %}
@@ -330,6 +334,10 @@
     {% endif %}
     {% if matrix_4x4 %}
         matrix_4x4 = true
+    {% endif %}
+    let intermediate_discovery = false
+    {% if intermediate_discovery %}
+        intermediate_discovery = true
     {% endif %}
     let discovery = false
     {% if discovery %}

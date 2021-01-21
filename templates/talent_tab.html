@@ -1,12 +1,12 @@
 <div id="talent-tab" class="tab-pane fade row container-fluid m-0">
-    {% if not discovery %}
+    {% if not intermediate_discovery %}
         <div class="row justify-content-center"><b>Talents</b></div>
     {% endif %}
     <div class="row my-lg-3 justify-content-center">
 
         <div class="col-lg-3 order-lg-3 mt-lg-0 mt-2">
             <div id="talents_3" class="list-group talent-list sortable-list border border-light rounded-lg">
-                {% if discovery %}
+                {% if intermediate_discovery %}
                     <div class="nav-header disabled text-center"><b>Talents & Spécialité +3</b></div>
                 {% else %}
                     <div class="nav-header disabled text-center"><b>3</b></div>
@@ -16,7 +16,7 @@
 
         <div class="col-lg-3 order-lg-2 mt-lg-0 mt-2">
             <div id="talents_2" class="list-group talent-list sortable-list border border-light rounded-lg">
-                {% if discovery %}
+                {% if intermediate_discovery %}
                     <div class="nav-header disabled text-center"><b>Talents & Spécialité +2</b></div>
                 {% else %}
                     <div class="nav-header disabled text-center"><b>2</b></div>
@@ -25,7 +25,7 @@
         </div>
 
         <div class="col-lg-3 order-lg-1 mt-lg-0 mt-2">
-            {% if not discovery %}
+            {% if not intermediate_discovery %}
                 <div id="talents_1" class="list-group talent-list sortable-list border border-light rounded-lg">
                     <div class="nav-header disabled text-center"><b>1</b></div>
                 </div>
@@ -60,7 +60,7 @@
                 </div>
             {% endif %}
         </div>
-        {% if discovery %}
+        {% if intermediate_discovery %}
             <div class="col-lg-3 order-lg-0 mt-lg-0 mt-2">
                 <div id="talents_0" class="list-group talent-list sortable-list border border-light rounded-lg">
                     <div class="nav-header disabled text-center"><b>Aptitudes</b></div>
@@ -93,7 +93,7 @@
             </div>
         {% endif %}
     </div>
-    {% if not discovery %}
+    {% if not intermediate_discovery %}
         <div class="row">
             <div class="col-lg-3 order-lg-3 mt-lg-0 mt-2">
                 <div id="talents_0" class="list-group talent-list sortable-list border border-light rounded-lg">

@@ -180,7 +180,7 @@ function update_talent_tooltip(talent, target_list = null) {
     if (current_level !== old_level) {
         const cost = talent_cost(talent, target_list)
         if (!isNaN(cost)) {
-            if (!discovery) {
+            if (!intermediate_discovery) {
                 talent.setAttribute("data-original-title",
                     "Talent " + old_level.toUpperCase() + " à la base <br />" + "Coût: " + cost + " PA")
                 $(talent).find(".talent-origin").text("< " + old_level.toUpperCase())
@@ -194,7 +194,7 @@ function update_talent_tooltip(talent, target_list = null) {
         $(talent).tooltip({disabled: false})
     } else {
         talent.setAttribute("data-original-title", "")
-        if (!discovery) {
+        if (!intermediate_discovery) {
             $(talent).removeClass("increased-talent").tooltip({disabled: true})
         }
         $(talent).find(".talent-origin").text("")

@@ -11,6 +11,8 @@ env:
   V8_MINIMAL_4x4_FINAL_FILENAME: simulacres_v8_fiche_perso_minimale_4x4.html
   V8_CAPTAIN_VOODOO_FINAL_FILENAME: simulacres_v8_fiche_perso_capitaine_vaudou.html
   V8_CAPTAIN_4x4_VOODOO_FINAL_FILENAME: simulacres_v8_fiche_perso_capitaine_vaudou_4x4.html
+  V8_INTERMEDIATE_DISCOVERY_FINAL_FILENAME: simulacres_v8_fiche_perso_minimale_decouverte_intermediaire.html
+  V8_INTERMEDIATE_DISCOVERY_4x4_FINAL_FILENAME: simulacres_v8_fiche_perso_minimale_intermediate_decouverte_4x4.html
   V8_DISCOVERY_FINAL_FILENAME: simulacres_v8_fiche_perso_minimale_decouverte.html
   V8_DISCOVERY_4x4_FINAL_FILENAME: simulacres_v8_fiche_perso_minimale_decouverte_4x4.html
 
@@ -37,10 +39,12 @@ jobs:
           python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V8_BASE_FINAL_FILENAME }} --version 8
           python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V8_MINIMAL_FINAL_FILENAME }} --version 8 --universe "Autre"
           python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V8_DISCOVERY_FINAL_FILENAME }} --version 8 --universe "Autre" --discovery --plugin plugins/plugin_generic_world.html
+          python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V8_INTERMEDIATE_DISCOVERY_FINAL_FILENAME }} --version 8 --universe "Autre" --intermediate-discovery --plugin plugins/plugin_generic_world.html
           python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V8_CAPTAIN_VOODOO_FINAL_FILENAME }} --version 8 --universe "Capitaine Vaudou"
           python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V8_BASE_4x4_FINAL_FILENAME }} --version 8 --matrix-4x4
           python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V8_MINIMAL_4x4_FINAL_FILENAME }} --version 8 --matrix-4x4 --universe "Autre"
           python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V8_DISCOVERY_4x4_FINAL_FILENAME }} --version 8 --matrix-4x4 --universe "Autre" --discovery --plugin plugins/plugin_generic_world.html
+          python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V8_INTERMEDIATE_DISCOVERY_4x4_FINAL_FILENAME }} --version 8 --matrix-4x4 --universe "Autre" --intermediate-discovery --plugin plugins/plugin_generic_world.html
           python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V8_CAPTAIN_4x4_VOODOO_FINAL_FILENAME }} --version 8 --matrix-4x4 --universe "Capitaine Vaudou"
 
       - name: Upload the base v7 sheet
@@ -79,6 +83,11 @@ jobs:
         with:
           name: ${{ env.V8_DISCOVERY_FINAL_FILENAME }}
           path: target/${{ env.V8_DISCOVERY_FINAL_FILENAME }}
+      - name: Upload the minimal v8 sheet in intermediate discovery mode
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.V8_INTERMEDIATE_DISCOVERY_FINAL_FILENAME }}
+          path: target/${{ env.V8_INTERMEDIATE_DISCOVERY_FINAL_FILENAME }}
 
       - name: Upload the base v8 sheet with 4x4 matrix
         uses: actions/upload-artifact@v2
@@ -100,6 +109,11 @@ jobs:
         with:
           name: ${{ env.V8_DISCOVERY_4x4_FINAL_FILENAME }}
           path: target/${{ env.V8_DISCOVERY_4x4_FINAL_FILENAME }}
+      - name: Upload the minimal v8 sheet in intermediate discovery mode with 4x4 matrix
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.V8_INTERMEDIATE_DISCOVERY_4x4_FINAL_FILENAME }}
+          path: target/${{ env.V8_INTERMEDIATE_DISCOVERY_4x4_FINAL_FILENAME }}
 
       - name: Create release
         id: create_release
@@ -185,6 +199,16 @@ jobs:
           asset_content_type: text/html
           asset_name: ${{ env.V8_DISCOVERY_FINAL_FILENAME }}
           asset_path: target/${{ env.V8_DISCOVERY_FINAL_FILENAME }}
+      - name: Upload the minimal v8 sheet in intermediate discovery mode in release assets
+        if: contains(github.ref, '/tags/')
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_content_type: text/html
+          asset_name: ${{ env.V8_INTERMEDIATE_DISCOVERY_FINAL_FILENAME }}
+          asset_path: target/${{ env.V8_INTERMEDIATE_DISCOVERY_FINAL_FILENAME }}
 
       - name: Upload the base v8 sheet with 4x4 matrix in release assets
         if: contains(github.ref, '/tags/')
@@ -226,3 +250,13 @@ jobs:
           asset_content_type: text/html
           asset_name: ${{ env.V8_DISCOVERY_4x4_FINAL_FILENAME }}
           asset_path: target/${{ env.V8_DISCOVERY_4x4_FINAL_FILENAME }}
+      - name: Upload the minimal v8 sheet in intermediate discovery mode with 4x4 matrix in release assets
+        if: contains(github.ref, '/tags/')
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_content_type: text/html
+          asset_name: ${{ env.V8_INTERMEDIATE_DISCOVERY_4x4_FINAL_FILENAME }}
+          asset_path: target/${{ env.V8_INTERMEDIATE_DISCOVERY_4x4_FINAL_FILENAME }}

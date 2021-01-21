@@ -27,6 +27,10 @@
     - les talents détaillés et l'armure (voir [ces règles optionnelles](https://www.facebook.com/groups/Simulacres/permalink/2186771051575289/))
     - une liste de talents vide (ils peuvent être ajoutés à la main) et aucune énergie magique (vous pouvez ajouter de nouvelles énergies avec un plugin, voir [documentation](../../#Plugins))
 
+- simulacres_v8_fiche_perso_minimale_decouverte_intermediaire.html inclut:
+  - les règles de base de [SimulacreS version 8](https://www.facebook.com/groups/Simulacres/permalink/2324033054515754/) sans talents détaillés et avec une gestion simplifiée des PAs 
+  - une liste de talents vide (ils peuvent être ajoutés à la main) et une énergie spéciale générique
+
 - simulacres_v8_fiche_perso_minimale_decouverte.html inclut:
     - les règles de découverte de [SimulacreS version 8](https://www.facebook.com/groups/Simulacres/permalink/2324033054515754/)
     - une liste de talents vide (ils peuvent être ajoutés à la main) et une énergie spéciale générique
@@ -36,4 +40,5 @@ Les fichiers suivants présentent les mêmes fonctionnalités que les trois ci-d
 - simulacres_v8_fiche_perso_4x4.html
 - simulacres_v8_fiche_perso_capitaine_vaudou_4x4.html
 - simulacres_v8_fiche_perso_minimale_4x4.html
+- simulacres_v8_fiche_perso_minimale_decouverte_intermediaire_4x4.html
 - simulacres_v8_fiche_perso_minimale_decouverte_4x4.html

@@ -87,6 +87,8 @@ $("#shield").on("change", _ => {
 const light_bonus_class = "light-bonus-applied"
 const heavy_bonus_class = "heavy-bonus-applied"
 $("#resistance").on("change", event => {
+    if (discovery)
+        return
     const target = $(event.target)
     const value = parseInt(event.target.value) || 0
     const trunk = $("#hp-trunk")
@@ -149,12 +151,18 @@ function update_body_energy(component, body_energy) {
 }
 
 $("#mind").on("change", event => {
+    if (discovery)
+        return
     update_body_energy(event.target, $("#psychic"))
 })
 $("#heart").on("change", event => {
+    if (discovery)
+        return
     update_body_energy(event.target, $("#breath"))
 })
 $("#instincts").on("change", event => {
+    if (discovery)
+        return
     update_body_energy(event.target, $("#breath"))
 })
 

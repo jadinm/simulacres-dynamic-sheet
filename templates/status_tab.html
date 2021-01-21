@@ -1,3 +1,8 @@
+{% if discovery %}
+    {% set max_slider = 5 %}
+{% else %}
+    {% set max_slider = 4 %}
+{% endif %}
 <div id="status-tab" class="tab-pane fade show active justify-content-center">
     <div class="row col-12 justify-content-center">
         <div class="col-lg-3 col-md-4 col-sm-6 ml-1">
@@ -10,8 +15,8 @@
             </div>
             <div class="row mb-3">
                 <input id="hp-trunk" class="hp input-slider" data-slider-id="hp-trunk-slider" type="text"
-                       data-slider-min="0" data-slider-max="4" data-slider-step="1" data-slider-value="4"
-                       data-slider-handle="custom" data-slider-reversed="true"/>
+                       data-slider-min="0" data-slider-max="{{ max_slider }}" data-slider-step="1"
+                       data-slider-value="{{ max_slider }}" data-slider-handle="custom" data-slider-reversed="true"/>
             </div>
 
             <div class="row clickable btn-link" data-toggle="modal" data-target="#breath-max-update">
@@ -21,7 +26,7 @@
             </div>
             <div class="row mb-3">
                 <input id="breath" data-slider-id="breath-slider" type="text" data-slider-min="0"
-                       data-slider-max="4" data-slider-step="1" data-slider-value="4"
+                       data-slider-max="{{ max_slider }}" data-slider-step="1" data-slider-value="{{ max_slider }}"
                        data-slider-reversed="true"
                        class="input-slider" data-slider-handle="custom" data-slider-tooltip-position="bottom"/>
             </div>
@@ -33,7 +38,7 @@
             </div>
             <div class="row">
                 <input id="psychic" data-slider-id="psychic-slider" type="text" data-slider-min="0"
-                       data-slider-max="4" data-slider-step="1" data-slider-value="4"
+                       data-slider-max="{{ max_slider }}" data-slider-step="1" data-slider-value="{{ max_slider }}"
                        data-slider-reversed="true"
                        class="input-slider" data-slider-handle="custom" data-slider-tooltip-position="bottom"/>
             </div>
@@ -47,7 +52,7 @@
                        data-slider-handle="custom" data-slider-tooltip-position="bottom"/>
             </div>
         </div>
-        {% if not discovery %}
+        {% if not intermediate_discovery %}
             <div class="col-xl-3 col-md-4 col-sm-6 ml-md-1">
                 <!-- Protection summary -->
                 <div class="row pl-1">

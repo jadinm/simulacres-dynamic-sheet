@@ -2,7 +2,7 @@
     <!-- Adventure points total -->
     <div class="row col-12 form-row md-form p-0 m-0">
         <div class="col-12">
-            {% if discovery %}
+            {% if intermediate_discovery %}
                 <label for="adventure-points">Nombre de PA reçus</label>
             {% else %}
                 <label for="adventure-points">Nombre total de PA reçus (création comprise)</label>
@@ -11,7 +11,7 @@
                    min="0">
         </div>
     </div>
-    {% if discovery %}
+    {% if intermediate_discovery %}
         <div class="row mt-2 justify-content-center">
             <div id="investment-table"
                  class="table-responsive-xl card shadow-none border border-heavy rounded-lg row col-xl-4 col-md-6 col-sm-8 col-12 m-0 p-0">
