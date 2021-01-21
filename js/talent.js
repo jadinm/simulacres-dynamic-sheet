@@ -262,11 +262,17 @@ $('.remove-talent').sortable({
     ghostClass: "remove-drop",
     onAdd: event => {
         // Remove the element
+        $(event.item).tooltip("dispose")
         $(event.item).remove()
 
         // Update rolls
         $(".roll-value,.dual_wielding-value").each((i, elem) => {
             update_roll_value($(elem))
+        })
+
+        // Update all list selections of talents
+        $("select.talent-select").each((i, elem) => {
+            update_talent_select($(elem))
         })
 
         changed_page = true
