@@ -62,11 +62,12 @@ function update_select(select, elements) {
     elements.sort((a, b) => {
         return a.name.localeCompare(b.name) // Sort correctly accents
     }).each((i, elem) => {
-        let new_option = "<option value=\"" + (elem.hasOwnProperty("value") ? elem.value : elem.name) + "\""
+        const value = (elem.hasOwnProperty("value") ? elem.value : elem.name)
+        let new_option = "<option value=\"" + value + "\""
         if (elem.content) {// Custom data-content (like images)
             new_option += " data-content='" + elem.content.replaceAll("'", "&apos;") + "'"
         }
-        if (selected_options.includes(elem.name)) // Keep selection
+        if (selected_options.includes(value)) // Keep selection
             new_option += " selected='selected'"
         new_option += ">" + elem.name + "</option>"
         select.append(new_option)
