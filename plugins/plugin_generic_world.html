@@ -34,6 +34,9 @@
         function dispose_plugin_generic_world() {
             // Remove extra energy row
             elem.parents("div.row").first().remove()
+            $("select.special-energy-select").each((i, elem) => {
+                update_special_energy_select(elem)
+            })
             compute_remaining_ap()
         }
         // Register the function (avoid typos here or the method won't be called)
@@ -59,7 +62,13 @@
             add_save_to_dom_listeners(row)
             row.find('[data-toggle="tooltip"]').tooltip()
             /* Trigger Adventure Point computation on change of your magic energy level */
-            elem.on("change", compute_remaining_ap)
+            elem.on("change", _ => { // Update lists of special energies
+                $("select.special-energy-select").each((i, elem) => {
+                    update_special_energy_select(elem)
+                })
+                compute_remaining_ap()
+            })
+            elem.trigger("change")
         }
     })
 </script>
