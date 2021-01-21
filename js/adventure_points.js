@@ -64,15 +64,31 @@ function update_numeric_input_select(select, input_selector) {
     const elements = input_selector.filter((i, elem) => {
         return only_at_levels == null || only_at_levels.includes(elem.value)
     }).map((i, elem) => {
+        /* Recover image if any */
         const new_image = $(elem).parent().find(".input-prefix").clone(true, false)
+        new_image.removeClass("input-prefix")
+        new_image.attr("width", "1em")
+        new_image.attr("height", "1em")
+
+        /* Find energy name, either in a tooltip or in the label on in the id without other alternative */
         const div = $(elem).parents("[title]").first()
         let name = div.attr("title")
         if (!name || name.length === 0)
             name = div.attr("data-original-title")
-        new_image.removeClass("input-prefix")
-        new_image.attr("width", "1em")
-        new_image.attr("height", "1em")
-        return {name: name, content: new_image[0].outerHTML + "&nbsp;" + name}
+        if (!name || name.length === 0) {
+            name = $("label[for=\"" + elem.id + "\"").text()
+            if (name)
+                name = name.trim()
+        }
+        if (!name || name.length === 0)
+            name = elem.id
+
+        /* Have content */
+        let content = ""
+        if (new_image.length > 0)
+            content += new_image[0].outerHTML + "&nbsp;"
+        content += name
+        return {name: name, content: content, value: elem.id}
     })
     update_select($(select), elements)
 }
