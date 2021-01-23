@@ -120,4 +120,14 @@ $(_ => {
 
     // Initialize AP computation
     compute_remaining_ap()
+
+    // Button collapse toggle
+    $(".collapse-button").on("click", e => {
+        const svg = $(e.target).find("svg")
+        if (svg.hasClass("fa-angle-up")) {
+            svg.addClass("fa-angle-down").removeClass("fa-angle-up")
+        } else {
+            svg.removeClass("fa-angle-down").addClass("fa-angle-up")
+        }
+    })
 })
