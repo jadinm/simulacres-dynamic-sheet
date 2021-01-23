@@ -16,22 +16,48 @@ function add_row_listeners(line = $(document)) {
     line.find("select.spell-list").on("changed.bs.select", list_changed)
     line.find(".spell-formula-elem").on("change", event => {
         event.preventDefault()
-        update_spell_value(row_elem(event.target, "value"))
+        update_spell_value($(event.target))
+        if (event.target.getAttribute("name").includes("-realm")) {
+            const realm_split = event.target.id.split("-")
+            const realm = realm_split[realm_split.length - 1]
+            const spell_difficulty_inputs = row_elem(event.target, "difficulty-input-" + realm).parents(".spell-difficulty-row")
+            const spell_value = row_elem(event.target, "value-" + realm).parents(".spell-value-row")
+            const spell_difficulty = spell_difficulty_inputs.prev()
+            const row_div = row(event.target)
+            const inline_realms = row_div.find("input[name*=-realm]:checked").length
+            if (event.target.checked) {
+                spell_difficulty_inputs.removeClass("d-none")
+                spell_difficulty.removeClass("d-none")
+                spell_value.removeClass("d-none")
+            } else {
+                spell_difficulty_inputs.addClass("d-none")
+                spell_difficulty.addClass("d-none")
+                spell_value.addClass("d-none")
+            }
+            if (inline_realms > 1) {
+                row_div.find(".spell-realm").removeClass("d-none")
+            } else {
+                row_div.find(".spell-realm").addClass("d-none")
+            }
+
+            // Update adventure points
+            compute_remaining_ap()
+        }
     })
     line.find(".spell-difficulty-input").on("change", event => {
-        update_spell_value(row_elem(event.target, "value"))
+        update_spell_value($(event.target))
         // Update selections of spells because they depend on the level
         $("select.spell-select").each((i, elem) => {
             update_spell_select(elem)
         })
     })
     line.find(".hermetic-difficulty").on("change", event => {
-        update_spell_value(row_elem(event.target, "value"))
+        update_spell_value($(event.target))
     })
     line.find("select.spell-talent").each((i, elem) => {
         if (!elem.id.includes("-x-")) {
             $(elem).on("changed.bs.select", e => {
-                update_spell_value(row_elem(e.target, "value"))
+                update_spell_value($(e.target))
             })
         }
     })
@@ -45,10 +71,12 @@ function add_row_listeners(line = $(document)) {
         let difficulty
         let roll_reason
         let critical_increase = 0
-        const spell_difficulty = row_elem(button[0], "difficulty")
-        const formula_elements = compute_formula(row(button[0]))[1]
-        let margin_throttle = NaN
+        const realm_split = button[0].id.split("-")
+        const realm = realm_split[realm_split.length - 1]
+        const spell_difficulty = row_elem(button[0], "difficulty-" + realm)
         const is_magic = spell_difficulty.length > 0
+        const formula_elements = is_magic ? compute_formula(row(button[0]), realm)[1] : compute_formula(row(button[0]))[1]
+        let margin_throttle = NaN
         if (is_magic && !is_hermetic_spell(button[0])) { // Spell
             difficulty = parseInt(spell_difficulty.text())
             roll_reason = row_elem(button[0], "name").val()
@@ -79,7 +107,7 @@ function add_row_listeners(line = $(document)) {
         $(".roll-dialog-energy").val(0)
 
         // Do the actual roll
-        const value = parseInt(row_elem(button[0], "value").text()) // Recover max value
+        const value = parseInt(row_elem(button[0], is_magic ? "value-" + realm : "value").text())
         new Roll(roll_reason, value, difficulty, row_elem(button[0], "effect").val(),
             critical_increase, formula_elements, margin_throttle, is_magic, spell_distance,
             spell_duration).trigger_roll()
@@ -118,7 +146,8 @@ function init_spell_list(input) {
         name: instinctive_magic,
         content: "<svg height=\"1em\" width=\"1em\">" +
             "<use xlink:href=\"#svg-instincts\"></use>" +
-            "</svg>&nbsp;" + instinctive_magic})
+            "</svg>&nbsp;" + instinctive_magic
+    })
     update_select($(input), list)
 }
 
@@ -136,13 +165,15 @@ function is_hobbit() {
     return false
 }
 
-function compute_formula(row) {
+function compute_formula(row, fixed_realm = null) {
     const elements = ["component", "means", "realm"]
     let sum = 0
     const checked_elements = []
     for (let i = 0; i < elements.length; i++) {
         const elem_name = row[0].id + "-" + elements[i]
-        const checked_elem = $("input[name=" + elem_name + "]:checked")
+        let checked_elem = $("input[name=" + elem_name + "]:checked")
+        if (elements[i] === "realm" && fixed_realm != null)
+            checked_elem = checked_elem.filter("[id*=\"-" + fixed_realm + "\"]")
         if (checked_elem.length === 0)
             continue  // Allow partial formulas
         checked_elements.push(checked_elem)
@@ -166,47 +197,53 @@ function is_instinctive_magic(value_div) {
     return value && value.trim() === instinctive_magic
 }
 
-function update_spell_value(value_div) {
-    let sum = 0
+function update_spell_value(col_div) {
+    const row_div = row(col_div[0])
+    row_div.find(".spell-value").each((i, value_div) => {
+        let sum = 0
+        const realm_split = value_div.id.split("-")
+        const realm = realm_split[realm_split.length - 1]
 
-    // Recover component, means and realm
-    const formula = compute_formula(row(value_div[0]))[0]
-    sum += formula
+        // Recover component, means and realm
+        const formula = compute_formula(row_div, realm)[0]
+        sum += formula
 
-    // Recover difficulty
-    sum += parseInt(row_elem(value_div[0], "difficulty").text())
+        // Recover difficulty
+        sum += parseInt(row_elem(col_div[0], "difficulty-" + realm).text())
 
-    if (is_hermetic_spell(value_div[0])) {
-        // Recover hermetic difficulty
-        const cast_diff = parseInt(row_elem(value_div[0], "hermetic-difficulty").val())
-        if (!isNaN(cast_diff)) {
-            sum += cast_diff
-        }
-        // Recover associated talent level
-        const name = row_elem(value_div[0], "talent").val()
-        if (name.length !== 0) {
-            const level = parseInt(talent_level(talent_from_name(name)))
-            if (isNaN(level)) {
-                sum = "X"
-            } else {
-                sum += level
+        if (is_hermetic_spell(col_div[0])) {
+            // Recover hermetic difficulty
+            const cast_diff = parseInt(row_elem(col_div[0], "hermetic-difficulty-" + realm).val())
+            if (!isNaN(cast_diff)) {
+                sum += cast_diff
+            }
+            // Recover associated talent level
+            const name = row_elem(col_div[0], "talent").val()
+            if (name.length !== 0) {
+                const level = parseInt(talent_level(talent_from_name(name)))
+                if (isNaN(level)) {
+                    sum = "X"
+                } else {
+                    sum += level
+                }
             }
         }
-    }
 
-    // Update
-    value_div.text(sum)
-    row_elem(value_div[0], "dice")[0].removeAttribute("hidden")
+        // Update
+        $(value_div).text(sum)
+        row_elem(col_div[0], "dice-" + realm)[0].removeAttribute("hidden")
+    })
 }
 
 function list_changed(event) {
-    // Fix the level to 0 if divine or ki energies
-    const slider = row_elem(event.target, "difficulty-input")
+    // Fix the level to 0 if divine energy
+    const row_div = row(event.target)
+    const slider = row_div.find(".spell-difficulty-input")
     if (slider.length === 0 || slider[0].id.includes("-x-"))
         return
 
-    const difficulty = row_elem(event.target, "difficulty")
-    const hermetic_difficulty = row_elem(event.target, "hermetic-difficulty")
+    const difficulty = row_div.find(".spell-difficulty-value")
+    const hermetic_difficulty = row_div.find(".hermetic-difficulty")
     const hermetic_talent = row_elem(event.target, "talent")
     const name = row_elem(event.target, "name")
     const handle = row_elem(event.target, "name-handle")
@@ -216,23 +253,29 @@ function list_changed(event) {
     handle.removeClass("d-none")
     difficulty.parent().removeClass("d-none")
     if ($(event.target).val() && ([priest_energy, instinctive_magic].includes($(event.target).val().trim()))) {
-        slider.val(10).slider("setValue", 10).slider("refresh", {useCurrentValue: true}).slider("disable")
-        $(slider.slider("getElement")).parent().addClass("d-none")
+        slider.each((i, elem) => {
+            $(elem).val(10).slider("setValue", 10).slider("refresh", {useCurrentValue: true}).slider("disable")
+            $($(elem).slider("getElement")).parent().addClass("d-none")
+        })
     } else if ($(event.target).val() && $(event.target).val().trim() === hermetic_energy) {
-        slider.val(10).slider("setValue", 10).slider("refresh", {useCurrentValue: true}).slider("disable")
-        $(slider.slider("getElement")).parent().addClass("d-none")
+        slider.each((i, elem) => {
+            $(elem).val(10).slider("setValue", 10).slider("refresh", {useCurrentValue: true}).slider("disable")
+            $($(elem).slider("getElement")).parent().addClass("d-none")
+        })
         hermetic_difficulty.parent().removeClass("d-none")
         hermetic_talent.parent().parent().removeClass("d-none")
         name.addClass("d-none")
         handle.addClass("d-none")
         difficulty.parent().addClass("d-none")
     } else {
-        slider.slider("enable").slider("refresh", {useCurrentValue: true})
-        $(slider.slider("getElement")).parent().removeClass("d-none")
+        slider.each((i, elem) => {
+            $(elem).slider("enable").slider("refresh", {useCurrentValue: true})
+            $($(elem).slider("getElement")).parent().removeClass("d-none")
+        })
     }
 
     // Update spell value
-    update_spell_value(row_elem(slider[0], "value"))
+    update_spell_value(slider)
 
     // Update spell selects if they don't show a given energy
     $("select.spell-select").each((i, elem) => {
@@ -313,7 +356,9 @@ $("#race,.realm,.component,.means," + talent_list_selector).on("change", _ => {
 function show_difficulty_builder(input) {
     return value => {
         const max = slider_max(input)
-        const difficulty_elem = $("#" + input.id.slice(0, -6))
+        const realm_split = input.id.split("-")
+        const difficulty_elem = row_elem(input,
+            "difficulty-" + realm_split[realm_split.length - 1])
         let difficulty // Use the count of the spell casted to compute difficulty
         if (value < 4)
             difficulty = -4
@@ -360,11 +405,14 @@ $("#add-spell").on("click", (event, idx = null) => { // Add parameter for forced
     })
 
     const new_id = add_row(table, new_spell, idx)
-    activate_slider(new_spell.find("#spell-" + new_id + "-difficulty-input")[0], show_difficulty_builder)
+    new_spell.find("[id*=\"spell-" + new_id + "-difficulty-input\"").each((i, elem) => {
+        activate_slider(elem, show_difficulty_builder)
+    })
 
     new_spell.find("#spell-" + new_id + "-talent").selectpicker()
     new_spell.find("#spell-" + new_id + "-list").selectpicker({sanitize: false})
     add_row_listeners(new_spell)
+    update_spell_value(new_spell)
 })
 
 $("#add-roll").on("click", (event, idx = null) => { // Add parameter for forced index

@@ -1,3 +1,9 @@
+{% if realm_checkbox %}
+    {% set realm_class = "custom-checkbox" %}
+{% else %}
+    {% set realm_class = "custom-radio" %}
+{% endif %}
+
 <div class="row">
     <div class="custom-control custom-radio custom-control-inline">
         <input type="checkbox" class="custom-control-input {{ row_type }}-formula-elem"
@@ -18,7 +24,7 @@
         </label>
     </div>
     {% if version == V7 %}
-        <div class="custom-control custom-radio custom-control-inline">
+        <div class="custom-control {{ realm_class }} custom-control-inline">
             <input type="checkbox" class="custom-control-input {{ row_type }}-formula-elem"
                    id="{{ row_type }}-x-mineral" name="{{ row_type }}-x-realm">
             <label class="custom-control-label" for="{{ row_type }}-x-mineral">
@@ -27,7 +33,7 @@
                 </svg>
             </label>
         </div>
-        <div class="custom-control custom-radio custom-control-inline">
+        <div class="custom-control {{ realm_class }} custom-control-inline">
             <input type="checkbox" class="custom-control-input {{ row_type }}-formula-elem"
                    id="{{ row_type }}-x-humanoid" name="{{ row_type }}-x-realm">
             <label class="custom-control-label" for="{{ row_type }}-x-humanoid">
@@ -80,7 +86,7 @@
         </label>
     </div>
     {% if version == V7 %}
-        <div class="custom-control custom-radio custom-control-inline">
+        <div class="custom-control {{ realm_class }} custom-control-inline">
             <input type="checkbox" class="custom-control-input {{ row_type }}-formula-elem"
                    id="{{ row_type }}-x-vegetal" name="{{ row_type }}-x-realm">
             <label class="custom-control-label" for="{{ row_type }}-x-vegetal">
@@ -89,7 +95,7 @@
                 </svg>
             </label>
         </div>
-        <div class="custom-control custom-radio custom-control-inline">
+        <div class="custom-control {{ realm_class }} custom-control-inline">
             <input type="checkbox" class="custom-control-input {{ row_type }}-formula-elem"
                    id="{{ row_type }}-x-mechanical" name="{{ row_type }}-x-realm">
             <label class="custom-control-label" for="{{ row_type }}-x-mechanical">
@@ -151,7 +157,7 @@
         </div>
     {% endif %}
     {% if version == V7 %}
-        <div class="custom-control custom-radio custom-control-inline">
+        <div class="custom-control {{ realm_class }} custom-control-inline">
             <input type="checkbox" class="custom-control-input {{ row_type }}-formula-elem"
                    id="{{ row_type }}-x-animal" name="{{ row_type }}-x-realm">
             <label class="custom-control-label" for="{{ row_type }}-x-animal">
@@ -160,7 +166,7 @@
                 </svg>
             </label>
         </div>
-        <div class="custom-control custom-radio custom-control-inline">
+        <div class="custom-control {{ realm_class }} custom-control-inline">
             <input type="checkbox" class="custom-control-input {{ row_type }}-formula-elem"
                    id="{{ row_type }}-x-void" name="{{ row_type }}-x-realm">
             <label class="custom-control-label" for="{{ row_type }}-x-void">

@@ -29,7 +29,7 @@ let talent_increment_cost_discovery_3 = 45
 let indirect_x_to_0_raise_cost = 0 // No penalty
 let advised_talent_save = 0 // No bonus
 let mage_spell_ap_cost = 0  // No special cost, a spell is a talent
-let ki_divine_spell_ap_cost = 0  // No special cost, a spell is a talent
+let divine_spell_ap_cost = 0  // No special cost, a spell is a talent
 let spell_same_realm_discount = 0  // No special cost, a spell is a talent
 
 let power_level_ap_cost = 5 // From 1 to 2 and from 2 to 3

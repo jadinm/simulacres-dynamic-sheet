@@ -22,7 +22,7 @@ let talent_increment_cost_discovery_3 = 0
 let indirect_x_to_0_raise_cost = 1
 let advised_talent_save = 1
 let mage_spell_ap_cost = talent_increment_cost["x"]["-4"]
-let ki_divine_spell_ap_cost = talent_increment_cost["x"]["0"]
+let divine_spell_ap_cost = talent_increment_cost["x"]["0"]
 let spell_same_realm_discount = 1
 
 let power_level_ap_cost = 5 // From 1 to 2 and from 2 to 3
@@ -70,24 +70,33 @@ function compute_remaining_ap() {
     $(".spell-name").each((i, elem) => {
         diff = 0
         const name = elem.value.trim()
-        let realm_modifier = spell_same_realm_discount
+        let split_spell_realm_modifier = spell_same_realm_discount
         if (name.length > 0) {
             if (!all_names.includes(name)) {
-                realm_modifier = 0
+                split_spell_realm_modifier = 0
                 all_names.push(name)
             }
 
-            const spell_list = row_elem(elem, "list")[0].value.trim()
-            if (spell_list === priest_energy)
-                diff += ki_divine_spell_ap_cost - realm_modifier // Priest and monk have level 0 spell directly
-            else if (spell_list.length > 0 && spell_list !== hermetic_energy && spell_list !== instinctive_magic)
-                diff += mage_spell_ap_cost - realm_modifier // Mages have -4 level spells at start
+            // Number of checked realms for the spell
+            const inline_realms = row(elem).find("input[name*=-realm]:checked")
+            const inline_realms_nbr = inline_realms.length
+            if (inline_realms_nbr > 0) {
+                const spell_list = row_elem(elem, "list")[0].value.trim()
+                if (spell_list === priest_energy)
+                    diff += (divine_spell_ap_cost * inline_realms_nbr) - (inline_realms_nbr - 1) * spell_same_realm_discount
+                        - split_spell_realm_modifier // Priest have level 0 spell directly
+                else if (spell_list.length > 0 && spell_list !== hermetic_energy && spell_list !== instinctive_magic)
+                    diff += (mage_spell_ap_cost * inline_realms_nbr) - (inline_realms_nbr - 1) * spell_same_realm_discount
+                        - split_spell_realm_modifier // Mages have -4 level spells at start
+            }
 
             // Raised at the creation
-            if (spells_raised_0.includes(elem.id))
-                diff += diff_level_0
-            else if (spells_raised_2.includes(elem.id))
-                diff += diff_level_2
+            inline_realms.each((i, elem) => {
+                if (spells_raised_0.includes(elem.id))
+                    diff += diff_level_0
+                else if (spells_raised_2.includes(elem.id))
+                    diff += diff_level_2
+            })
 
             consumed_points += diff
         }

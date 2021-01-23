@@ -299,15 +299,15 @@
         <!-- Spells -->
         <div class="row col-12 mt-2 m-0 p-0"><b>Sorts</b></div>
         <div class="table-responsive col-12 m-0 p-0 pb-2" style="overflow-y: hidden !important;">
-            <table class="table table-hover m-0 p-0 mb-2">
+            <table class="table table-hover m-0 p-0 mb-4">
                 <thead class="m-0 p-0">
                 <tr>
                     <th scope="col" style="width: 15%">Nom</th>
                     <th scope="col" style="width: 10%">Liste</th>
-                    <th scope="col" class="text-center" style="width: 5%">Niveau</th>
-                    <th scope="col" class="text-center" style="width: 5%">Formule</th>
+                    <th scope="col" class="text-center" style="width: 2.5%">Niveau</th>
+                    <th scope="col" class="text-center" style="width: 2.5%">Formule</th>
                     <th scope="col" class="text-center" style="width: 10%">Difficulté</th>
-                    <th scope="col" class="text-center" style="width: 10%">Valeur</th>
+                    <th scope="col" class="text-center" style="width: 15%">Valeur</th>
                     <th scope="col" class="text-center" style="width: 5%">Temps</th>
                     <th scope="col" class="text-center" style="width: 5%">Distance</th>
                     <th scope="col" style="width: 35%">Effet</th>
@@ -347,35 +347,59 @@
                         <label for="spell-x-level"></label>
                     </td>
                     <td class="my-0 py-0 spell-formula align-middle">
-                        {% with row_type = "spell" %}
+                        {% with row_type = "spell", realm_checkbox = True %}
                             {% include "roll_formula.html" %}
                         {% endwith %}
                     </td>
                     <td class="spell-difficulty my-0 py-0 align-middle">
-                        <div class="row">
-                            <div class="text-center col-12">
-                                <label for="spell-x-difficulty-input" id="spell-x-difficulty">0</label>
+                        {% for realm in ["mineral", "vegetal", "animal", "humanoid", "mechanical", "void"] %}
+                            <div class="row py-0 my-0 d-none">
+                                <div class="text-center col-12 py-0 my-0">
+                                    <label class="py-0 my-0 spell-difficulty-value"
+                                           for="spell-x-difficulty-input-{{ realm }}"
+                                           id="spell-x-difficulty-{{ realm }}">
+                                        0
+                                    </label>
+                                    <span class="spell-realm">
+                                        [<svg height="1em" width="1em">
+                                            <use xlink:href="#svg-{{ realm }}"></use>
+                                        </svg>]
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="text-center col-12">
-                                <input id="spell-x-difficulty-input" data-slider-id="spell-x-difficulty-slider"
-                                       type="text" data-slider-min="0" data-slider-max="30" data-slider-step="1"
-                                       data-slider-value="0" class="input-slider spell-difficulty-input"
-                                       data-slider-tooltip-position="bottom"/>
+                            <div class="row py-0 my-0 spell-difficulty-row d-none">
+                                <div class="text-center col-12 py-0 my-0">
+                                    <input id="spell-x-difficulty-input-{{ realm }}"
+                                           data-slider-id="spell-x-difficulty-slider-{{ realm }}"
+                                           type="text" data-slider-min="0" data-slider-max="30" data-slider-step="1"
+                                           data-slider-value="0" class="input-slider spell-difficulty-input"
+                                           data-slider-tooltip-position="bottom"/>
+                                </div>
+                                <div class="text-center md-form col-12 d-none py-0 my-0 mt-2">
+                                    <label class="py-0 my-0" for="spell-x-hermetic-difficulty-{{ realm }}">
+                                        Difficulté de lancer
+                                    </label>
+                                    <input class="form-control hermetic-difficulty py-0 my-0 text-center"
+                                           id="spell-x-hermetic-difficulty-{{ realm }}"
+                                           type="number" value="0">
+                                </div>
                             </div>
-                            <div class="text-center md-form col-12 d-none">
-                                <label for="spell-x-hermetic-difficulty">Difficulté de lancer</label>
-                                <input class="form-control hermetic-difficulty" id="spell-x-hermetic-difficulty"
-                                       type="number" value="0">
-                            </div>
-                        </div>
+                        {% endfor %}
                     </td>
                     <td class="my-0 py-0 text-center align-middle">
-                        <span id="spell-x-value" class="spell-value"></span>
-                        <span id="spell-x-dice" class="clickable row-roll-trigger" hidden>
-                                <i class="fas fa-dice"></i>
-                            </span>
+                        {% for realm in ["mineral", "vegetal", "animal", "humanoid", "mechanical", "void"] %}
+                            <div class="m-0 p-0 spell-value-row d-none">
+                                <span class="spell-realm">
+                                    <svg height="1em" width="1em" class="spell-difficulty-realm">
+                                        <use xlink:href="#svg-{{ realm }}"></use>
+                                    </svg>:
+                                </span>
+                                <span id="spell-x-value-{{ realm }}" class="spell-value"></span>
+                                <span id="spell-x-dice-{{ realm }}" class="clickable row-roll-trigger" hidden>
+                                    <i class="fas fa-dice"></i>
+                                </span>
+                            </div>
+                        {% endfor %}
                     </td>
                     <td class="md-form my-0 py-0 align-middle">
                         <input id="spell-x-time" class="spell-time form-control text-center" type="text">

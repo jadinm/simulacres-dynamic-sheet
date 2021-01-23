@@ -82,7 +82,7 @@ Les prêtres utilisent la liste "Divin" pour encoder leurs sorts et les mages he
 doivent utiliser la liste "Hermétique".
 
 Apprendre un sort déjà appris pour un autre règne coûte 1 point d'aventure de moins.
-La fiche appliquera le bonus si plusieurs sorts ont le même nom.
+Il suffit de sélectionner plusieurs règnes pour un même sort.
 
 Pour les mages hermétiques, les sorts sont des talents classiques
 et doivent être créés depuis la colonne X de l'onglet des talents avant de pouvoir

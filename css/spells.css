@@ -15,6 +15,10 @@
     min-width: 15em;
 }
 
+.spell-value-row {
+    min-width: 4.5em;
+}
+
 .spell-difficulty .slider-selection {
     background: black;
 }

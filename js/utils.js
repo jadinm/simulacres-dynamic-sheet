@@ -3,6 +3,19 @@ const priest_energy = "Divin"
 const hermetic_energy = "Hermétique"
 const instinctive_magic = "Magie instinctive"
 
+function sanitize(string) {
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#x27;',
+        "/": '&#x2F;',
+    };
+    const reg = /[&<>"'/]/ig;
+    return string.replace(reg, (match) => (map[match]));
+}
+
 /**
  * Find the index of the child inside the parent based on id
  *
@@ -35,7 +48,7 @@ $.fn.selectpicker.Constructor.BootstrapVersion = '4'
 
 // Dark mode
 
-function is_dark_mode(page=$(document)) {
+function is_dark_mode(page = $(document)) {
     return page.find("#dark-mode").hasClass("d-none")
 }
 
@@ -98,8 +111,8 @@ $(_ => {
     }
 
     // We enable the use of svg images inside some of the select pickers
-    $("select.spell-list, select.component-select, select.special-energy-select, select.realm-energy-select").each((i, elem) => {
-        if (!elem.id.includes("-x-"))
+    $("select.spell-list, select.component-select, select.special-energy-select, select.realm-energy-select, select.spell-select").each((i, elem) => {
+        if (!elem.id.includes("-x-")) {
             $(elem).selectpicker({sanitize: false})
             $(elem).selectpicker("refresh")
         }

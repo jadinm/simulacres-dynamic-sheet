@@ -43,10 +43,15 @@ function add_save_to_dom_listeners(base = $(document)) {
     })
     base.find("input[type=\"checkbox\"]").on("click", event => {
         const already_present = $(event.target).is(':checked')
-        $("input[name='" + event.target.name + "']").prop("checked", false).removeAttr("checked")
+        if ($(event.target).parents(".custom-control").first().hasClass("custom-radio")) {
+            // Uncheck previous selection if we want to emulate radio buttons
+            $("input[name='" + event.target.name + "']").prop("checked", false).removeAttr("checked")
+        }
 
         if (already_present) { // Do not check if the same element was selected twice
             check_radio(event.target)
+        } else {
+            $(event.target).prop("checked", false).removeAttr("checked")
         }
         changed_page = true
     })
@@ -119,6 +124,7 @@ function import_data(src_html, dst_html) {
     // Retrieve and copy all of the input values of the src_html
     const table_row_input_id = /(.+)-(\d+)-.+/
     const talent_input_id = /^(x|(?:-4)|(?:-2)|0|1)(\d+)-name$/
+    const spell_difficulty_input_id = /^(spell-\d+)-(difficulty-input|hermetic-difficulty)$/
 
     src_html.find("input").each((i, old_input) => {
         if (old_input.id && old_input.id.length > 0) {
@@ -128,7 +134,19 @@ function import_data(src_html, dst_html) {
             const talent_matching = old_input.id.match(talent_input_id)
             if (new_input.length === 0) {
                 let matching = old_input.id.match(table_row_input_id)
-                if (matching) {
+                const difficulty_slider_match = old_input.id.match(spell_difficulty_input_id)
+                if (difficulty_slider_match) {
+                    // This is an old unified spell difficulty input
+                    // => transfer it to the appropriate per-realm spell difficulty
+                    const new_spell = $("#" + difficulty_slider_match[1])
+                    const old_spell = src_html.find("#" + old_input.id).parents("tr").first()
+                    const old_spell_realm = old_spell.find("input[name*=-realm]:checked").first()
+                    if (old_spell_realm.length > 0) {
+                        const realm_split = old_spell_realm[0].id.split("-")
+                        const realm = realm_split[realm_split.length - 1]
+                        new_input = row_elem(new_spell[0], difficulty_slider_match[2] + "-" + realm)
+                    }
+                } else if (matching) {
                     // Add rows to the tables until it finds the appropriate field
                     const button = dst_html.find("#add-" + matching[1])
                     button.trigger("click", parseInt(matching[2])) // Add a new elem with forced index
