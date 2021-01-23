@@ -201,11 +201,17 @@ function import_data(src_html, dst_html) {
                         nbr_options = 0
                     new_input.selectpicker("val",
                         new_input.find("option").slice(0, nbr_options).map((i, elem) => $(elem).val()).toArray())
+                    new_input.trigger("change")
+                } else if (new_input.length > 0 && old_input.getAttribute("type") === "checkbox") {
+                    if (new_input.prop("checked") && old_input.getAttribute("checked") == null || !new_input.prop("checked") && old_input.getAttribute("checked") != null) {
+                        new_input.trigger("click")
+                        new_input.trigger("change")
+                    }
                 } else {
                     // We change the value and trigger the change in case of a listener
                     new_input.val(old_input.value)
+                    new_input.trigger("change")
                 }
-                new_input.trigger("change")
             }
         }
     })
@@ -265,15 +271,6 @@ function import_data(src_html, dst_html) {
             return a_idx - b_idx
         })
         dst_html.find(elem).append(items)
-    })
-
-    // Check correct radio buttons
-    src_html.find("input:checked").each((i, old_input) => {
-        if (old_input.id && old_input.id.length > 0) { // Avoid summernote inputs
-            const new_input = dst_html.find("#" + old_input.id)
-            if (new_input.length > 0)
-                check_radio(new_input[0])
-        }
     })
 
     // Update the image if any
