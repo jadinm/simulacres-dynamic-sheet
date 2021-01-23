@@ -101,6 +101,8 @@ $(_ => {
     $("select.spell-list, select.component-select, select.special-energy-select, select.realm-energy-select").each((i, elem) => {
         if (!elem.id.includes("-x-"))
             $(elem).selectpicker({sanitize: false})
+            $(elem).selectpicker("refresh")
+        }
     })
 
     // Initialize AP computation
