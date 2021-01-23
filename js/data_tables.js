@@ -95,6 +95,14 @@ $('#roll-table-remove,#spell-table-remove,#focus-table-remove,#limitedUse-equipm
             $(event.item).find("[data-toggle='tooltip']:visible").tooltip("dispose")
             $(event.item).remove()
 
+            if (elem.id.includes("spell-table")) {
+                // Update selections of spells
+                $("select.spell-select").each((i, elem) => {
+                    update_spell_select(elem)
+                })
+            }
+
+            compute_remaining_ap()
             changed_page = true
         }
     })
