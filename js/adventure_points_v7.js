@@ -70,7 +70,8 @@ function compute_remaining_ap() {
     $(".spell").each((i, elem) => {
         diff = 0
         let name
-        const spell_list = row_elem(elem, "list")[0].value.trim()
+        const spell = SpellRow.of(elem)
+        const spell_list = spell.get("list")[0].value.trim()
         if (spell_list === hermetic_energy) {
             name = $(elem).find("select.spell-talent").val().trim()
         } else {
@@ -84,7 +85,7 @@ function compute_remaining_ap() {
             }
 
             // Number of checked realms for the spell
-            const inline_realms = row(elem).find("input[name*=-realm]:checked")
+            const inline_realms = spell.data.find("input[name*=-realm]:checked")
             const inline_realms_nbr = inline_realms.length
             if (inline_realms_nbr > 0) {
                 if (spell_list === priest_energy || spell_list === hermetic_energy)
@@ -107,8 +108,8 @@ function compute_remaining_ap() {
         }
 
         // Update tooltip
-        title = row(elem).children().first()
-        if (title.length > 0 && row(elem)[0].id !== "spell-x" && !intermediate_discovery) {
+        title = spell.data.children().first()
+        if (title.length > 0 && spell.data.id !== "spell-x" && !intermediate_discovery) {
             title.each((i, elem) => elem.setAttribute("title", "Coût: " + diff + " PA"))
             title.tooltip("dispose")
             title.tooltip()

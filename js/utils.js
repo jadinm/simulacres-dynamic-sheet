@@ -1,3 +1,11 @@
+/* Allow on and off */
+(function($) {
+    $.fn.uon = function(events, handler) {
+        // Prevent duplication of listener handlers
+        return this.off(events, handler).on(events, handler)
+    }
+}(jQuery));
+
 /* Data */
 const priest_energy = "Divin"
 const hermetic_energy = "Hermétique"
@@ -110,9 +118,6 @@ function build_tab_hide_list() {
             list_item.find(".show-tab").removeClass("d-none")
         })
         list_item.children().first().text($(elem).text().trim())
-        console.log($(elem))
-        console.log($(elem).text().trim())
-        console.log(list_item)
         parent_list.append(list_item)
     })
 }

@@ -1,33 +1,54 @@
-function toggle_show_button(note, show = true) {
-    const svg = note.find("button.note-show-button svg")
-    const text_area = note.find("textarea.summernote")
-    if (show) {
-        text_area.summernote(summernote_cfg)
-        svg.removeClass("fa-angle-down").addClass("fa-angle-up")
-    } else {
-        svg.addClass("fa-angle-down").removeClass("fa-angle-up")
+class Note extends DataRow {
+
+    toggle_show_button(show = true) {
+        const svg = this.data.find("button.note-show-button svg")
+        const text_area = this.data.find("textarea.summernote")
+        if (show) {
+            text_area.summernote(summernote_cfg)
+            svg.removeClass("fa-angle-down").addClass("fa-angle-up")
+        } else {
+            svg.addClass("fa-angle-down").removeClass("fa-angle-up")
+        }
+    }
+
+    destroy_summernote() {
+        this.data.find("textarea.summernote").summernote('destroy')
     }
 }
 
-function destroy_summernote(note) {
-    note.find("textarea.summernote").summernote('destroy')
+function row_show() {
+    Note.of(this).toggle_show_button(true)
 }
 
-$("#add-note").on("click", (event, idx = null) => { // Add parameter for forced index
-    const new_note = $("#note-x").clone(true, false)
-    add_row($("#note-table"), new_note, idx)
-    add_row_listeners(new_note)
-    add_summernote_listeners(new_note)
-    new_note.find(".note-body").on('show.bs.collapse', _ => toggle_show_button(new_note, true))
-        .on('hide.bs.collapse', _ => toggle_show_button(new_note, false))
-        .on('hidden.bs.collapse', _ => destroy_summernote(new_note))
-})
+function row_hide() {
+    Note.of(this).toggle_show_button(false)
+}
 
-$(".note-body").each((i, elem) => {
-    $(elem).on('show.bs.collapse', _ => toggle_show_button($(elem).parent(), true))
-        .on('hide.bs.collapse', _ => toggle_show_button($(elem).parent(), false))
-        .on('hidden.bs.collapse', _ => destroy_summernote($(elem)))
-})
+function row_clean() {
+    Note.of(this).destroy_summernote()
+}
+
+class NoteTable extends DataTable {
+    row_class = Note
+
+    add_custom_listener_to_row(row) {
+        super.add_custom_listener_to_row(row)
+        add_save_to_dom_listeners(row.data)
+        add_summernote_listeners(row.data)
+        row.data.find(".note-body").uon('show.bs.collapse', row_show)
+            .uon('hide.bs.collapse', row_hide)
+            .uon('hidden.bs.collapse', row_clean)
+    }
+
+    clone_row() {
+        return this.template_row.clone(true, false)
+    }
+
+    remove_row(event) {
+        super.remove_row(event)
+        compute_remaining_ap()
+    }
+}
 
 $("#note-search").on("keyup", event => {
     let value = $(event.target).val().toLowerCase()
@@ -45,9 +66,5 @@ $("#note-search").on("keyup", event => {
 })
 
 $(_ => {
-    // Collapse all notes
-    $('#note-table').each((i, elem) => {
-        $(elem).find(".note-body").removeClass("show")
-        toggle_show_button($(elem), false)
-    })
+    new NoteTable($("#note-table"))
 })

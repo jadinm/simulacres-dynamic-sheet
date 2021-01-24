@@ -113,24 +113,23 @@ function update_spell_select(select) {
     if (exclude_spell_lists != null)
         exclude_spell_lists = exclude_spell_lists.split(',')
     const elements = $(".spell-name").filter((i, elem) => {
-        const spell_list = row_elem(elem, "list").val()
+        const spell_list = SpellRow.of(elem).get("list").val()
         return elem.value && elem.value.length > 0
             && (exclude_spell_lists == null || spell_list == null || !exclude_spell_lists.includes(spell_list))
     }).map((i, elem) => {
         // Get spell difficulties of each realm
-        const spell = row(elem)
-        const realm_list = spell.find("input[name*=-realm]:checked")
+        const spell = SpellRow.of(elem)
+        const realm_list = spell.data.find("input[name*=-realm]:checked")
         return realm_list.map((j, checkbox) => {
-            const realm_split = checkbox.id.split("-")
-            const realm = realm_split[realm_split.length - 1]
+            const realm = spell.realm(checkbox)
             const realm_svg = $("label[for=\"" + checkbox.id + "\"] svg").first().clone(false, false).removeClass("input-prefix").get(0)
-            const spell_level = row_elem(elem, "difficulty-" + realm).text()
+            const spell_level = spell.get("difficulty", checkbox).text()
             if (only_at_levels == null || only_at_levels.includes(spell_level)) {
                 let content = sanitize(elem.value)
                 if (realm_list.length > 1) { // Show realm symbol because there are several realms for the same spell
                     content += "&nbsp;" + realm_svg.outerHTML
                 }
-                return {name: elem.value, content: content, value: spell[0].id + "-" + realm}
+                return {name: elem.value, content: content, value: spell.id + "-" + realm}
             } else {
                 return []
             }

@@ -31,56 +31,66 @@ function check_radio(elem) {
     $(elem).prop("checked", true)
 }
 
+function input_change(event) {
+    event.target.setAttribute("value", event.target.value)
+    changed_page = true
+}
+
+function input_slider_change(event) {
+    event.target.setAttribute("data-slider-value", event.target.value)
+    changed_page = true
+}
+
+function checkbox_click(event) {
+    const already_present = $(event.target).is(':checked')
+    if ($(event.target).parents(".custom-control").first().hasClass("custom-radio")) {
+        // Uncheck previous selection if we want to emulate radio buttons
+        $("input[name='" + event.target.name + "']").prop("checked", false).removeAttr("checked")
+    }
+
+    if (already_present) { // Do not check if the same element was selected twice
+        check_radio(event.target)
+    } else {
+        $(event.target).prop("checked", false).removeAttr("checked")
+    }
+    changed_page = true
+}
+
+function select_change(e) {
+    if (e.target.id.includes("-x-"))
+        return
+    let current_value = $(e.target).selectpicker('val')
+    if (!Array.isArray(current_value))
+        current_value = [current_value]
+    $(e.target).children().each((i, elem) => { // Save results in DOM
+        elem.removeAttribute('selected')
+        if (current_value.includes(elem.value)) {
+            $(e.target).children()[i].setAttribute('selected', 'selected')
+        }
+    })
+    changed_page = true
+}
+
+function number_input_key_event() {
+    if (number_filter(this.value, this.getAttribute("min"), this.getAttribute("max"))) {
+        this.oldValue = this.value
+    } else if (this.hasOwnProperty("oldValue")) {
+        this.value = this.oldValue
+    } else {
+        this.value = ""
+    }
+}
+
 function add_save_to_dom_listeners(base = $(document)) {
+    base.find("input").uon("change", input_change)
+    base.find("input.input-slider").uon("change", input_slider_change)
+    base.find("input[type=\"checkbox\"]").uon("click", checkbox_click)
 
-    base.find("input").on("change", event => {
-        event.target.setAttribute("value", event.target.value)
-        changed_page = true
-    })
-    base.find("input.input-slider").on("change", event => {
-        event.target.setAttribute("data-slider-value", event.target.value)
-        changed_page = true
-    })
-    base.find("input[type=\"checkbox\"]").on("click", event => {
-        const already_present = $(event.target).is(':checked')
-        if ($(event.target).parents(".custom-control").first().hasClass("custom-radio")) {
-            // Uncheck previous selection if we want to emulate radio buttons
-            $("input[name='" + event.target.name + "']").prop("checked", false).removeAttr("checked")
-        }
-
-        if (already_present) { // Do not check if the same element was selected twice
-            check_radio(event.target)
-        } else {
-            $(event.target).prop("checked", false).removeAttr("checked")
-        }
-        changed_page = true
-    })
-
-    base.find("select").on("changed.bs.select", (e, clickedIndex, newValue, oldValue) => {
-        if (e.target.id.includes("-x-"))
-            return
-        let current_value = $(e.target).selectpicker('val')
-        if (!Array.isArray(current_value))
-            current_value = [current_value]
-        $(e.target).children().each((i, elem) => { // Save results in DOM
-            elem.removeAttribute('selected')
-            if (current_value.includes(elem.value)) {
-                $(e.target).children()[i].setAttribute('selected', 'selected')
-            }
-        })
-        changed_page = true
-    })
+    base.find("select").uon("changed.bs.select", select_change)
 
     // Install input filters on number inputs
-    base.find("input[type='number']").on("input keydown keyup mousedown mouseup select contextmenu drop", function () {
-        if (number_filter(this.value, this.getAttribute("min"), this.getAttribute("max"))) {
-            this.oldValue = this.value
-        } else if (this.hasOwnProperty("oldValue")) {
-            this.value = this.oldValue
-        } else {
-            this.value = ""
-        }
-    })
+    base.find("input[type='number']").uon("input keydown keyup mousedown mouseup select contextmenu drop",
+        number_input_key_event)
 }
 
 add_save_to_dom_listeners()
@@ -144,7 +154,7 @@ function import_data(src_html, dst_html) {
                     if (old_spell_realm.length > 0) {
                         const realm_split = old_spell_realm[0].id.split("-")
                         const realm = realm_split[realm_split.length - 1]
-                        new_input = row_elem(new_spell[0], difficulty_slider_match[2] + "-" + realm)
+                        new_input = SpellRow.of(new_spell).get(difficulty_slider_match[2] + "-" + realm)
                     }
                 } else if (matching) {
                     // Add rows to the tables until it finds the appropriate field
@@ -298,11 +308,11 @@ function import_data(src_html, dst_html) {
 
     // Update all of the spell values
     $(".spell-value").each((i, elem) => {
-        update_spell_value($(elem))
+        SpellRow.of(elem).update_roll_value()
     })
     // Update all the rolls
     $(".roll-value,.dual_wielding-value").each((i, elem) => {
-        update_roll_value($(elem))
+        RollRow.of(elem).update_roll_value()
     })
 
     // Set the same theme

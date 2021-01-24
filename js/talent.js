@@ -217,12 +217,12 @@ function update_talent(event) {
 
     // Update rolls
     $(".roll-value,.dual_wielding-value").each((i, elem) => {
-        update_roll_value($(elem))
+        RollRow.of(elem).update_roll_value()
     })
 
     // Update spells (for hermetic spells)
     $(".spell-value").each((i, elem) => {
-        update_spell_value($(elem))
+        SpellRow.of(elem).update_roll_value()
     })
 
     // Update armor penalty
@@ -272,12 +272,12 @@ $('.remove-talent').sortable({
 
         // Update rolls
         $(".roll-value,.dual_wielding-value").each((i, elem) => {
-            update_roll_value($(elem))
+            RollRow.of(elem).update_roll_value()
         })
 
         // Update spells (for hermetic spells)
         $(".spell-value").each((i, elem) => {
-            update_spell_value($(elem))
+            SpellRow.of(elem).update_roll_value()
         })
 
         // Update all list selections of talents

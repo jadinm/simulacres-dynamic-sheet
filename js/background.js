@@ -36,12 +36,14 @@ summernote_cfg = {
     lang: 'fr-FR'
 }
 
+function summer_note_listener(we, contents) {
+    // Copy to textarea
+    $(we.target).html(contents)
+    changed_page = true
+}
+
 function add_summernote_listeners(base = $(document)) {
-    base.find('textarea.summernote').on('summernote.change', (we, contents, $editable) => {
-        // Copy to textarea
-        $(we.target).html(contents)
-        changed_page = true
-    });
+    base.find('textarea.summernote').uon('summernote.change', summer_note_listener)
 }
 
 $(_ => {
