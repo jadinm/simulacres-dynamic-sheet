@@ -74,7 +74,8 @@ function compute_remaining_ap() {
         diff = 0
         let name
         const spell = SpellRow.of(elem)
-        const spell_list = spell.get("list")[0].value.trim()
+        const spell_list_div = spell.get("list")
+        const spell_list = spell_list_div.length > 0 ? spell.get("list")[0].value.trim() : ""
         const spell_level = parseInt(spell.get("level")[0].value.trim())
         if (spell_list === hermetic_energy) {
             name = $(elem).find("select.spell-talent").val().trim()
@@ -95,7 +96,7 @@ function compute_remaining_ap() {
                 if (spell_list === priest_energy || spell_list === hermetic_energy) {
                     diff += (divine_spell_ap_cost * inline_realms_nbr) - (inline_realms_nbr - 1) * spell_same_realm_discount
                         - split_spell_realm_modifier // Priest have level 0 spell directly
-                } else if (spell_list.length > 0 && spell_list !== instinctive_magic) {
+                } else if (spell_list !== instinctive_magic) {
                     diff += (mage_spell_ap_cost * inline_realms_nbr) - (inline_realms_nbr - 1) * spell_same_realm_discount
                         - split_spell_realm_modifier // Mages have -4 level spells at start
                 }

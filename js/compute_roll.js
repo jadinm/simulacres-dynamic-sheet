@@ -197,8 +197,8 @@ class SpellRow extends RollRow {
             difficulty = parseInt(talent_level(talent_from_name(talent)))
             roll_reason = talent
         }
-        let spell_distance = this.get("time").val()
-        let spell_duration = this.get("distance").val()
+        let spell_distance = this.get("distance").val()
+        let spell_duration = this.get("time").val()
         difficulty = isNaN(difficulty) ? 0 : difficulty
 
         // Reset all invested energies
@@ -323,31 +323,6 @@ class SpellRow extends RollRow {
         // Update adventure points
         compute_remaining_ap()
     }
-
-    static show_difficulty_builder(input) {
-        const spell = SpellRow.of(input)
-        return value => {
-            const max = slider_max(input)
-            const difficulty_elem = spell.get("difficulty", input)
-            let difficulty // Use the count of the spell casted to compute difficulty
-            if (value < 4)
-                difficulty = -4
-            else if (value <= 6)
-                difficulty = -3
-            else if (value <= 8)
-                difficulty = -2
-            else if (value === 9)
-                difficulty = -1
-            else if (value <= 19)
-                difficulty = 0
-            else if (value <= 29)
-                difficulty = 1
-            else
-                difficulty = 2
-            difficulty_elem.text(difficulty)
-            return value + "/" + max
-        }
-    }
 }
 
 class TalentRollTable extends DataTable {
@@ -449,7 +424,7 @@ class SpellRollTable extends TalentRollTable {
         row.data.find(".hermetic-mr-learning").uon("change", this.update_spell_value)
 
         row.data.find("[id*=\"-difficulty-input\"").each((i, elem) => {
-            activate_slider(elem, this.row_class.show_difficulty_builder)
+            activate_slider(elem, this.show_difficulty_builder)
         })
         row.get("talent").selectpicker()
         row.get("list").selectpicker({sanitize: false})
@@ -462,6 +437,42 @@ class SpellRollTable extends TalentRollTable {
             update_spell_select(elem)
         })
         compute_remaining_ap()
+    }
+
+    show_difficulty_builder(input) {
+        const spell = SpellRow.of(input)
+        return value => {
+            const max = slider_max(input)
+            const difficulty_elem = spell.get("difficulty", input)
+            let difficulty // Use the count of the spell casted to compute difficulty
+            if (value < 4)
+                difficulty = -4
+            else if (value <= 6)
+                difficulty = -3
+            else if (value <= 8)
+                difficulty = -2
+            else if (value === 9)
+                difficulty = -1
+            else if (value <= 19)
+                difficulty = 0
+            else if (value <= 29)
+                difficulty = 1
+            else
+                difficulty = 2
+            difficulty_elem.text(difficulty)
+            return value + "/" + max
+        }
+    }
+}
+
+class PsyRollTable extends SpellRollTable {
+
+    show_difficulty_builder(input) {
+        const spell = SpellRow.of(input)
+        return value => {
+            spell.get("difficulty", input).text(value)
+            return ""
+        }
     }
 }
 
@@ -536,4 +547,5 @@ $(_ => {
     new TalentRollTable($("#roll-table"))
     new TalentRollTable($("#dual_wielding-table"))
     new SpellRollTable($("#spell-table"))
+    new PsyRollTable($("#psy-table"))
 })
