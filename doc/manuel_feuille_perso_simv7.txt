@@ -1,0 +1,602 @@
+.. |mdash| unicode:: U+2014
+.. |quad| unicode:: U+2003
+.. |nbsp| unicode:: U+00A0
+    :trim:
+.. |n| unicode:: U+00A0
+    :trim:
+.. |tab| unicode:: U+0009
+.. |i| unicode:: U+24D8
+
+.. role:: simb
+
+.. |corps| replace:: :simb:`a`
+.. |instinct| replace:: :simb:`z`
+.. |coeur| replace:: :simb:`e`
+.. |esprit| replace:: :simb:`r`
+.. |action| replace:: :simb:`s`
+.. |perception| replace:: :simb:`q`
+.. |desir| replace:: :simb:`d`
+.. |resistance| replace:: :simb:`i`
+.. |humain| replace:: :simb:`v`
+.. |animal| replace:: :simb:`c`
+.. |vegetal| replace:: :simb:`x`
+.. |mineral| replace:: :simb:`w`
+.. |mecanique| replace:: :simb:`b`
+.. |neant| replace:: :simb:`n`
+.. |puissance| replace:: :simb:`t`
+.. |precision| replace:: :simb:`u`
+.. |rapidite| replace:: :simb:`y`
+
+.. |move| image:: images/move.png
+            :height: 2ex
+            :align: bottom
+
+.. |herm| image:: images/hermetique.png
+            :height: 2ex
+            :align: bottom
+
+.. |cogs| image:: images/cogs.png
+            :height: 2ex
+            :align: bottom
+
+.. To compile (minimal to get the layout):
+..  $ rst2pdf manuel_feuille_perso_simv7.txt \
+..      -s sim_styles.txt \
+..      -o manuel_feuille_perso_simv7.pdf
+..
+.. With usual options:
+..  $ rst2pdf manuel_feuille_perso_simv7.txt \
+..      -s sim_styles.txt \
+..      -e preprocess \
+..      --use-floating-images \
+..      --real-footnotes \
+..      -o manuel_feuille_perso_simv7.pdf
+
+.. footer:: 
+    
+ .. class:: ccfooter
+
+  +-----------------------------+-----------------------------------------------------------------------+
+  |                             | .. class:: small                                                      |
+  | .. image:: images/cc-by.jpg |                                                                       |
+  |     :align: center          |   Sauf mention contraire, ce document est placé sous licence          |
+  |                             |   Creative Commons `Attribution 4.0                                   |
+  |                             |   International (CC BY 4.0)                                           |
+  |                             |   <https://creativecommons.org/licenses/by/4.0/deed.fr>`_             |
+  +-----------------------------+-----------------------------------------------------------------------+
+ 
+ 
+ 
+.. image:: images/entete.jpg
+    :width: 2000px
+    :align: center
+
+.. class:: center
+
+  **Une réalisation de Mathieu Jadin, mode d'emploi par Karl Karas**
+
+  **Janvier 2021**
+
+.. raw:: pdf
+    
+    Spacer 0,0
+
+**Versions**
+
+- 0.1, first v7 multi-complex version
+
+----
+
+.. image:: images/C.png
+    :height: 6.6ex
+    :align: left
+
+ette feuille permet de gérer un personnage, y compris la plupart des Tests. Ce
+document est librement inspiré du mode d'emploi de la feuille pour Simulacres
+v8, écrit par Pierre Rosenthal et disponible `ici
+<https://www.facebook.com/groups/Simulacres/permalink/2762370807348641/>`_.
+
+La version 8 de Simulacres étant particulièrement destinée à l'initiation et
+l'introduction dans le monde du jeu de rôles de nouveaux joueuses et joueurs (y
+compris dans le rôle de meneuse ou meneur de jeu), nous avons choisi pour la v7
+d'inclure dans la fiche un bon nombre d'extensions et de règles optionnelles
+dont cette version de Simulacres s'est étoffée au cours de sa longue histoire.
+Ainsi, les personnes intéressées pourront disposer d'une boite à outils assez
+complète qui donne la mesure des potentialités du système, tout en ayant la
+possibilité d'ignorer simplement les éléments dont ils n'ont pas besoin (pour
+la plupart).
+
+La fiche v7 supporte donc les extensions et règles optionnelles suivantes :
+
+- règles de campagne v7 décrites dans le hors série n°10 de Casus Belli (CB HS
+  10), page 32, ainsi que la gestion complètement automatisée du décompte des
+  PAs;
+- utilisation des Points de Vie localisés, ainsi que la localisation des
+  armures, du talent de bouclier et des points de malaise associés, décrite
+  dans CB HS 10, page 37 et 38;
+- usage optionnel des énergies de base décrit dans le CB HS 10, page 38
+- la liste des talents de Sangdragon, décrits dans le hors série 11 de Casus
+  Belli (CB HS 11);
+- les énergies et le système de magie complet de Sangdragon, décrits dans le CB
+  HS 11;
+- les pouvoirs de la Voie du Moine et l'énergie Shaolin/Ki/whatever, décrits
+  dans `le Petit Capharnaüm n°25
+  <http://joueursdurepaire.free.fr/casus_belli/cb_LPC25.html>`_, paru dans le
+  Casus Belli n°98, p.76;
+- une énergie « extraordinaire » supplémentaire qui peut servir à implémenter
+  un compteur pour jouer des pouvoirs supplémentaires, ou le vaudou d'un
+  certain univers pirates, ou encore l'Héroïsme de la v8;
+- à terme, la magie originale et les trois énergies spéciales décrites dans
+  Nuisance et Nature, tirées du `Petit Capharnaüm n° 17
+  <http://joueursdurepaire.free.fr/casus_belli/cb_LPC17.html>`_ (Casus Belli
+  86, p.84, en avril 1995);
+- à terme, les pouvoir psioniques et les super-pouvoirs décrits dans le HS 10.
+
+Le système construit par Mathieu Jadin permet toutefois de construire
+virtuellement n'importe quelle combinaison de ces règles pour obtenir la fiche
+qui correspondra le mieux à vos besoins. Pour plus d'informations, rendez-vous
+sur son `dépôt github <https://github.com/jadinm/simulacres-dynamic-sheet>`_.
+
+.. raw:: pdf
+
+    PageBreak twoColumn
+
+Préparation du navigateur
+-------------------------
+
+Tous les changements effectués dans la fiches ne seront *pas* enregistrés par
+défaut. Pour ce faire, il faut cliquer sur le bouton « sauvegarder » dans le
+bas de la fiche. Comme il s'agit d'une simple page web ouverte dans votre
+navigateur, ce bouton provoque *le téléchargement* de la fiche modifiée. Par
+défaut, dans la plupart des navigateurs, le fichier va s'enregistrer
+silencieusement dans votre dossier de téléchargement.
+
+Pour pouvoir sauvegarder les feuilles où vous le désirez, il faut parfois
+redéfinir certains paramètres. Par exemple, pour Chrome : **Paramètres >
+Paramètres avancés > Téléchargements**. Cochez « Toujours demander où
+enregistrer les fichiers ».
+
+Description générale et caractéristiques
+----------------------------------------
+
+La partie supérieure de la fiche permet d'enregistrer les paramètres généraux
+de votre personnage (nom, âge, métier, etc.), ainsi que ses caractéristiques.
+Comme la fiche s'adresse à des joueurs confirmés, nous avons choisi de
+présenter Composantes et Moyens sous la forme classique de la matrice 4x4
+propre à Simulacres v7 (cela correspond aussi à la nouvelle fiche de personnage
+parue pour les 10 ans de Simulacres dans le Casus Belli 96, p.87, en juillet
+1996).
+
+Le nom des caractéristiques (Composantes, Moyens, Règnes et Énergies) est
+indiqué par des info-bulles quand on passe le curseur de la souris sur les
+symboles bien connus des joueurs de la v7.
+
+Le minimum et maximum des caractéristiques est implémenté. À la création du
+personnage c’est aux joueuses et joueurs de vérifier que les totaux sont
+corrects avec leur MJ (ex. 18 points à répartir entre les 4 composantes).
+
+Vous pouvez importer une image pour illustrer votre personnage via le bouton
+« image ».
+
+Pour l'instant, laissons de côté les 2 champs notés « PAs non dépensés » et «
+PC », nous y reviendrons plus loin.
+
+Choisir ses onglets
+-------------------
+
+La feuille supporte donc de nombreuses règles optionnelles et possibilités
+supplémentaires. Ces fonctionnalités sont pour la plupart implémentées dans des
+onglets visibles dans la partie inférieure de la feuille. Selon ce que vous
+souhaitez utiliser, vous pourrez choisir d'afficher ou de cacher l'un ou
+l'autre de ces onglets en cliquant sur ce bouton |cogs| |n| situé à droite des
+intitulés des onglets.
+
+Onglet États
+------------
+
+Le choix a donc été fait d'utiliser les règles optionnelles des Points de Vie
+localisés, ainsi que du malaise, de la localisation des armures et de
+l'utilisation du talent de bouclier. Dans cette version de la fiche v7 il
+n'est pas possible de revenir aux Points de Vie non-localisés, mais le dépôt
+Github de Mathieu permet de télécharger d'autres versions, ou même d'en
+produire de nouvelles, complètement adaptées à vos besoins et envies (`plus
+d'info <https://github.com/jadinm/simulacres-dynamic-sheet>`_).
+
+La valeur maximum de chaque curseur est ajustée automatiquement en tenant
+compte des Composantes et des Moyens. Toutefois, si vous payez en PA pour
+augmenter les PS ou EP, vous pouvez manuellement augmenter le maximum en
+cliquant sur le nom du curseur. De la même manière vous pouvez diminuer le
+maximum en cas de pertes « définitives », par exemple dans une zone lors d'une
+blessure critique mal soignée.
+
+Onglet Historique
+-----------------
+
+Vous pouvez y écrire ou coller la description et / ou l’historique de votre
+personnage.
+
+Onglet Notes
+------------
+
+Vous pouvez créer et écrire des notes individuelles, par séance ou par thème de
+votre choix, et rechercher parmi les notes.
+
+Onglet PA
+---------
+
+Cet onglet est l'un des plus complexe de la fiche v7, mais aussi l'un des plus
+utile lorsqu'on joue en campagne. L'idée est d'avoir un endroit où l'on indique
+le nombre de PAs attribués depuis la création du personnage par le ou la MJ, et
+de décompter automatiquement de celui-ci toutes les évolutions que l'on peut
+repérer dans la fiche, comme le passage d'un talent d'une colonne à une autre
+ou l'augmentation du score d'une composante, d'un moyen ou d'une énergie.
+
+Ceci permet de calculer automatiquement le compteur en haut de la fiche
+intitulé « PAs non dépensé» où est indiqué le nombre de PAs disponibles pour
+les futures évolutions du personnage (si ce montant est négatif, c'est que vous
+avez effectué une évolution non autorisée par les règles avec les PAs à
+disposition).
+
+La fiche prend le parti pris d'utiliser les règles de campagne pour la création
+du personnage : le MJ attribue un certain de nombre de PAs au départ, qui
+servent à faire monter les talents de base du personnage (HS 10, p. 32). Pour
+que le calcul des PAs restant soit exact dans le haut de la fiche, il faut donc
+préciser dans cet onglet comment l'investissement des ces PAs « de départ » a
+été fait. La fiche permet de le faire le plus simplement possible, mais une
+certaine complexité a été nécessairement introduite pour tenir compte de la
+multiplicité des cas qui peuvent se présenter.
+
+De manière générale, le calcul des coûts d'évolutions en PAs est repris et mis
+à jour dans les info-bulles des éléments concernés, par exemple
+individuellement pour les Talents et de façon agrégée pour l'ensemble des
+composantes, des moyens, des règnes et énergies, etc.
+
+Onglet Équipement
+-----------------
+
+Encore un onglet très chargé, mais uniquement pour refléter au mieux les
+multiples possibilités du jeu.
+
+Tout d'abord la première ligne permet d'enregistrer le nerf de la guerre :
+l'argent ! Les unités sont celles de Sangdragon, mais les compteurs peuvent
+être utilisés pour n'importe quel monnaie en ignorant les intitulés.
+
+Vous pouvez ajouter quatre types d’équipement.
+
+1. Focus magique (HS 10, p.42 et HS11, p.24) avec une description, sa charge
+   maximale et sa charge actualisée
+2. Équipement à charge, qui peut servir à enregistrer les objets magiques à
+   charge, ou tout autre objet dont l'usage est limité d'une manière ou d'une
+   autre
+3. Équipement générique qui permet d'enregistrer le contenu de son sac
+   d'aventurier (pas de règle d'encombrement ? :-))
+4. Équipement à solidité limité ou nombre d'usage fixé permet de noter les
+   objets particuliers qui peuvent se briser (comme une arme qui se brise dans
+   certaines circonstances ou après 2 échecs critique comme dans la v8) ou dont
+   on ne peut faire usage d'une certain nombre de fois (comme un parchemin
+   enchanté, ou une fiole contenant 3 doses de contre-poison par exemple)
+
+A chacun de voir le meilleur parti à tirer des ces possibilités pour encoder au
+mieux son équipement.
+
+Onglet Talents
+--------------
+
+On y gère les Talents du personnage, comme dans les règles de campagne (HS 10,
+p.32). La liste de Talents pré-encodés correspond à celle de Sangdragon (HS 11,
+p.9), mais elle est complètement modulable et adaptable à n'importe quel
+univers (il est même possible d'écrire un greffon pour la particulariser
+automatiquement à son propre univers).
+
+Les niveaux de Talents sont représentés par différents cadres intitulés X, -4,
+-2, 0, 1, 2 et 3. Lorsque l'évolution du personnage le permet, la valeur d'un
+Talent peut monter. On peut alors le déplacer dans le cadre correspondant en
+cliquant sur la croix |move| |nbsp| située à gauche de son nom, puis en
+maintenant le bouton de la souris enfoncé et en tirant le Talent jusqu'à sa
+nouvelle place.  Celui-ci y apparaîtra alors en rouge pour montrer qu'il s'agit
+d'une évolution du personnage et son niveau initial restera indiqué à droite de
+son nom. Le résumé des évolution du Talent sera indiqué dans l'info-bulle
+associée.
+
+Lorsqu'on déplace ainsi un Talent, les PAs nécessaires sont décomptés
+automatiquement du nombre total indiqué dans l'onglet PA et le nouveau total
+est répercuté sur le compteur des PAs restant en haut de la fiche. On sait
+ainsi en permanence si on a suffisamment de PA pour effectuer une évolution.
+
+Pour ajouter un Talent, cliquez sur le + dans le cadre voulu (à négocier avec
+le ou la MJ), puis indiquez simplement son nom à droite de la croix |move|.
+
+Pour supprimer un Talent, il suffit de le déplacer sur un bouton « poubelle »
+situé en bas des cadres de niveaux.
+
+Onglet Tests
+------------
+
+Dans cet onglet, vous pouvez gérer les Tests les plus courants.
+
+Si vous faites vous-même vos calculs, vous y trouvez un bouton pour lancer
+2dés, voire un 3ème en cas de besoin. Les deux dés du lancer apparaissent, vous
+pouvez cliquer sur chacun pour le relancer, au cas où vous en auriez la
+possibilité (comme un système de Point de Chance fait maison ou l'importation
+de l’énergie d'Héroïsme dans la v7 par exemple).
+
+En revanche, si vous utilisez souvent les mêmes Talents, vous pouvez créer des
+lignes pour mémoriser des Tests courants et en avoir aussitôt les résultats.
+Toutefois, tous les Talents concernés doivent exister dans l’onglet Talents
+pour pouvoir être utilisé dans les tests courants.
+
+Pour créer un Test :
+
+1. créez une ligne en cliquant sur le **(+)**;
+2. dans la case ainsi créée, utilisez le menu déroulant pour y insérer le
+   Talent concerné (ou rien du tout, voir plus bas);
+3. définissez la formule en sélectionnant les symboles de composantes, moyens
+   et règnes;
+4. écrivez une description qui peut comporter certains termes qui seront
+   interprétés par la fiche au moment de lancer les dés.
+
+Formule
+^^^^^^^
+
+Le bloc formule permet de choisir une Composante, un Moyen, un Règne pour votre
+Test. N'oubliez pas qu'à Simulacres, aucune formule n'est écrite dans le marbre
+et que les joueurs et leur MJ peuvent faire preuve d'imagination dans ce
+domaine, en fonction des circonstances ou des décisions des uns et des autres.
+
+Indiquez la formule utilisée le plus souvent. Par exemple, pour combattre au
+sabre, à droite du Talent Sabre, vous indiquerez Corps |corps| + Action
+|action| + Mécanique |mecanique|. Comme la formule n’est pas figée pour
+autant, avant chaque Test vous pouvez la modifier pour, par exemple, utiliser
+Instinct |instinct| pour réagir rapidement à une attaque surprise d'un
+squelette surgi de derrière une stalagmite dans la Grotte du Crâne.
+
+Comme il existe des Tests sans Règne comme regarder au loin sans objectif
+précis, vous pouvez re-cliquer sur le Règne pour retirer la coche, comme sur
+tout autre choix. Tout choix vide vaut 0.
+
+Pour des raisons de place, il n’y a pas d’info-bulle sur les symboles, il
+faudra donc les connaître !
+
+Description
+^^^^^^^^^^^
+
+Indiquez ici le résultat général du Test. Il sera inscrit dans la fenêtre de
+résultat. Si vous y inscrivez « MR » ou des descriptions d'effets entre crochets
+telles que « [A] » ou « [D] PV », ces termes seront substitués dans la
+fenêtre du résultat par leur valeur, déterminée selon le résultat du jet.
+
+**Exemple :** Talent Épée Longue, Formule |corps| + |action| + |mecanique|,
+Description : Dégâts de [F] PV et [A] PS.
+
+Effectuer le Test
+^^^^^^^^^^^^^^^^^
+
+Cliquez sur les 2 petits dés dessinés entre la formule et la description. À
+leur gauche, on peut voir la valeur du test sans ajustement.
+
+Si le personnage n’a aucune Énergie de base, la fenêtre avec le résultat
+apparaît aussitôt. Deux curseurs permettent alors d'indiquer :
+
+- un modificateur variant selon les circonstances, comme par exemple une
+  difficulté supplémentaire imposée par la ou le MJ ou un malus lors d'un
+  combat contre plusieurs adversaires;
+- un modificateur d'effet, qui sert à matérialiser, par exemple, la protection
+  d'une armure sur votre adversaire, mais qui peut affecter le calcul des
+  effets pour toute autre raison.
+
+Si le personnage dispose d'au moins 1 pt dans une Énergie de base, une fenêtre
+intermédiaire apparait, pour demander si le personnage active un ou plusieurs
+points dans les Énergies qu’il possède (c'est à la joueuse ou au joueur de
+limiter cet investissement en fonction des PS et PV actuel de son personnage).
+Pour supporter la règle de l'utilisation alternative des énergies (HS 10,
+p.38), il y deux lignes permettant de spécifier quels points on investi dans
+quelle énergie pour augmenter la valeur du test, ou pour profiter d'un des
+effets alternatif.  Une fois l'investissement défini, on valide alors pour
+obtenir le résultat. Tous les paramètres sont alors intégrés et le résultat
+calculé, ainsi que les effets en relançant 2 dés et en utilisant le tableau
+standard des effets (qui est d'ailleurs repris dans un onglet).
+
+Dans la fenêtre du Lancer, il est toujours possible de cliquer sur les petits
+dés pour les relancer, ce qui provoque l'adaptation automatique de tous les
+résultats calculés. Ceci n'est évidemment à utiliser que si cette possibilité
+existe à votre table.
+
+Cas particuliers : Duels
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+Si deux personnages s’affrontent en Duel, celui qui obtient la plus grande MR
+l'emporte. Lorsque l'adversaire combat avec un talent dont la valeur est au
+moins +1, le vainqueur soustraira la MR du vaincu à sa propre MR. Il s'agit
+d'une règle optionnelle fortement conseillée et parue dans `le Petit Capharnaüm
+n° 19 <http://joueursdurepaire.free.fr/casus_belli/cb_LPC19.html>`_ (Casus
+Belli 90, p.45, en décembre 1995).
+
+Exemple : Arthur donne un coup de poing à Bernard et obtient une MR de 8.
+Bernard réussit aussi mais avec un MR de 2. Comme Bernard est un boxeur
+professionnel (son Talent de Boxe est à +1), on soustrait 2 à la MR d’Arthur
+(avec le second curseur sur la fenêtre du Lancer) et cela donnera le résultat
+final du Test.
+
+Astuce
+^^^^^^
+
+Vous pouvez créer un Test « vide », sans Talent précis. Ajoutez juste un Test
+(+) et remplissez la formule Cela vous permettra d’avoir une ligne pour un jet
+ponctuel dont vous remplirez la formule à chaque fois. Par exemple Corps
+|corps| + Résistance |resistance| + Humain |humain| pour résister à un poison.
+Nul besoin de créer une ligne à chaque fois, vous pourrez réutiliser la même.
+
+Onglet Magie
+------------
+
+Cet onglet est construit autour de la magie décrite dans SangDragon, HS 11, il
+permet d'en encoder pratiquement tous les aspects.
+
+Magie de SangDragon
+^^^^^^^^^^^^^^^^^^^
+
+Toutes les Énergies sont présentes avec un compteur pour indiquer le niveau
+atteint par le personnage.  Les restrictions liées à la **Magie Élementaire**
+ne sont pas directement implémentées car c'est une option; c'est à la joueuse et
+à sa MJ de se mettre d'accord pour ne pas monter trop rapidement une Énergie
+qui dépend d'une autre si ces règles sont utilisées.
+
+Les compteurs, optionnels, de **Magie Noire** et de **Malmagite** sont
+également présents.
+
+Enfin, une liste évolutive permet d'ajouter les sorts maîtrisés, avec le calcul
+de leur tests respectifs, ainsi que la gestion de leur évolution et de leurs
+effets dans une fenêtre de lancer, comme pour les lancers courants de l'onglet
+Tests.
+
+Comme pour les Talents, on peut ajouter un sort en cliquant sur le **(+)** (et
+on peut également les ré-ordonner en utilisant la croix |move| |nbsp| de la
+même manière).  Chaque sort porte un nom et est associé à une Énergie à un
+certain niveau (pour pouvoir le lancer, il faut évidemment avoir atteint ce
+niveau dans cette Énergie Magique).
+
+La **Difficulté** est le compteur qui caractérise la maîtrise du sort par le
+mage : lorsqu'un sort est appris, sa Difficulté est de -4, puis elle va
+augmenter à chaque réussite selon une progression décrite dans les règles du HS
+11. Le curseur Difficulté permet d'ajuster celle-ci (mais pas de manière
+automatique, ce qui permet de faire des essais de lancer « à blanc ») afin que
+la difficulté soit prise en compte dans les lancers.
+
+La **Formule** se défini comme pour les Tests, mais avec l'importante
+spécificité que certains sorts peuvent s'appliquer à plusieurs Règnes et que
+les règles précisent qu'il faut alors les considérer comme *des sorts
+différents*, particularisés chacun à un règne spécifique et dont l'évolution se
+fera en fonction de leur utilisation. Pour éviter de dupliquer des lignes
+similaires, la fiche supporte d'indiquer plusieurs Règnes, qui seront alors
+associés chacun à une difficulté spécifique, à une valeur de test non-modifiée
+adaptée et à un bouton différent pour lancer un test.
+
+On peut ensuite décrire les autres caractéristique du sort que sont le temps
+d'invocation, la distance d'action et les effets précis. Comme dans l'onglet
+Tests, ces champs peuvent comporter l'indication « |n| MR |n| » ou des
+caractérisations destinées à être utilisées avec la tables d'effets comme par
+exemple « |n| [A] PV et [E] PS |n| » ou « |n| [D] minutes |n| ». Ces valeurs
+seront calculées automatiquement au moment du test.
+
+Comme pour les Lancer courants, il sera possible de décrire l'investissement
+traditionnel dans les Énergies de Bases, mais aussi suivant les règles
+optionnelles, et avec également les adaptations spécifiques pour la Magie comme
+la diminution de la durée de concentration ou l'amélioration des effets (durée
+ou portée multipliée, etc.).
+
+Magie Hermétique
+^^^^^^^^^^^^^^^^
+
+La **Magie Hermétique**, décrite dans le HS 10, p.41 et reprise dans le HS 11,
+est également supportée par cet onglet, via l'Énergie **Hermétique** |herm|.
+
+En Magie Hermétique, les sorts sont considérés comme des Talents presque comme
+les autres et s'utilisent toujours avec la même formule : Corps |corps| +
+Action |action| + Humain |humain| + Sort + Difficulté de Lancer. C'est une
+simplification par rapport à la magie de SangDragon, mais il y a toutefois
+quelques petites complexités additionnelles à considérer.
+
+Lorsqu'un mage hermétique acquiert un sort, il lui faudra d'abord ajouter ce
+sort dans ses Talents (dans l'onglet Talents). En fonction de la MR de son test
+d'apprentissage, il placera ce Talent dans la colonne adaptée selon les règles
+de la page 41 du HS 10 (attention aux niveaux « intermédiaires », qui
+descendent d'une colonne et inférieurs à -4, qui vont dans la colonne X).
+
+Il ajoute ensuite le sort dans l'onglet Magie en sélectionnant l'Énergie
+**Hermétique** |herm|, ce qui va changer l'aspect des champs descriptifs pour
+lui permettre de sélectionner le Talent créé et fixera directement la formule.
+Il devra alors indiquer exactement la *MR du test d'apprentissage* à droite de
+la formule, ainsi que la *Difficulté de lancer* précisée dans la description du
+sort pour la Magie Hermétique. De cette manière, les tests seront calculés
+correctement et le décompte des PAs sera adapté.
+
+Magie Rapide
+^^^^^^^^^^^^
+
+La **Magie Rapide** du HS 11, p. 28 peut évidemment être très facilement
+simulée à l'aide de cet onglet également (essentiellement pour avoir la trace
+des caractéristiques des sorts, mais on pourrait aussi simplement utiliser les
+Talents ordinaires).
+
+Nuisance et Nature
+^^^^^^^^^^^^^^^^^^
+
+Cette règle optionnelle, parue dans le `Petit Capharnaüm n° 17
+<http://joueursdurepaire.free.fr/casus_belli/cb_LPC17.html>`_ (Casus Belli 86,
+p.84, en avril 1995) est très proche de la Magie Rapide.  Elle propose 3
+nouvelles Énergies magiques : le **Bien**, le **Mal** et la **Nature**. Ces
+énergies sont associées à des sorts que l'on utilise sans lancer de dés, juste
+en dépensant des PS ou des EP. Ces trois Énergies sont incluses d'office dans
+la liste des Énergies Magiques pour permettre de disposer d'une liste des sorts
+qui s'y rapportent.  Lorsqu'on sélectionne l'une de ces trois énergies, les
+champs Formules et Difficulté disparaissent.
+
+Encore ?
+^^^^^^^^
+
+Pour encore plus de particularisation, Mathieu décrit sur son `dépôt github
+<https://github.com/jadinm/simulacres-dynamic-sheet>`_, comment produire un
+greffon spécifique pour un univers donné, permettant, par exemple, d'ajouter ou
+de supprimer des énergies magiques.
+
+Onglet Ki
+---------
+
+Cet onglet est destiné à ceux qui souhaitent utiliser le complément de règle «
+|n| La Voie du Moine |n| », décrit dans `le Petit Capharnaüm n°25
+<http://joueursdurepaire.free.fr/casus_belli/cb_LPC25.html>`_, paru dans le
+Casus Belli n°98, p.76, en octobre 1996.
+
+Les pratiquants de cette discipline doivent investir dans une énergie
+spécifique appelée « |n| Shaolin |n| » par défaut, mais que l'on peut nommer
+selon l'univers concerné. Ils devront aussi ajouter le Talent **Méditation**
+dans l'onglet Talents, au niveau adapté à leurs investissements (idéalement, +1
+à la création, mais c'est un choix à faire).
+
+Chaque pouvoir de Moine se gère comme un Talent, dans l'onglet Talent, mais
+aussi par une ligne supplémentaire dans l'onglet Ki. Comme pour les autres
+onglets, il suffit de cliquer sur **(+)**, puis de sélectionner le Talent, et
+enfin de préciser le niveau d'énergie de celui-ci, qui influencera la puissance
+des effets. La fiche gère automatiquement les dépenses de PAs faites pour
+augmenter la valeur du Talents (en le changeant de colonne), mais aussi celle
+requises pour faire progresser le niveau de celui-ci (en utilisant le compteur
+de niveau). Les changements dans la description des effets sont par contre à
+préciser spécifiquement lors de chaque évolution de niveau en fonction du
+pouvoir.
+
+Onglet Psy
+----------
+
+A venir, pour supporter les Pouvoirs Psioniques, décrits dans le HS 10, p.47.
+
+Onglet Super
+------------
+
+A venir, pour supporter les Pouvoirs de Super-Héros, décrits dans le HS 10,
+p.46.
+
+Encore des détails
+------------------
+
+Greffons
+^^^^^^^^
+
+Cette fonctionnalité est destinée aux utilisateurs avertis, plutôt les MJs, et
+relativement versés en informatique.
+
+La faculté d'importer des greffons, est implémentée pour permettre une
+particularisation complète de la feuille de personnage. Ce greffons, qui sont
+essentiellement des fichiers HTML, sont destinés à *ajouter, modifier  ou
+remplacer des onglets*, ou encore de *changer la zone principale des Composantes,
+Moyens, Règnes et Énergies de base*. Elle permet donc de pratiquement de
+construire complètement sa propre fiche.
+
+Des exemples et de la documentation sont donnés sur le `dépôt github de Mathieu
+<https://github.com/jadinm/simulacres-dynamic-sheet>`_.
+
+Détails
+^^^^^^^
+
+Un petit bouton noté |i| en bas à droite de la fiche permet d'obtenir les détails de
+génération de la feuille : numéro de version, options de compilation, greffons
+présent, etc.
