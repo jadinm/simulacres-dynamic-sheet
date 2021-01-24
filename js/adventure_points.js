@@ -70,13 +70,20 @@ function update_numeric_input_select(select, input_selector) {
         new_image.attr("width", "1em")
         new_image.attr("height", "1em")
 
-        /* Find energy name, either in a tooltip or in the label on in the id without other alternative */
+        /* Find energy name, either in a tooltip, in the label, in a side input
+         * or in the id without other alternative
+         */
         const div = $(elem).parents("[title]").first()
         let name = div.attr("title")
         if (!name || name.length === 0)
             name = div.attr("data-original-title")
         if (!name || name.length === 0) {
             name = $("label[for=\"" + elem.id + "\"").text()
+            if (name)
+                name = name.trim()
+        }
+        if (!name || name.length === 0) {
+            name = $("input[id=\"" + elem.id + "-label\"").val()
             if (name)
                 name = name.trim()
         }
