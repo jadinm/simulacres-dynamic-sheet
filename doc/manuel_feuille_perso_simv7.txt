@@ -97,7 +97,7 @@ v8, écrit par Pierre Rosenthal et disponible `ici
 <https://www.facebook.com/groups/Simulacres/permalink/2762370807348641/>`_.
 
 La version 8 de Simulacres étant particulièrement destinée à l'initiation et
-l'introduction dans le monde du jeu de rôles de nouveaux joueuses et joueurs (y
+l'introduction dans le monde du jeu de rôle de nouveaux joueuses et joueurs (y
 compris dans le rôle de meneuse ou meneur de jeu), nous avons choisi pour la v7
 d'inclure dans la fiche un bon nombre d'extensions et de règles optionnelles
 dont cette version de Simulacres s'est étoffée au cours de sa longue histoire.
@@ -110,7 +110,7 @@ La fiche v7 supporte donc les extensions et règles optionnelles suivantes :
 
 - règles de campagne v7 décrites dans le hors série n°10 de Casus Belli (CB HS
   10), page 32, ainsi que la gestion complètement automatisée du décompte des
-  PAs;
+  Points d'Aventure (PAs);
 - utilisation des Points de Vie localisés, ainsi que la localisation des
   armures, du talent de bouclier et des points de malaise associés, décrite
   dans CB HS 10, page 37 et 38;
@@ -346,9 +346,9 @@ domaine, en fonction des circonstances ou des décisions des uns et des autres.
 Indiquez la formule utilisée le plus souvent. Par exemple, pour combattre au
 sabre, à droite du Talent Sabre, vous indiquerez Corps |corps| + Action
 |action| + Mécanique |mecanique|. Comme la formule n’est pas figée pour
-autant, avant chaque Test vous pouvez la modifier pour, par exemple, utiliser
-Instinct |instinct| pour réagir rapidement à une attaque surprise d'un
-squelette surgi de derrière une stalagmite dans la Grotte du Crâne.
+autant, avant chaque Test vous pouvez la modifier dans le but de, par exemple,
+utiliser Instinct |instinct| afin de réagir rapidement à l'attaque surprise
+d'un squelette surgi de derrière une stalagmite dans la Grotte du Crâne.
 
 Comme il existe des Tests sans Règne comme regarder au loin sans objectif
 précis, vous pouvez re-cliquer sur le Règne pour retirer la coche, comme sur
@@ -491,7 +491,7 @@ La **Magie Hermétique**, décrite dans le HS 10, p.41 et reprise dans le HS 11,
 est également supportée par cet onglet, via l'Énergie **Hermétique** |herm|.
 
 En Magie Hermétique, les sorts sont considérés comme des Talents presque comme
-les autres et s'utilisent toujours avec la même formule : Corps |corps| +
+les autres et s'utilisent toujours avec la même formule : Esprit |esprit| +
 Action |action| + Humain |humain| + Sort + Difficulté de Lancer. C'est une
 simplification par rapport à la magie de SangDragon, mais il y a toutefois
 quelques petites complexités additionnelles à considérer.
