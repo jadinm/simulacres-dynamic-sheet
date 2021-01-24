@@ -108,7 +108,7 @@ $(".waves-ripple").remove()
 function reset_tab_selection(html) {
     html.find("#tabs .tab-pane").removeClass("show").removeClass("active")
     html.find("#status-tab").addClass("show").addClass("active")
-    const tab_buttons = html.find("#nav-tabs a")
+    const tab_buttons = html.find("#nav-tabs a[role=\"tab\"]")
     tab_buttons.removeClass("active").each((i, elem) => {
         elem.setAttribute("aria-selected", "true")
     })
@@ -355,7 +355,14 @@ function insert_or_replace_block(block, parent, overwrite = true) {
         if (overwrite)
             $(block).replaceAll(block_selector)
     } else {
+        let last_child = null
+        if (parent[0].id === "nav-tabs") { // Keep setting button last
+            last_child = parent.children().last()
+        }
         parent.append(block)
+        if (last_child) {
+            parent.append(last_child)
+        }
     }
 }
 
@@ -387,6 +394,9 @@ function insert_or_replace_plugins(plugin, overwrite = true) {
 
     // Update plugin list
     build_plugin_list()
+
+    // Update tab list
+    build_tab_hide_list()
 }
 
 const plugin_dispose_methods = {}
@@ -403,6 +413,8 @@ function remove_plugin(plugin_id) {
     }
     // Update plugin list
     build_plugin_list()
+    // Update list of tabs
+    build_tab_hide_list()
 }
 
 /* Import Character page data */

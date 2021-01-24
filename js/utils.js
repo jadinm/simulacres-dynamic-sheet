@@ -91,6 +91,32 @@ $("#dark-mode").on("click", _ => {
     enable_dark_mode()
 })
 
+// Tab customization
+function build_tab_hide_list() {
+    const parent_list = $("#hide-tabs-tabs")
+    parent_list.children().slice(1).remove()
+    const to_clone = parent_list.children().first()
+    $("#nav-tabs a[role=\"tab\"]").each((i, elem) => {
+        const list_item = to_clone.clone(false, false)
+        list_item.removeClass("d-none").addClass("d-flex")
+        list_item.find(".show-tab").on("click", _ => {
+            $(elem).removeClass("d-none")
+            list_item.find(".show-tab").addClass("d-none")
+            list_item.find(".hide-tab").removeClass("d-none")
+        })
+        list_item.find(".hide-tab").on("click", _ => {
+            $(elem).addClass("d-none")
+            list_item.find(".hide-tab").addClass("d-none")
+            list_item.find(".show-tab").removeClass("d-none")
+        })
+        list_item.children().first().text($(elem).text().trim())
+        console.log($(elem))
+        console.log($(elem).text().trim())
+        console.log(list_item)
+        parent_list.append(list_item)
+    })
+}
+
 function number_filter(value, min, max) {
     return /^-?\d*$/.test(value) && (value === "" || max == null || isNaN(max) || parseInt(value) <= max)
         && (value === "" || min == null || isNaN(min) || parseInt(value) >= min)
@@ -130,4 +156,7 @@ $(_ => {
             svg.removeClass("fa-angle-down").addClass("fa-angle-up")
         }
     })
+
+    // Initialize tab list
+    build_tab_hide_list()
 })

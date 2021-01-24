@@ -163,6 +163,11 @@
             {% for button in plugins.buttons %}
                 {{ button | safe }}
             {% endfor %}
+            <li class="ml-auto nav-item">
+                <a class="nav-link" data-toggle="modal" data-target="#hide-tabs">
+                    <i class="fas fa-cogs"></i>
+                </a>
+            </li>
         </ul>
 
         <div id="tabs" class="container-fluid tab-content px-2 pt-1">
@@ -250,6 +255,33 @@
 </div>
 
 <!-- Modals -->
+
+<div class="container">
+    <div class="modal fade bd-modal-lg" id="hide-tabs" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="font-family: 'Linux Libertine', serif">
+                <div class="modal-header justify-content-center">
+                    <h4>Cacher/Montrer les onglets</h4>
+                </div>
+                <div class="modal-body align-middle">
+                    <!-- List of tabs -->
+                    <ul id="hide-tabs-tabs" class="list-group-flush col-12">
+                        <li class="list-group-item align-items-center py-1 my-0 d-none">
+                            <div class="d-flex align-items-center my-0 py-0"></div>
+                            <button class="btn btn-dark ml-auto my-0 py-2 hide-tab">
+                                Cacher&nbsp;<i class="far fa-eye-slash"></i>
+                            </button>
+                            <button class="btn btn-light ml-auto my-0 py-2 show-tab d-none">
+                                Montrer&nbsp;<i class="far fa-eye"></i>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="container">
     <div class="modal fade bd-modal-lg" id="about-sheet" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg">
