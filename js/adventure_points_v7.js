@@ -67,11 +67,17 @@ function compute_remaining_ap() {
     const spells_raised_2 = ($("#spells-started-level-2").val() || [])
     const diff_level_0 = talent_increment_cost["x"]["0"] - talent_increment_cost["x"]["-4"]
     const spells_raised_0 = ($("#spells-started-level-0").val() || [])
-    $(".spell-name").each((i, elem) => {
+    $(".spell").each((i, elem) => {
         diff = 0
-        const name = elem.value.trim()
+        let name
+        const spell_list = row_elem(elem, "list")[0].value.trim()
+        if (spell_list === hermetic_energy) {
+            name = $(elem).find("select.spell-talent").val().trim()
+        } else {
+            name = $(elem).find(".spell-name").val().trim()
+        }
         let split_spell_realm_modifier = spell_same_realm_discount
-        if (name.length > 0) {
+        if (name && name.length > 0) {
             if (!all_names.includes(name)) {
                 split_spell_realm_modifier = 0
                 all_names.push(name)
@@ -81,11 +87,10 @@ function compute_remaining_ap() {
             const inline_realms = row(elem).find("input[name*=-realm]:checked")
             const inline_realms_nbr = inline_realms.length
             if (inline_realms_nbr > 0) {
-                const spell_list = row_elem(elem, "list")[0].value.trim()
-                if (spell_list === priest_energy)
+                if (spell_list === priest_energy || spell_list === hermetic_energy)
                     diff += (divine_spell_ap_cost * inline_realms_nbr) - (inline_realms_nbr - 1) * spell_same_realm_discount
                         - split_spell_realm_modifier // Priest have level 0 spell directly
-                else if (spell_list.length > 0 && spell_list !== hermetic_energy && spell_list !== instinctive_magic)
+                else if (spell_list.length > 0 && spell_list !== instinctive_magic)
                     diff += (mage_spell_ap_cost * inline_realms_nbr) - (inline_realms_nbr - 1) * spell_same_realm_discount
                         - split_spell_realm_modifier // Mages have -4 level spells at start
             }

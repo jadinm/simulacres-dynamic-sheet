@@ -20,7 +20,10 @@ function talent_level(talent, target_list = null) {
 }
 
 function talent_base_level(talent) {
-    return talent.id.match(regex_talent_from_id)[1]
+    talent = $(talent)
+    if (!talent.hasClass("talent"))
+        talent = talent.parents(".talent").first()
+    return talent.length > 0 ? talent[0].id.match(regex_talent_from_id)[1] : "0"
 }
 
 function talent_cost(talent, list = null) {
@@ -134,10 +137,6 @@ function add_talent(list, fixed_id = null) {
     $("select.talent-select").each((i, elem) => {
         update_talent_select($(elem))
     })
-    // Update rolls
-    $(".roll-value,.dual_wielding-value").each((i, elem) => {
-        update_roll_value($(elem))
-    })
     // Update armor penalty
     recompute_armor_penalty()
     return new_talent
@@ -221,6 +220,11 @@ function update_talent(event) {
         update_roll_value($(elem))
     })
 
+    // Update spells (for hermetic spells)
+    $(".spell-value").each((i, elem) => {
+        update_spell_value($(elem))
+    })
+
     // Update armor penalty
     recompute_armor_penalty()
 
@@ -269,6 +273,11 @@ $('.remove-talent').sortable({
         // Update rolls
         $(".roll-value,.dual_wielding-value").each((i, elem) => {
             update_roll_value($(elem))
+        })
+
+        // Update spells (for hermetic spells)
+        $(".spell-value").each((i, elem) => {
+            update_spell_value($(elem))
         })
 
         // Update all list selections of talents

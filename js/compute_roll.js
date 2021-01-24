@@ -54,10 +54,14 @@ function add_row_listeners(line = $(document)) {
     line.find(".hermetic-difficulty").on("change", event => {
         update_spell_value($(event.target))
     })
+    line.find(".hermetic-mr-learning").on("change", event => {
+        update_spell_value($(event.target))
+    })
     line.find("select.spell-talent").each((i, elem) => {
         if (!elem.id.includes("-x-")) {
             $(elem).on("changed.bs.select", e => {
                 update_spell_value($(e.target))
+                compute_remaining_ap()
             })
         }
     })
@@ -220,9 +224,25 @@ function update_spell_value(col_div) {
             // Recover associated talent level
             const name = row_elem(col_div[0], "talent").val()
             if (name.length !== 0) {
-                const level = parseInt(talent_level(talent_from_name(name)))
-                if (isNaN(level)) {
-                    sum = "X"
+                const talent = talent_from_name(name)
+                // This is complicated because hermetic spells can have a penalty when they are not learned correctly
+                // (MR < 0) and this penalty can be outside of the talent levels, like -6 or -3
+                // However, once the talent is raised for the first time, this odd penalty disappears
+                let level = parseInt(talent_level(talent[0]))
+                let origin_level = parseInt(talent_base_level(talent[0]))
+                let mr_learning = parseInt(row_elem(col_div[0], "hermetic-mr-learning-" + realm).val())
+
+                // In this case a level "X" does not mean that they cannot cast the spell (though it will be difficult)
+                if (isNaN(level))
+                    level = -5
+                if (isNaN(origin_level))
+                    origin_level = -5
+                if (isNaN(mr_learning))
+                    mr_learning = 0
+
+                if (level === origin_level && mr_learning < 0) {
+                    // Did not pay the learning failure at least once
+                    sum += mr_learning
                 } else {
                     sum += level
                 }
@@ -242,12 +262,16 @@ function list_changed(event) {
     if (slider.length === 0 || slider[0].id.includes("-x-"))
         return
 
+    const radio_buttons = row_div.find(".spell-formula-elem")
     const difficulty = row_div.find(".spell-difficulty-value")
     const hermetic_difficulty = row_div.find(".hermetic-difficulty")
+    const hermetic_mr_difficulty = row_div.find(".hermetic-mr-learning")
     const hermetic_talent = row_elem(event.target, "talent")
     const name = row_elem(event.target, "name")
     const handle = row_elem(event.target, "name-handle")
+    radio_buttons.prop("disabled", false).removeAttr("disabled")
     hermetic_difficulty.parent().addClass("d-none")
+    hermetic_mr_difficulty.parent().addClass("d-none")
     hermetic_talent.parent().parent().addClass("d-none")
     name.removeClass("d-none")
     handle.removeClass("d-none")
@@ -263,10 +287,23 @@ function list_changed(event) {
             $($(elem).slider("getElement")).parent().addClass("d-none")
         })
         hermetic_difficulty.parent().removeClass("d-none")
+        hermetic_mr_difficulty.parent().removeClass("d-none")
         hermetic_talent.parent().parent().removeClass("d-none")
         name.addClass("d-none")
         handle.addClass("d-none")
         difficulty.parent().addClass("d-none")
+
+        // Fix hermetic formula to body + action + humanoid
+        const checked_radio_buttons = radio_buttons.filter(":checked")
+        checked_radio_buttons.each((i, elem) => {
+            $(elem).trigger("click").trigger("change")
+        })
+        const hermetic_test = $([row_elem(event.target, "mind")[0],
+            row_elem(event.target, "action")[0], row_elem(event.target, "humanoid")[0]])
+        hermetic_test.each((i, elem) => {
+            $(elem).trigger("click").trigger("change")
+        })
+        radio_buttons.prop("disabled", true)[0].setAttribute("disabled", "")
     } else {
         slider.each((i, elem) => {
             $(elem).slider("enable").slider("refresh", {useCurrentValue: true})

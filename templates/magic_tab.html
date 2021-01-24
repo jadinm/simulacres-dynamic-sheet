@@ -314,7 +314,7 @@
                 </tr>
                 </thead>
                 <tbody id="spell-table" class="sortable-list">
-                <tr id="spell-x" hidden>
+                <tr id="spell-x" class="spell" hidden>
                     <td class="md-form align-middle" data-toggle="tooltip" data-placement="bottom" title="">
                         <i id="spell-x-name-handle" class="fas fa-arrows-alt prefix h-100"
                            style="font-size: 1.5em;"></i>
@@ -326,8 +326,7 @@
                             <label for="spell-x-talent" hidden></label>
                             <select class="show-tick form-control talent-select selectpicker spell-talent"
                                     data-live-search="true" id="spell-x-talent"
-                                    data-style="col-10 ml-5 mx-0 px-3 align-middle"
-                                    data-talent-filter-origin-level="x" data-container="body">
+                                    data-style="col-10 ml-5 mx-0 px-3 align-middle" data-container="body">
                             </select>
                             <i class="fas fa-arrows-alt prefix h-100" style="font-size: 1.5em;"></i>
                         </div>
@@ -382,6 +381,13 @@
                                     <input class="form-control hermetic-difficulty py-0 my-0 text-center"
                                            id="spell-x-hermetic-difficulty-{{ realm }}"
                                            type="number" value="0">
+                                </div>
+                                <div class="text-center md-form col-12 d-none py-0 my-0 mt-2">
+                                    <label class="py-0 my-0" for="spell-x-hermetic-mr-learning-{{ realm }}">
+                                        MR de l'apprentissage
+                                    </label>
+                                    <input class="form-control hermetic-mr-learning py-0 my-0 text-center"
+                                           id="spell-x-hermetic-mr-learning-{{ realm }}" type="number" value="0">
                                 </div>
                             </div>
                         {% endfor %}

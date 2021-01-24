@@ -85,8 +85,12 @@ Apprendre un sort déjà appris pour un autre règne coûte 1 point d'aventure d
 Il suffit de sélectionner plusieurs règnes pour un même sort.
 
 Pour les mages hermétiques, les sorts sont des talents classiques
-et doivent être créés depuis la colonne X de l'onglet des talents avant de pouvoir
-être sélectionnés comme nom du sort.
+et la colonne depuis laquelle ils doivent être créés dépend de la marge de réussite
+du test d'apprentissage. Si elle est positive,
+le talent doit être créé dans la colonne 0.
+Si la marge est -2 ou -1, le talent doit être créé dans la colonne -2,
+Si la marge est -4 ou -3, le talent doit être créé dans la colonne -4,
+et, en dessous, le talent doit être créé dans la colonne X.
 
 Les mages non-hermétiques ont le droit de lancer des sorts non appris
 en magie instinctive pour peu qu'ils ne dépensent que des EP, qu'ils aient le niveau
