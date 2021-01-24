@@ -16,6 +16,8 @@ avec les éléments suivants en plus :
 - la voie du moine (voir [Casus Belli LPC n°25](http://joueursdurepaire.free.fr/casus_belli/cb_LPC25.html)).
 - la proposition de règle non officielle sur
   [le combat à deux armes](https://www.facebook.com/groups/Simulacres/permalink/2507313226187735/) par Karl Karas.
+- le bon, le méchant et le druide
+  (voir [Casus Belli LPC n°17](http://joueursdurepaire.free.fr/casus_belli/cb_LPC17.html)).
 
 Ce projet supporte aussi les règles de campagne et de découverte de
 [SimulacreS version 8](https://www.facebook.com/groups/Simulacres/permalink/2324033054515754/)

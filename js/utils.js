@@ -10,6 +10,7 @@
 const priest_energy = "Divin"
 const hermetic_energy = "Hermétique"
 const instinctive_magic = "Magie instinctive"
+const good_nature_evil_energies = ["Bien", "Mal", "Nature"]
 
 function sanitize(string) {
     const map = {

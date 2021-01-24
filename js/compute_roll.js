@@ -248,9 +248,13 @@ class SpellRow extends RollRow {
         const hermetic_talent = this.get("talent")
         const name = this.get("name")
         const handle = this.get("name-handle")
+        const dice_3 = $("#spell-margin-good-nature-evil-1d3").parent()
 
         // Reset visibility of elements
+        dice_3.addClass("d-none")
+        dice_3.prev().addClass("d-none")
         radio_buttons.prop("disabled", false).removeAttr("disabled")
+        radio_buttons.parent().children().removeClass("d-none")
         hermetic_difficulty.parent().addClass("d-none")
         hermetic_mr_difficulty.parent().addClass("d-none")
         hermetic_talent.parent().parent().addClass("d-none")
@@ -287,6 +291,12 @@ class SpellRow extends RollRow {
                 $(elem).trigger("click").trigger("change")
             })
             radio_buttons.prop("disabled", true)[0].setAttribute("disabled", "")
+        } else if (list.val() && good_nature_evil_energies.includes(list.val())) {
+            radio_buttons.parent().children().addClass("d-none")
+            const checked_radio_buttons = radio_buttons.filter(":checked")
+            checked_radio_buttons.each((i, elem) => {
+                $(elem).trigger("click").trigger("change")
+            })
         } else {
             // Other mage lists
             slider.each((i, elem) => {
@@ -294,6 +304,13 @@ class SpellRow extends RollRow {
                 $($(elem).slider("getElement")).parent().removeClass("d-none")
             })
         }
+
+        $("select.spell-list").each((i, elem) => {
+            if (good_nature_evil_energies.includes($(elem).val())) {
+                dice_3.removeClass("d-none")
+                dice_3.prev().removeClass("d-none")
+            }
+        })
 
         // Update spell value
         this.update_roll_value()
@@ -393,6 +410,11 @@ class SpellRollTable extends TalentRollTable {
         compute_remaining_ap()
     }
 
+    update_level(e) {
+        SpellRow.of(e.target).update_roll_value()
+        compute_remaining_ap()
+    }
+
     update_spell_name() {
         // Update selections of spells
         $("select.spell-select").each((i, elem) => {
@@ -420,6 +442,7 @@ class SpellRollTable extends TalentRollTable {
     add_custom_listener_to_row(row) {
         super.add_custom_listener_to_row(row)
         row.data.find(".spell-name").uon("change", this.update_spell_name)
+        row.data.find(".spell-level").uon("change", this.update_level)
         row.data.find("select.spell-list").uon("changed.bs.select", this.update_list)
         row.data.find(".spell-difficulty-input").uon("change", this.update_difficulty_slider)
         row.data.find(".hermetic-difficulty").uon("change", this.update_spell_value)
@@ -496,6 +519,11 @@ $("#race,.realm,.component,.means," + talent_list_selector).on("change", _ => {
     $(".roll-value,.dual_wielding-value").each((i, elem) => {
         RollRow.of(elem).update_roll_value()
     })
+})
+
+$("#spell-margin-good-nature-evil-1d3").on("click", _ => {
+    const dice_value = roll_dices(1, 3)
+    $("#spell-margin-good-nature-evil-1d3-result").text("1d3: " + dice_value)
 })
 
 $(_ => {

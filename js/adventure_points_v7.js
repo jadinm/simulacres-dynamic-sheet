@@ -23,6 +23,8 @@ let indirect_x_to_0_raise_cost = 1
 let advised_talent_save = 1
 let mage_spell_ap_cost = talent_increment_cost["x"]["-4"]
 let divine_spell_ap_cost = talent_increment_cost["x"]["0"]
+let good_nature_evil_base_cost = 1
+let good_nature_evil_level_cost = 3
 let spell_same_realm_discount = 1
 
 let power_level_ap_cost = 5 // From 1 to 2 and from 2 to 3
@@ -67,11 +69,13 @@ function compute_remaining_ap() {
     const spells_raised_2 = ($("#spells-started-level-2").val() || [])
     const diff_level_0 = talent_increment_cost["x"]["0"] - talent_increment_cost["x"]["-4"]
     const spells_raised_0 = ($("#spells-started-level-0").val() || [])
+    const spells_free_good_nature_evil = ($("#spells-free-good-nature-evil").val() || [])
     $(".spell").each((i, elem) => {
         diff = 0
         let name
         const spell = SpellRow.of(elem)
         const spell_list = spell.get("list")[0].value.trim()
+        const spell_level = parseInt(spell.get("level")[0].value.trim())
         if (spell_list === hermetic_energy) {
             name = $(elem).find("select.spell-talent").val().trim()
         } else {
@@ -88,12 +92,15 @@ function compute_remaining_ap() {
             const inline_realms = spell.data.find("input[name*=-realm]:checked")
             const inline_realms_nbr = inline_realms.length
             if (inline_realms_nbr > 0) {
-                if (spell_list === priest_energy || spell_list === hermetic_energy)
+                if (spell_list === priest_energy || spell_list === hermetic_energy) {
                     diff += (divine_spell_ap_cost * inline_realms_nbr) - (inline_realms_nbr - 1) * spell_same_realm_discount
                         - split_spell_realm_modifier // Priest have level 0 spell directly
-                else if (spell_list.length > 0 && spell_list !== instinctive_magic)
+                } else if (spell_list.length > 0 && spell_list !== instinctive_magic) {
                     diff += (mage_spell_ap_cost * inline_realms_nbr) - (inline_realms_nbr - 1) * spell_same_realm_discount
                         - split_spell_realm_modifier // Mages have -4 level spells at start
+                }
+            } else if (good_nature_evil_energies.includes(spell_list) && !spells_free_good_nature_evil.includes(elem.id)) {
+                diff += (!spell_level || isNaN(spell_level) || spell_level === 0) ? good_nature_evil_base_cost : spell_level * good_nature_evil_level_cost
             }
 
             // Raised at the creation

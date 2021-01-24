@@ -439,6 +439,19 @@
                         data-filter-out-list="Divin,Magie instinctive,Hermétique" multiple>
                 </select>
             </div>
+            <div class="row col-12 mt-2 px-0 mx-0">
+                Les mages utilisant les énergies du Bien, du Mal et de la Nature ont le droit
+                d'avoir un sort gratuitement à chaque fois qu'ils montent une de ces énergies.
+                Le niveau du sort doit être inférieur ou égal au niveau de l'énergie.
+            </div>
+            <div class="row col-12 form-row mt-2 md-form p-0 m-0">
+                <select id="spells-free-good-nature-evil"
+                        class="show-tick form-control spell-select selectpicker adventure-points-select col-12"
+                        data-live-search="true" data-style="align-middle"
+                        title="Sorts obtenus en montant les énergies du Bien, du Mal et de la Nature"
+                        data-filter-list="Bien,Nature,Mal" data-no-realm-id="true" multiple>
+                </select>
+            </div>
         {% endif %}
     {% endif %}
 </div>

@@ -5,6 +5,7 @@
     - le bouclier sans localisation des dégâts (voir [Casus Belli HS n°16](http://confrerie-acier.chez-alice.fr/localisation%20armures%20et%20autres.htm))
     - les utilisations optionnelles des énergies classiques (voir [Casus Belli HS n°16](http://confrerie-acier.chez-alice.fr/localisation%20armures%20et%20autres.htm))
     - la voie du moine (voir [Casus Belli LPC n°25](http://joueursdurepaire.free.fr/casus_belli/cb_LPC25.html))
+    - le bon, le méchant et le druide (voir [Casus Belli LPC n°17](http://joueursdurepaire.free.fr/casus_belli/cb_LPC17.html)).
 
 - simulacres_v7_localisation_fiche_perso.html rajoute en plus:
     - la localisation des PV, de l'armure et du bouclier (voir [Casus Belli HS n°16](http://confrerie-acier.chez-alice.fr/localisation%20armures%20et%20autres.htm))
