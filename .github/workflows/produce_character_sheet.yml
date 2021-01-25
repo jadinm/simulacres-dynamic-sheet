@@ -2,6 +2,7 @@ name: Produce character sheet
 on: [ push, pull_request ]
 env:
   PYTHON_SCRIPT: compile.py
+  DOC_V7: manuel_feuille_perso_simv7
   V7_BASE_FINAL_FILENAME: simulacres_v7_fiche_perso.html
   V7_LOCALISATION_FINAL_FILENAME: simulacres_v7_localisation_fiche_perso.html
   V7_LOCALISATION_DUAL_FINAL_FILENAME: simulacres_v7_localisation_deux_armes_fiche_perso.html
@@ -46,6 +47,12 @@ jobs:
           python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V8_DISCOVERY_4x4_FINAL_FILENAME }} --version 8 --matrix-4x4 --universe "Autre" --discovery --plugin plugins/plugin_generic_world.html
           python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V8_INTERMEDIATE_DISCOVERY_4x4_FINAL_FILENAME }} --version 8 --matrix-4x4 --universe "Autre" --intermediate-discovery --plugin plugins/plugin_generic_world.html
           python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V8_CAPTAIN_4x4_VOODOO_FINAL_FILENAME }} --version 8 --matrix-4x4 --universe "Capitaine Vaudou"
+      - name: Compile documentation
+        run: |
+          mkdir ~/.fonts
+          cp doc/fonts/* ~/.fonts
+          fc-cache -f -v
+          cd doc && python3 -m rst2pdf.createpdf ${{ env.DOC_V7 }}.txt -v -s sim_styles.txt -e preprocess --use-floating-images --real-footnotes -o ${{ env.DOC_V7 }}.pdf
 
       - name: Upload the base v7 sheet
         uses: actions/upload-artifact@v2
@@ -114,6 +121,12 @@ jobs:
         with:
           name: ${{ env.V8_INTERMEDIATE_DISCOVERY_4x4_FINAL_FILENAME }}
           path: target/${{ env.V8_INTERMEDIATE_DISCOVERY_4x4_FINAL_FILENAME }}
+
+      - name: Upload v7 documentation
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.DOC_V7 }}.pdf
+          path: doc/${{ env.DOC_V7 }}.pdf
 
       - name: Create release
         id: create_release
@@ -260,3 +273,14 @@ jobs:
           asset_content_type: text/html
           asset_name: ${{ env.V8_INTERMEDIATE_DISCOVERY_4x4_FINAL_FILENAME }}
           asset_path: target/${{ env.V8_INTERMEDIATE_DISCOVERY_4x4_FINAL_FILENAME }}
+
+      - name: Upload v7 documentation in release assets
+        if: contains(github.ref, '/tags/')
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_content_type: application/pdf
+          asset_name: ${{ env.DOC_V7 }}.pdf
+          asset_path: doc/${{ env.DOC_V7 }}.pdf
