@@ -142,7 +142,7 @@ class SpellRow extends RollRow {
             // Recover difficulty
             const difficulty = this.get("difficulty", value_div).text()
             if (difficulty)
-                sum += difficulty
+                sum += parseInt(difficulty)
 
             if (this.is_hermetic_spell() || this.is_ki_power()) {
                 // Recover hermetic difficulty
