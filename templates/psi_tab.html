@@ -1,18 +1,22 @@
-<div id="psy-tab" class="tab-pane fade row container-fluid m-0 pt-2">
-    <!-- Psy energies -->
+<div id="psi-tab" class="tab-pane fade row container-fluid m-0 pt-2">
+    <!-- Psi energies -->
     <div class="row col-12 form-row mt-2 md-form p-0 m-0">
         <div class="col-md-2 input-with-pre-icon">
             <svg height="3em" width="2em" class="input-prefix">
-                <use xlink:href="#svg-psy"></use>
+                <use xlink:href="#svg-psi"></use>
             </svg>
-            <label for="water">Psionique</label>
-            <input class="special-energy magical-energy form-control text-center" id="water" type="number" value="0"
+            <label for="psi-label"></label>
+            <input class="special-energy form-control text-center" id="psi-label" type="text" value="Psionique">
+        </div>
+        <div class="col-md-2">
+            <label for="psi"></label>
+            <input class="special-energy magical-energy form-control text-center" id="psi" type="number" value="0"
                    min="0" max="3">
         </div>
     </div>
 
-    <!-- Psy powers -->
-    <div class="row col-12 mt-2 m-0 p-0"><b>Pouvoirs psis</b></div>
+    <!-- Psionic powers -->
+    <div class="row col-12 mt-2 m-0 p-0"><b>Pouvoirs</b></div>
     <div class="table-responsive col-12 m-0 p-0 pb-2" style="overflow-y: hidden !important;">
         <table class="table table-hover m-0 p-0">
             <thead class="m-0 p-0">
@@ -27,21 +31,21 @@
                 <th scope="col" style="width: 35%">Effet</th>
             </tr>
             </thead>
-            <tbody id="psy-table" class="sortable-list">
-            <tr id="psy-x" class="spell" hidden>
+            <tbody id="psi-table" class="sortable-list">
+            <tr id="psi-x" class="spell" hidden>
                 <td class="md-form align-middle" data-toggle="tooltip" data-placement="bottom" title="">
-                    <i id="psy-x-name-handle" class="fas fa-arrows-alt prefix h-100"
+                    <i id="psi-x-name-handle" class="fas fa-arrows-alt prefix h-100"
                        style="font-size: 1.5em;"></i>
-                    <label for="psy-x-name"></label>
-                    <input id="psy-x-name" class="spell-name form-control" type="text" value="">
+                    <label for="psi-x-name"></label>
+                    <input id="psi-x-name" class="spell-name form-control" type="text" value="">
                 </td>
                 <td class="md-form my-0 py-0 align-middle">
-                    <input id="psy-x-level" class="spell-level form-control text-center"
+                    <input id="psi-x-level" class="spell-level form-control text-center"
                            type="number" value="1" min="0" max="3">
-                    <label for="psy-x-level"></label>
+                    <label for="psi-x-level"></label>
                 </td>
                 <td class="my-0 py-0 spell-formula align-middle">
-                    {% with row_type = "psy", realm_checkbox = True %}
+                    {% with row_type = "psi", realm_checkbox = True %}
                         {% include "roll_formula.html" %}
                     {% endwith %}
                 </td>
@@ -50,8 +54,8 @@
                         <div class="row py-0 my-0 d-none">
                             <div class="text-center col-12 py-0 my-0">
                                 <label class="py-0 my-0 spell-difficulty-value"
-                                       for="psy-x-difficulty-input-{{ realm }}"
-                                       id="psy-x-difficulty-{{ realm }}">
+                                       for="psi-x-difficulty-input-{{ realm }}"
+                                       id="psi-x-difficulty-{{ realm }}">
                                     0
                                 </label>
                                 <span class="spell-realm">
@@ -63,8 +67,8 @@
                         </div>
                         <div class="row py-0 my-0 spell-difficulty-row d-none">
                             <div class="text-center col-12 py-0 my-0">
-                                <input id="psy-x-difficulty-input-{{ realm }}"
-                                       data-slider-id="psy-x-difficulty-slider-{{ realm }}"
+                                <input id="psi-x-difficulty-input-{{ realm }}"
+                                       data-slider-id="psi-x-difficulty-slider-{{ realm }}"
                                        type="text" data-slider-min="-4" data-slider-max="3" data-slider-step="1"
                                        data-slider-value="-4" class="input-slider spell-difficulty-input"
                                        data-slider-tooltip="hide"/>
@@ -80,24 +84,24 @@
                                         <use xlink:href="#svg-{{ realm }}"></use>
                                     </svg>:
                                 </span>
-                            <span id="psy-x-value-{{ realm }}" class="spell-value"></span>
-                            <span id="psy-x-dice-{{ realm }}" class="clickable row-roll-trigger" hidden>
+                            <span id="psi-x-value-{{ realm }}" class="spell-value"></span>
+                            <span id="psi-x-dice-{{ realm }}" class="clickable row-roll-trigger" hidden>
                                     <i class="fas fa-dice"></i>
                                 </span>
                         </div>
                     {% endfor %}
                 </td>
                 <td class="md-form my-0 py-0 align-middle">
-                    <input id="psy-x-time" class="spell-time form-control text-center" type="text">
-                    <label for="psy-x-time"></label>
+                    <input id="psi-x-time" class="spell-time form-control text-center" type="text">
+                    <label for="psi-x-time"></label>
                 </td>
                 <td class="md-form my-0 py-0 align-middle">
-                    <input id="psy-x-distance" class="spell-distance form-control text-center" type="text">
-                    <label for="psy-x-distance"></label>
+                    <input id="psi-x-distance" class="spell-distance form-control text-center" type="text">
+                    <label for="psi-x-distance"></label>
                 </td>
                 <td class="md-form my-0 py-0 align-middle">
-                    <input id="psy-x-effect" class="spell-effect form-control" type="text">
-                    <label for="psy-x-effect"></label>
+                    <input id="psi-x-effect" class="spell-effect form-control" type="text">
+                    <label for="psi-x-effect"></label>
                 </td>
             </tr>
             </tbody>
@@ -106,12 +110,12 @@
     <div class="row col-12 m-0 p-0">
         <div class="col-lg-2 col-md-4 row">
             <div class="col-6 px-0 mx-0">
-                <button id="add-psy" class="btn btn-success btn-block">
+                <button id="add-psi" class="btn btn-success btn-block">
                     <i class="fas fa-plus"></i>
                 </button>
             </div>
             <div class="col-6 px-0 mx-0">
-                <div id="psy-table-remove" class="sortable-list text-center" style="min-height: 50px">
+                <div id="psi-table-remove" class="sortable-list text-center" style="min-height: 50px">
                     <button class="btn-block btn btn-danger" style="cursor:default;" data-toggle="tooltip"
                             data-html="true" data-placement="bottom"
                             title="Déplacez un élément ici pour le supprimer">

@@ -477,13 +477,13 @@ class SpellRollTable extends TalentRollTable {
 class KiTable extends SpellRollTable {
 }
 
-class PsyRollTable extends SpellRollTable {
+class PsiRollTable extends SpellRollTable {
 
     show_difficulty_builder(input) {
         const spell = SpellRow.of(input)
         return value => {
             spell.get("difficulty", input).text(value)
-            return ""
+            return "0"
         }
     }
 }
@@ -560,5 +560,5 @@ $(_ => {
     new TalentRollTable($("#dual_wielding-table"))
     new SpellRollTable($("#spell-table"))
     new KiTable($("#ki-table"))
-    new PsyRollTable($("#psy-table"))
+    new PsiRollTable($("#psi-table"))
 })

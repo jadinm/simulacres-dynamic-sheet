@@ -65,7 +65,11 @@ function update_numeric_input_select(select, input_selector) {
         return only_at_levels == null || only_at_levels.includes(elem.value)
     }).map((i, elem) => {
         /* Recover image if any */
-        const new_image = $(elem).parent().find(".input-prefix").clone(true, false)
+        let base_image = $(elem).parent().find(".input-prefix")
+        if (base_image.length === 0) {
+            base_image = $("input[id=\"" + elem.id + "-label\"").parent().find(".input-prefix")
+        }
+        const new_image = base_image.clone(true, false)
         new_image.removeClass("input-prefix")
         new_image.attr("width", "1em")
         new_image.attr("height", "1em")

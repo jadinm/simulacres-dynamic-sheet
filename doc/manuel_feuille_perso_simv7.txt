@@ -564,7 +564,7 @@ de niveau). Les changements dans la description des effets sont par contre à
 préciser spécifiquement lors de chaque évolution de niveau en fonction du
 pouvoir.
 
-Onglet Psy
+Onglet Psi
 ----------
 
 A venir, pour supporter les Pouvoirs Psioniques, décrits dans le HS 10, p.47.
