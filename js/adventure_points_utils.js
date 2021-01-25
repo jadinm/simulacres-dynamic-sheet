@@ -92,11 +92,11 @@ function talents_cost() {
 
 function monk_power_cost() {
     let consumed_points = 0
-    $(".ki-level").each((i, elem) => {
+    $("#ki-table .spell-level").each((i, elem) => {
         let diff = 0
         const value = parseInt(elem.value)
-        if (!isNaN(value) && value > 0 && value <= 3) {
-            diff = (value - 1) * power_level_ap_cost
+        if (!isNaN(value) && value > 1 && value <= 3) {
+            diff = power_level_ap_cost
             consumed_points += diff
         }
 

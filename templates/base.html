@@ -119,18 +119,20 @@
                         Magie
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#ki-tab" role="tab" aria-controls="profile"
-                       aria-selected="false">
-                        Ki
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#psy-tab" role="tab" aria-controls="profile"
-                       aria-selected="false">
-                        Psi
-                    </a>
-                </li>
+                {% if version == V7 %}
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#ki-tab" role="tab" aria-controls="profile"
+                           aria-selected="false">
+                            Ki
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#psy-tab" role="tab" aria-controls="profile"
+                           aria-selected="false">
+                            Psi
+                        </a>
+                    </li>
+                {% endif %}
             {% elif universe == captain_voodoo %}
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="tab" href="#magic-tab" role="tab" aria-controls="profile"
@@ -197,11 +199,13 @@
                 <!-- Magic -->
                 {% include "magic_tab.html" %}
 
-                <!-- Ki board -->
-                {% include "ki_tab.html" %}
+                {% if version == V7 %}
+                    <!-- Ki board -->
+                    {% include "ki_tab.html" %}
 
-                <!-- Psy board -->
-                {% include "psy_tab.html" %}
+                    <!-- Psy board -->
+                    {% include "psy_tab.html" %}
+                {% endif %}
             {% elif universe == captain_voodoo %}
                 <!-- Magic -->
                 {% include "magic_tab.html" %}

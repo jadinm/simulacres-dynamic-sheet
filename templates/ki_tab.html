@@ -19,30 +19,63 @@
         <table class="table table-hover m-0 p-0">
             <thead>
             <tr>
-                <th scope="col" class="col-3" style="width: 30%; min-width: 300px">Nom</th>
-                <th scope="col" class="col-2" style="width: 10%">Niveau max</th>
-                <th scope="col" class="col-7" style="width: 70%; min-width: 500px">Effets</th>
+                <th scope="col" class="col-3" style="width: 15%; min-width: 300px">Nom</th>
+                <th scope="col" class="col-2" style="width: 2.5%">Niveau</th>
+                <th scope="col" class="text-center" style="width: 2.5%">Formule</th>
+                <th scope="col" class="text-center" style="width: 15%">Valeur</th>
+                <th scope="col" class="text-center" style="width: 5%">Temps</th>
+                <th scope="col" class="text-center" style="width: 5%">Distance</th>
+                <th scope="col" style="width: 45%">Effet</th>
             </tr>
             </thead>
             <tbody id="ki-table" class="sortable-list">
             <tr id="ki-x" hidden>
-                <td class="row col-12 md-form m-0 p-0 align-middle"
-                    data-toggle="tooltip" data-placement="bottom" title="">
-                    <label for="ki-x-name"></label>
-                    <select class="show-tick form-control talent-select selectpicker" data-live-search="true"
-                            id="ki-x-name" data-style="col-8 ml-5 align-middle">
+                <td class="md-form align-middle" data-toggle="tooltip" data-placement="bottom" title="">
+                    <div class="row col-12 md-form my-0 py-0 align-middle d-flex">
+                    <label for="ki-x-talent"></label>
+                    <select class="show-tick form-control talent-select selectpicker spell-talent"
+                            data-live-search="true" id="ki-x-talent" data-style="col-10 ml-5 mx-0 px-3 align-middle"
+                            data-talent-filter-origin-level="x">
                     </select>
-                    <i class="fas fa-arrows-alt prefix mt-3 ml-1" style="font-size: 1.5em;"></i>
+                    <i class="fas fa-arrows-alt prefix h-100" style="font-size: 1.5em;"></i>
+                    </div>
                 </td>
                 <td class="md-form my-0 py-0 align-middle">
-                    <input id="ki-x-level" class="ki-level form-control text-center"
+                    <input id="ki-x-level" class="spell-level form-control text-center"
                            type="number" value="1" min="1" max="3">
                     <label for="ki-x-level"></label>
                 </td>
+                <td class="my-0 py-0 spell-formula align-middle">
+                    {% with row_type = "ki", realm_checkbox = False %}
+                        {% include "roll_formula.html" %}
+                    {% endwith %}
+                </td>
+                <td class="my-0 py-0 text-center align-middle">
+                    {% for realm in ["mineral", "vegetal", "animal", "humanoid", "mechanical", "void"] %}
+                        <div class="m-0 p-0 spell-value-row d-none">
+                                <span class="spell-realm">
+                                    <svg height="1em" width="1em" class="spell-difficulty-realm">
+                                        <use xlink:href="#svg-{{ realm }}"></use>
+                                    </svg>:
+                                </span>
+                            <span id="ki-x-value-{{ realm }}" class="spell-value"></span>
+                            <span id="ki-x-dice-{{ realm }}" class="clickable row-roll-trigger" hidden>
+                                    <i class="fas fa-dice"></i>
+                                </span>
+                        </div>
+                    {% endfor %}
+                </td>
                 <td class="md-form my-0 py-0 align-middle">
-                    <input id="ki-x-description" class="ki-description form-control"
-                           type="text" value="">
-                    <label for="ki-x-description"></label>
+                    <input id="ki-x-time" class="spell-time form-control text-center" type="text">
+                    <label for="ki-x-time"></label>
+                </td>
+                <td class="md-form my-0 py-0 align-middle">
+                    <input id="ki-x-distance" class="spell-distance form-control text-center" type="text">
+                    <label for="ki-x-distance"></label>
+                </td>
+                <td class="md-form my-0 py-0 align-middle">
+                    <input id="ki-x-effect" class="spell-effect form-control" type="text">
+                    <label for="ki-x-effect"></label>
                 </td>
             </tr>
             </tbody>

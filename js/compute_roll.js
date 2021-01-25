@@ -121,6 +121,10 @@ class SpellRow extends RollRow {
         return value && value.trim() === hermetic_energy
     }
 
+    is_ki_power() {
+        return this.data.parents("#ki-table").length > 0
+    }
+
     is_instinctive_magic() {
         const value = this.get("list").val()
         return value && value.trim() === instinctive_magic
@@ -136,9 +140,11 @@ class SpellRow extends RollRow {
             sum += formula
 
             // Recover difficulty
-            sum += parseInt(this.get("difficulty", value_div).text())
+            const difficulty = this.get("difficulty", value_div).text()
+            if (difficulty)
+                sum += difficulty
 
-            if (this.is_hermetic_spell()) {
+            if (this.is_hermetic_spell() || this.is_ki_power()) {
                 // Recover hermetic difficulty
                 const cast_diff = parseInt(this.get("hermetic-difficulty", value_div).val())
                 if (!isNaN(cast_diff)) {
@@ -157,16 +163,16 @@ class SpellRow extends RollRow {
 
                     // In this case a level "X" does not mean that they cannot cast the spell (though it will be difficult)
                     if (isNaN(level))
-                        level = -5
+                        level = this.is_hermetic_spell() ? -5 : "X"
                     if (isNaN(origin_level))
-                        origin_level = -5
+                        origin_level = this.is_hermetic_spell() ? -5 : "X"
                     if (isNaN(mr_learning))
                         mr_learning = 0
 
                     if (level === origin_level && mr_learning < 0) {
                         // Did not pay the learning failure at least once
                         sum += mr_learning
-                    } else {
+                    } else if (!isNaN(level)) {
                         sum += level
                     }
                 }
@@ -187,7 +193,7 @@ class SpellRow extends RollRow {
         const spell_difficulty = this.get("difficulty", button)
         const formula_elements = this.compute_formula(realm)[1]
         let margin_throttle = NaN
-        if (!this.is_hermetic_spell(button[0])) { // Spell
+        if (!this.is_hermetic_spell() && !this.is_ki_power()) { // Spell
             difficulty = parseInt(spell_difficulty.text())
             roll_reason = this.get("name").val()
             margin_throttle = this.is_instinctive_magic(button[0]) ? 1 : NaN
@@ -375,8 +381,11 @@ class SpellRollTable extends TalentRollTable {
     formula_changed(e) {
         e.preventDefault()
         const spell = SpellRow.of(e.target)
-        if (e.target.getAttribute("name").includes("-realm"))
-            spell.update_realm($(e.target))
+        if (e.target.getAttribute("name").includes("-realm")) {
+            spell.data.find("[name*=\"-realm\"]").each((i, elem) => {
+                spell.update_realm($(elem))
+            })
+        }
         spell.update_roll_value()
     }
 
@@ -465,6 +474,9 @@ class SpellRollTable extends TalentRollTable {
     }
 }
 
+class KiTable extends SpellRollTable {
+}
+
 class PsyRollTable extends SpellRollTable {
 
     show_difficulty_builder(input) {
@@ -547,5 +559,6 @@ $(_ => {
     new TalentRollTable($("#roll-table"))
     new TalentRollTable($("#dual_wielding-table"))
     new SpellRollTable($("#spell-table"))
+    new KiTable($("#ki-table"))
     new PsyRollTable($("#psy-table"))
 })

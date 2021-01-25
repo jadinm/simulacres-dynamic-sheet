@@ -117,30 +117,9 @@ class DataTable {
     }
 }
 
-class KiTable extends DataTable {
-
-    add_custom_listener_to_row(row) {
-        super.add_custom_listener_to_row(row)
-        const select = row.get("name")
-        select.selectpicker()
-        add_save_to_dom_listeners(row.data)
-        row.get("level").uon("change", compute_remaining_ap)
-    }
-
-    clone_row() {
-        return this.template_row.clone(true, false)
-    }
-
-    remove_row(event) {
-        super.remove_row(event)
-        compute_remaining_ap()
-    }
-}
-
 $(_ => {
     new DataTable($("#focus-table"))
     new DataTable($("#magical-equipment-table"))
     new DataTable($("#equipment-table"))
     new DataTable($("#limitedUse-equipment-table"))
-    new KiTable($("#ki-table"))
 })
