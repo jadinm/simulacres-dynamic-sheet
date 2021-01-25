@@ -119,6 +119,14 @@ function build_tab_hide_list() {
             list_item.find(".show-tab").removeClass("d-none")
         })
         list_item.children().first().text($(elem).text().trim())
+
+        if ($(elem).hasClass("d-none")) {
+            list_item.find(".show-tab").removeClass("d-none")
+            list_item.find(".hide-tab").addClass("d-none")
+        } else {
+            list_item.find(".show-tab").addClass("d-none")
+            list_item.find(".hide-tab").removeClass("d-none")
+        }
         parent_list.append(list_item)
     })
 }

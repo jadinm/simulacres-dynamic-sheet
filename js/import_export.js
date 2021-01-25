@@ -321,6 +321,11 @@ function import_data(src_html, dst_html) {
     } else if (!is_dark_mode(src_html) && is_dark_mode()) {
         disable_dark_mode()
     }
+
+    // Hide the same tabs
+    src_html.find("#nav-tabs a[role=\"tab\"].d-none").each((i, old_tab) => {
+        dst_html.find("#nav-tabs a[role=\"tab\"][href=\"" + old_tab.getAttribute("href") + "\"]").addClass("d-none")
+    })
 }
 
 const plugin_selectors = [".plugin-tab", ".plugin-button", ".plugin-css", ".plugin-js"]
