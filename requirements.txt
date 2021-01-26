@@ -2,3 +2,4 @@ Jinja2>=2.11.2
 bs4
 html5lib
 rst2pdf
+svglib

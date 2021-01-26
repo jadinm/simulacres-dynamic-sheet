@@ -7,6 +7,8 @@
 .. |tab| unicode:: U+0009
 .. |i| unicode:: U+24D8
 
+.. include:: pictos.rst
+
 .. role:: simb
 
 .. |corps| replace:: :simb:`a`
@@ -26,20 +28,27 @@
 .. |puissance| replace:: :simb:`t`
 .. |precision| replace:: :simb:`u`
 .. |rapidite| replace:: :simb:`y`
+.. |bien| replace:: :simb:`/`
+.. |mal| replace:: :simb:`\\`
+.. |1| replace:: :simb:`1`
+.. |2| replace:: :simb:`2`
+.. |3| replace:: :simb:`3`
+.. |4| replace:: :simb:`4`
+.. |5| replace:: :simb:`5`
+.. |6| replace:: :simb:`6`
 
 .. |move| image:: images/move.png
-            :height: 2ex
-            :align: bottom
-
-.. |herm| image:: images/hermetique.png
             :height: 2ex
             :align: bottom
 
 .. |cogs| image:: images/cogs.png
             :height: 2ex
             :align: bottom
-
+..
 .. To compile (minimal to get the layout):
+.. Fist generate the pictos
+..  $ cd images; python3 create_pictos.py; cd .. # requires svglib
+.. Then compile
 ..  $ rst2pdf manuel_feuille_perso_simv7.txt \
 ..      -s sim_styles.txt \
 ..      -o manuel_feuille_perso_simv7.pdf
@@ -126,11 +135,11 @@ La fiche v7 supporte donc les extensions et règles optionnelles suivantes :
 - une énergie « extraordinaire » supplémentaire qui peut servir à implémenter
   un compteur pour jouer des pouvoirs supplémentaires, ou le vaudou d'un
   certain univers pirates, ou encore l'Héroïsme de la v8;
-- à terme, la magie originale et les trois énergies spéciales décrites dans
-  Nuisance et Nature, tirées du `Petit Capharnaüm n° 17
+- la magie originale et les trois énergies spéciales décrites dans Nuisance et
+  Nature, tirées du `Petit Capharnaüm n° 17
   <http://joueursdurepaire.free.fr/casus_belli/cb_LPC17.html>`_ (Casus Belli
   86, p.84, en avril 1995);
-- à terme, les pouvoir psioniques et les super-pouvoirs décrits dans le HS 10.
+- les Pouvoirs Psioniques et les Super-Pouvoirs décrits dans le HS 10.
 
 Le système construit par Mathieu Jadin permet toutefois de construire
 virtuellement n'importe quelle combinaison de ces règles pour obtenir la fiche
@@ -187,9 +196,10 @@ Choisir ses onglets
 La feuille supporte donc de nombreuses règles optionnelles et possibilités
 supplémentaires. Ces fonctionnalités sont pour la plupart implémentées dans des
 onglets visibles dans la partie inférieure de la feuille. Selon ce que vous
-souhaitez utiliser, vous pourrez choisir d'afficher ou de cacher l'un ou
-l'autre de ces onglets en cliquant sur ce bouton |cogs| |n| situé à droite des
-intitulés des onglets.
+souhaitez utiliser, **vous pourrez choisir d'afficher ou de cacher l'un ou
+l'autre de ces onglets** en cliquant sur ce bouton |cogs| |n| situé à droite
+des intitulés des onglets. Ceci vous permet de n'inclure dans votre feuille de
+personnage que les onglets qui vous intéressent.
 
 Onglet États
 ------------
@@ -205,9 +215,11 @@ d'info <https://github.com/jadinm/simulacres-dynamic-sheet>`_).
 La valeur maximum de chaque curseur est ajustée automatiquement en tenant
 compte des Composantes et des Moyens. Toutefois, si vous payez en PA pour
 augmenter les PS ou EP, vous pouvez manuellement augmenter le maximum en
-cliquant sur le nom du curseur. De la même manière vous pouvez diminuer le
-maximum en cas de pertes « définitives », par exemple dans une zone lors d'une
-blessure critique mal soignée.
+cliquant sur le nom du curseur (l'augmentation des Points de Vie dans les zones
+est faite automatiquement lorsque vous faites monter vos caractéristiques). De
+la même manière vous pouvez diminuer le maximum en cas de pertes « définitives
+», par exemple dans une zone lors d'une blessure critique mal soignée : il faut
+alors cliquer sur l'icône de la zone concernée.
 
 Onglet Historique
 -----------------
@@ -286,7 +298,7 @@ On y gère les Talents du personnage, comme dans les règles de campagne (HS 10,
 p.32). La liste de Talents pré-encodés correspond à celle de Sangdragon (HS 11,
 p.9), mais elle est complètement modulable et adaptable à n'importe quel
 univers (il est même possible d'écrire un greffon pour la particulariser
-automatiquement à son propre univers).
+automatiquement à son propre univers, cf. plus bas).
 
 Les niveaux de Talents sont représentés par différents cadres intitulés X, -4,
 -2, 0, 1, 2 et 3. Lorsque l'évolution du personnage le permet, la valeur d'un
@@ -488,7 +500,7 @@ Magie Hermétique
 ^^^^^^^^^^^^^^^^
 
 La **Magie Hermétique**, décrite dans le HS 10, p.41 et reprise dans le HS 11,
-est également supportée par cet onglet, via l'Énergie **Hermétique** |herm|.
+est également supportée par cet onglet, via l'Énergie **Hermétique** |hermetic|.
 
 En Magie Hermétique, les sorts sont considérés comme des Talents presque comme
 les autres et s'utilisent toujours avec la même formule : Esprit |esprit| +
@@ -503,12 +515,12 @@ de la page 41 du HS 10 (attention aux niveaux « intermédiaires », qui
 descendent d'une colonne et inférieurs à -4, qui vont dans la colonne X).
 
 Il ajoute ensuite le sort dans l'onglet Magie en sélectionnant l'Énergie
-**Hermétique** |herm|, ce qui va changer l'aspect des champs descriptifs pour
-lui permettre de sélectionner le Talent créé et fixera directement la formule.
-Il devra alors indiquer exactement la *MR du test d'apprentissage* à droite de
-la formule, ainsi que la *Difficulté de lancer* précisée dans la description du
-sort pour la Magie Hermétique. De cette manière, les tests seront calculés
-correctement et le décompte des PAs sera adapté.
+**Hermétique** |hermetic|, ce qui va changer l'aspect des champs descriptifs
+pour lui permettre de sélectionner le Talent créé et fixera directement la
+formule.  Il devra alors indiquer exactement la *MR du test d'apprentissage* à
+droite de la formule, ainsi que la *Difficulté de lancer* précisée dans la
+description du sort pour la Magie Hermétique. De cette manière, les tests
+seront calculés correctement et le décompte des PAs sera adapté.
 
 Magie Rapide
 ^^^^^^^^^^^^
@@ -524,12 +536,12 @@ Nuisance et Nature
 Cette règle optionnelle, parue dans le `Petit Capharnaüm n° 17
 <http://joueursdurepaire.free.fr/casus_belli/cb_LPC17.html>`_ (Casus Belli 86,
 p.84, en avril 1995) est très proche de la Magie Rapide.  Elle propose 3
-nouvelles Énergies magiques : le **Bien**, le **Mal** et la **Nature**. Ces
-énergies sont associées à des sorts que l'on utilise sans lancer de dés, juste
-en dépensant des PS ou des EP. Ces trois Énergies sont incluses d'office dans
-la liste des Énergies Magiques pour permettre de disposer d'une liste des sorts
-qui s'y rapportent.  Lorsqu'on sélectionne l'une de ces trois énergies, les
-champs Formules et Difficulté disparaissent.
+nouvelles Énergies magiques : le **Bien** |bien|, le **Mal** |mal| |n| et la
+**Nature** |nature|. Ces énergies sont associées à des sorts que l'on utilise
+sans lancer de dés, juste en dépensant des PS ou des EP. Ces trois Énergies
+sont incluses d'office dans la liste des Énergies Magiques pour permettre de
+disposer d'une liste des sorts qui s'y rapportent.  Lorsqu'on sélectionne l'une
+de ces trois énergies, les champs Formules et Difficulté disparaissent.
 
 Encore ?
 ^^^^^^^^
@@ -548,33 +560,74 @@ Cet onglet est destiné à ceux qui souhaitent utiliser le complément de règle
 Casus Belli n°98, p.76, en octobre 1996.
 
 Les pratiquants de cette discipline doivent investir dans une énergie
-spécifique appelée « |n| Shaolin |n| » par défaut, mais que l'on peut nommer
+spécifique appelée **Shaolin** |ki| par défaut, mais que l'on peut nommer
 selon l'univers concerné. Ils devront aussi ajouter le Talent **Méditation**
 dans l'onglet Talents, au niveau adapté à leurs investissements (idéalement, +1
 à la création, mais c'est un choix à faire).
 
-Chaque pouvoir de Moine se gère comme un Talent, dans l'onglet Talent, mais
-aussi par une ligne supplémentaire dans l'onglet Ki. Comme pour les autres
-onglets, il suffit de cliquer sur **(+)**, puis de sélectionner le Talent, et
-enfin de préciser le niveau d'énergie de celui-ci, qui influencera la puissance
-des effets. La fiche gère automatiquement les dépenses de PAs faites pour
-augmenter la valeur du Talents (en le changeant de colonne), mais aussi celle
-requises pour faire progresser le niveau de celui-ci (en utilisant le compteur
-de niveau). Les changements dans la description des effets sont par contre à
-préciser spécifiquement lors de chaque évolution de niveau en fonction du
-pouvoir.
+Chaque pouvoir de Moine se gère comme un Talent, dans l'onglet Talent (colonne
+X), mais aussi par une ou plusieurs lignes supplémentaires dans l'onglet Ki.
+Comme pour les autres onglets, il suffit de cliquer sur **(+)**, puis de
+sélectionner le Talent, et enfin de préciser le niveau d'énergie de celui-ci,
+qui influencera la puissance des effets. La fiche gère automatiquement les
+dépenses de PAs faites pour augmenter la valeur du Talents (en le changeant de
+colonne), mais aussi celle requises pour faire progresser le niveau de celui-ci
+(en utilisant le compteur de niveau).
+
+Pour que les calculs de PAs restent cohérents et que les lancers de dés soient
+lisibles, il faut écrire une ligne par niveau de talent en précisant dans la
+description les effets de celui-ci pour chaque niveau. Ainsi par exemple, le
+moine Shaolin Khar'Adynn, qui possède Mains Dures au niveau 2, aura donc 2
+lignes pour cette discipline dans la table des Pouvoirs |n| : une pour Mains
+Dures au niveau 1 et une autre pour Mains dures au niveau 2. Chacune de ces
+lignes permettra d'indiquer les différences d'effets entre les différents
+niveaux d'Énergie.
 
 Onglet Psi
 ----------
 
-A venir, pour supporter les Pouvoirs Psioniques, décrits dans le HS 10, p.47.
+Cet onglet permet d'encoder les Pouvoirs Psioniques, décrits dans le HS 10,
+p.47. Il ressemble fortement à celui de la Magie de SangDragon mais ne comporte
+qu'une seule Énergie, nommée par défaut **Psionique** |psi|, mais que l'on peut
+renommer en fonction de l'univers visé.
 
-Onglet Super
-------------
+Les Pouvoir Psioniques, que l'on peut ajouter en cliquant sur le **(+)**, sont
+décrits par un nom, un niveau qui donne le nombre de points d'Énergie Psionique
+requis pour être capable d'utiliser un Pouvoir (ainsi que, forcément, le nombre
+de points à investir), puis d'une formule, d'une difficulté assortie d'un
+bouton de lancer et enfin d'une description des effets. Comme les règles le
+précisent, la difficulté commence à -4 et progresse d'un cran sur chaque
+double-\ |1| |n| (comme pour les sorts, cette progression n'est pas
+automatique, pour permettre de faire des tests « à blanc »). 
 
-A venir, pour supporter les Pouvoirs de Super-Héros, décrits dans le HS 10,
-p.46.
+Comme dans les autres onglets, la fenêtre de lancer permet d'avoir le résultat
+de l'utilisation du Pouvoir Psionique avec l'investissement éventuel des
+Énergies de Base.
 
+Onglet Super-Pouvoirs
+---------------------
+
+Cet onglet permet de supporter les Pouvoirs de Super-Héros, décrits dans le HS
+10, p.46. Comme pour les autres onglets, on ajoute un Super-Pouvoir en cliquant
+sur le **(+)**.
+
+Ces pouvoirs portent un nom et dépendent d'une Composante et d'un Moyen que
+l'on peut sélectionner un peu à la manière d'un Test. La valeur du test sera
+directement mise à jour dans la cinquième colonne et un bouton de lancer
+apparaît. Il permet donc de lancer autant de dés que la valeur de la
+Composante. Tous ceux qui auront une valeur inférieure ou égale à celle du
+Moyen lors du lancer donneront une *réussite*.  En fonction du nombre total de
+réussites n (le nombre de dés dont la valeur est inférieure à celle du
+Moyen), la MR du test est fixée à 3\ :sup:`n`.
+
+Dès qu'un Super-Pouvoir implique une Composante, tous les tests qui utilisent
+cette Composante ont un bonus de +4.
+
+Les compteurs nommés « Modificateur Composante » et « Modificateur Moyen » sont
+là pour implémenter les *Mini-Pouvoirs*, qui fonctionnent comme les
+Super-Pouvoirs décrits ci-dessus, mais avec un modificateur négatif pour la
+Composante, le Moyen, ou les deux.
+ 
 Encore des détails
 ------------------
 
