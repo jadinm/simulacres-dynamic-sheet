@@ -188,8 +188,10 @@ Le minimum et maximum des caractéristiques est implémenté. À la création du
 personnage c’est aux joueuses et joueurs de vérifier que les totaux sont
 corrects avec leur MJ (ex. 18 points à répartir entre les 4 composantes).
 
-Vous pouvez importer une image pour illustrer votre personnage via le bouton
-« image ».
+.. sidebar:: Illustration
+
+    Vous pouvez importer une image pour illustrer votre personnage via le
+    bouton « image ».
 
 Pour l'instant, laissons de côté les 2 champs notés « PAs non dépensés » et «
 PC », nous y reviendrons plus loin.
@@ -262,10 +264,12 @@ préciser dans cet onglet comment l'investissement des ces PAs « de départ » 
 certaine complexité a été nécessairement introduite pour tenir compte de la
 multiplicité des cas qui peuvent se présenter.
 
-De manière générale, le calcul des coûts d'évolutions en PAs est repris et mis
-à jour dans les info-bulles des éléments concernés, par exemple
-individuellement pour les Talents et de façon agrégée pour l'ensemble des
-composantes, des moyens, des règnes et énergies, etc.
+.. sidebar:: Coûts des évolutions
+
+    De manière générale, le calcul des coûts d'évolutions en PAs est repris et
+    mis à jour dans les info-bulles des éléments concernés, par exemple
+    individuellement pour les Talents et de façon agrégée pour l'ensemble des
+    composantes, des moyens, des règnes et énergies, etc.
 
 Onglet Équipement
 -----------------
@@ -413,10 +417,12 @@ résultat. Tous les paramètres sont alors intégrés et le résultat calculé, 
 que les effets en relançant 2 dés et en utilisant le tableau standard des
 effets (qui est d'ailleurs repris dans un onglet).
 
-Dans la fenêtre du Lancer, il est toujours possible de cliquer sur les petits
-dés pour les relancer, ce qui provoque l'adaptation automatique de tous les
-résultats calculés. Ceci n'est évidemment à utiliser que si cette possibilité
-existe à votre table.
+.. sidebar:: Relancer les dés
+
+    Dans la fenêtre du Lancer, il est toujours possible de cliquer sur les
+    petits dés pour les relancer, ce qui provoque l'adaptation automatique de
+    tous les résultats calculés. Ceci n'est évidemment à utiliser que si cette
+    possibilité existe à votre table.
 
 Cas particuliers : Duels
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -434,14 +440,14 @@ professionnel (son Talent de Boxe est à +1), on soustrait 2 à la MR d’Arthur
 (avec le second curseur sur la fenêtre du Lancer) et cela donnera le résultat
 final du Test.
 
-Astuce
-^^^^^^
+.. sidebar:: Astuce
 
-Vous pouvez créer un Test « vide », sans Talent précis. Ajoutez juste un Test
-(+) et remplissez la formule Cela vous permettra d’avoir une ligne pour un jet
-ponctuel dont vous remplirez la formule à chaque fois. Par exemple Corps
-|corps| + Résistance |resistance| + Humain |humain| pour résister à un poison.
-Nul besoin de créer une ligne à chaque fois, vous pourrez réutiliser la même.
+    Vous pouvez créer un Test « vide », sans Talent précis. Ajoutez juste un
+    Test (+) et remplissez la formule Cela vous permettra d’avoir une ligne
+    pour un jet ponctuel dont vous remplirez la formule à chaque fois. Par
+    exemple Corps |corps| + Résistance |resistance| + Humain |humain| pour
+    résister à un poison.  Nul besoin de créer une ligne à chaque fois, vous
+    pourrez réutiliser la même.
 
 Onglet Magie
 ------------
@@ -527,13 +533,12 @@ droite de la formule, ainsi que la *Difficulté de lancer* précisée dans la
 description du sort pour la Magie Hermétique. De cette manière, les tests
 seront calculés correctement et le décompte des PAs sera adapté.
 
-Magie Rapide
-^^^^^^^^^^^^
+.. sidebar:: Magie Rapide
 
-La **Magie Rapide** du HS 11, p. 28 peut évidemment être très facilement
-simulée à l'aide de cet onglet également (essentiellement pour avoir la trace
-des caractéristiques des sorts, mais on pourrait aussi simplement utiliser les
-Talents ordinaires).
+    La **Magie Rapide** du HS 11, p. 28 peut évidemment être très facilement
+    simulée à l'aide de cet onglet également (essentiellement pour avoir la
+    trace des caractéristiques des sorts, mais on pourrait aussi simplement
+    utiliser les Talents ordinaires).
 
 Nuisance et Nature
 ^^^^^^^^^^^^^^^^^^
@@ -548,13 +553,12 @@ sont incluses d'office dans la liste des Énergies Magiques pour permettre de
 disposer d'une liste des sorts qui s'y rapportent.  Lorsqu'on sélectionne l'une
 de ces trois énergies, les champs Formules et Difficulté disparaissent.
 
-Encore ?
-^^^^^^^^
+.. sidebar:: Encore ?
 
-Pour encore plus de particularisation, Mathieu décrit sur son `dépôt github
-<https://github.com/jadinm/simulacres-dynamic-sheet>`_, comment produire un
-greffon spécifique pour un univers donné, permettant, par exemple, d'ajouter ou
-de supprimer des énergies magiques.
+    Pour encore plus de particularisation, Mathieu décrit sur son `dépôt github
+    <https://github.com/jadinm/simulacres-dynamic-sheet>`_, comment produire un
+    greffon spécifique pour un univers donné, permettant, par exemple,
+    d'ajouter ou de supprimer des énergies magiques.
 
 Onglet Ki
 ---------
@@ -652,9 +656,8 @@ construire complètement sa propre fiche.
 Des exemples et de la documentation sont donnés sur le `dépôt github de Mathieu
 <https://github.com/jadinm/simulacres-dynamic-sheet>`_.
 
-Détails
-^^^^^^^
+.. sidebar:: Détails
 
-Un petit bouton noté |i| en bas à droite de la fiche permet d'obtenir les détails de
-génération de la feuille : numéro de version, options de compilation, greffons
-présent, etc.
+    Un petit bouton noté |i| en bas à droite de la fiche permet d'obtenir les
+    détails de génération de la feuille : numéro de version, options de
+    compilation, greffons présent, etc.
