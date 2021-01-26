@@ -274,8 +274,9 @@ Encore un onglet très chargé, mais uniquement pour refléter au mieux les
 multiples possibilités du jeu.
 
 Tout d'abord la première ligne permet d'enregistrer le nerf de la guerre :
-l'argent ! Les unités sont celles de Sangdragon, mais les compteurs peuvent
-être utilisés pour n'importe quel monnaie en ignorant les intitulés.
+l'argent ! Les unités sont celles de Sangdragon par défaut, mais les compteurs
+peuvent être utilisés pour n'importe quel monnaie en modifiant simplement les
+intitulés.
 
 Vous pouvez ajouter quatre types d’équipement.
 
@@ -403,14 +404,14 @@ apparaît aussitôt. Deux curseurs permettent alors d'indiquer :
 Si le personnage dispose d'au moins 1 pt dans une Énergie de base, une fenêtre
 intermédiaire apparait, pour demander si le personnage active un ou plusieurs
 points dans les Énergies qu’il possède (c'est à la joueuse ou au joueur de
-limiter cet investissement en fonction des PS et PV actuel de son personnage).
+limiter cet investissement en fonction des PS et EP actuels de son personnage).
 Pour supporter la règle de l'utilisation alternative des énergies (HS 10,
 p.38), il y deux lignes permettant de spécifier quels points on investi dans
 quelle énergie pour augmenter la valeur du test, ou pour profiter d'un des
-effets alternatif.  Une fois l'investissement défini, on valide alors pour
-obtenir le résultat. Tous les paramètres sont alors intégrés et le résultat
-calculé, ainsi que les effets en relançant 2 dés et en utilisant le tableau
-standard des effets (qui est d'ailleurs repris dans un onglet).
+effets alternatifs. Une fois l'investissement défini, on valide pour obtenir le
+résultat. Tous les paramètres sont alors intégrés et le résultat calculé, ainsi
+que les effets en relançant 2 dés et en utilisant le tableau standard des
+effets (qui est d'ailleurs repris dans un onglet).
 
 Dans la fenêtre du Lancer, il est toujours possible de cliquer sur les petits
 dés pour les relancer, ce qui provoque l'adaptation automatique de tous les
