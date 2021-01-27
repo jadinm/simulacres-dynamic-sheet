@@ -159,8 +159,17 @@ function import_data(src_html, dst_html) {
                 } else if (matching) {
                     // Add rows to the tables until it finds the appropriate field
                     const button = dst_html.find("#add-" + matching[1])
-                    button.trigger("click", parseInt(matching[2])) // Add a new elem with forced index
-                    new_input = dst_html.find(old_input_sel)
+                    const row_selector = "#" + matching[1] + "-" + matching[2]
+                    if ($(row_selector).length === 0) {
+                        // The row does not exist, so create it
+                        button.trigger("click", parseInt(matching[2])) // Add a new elem with forced index
+                        new_input = dst_html.find(old_input_sel)
+                        if (new_input.length === 0) {
+                            // The new created row do not contain the new id,
+                            // it is likely that the field was deleted in the new version => we remove the line
+                            $(row_selector).remove()
+                        }
+                    }
                 }
             }
 
