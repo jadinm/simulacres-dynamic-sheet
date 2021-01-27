@@ -746,7 +746,9 @@ class SuperpowerRoll extends TalentRoll {
             modifier.slider("setValue", this.superpower_modifier)
             modifier.slider("refresh", {useCurrentValue: true})
         }
-        $(".roll-dialog-superpower-slider").removeClass("d-none")
+        if (this.energy_investment_validated) {
+            $(".roll-dialog-superpower-slider").removeClass("d-none")
+        }
     }
 }
 
