@@ -6,3 +6,5 @@ target/
 yarn.lock
 node_modules/
 doc/*.pdf
+doc/images/svgs/
+doc/pictos.rst

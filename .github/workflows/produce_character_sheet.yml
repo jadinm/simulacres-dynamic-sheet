@@ -52,7 +52,8 @@ jobs:
           mkdir ~/.fonts
           cp doc/fonts/* ~/.fonts
           fc-cache -f -v
-          cd doc && python3 -m rst2pdf.createpdf ${{ env.DOC_V7 }}.txt -v -s sim_styles.txt -e preprocess --use-floating-images --real-footnotes -o ${{ env.DOC_V7 }}.pdf
+          cd doc/images && python3 create_pictos.py && cd -
+          cd doc && python3 -m rst2pdf.createpdf ${{ env.DOC_V7 }}.txt -v -s sim_styles.txt -e preprocess --use-floating-images --real-footnotes -o ${{ env.DOC_V7 }}.pdf && cd -
 
       - name: Upload the base v7 sheet
         uses: actions/upload-artifact@v2

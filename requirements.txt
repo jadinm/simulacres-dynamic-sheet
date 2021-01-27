@@ -3,3 +3,4 @@ bs4
 html5lib
 rst2pdf
 svglib
+reportlab
