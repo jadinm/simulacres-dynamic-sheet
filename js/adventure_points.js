@@ -3,6 +3,8 @@ $("select.adventure-points-select").on("changed.bs.select", compute_remaining_ap
 
 function work_talents() {
     let val = $("#work-talents").val()
+    if (!val)
+        val = []
     if (!Array.isArray(val))
         val = [val]
     return val
@@ -10,6 +12,8 @@ function work_talents() {
 
 function main_work_talents() {
     let val = $("#work-main-talent").val()
+    if (!val)
+        val = []
     if (!Array.isArray(val))
         val = [val]
     return val
@@ -17,6 +21,8 @@ function main_work_talents() {
 
 function advised_talent() {
     let val = $("#advised-talents").val()
+    if (!val)
+        val = []
     if (!Array.isArray(val))
         val = [val]
     return val
@@ -24,6 +30,8 @@ function advised_talent() {
 
 function talent_x_inefficient_raise() {
     let val = $("#talents-inefficient-raise").val()
+    if (!val)
+        val = []
     if (!Array.isArray(val))
         val = [val]
     return val
