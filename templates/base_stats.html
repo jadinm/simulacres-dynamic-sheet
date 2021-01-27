@@ -120,7 +120,7 @@
                             <use xlink:href="#svg-perception"></use>
                         </svg>
                         <input class="form-control means text-center" id="perception" name="perception"
-                               type="number" value="1" min="1" max="{{ max_means }}">
+                               type="number" value="1" min="0" max="{{ max_means }}">
                     </div>
                 </div>
                 <div class="row m-0">
@@ -130,7 +130,7 @@
                             <use xlink:href="#svg-action"></use>
                         </svg>
                         <input class="form-control means text-center" id="action" name="action" type="number"
-                               value="1" min="1" max="{{ max_means }}">
+                               value="1" min="0" max="{{ max_means }}">
                     </div>
                 </div>
                 {% if matrix_4x4 %}
@@ -141,7 +141,7 @@
                                 <use xlink:href="#svg-desire"></use>
                             </svg>
                             <input class="form-control means text-center" id="desire" name="desire"
-                                   type="number" value="1" min="1" max="{{ max_means }}">
+                                   type="number" value="1" min="0" max="{{ max_means }}">
                         </div>
                     </div>
                 {% endif %}
@@ -152,7 +152,7 @@
                             <use xlink:href="#svg-resistance"></use>
                         </svg>
                         <input class="form-control means text-center" id="resistance" name="resistance"
-                               type="number" value="1" min="1" max="{{ max_means }}">
+                               type="number" value="1" min="0" max="{{ max_means }}">
                     </div>
                 </div>
             </div>
@@ -177,7 +177,7 @@
                                     <use xlink:href="#svg-perception"></use>
                                 </svg>
                                 <input class="form-control means text-center" id="perception" name="perception"
-                                       type="number" value="1" min="1" max="{{ max_means }}">
+                                       type="number" value="1" min="0" max="{{ max_means }}">
                             </div>
                         </th>
                         <th scope="col" class="align-middle md-form input-with-pre-icon">
@@ -186,7 +186,7 @@
                                     <use xlink:href="#svg-action"></use>
                                 </svg>
                                 <input class="form-control means text-center" id="action" name="action" type="number"
-                                       value="1" min="1" max="{{ max_means }}">
+                                       value="1" min="0" max="{{ max_means }}">
                             </div>
                         </th>
                         {% if matrix_4x4 %}
@@ -196,7 +196,7 @@
                                         <use xlink:href="#svg-desire"></use>
                                     </svg>
                                     <input class="form-control means text-center" id="desire" name="desire"
-                                           type="number" value="1" min="1" max="{{ max_means }}">
+                                           type="number" value="1" min="0" max="{{ max_means }}">
                                 </div>
                             </th>
                         {% endif %}
@@ -206,7 +206,7 @@
                                     <use xlink:href="#svg-resistance"></use>
                                 </svg>
                                 <input class="form-control means text-center" id="resistance" name="resistance"
-                                       type="number" value="1" min="1" max="{{ max_means }}">
+                                       type="number" value="1" min="0" max="{{ max_means }}">
                             </div>
                         </th>
                     </tr>
