@@ -407,6 +407,15 @@ class TalentRoll extends Roll {
             }
         }
 
+        let superpower_bonus = ""
+        for (let i in this.formula_elements) {
+            const base_array = this.formula_elements[i][0].id.split("-")
+            const formula_base_name = base_array[base_array.length - 1]
+            if (SuperpowerRollTable.components().includes(formula_base_name)) {
+                superpower_bonus = "</div><div class='row mx-1 align-middle'> La composante utilisée est celle d'un super-pouvoir (bonus de +4 déjà appliqué)"
+            }
+        }
+
         const threshold_name = intermediate_discovery ? "Valeur du test <=" : "Valeur seuil ="
         let details_text
         if (this.energy_investment_validated) {
@@ -414,7 +423,7 @@ class TalentRoll extends Roll {
                 + this.dice_buttons("base_dices", this.base_dices)
                 + "</div><div class='row mx-1 align-middle'>" + threshold_name
                 + "&nbsp;<span id='roll-dialog-threshold'>"
-                + this.max_threshold() + "</span>" + racial_bonus + "</div>"
+                + this.max_threshold() + "</span>" + racial_bonus + superpower_bonus + "</div>"
         } else {
             details_text ="<div class='row mx-1 align-middle'>" + threshold_name
                 + "&nbsp;<span id='roll-dialog-threshold'>"
