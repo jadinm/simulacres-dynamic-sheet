@@ -139,6 +139,17 @@
                             </div>
                         </div>
                     {% endif %}
+                    <div class="row mx-1 roll-dialog-effect-hide roll-dialog-slider roll-dialog-superpower-slider">
+                        <label id="roll-dialog-superpower-modifier-label" for="roll-dialog-superpower-modifier">
+                            Modificateur du nombre de réussites
+                        </label>
+                    </div>
+                    <div class="row mx-1 mb-5 roll-dialog-effect-hide roll-dialog-slider roll-dialog-superpower-slider">
+                        <input id="roll-dialog-superpower-modifier"
+                               data-slider-id="roll-dialog-superpower-modifier-slider" type="text" data-slider-min="-12"
+                               data-slider-max="0" data-slider-step="1" data-slider-value="0" class="input-slider"
+                               data-slider-tooltip-position="bottom"/>
+                    </div>
                     <div class="row mx-1 roll-dialog-effect-hide roll-dialog-slider">
                         <label id="roll-dialog-modifier-label" for="roll-dialog-modifier">
                             {% if version == V8 %}

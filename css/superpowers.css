@@ -1,0 +1,15 @@
+.superpower-value {
+    min-width: 8em;
+}
+
+.superpower-formula {
+    min-width: 7.5em;
+}
+
+#roll-dialog-superpower-modifier-slider .slider-selection {
+    background: black;
+}
+
+#roll-dialog-superpower-modifier-slider .slider-handle {
+    background: black;
+}

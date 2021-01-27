@@ -23,7 +23,7 @@
             </svg>
         </label>
     </div>
-    {% if version == V7 %}
+    {% if version == V7 and not no_realm %}
         <div class="custom-control {{ realm_class }} custom-control-inline">
             <input type="checkbox" class="custom-control-input formula-elem"
                    id="{{ row_type }}-x-mineral" name="{{ row_type }}-x-realm">
@@ -42,7 +42,7 @@
                 </svg>
             </label>
         </div>
-    {% elif not discovery %}
+    {% elif not discovery and not no_realm %}
         <div class="custom-control custom-radio custom-control-inline">
             <input type="checkbox" class="custom-control-input formula-elem"
                    id="{{ row_type }}-x-nature" name="{{ row_type }}-x-realm">
@@ -85,7 +85,7 @@
             </svg>
         </label>
     </div>
-    {% if version == V7 %}
+    {% if version == V7 and not no_realm %}
         <div class="custom-control {{ realm_class }} custom-control-inline">
             <input type="checkbox" class="custom-control-input formula-elem"
                    id="{{ row_type }}-x-vegetal" name="{{ row_type }}-x-realm">
@@ -104,7 +104,7 @@
                 </svg>
             </label>
         </div>
-    {% elif not discovery %}
+    {% elif not discovery and not no_realm %}
         <div class="custom-control custom-radio custom-control-inline">
             <input type="checkbox" class="custom-control-input formula-elem"
                    id="{{ row_type }}-x-humanoid" name="{{ row_type }}-x-realm">
@@ -156,7 +156,7 @@
             </label>
         </div>
     {% endif %}
-    {% if version == V7 %}
+    {% if version == V7 and not no_realm %}
         <div class="custom-control {{ realm_class }} custom-control-inline">
             <input type="checkbox" class="custom-control-input formula-elem"
                    id="{{ row_type }}-x-animal" name="{{ row_type }}-x-realm">
@@ -175,7 +175,7 @@
                 </svg>
             </label>
         </div>
-    {% elif not discovery %}
+    {% elif not discovery and not no_realm %}
         <div class="custom-control custom-radio custom-control-inline">
             <input type="checkbox" class="custom-control-input formula-elem"
                    id="{{ row_type }}-x-artificial" name="{{ row_type }}-x-realm">
@@ -225,7 +225,7 @@
             </label>
         </div>
     {% endif %}
-    {% if version == V8 and not discovery %}
+    {% if version == V8 and not discovery and not no_realm %}
         <div class="custom-control custom-radio custom-control-inline">
             <input type="checkbox" class="custom-control-input formula-elem"
                    id="{{ row_type }}-x-supernatural" name="{{ row_type }}-x-realm">

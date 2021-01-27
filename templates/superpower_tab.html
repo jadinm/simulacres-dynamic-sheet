@@ -1,0 +1,87 @@
+<div id="superpower-tab" class="tab-pane fade row container-fluid m-0 pt-2">
+    <!-- Superpowers -->
+    <div class="row col-12 mt-2 m-0 p-0"><b>Super-pouvoirs</b></div>
+    <div class="table-responsive col-12 m-0 p-0 pb-2" style="overflow-y: hidden !important;">
+        <table class="table table-hover m-0 p-0">
+            <thead class="m-0 p-0">
+            <tr>
+                <th scope="col" style="width: 15%">Nom</th>
+                <th scope="col" class="text-center" style="width: 2.5%">Formule</th>
+                <th scope="col" class="text-center" style="width: 10%">Modificateur composante</th>
+                <th scope="col" class="text-center" style="width: 10%">Modificateur moyen</th>
+                <th scope="col" class="text-center" style="width: 5%">Valeur</th>
+                <th scope="col" class="text-center" style="width: 2.5%">Temps</th>
+                <th scope="col" class="text-center" style="width: 2.5%">Distance</th>
+                <th scope="col" style="width: 50%">Effet</th>
+            </tr>
+            </thead>
+            <tbody id="superpower-table" class="sortable-list">
+            <tr id="superpower-x" class="superpower" hidden>
+                <td class="md-form align-middle" data-toggle="tooltip" data-placement="bottom" title="">
+                    <i id="superpower-x-name-handle" class="fas fa-arrows-alt prefix h-100"
+                       style="font-size: 1.5em;"></i>
+                    <label for="superpower-x-name"></label>
+                    <input id="superpower-x-name" class="form-control" type="text" value="">
+                </td>
+                <td class="my-0 py-0 superpower-formula align-middle">
+                    {% with row_type = "superpower", realm_checkbox = False, no_realm = True %}
+                        {% include "roll_formula.html" %}
+                    {% endwith %}
+                </td>
+                <td class="my-0 py-0 align-middle">
+                    <div class="text-center md-form col-12 py-0 my-0 mt-2">
+                        <label class="py-0 my-0" for="superpower-x-component-modifier"></label>
+                        <input class="form-control py-0 my-0 text-center" id="superpower-x-component-modifier"
+                               type="number" value="0">
+                    </div>
+                </td>
+                <td class="my-0 py-0 align-middle">
+                    <div class="text-center md-form col-12 py-0 my-0 mt-2">
+                        <label class="py-0 my-0" for="superpower-x-means-modifier"></label>
+                        <input class="form-control py-0 my-0 text-center" id="superpower-x-means-modifier"
+                               type="number" value="0">
+                    </div>
+                </td>
+                <td class="my-0 py-0 text-center align-middle superpower-value">
+                    <span id="superpower-x-nbr-dices">0</span>
+                    <span>d6 &le;</span>
+                    <span id="superpower-x-under-value">0</span>
+                    <span id="superpower-x-dice" class="clickable row-roll-trigger">
+                        <i class="fas fa-dice"></i>
+                    </span>
+                </td>
+                <td class="md-form my-0 py-0 align-middle">
+                    <input id="superpower-x-time" class="form-control text-center" type="text">
+                    <label for="superpower-x-time"></label>
+                </td>
+                <td class="md-form my-0 py-0 align-middle">
+                    <input id="superpower-x-distance" class="form-control text-center" type="text">
+                    <label for="superpower-x-distance"></label>
+                </td>
+                <td class="md-form my-0 py-0 align-middle">
+                    <input id="superpower-x-effect" class="form-control" type="text">
+                    <label for="superpower-x-effect"></label>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="row col-12 m-0 p-0">
+        <div class="col-lg-2 col-md-4 row">
+            <div class="col-6 px-0 mx-0">
+                <button id="add-superpower" class="btn btn-success btn-block">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <div class="col-6 px-0 mx-0">
+                <div id="superpower-table-remove" class="sortable-list text-center" style="min-height: 50px">
+                    <button class="btn-block btn btn-danger" style="cursor:default;" data-toggle="tooltip"
+                            data-html="true" data-placement="bottom"
+                            title="Déplacez un élément ici pour le supprimer">
+                        <i class="fas fa-trash-alt fa-1x"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

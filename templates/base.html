@@ -43,6 +43,7 @@
     <style>{{ include_static("../css/rolls.css") }}</style>
     <style>{{ include_static("../css/background.css") }}</style>
     <style>{{ include_static("../css/notes.css") }}</style>
+    <style>{{ include_static("../css/superpowers.css") }}</style>
 
     <script>{{ include_static("../node_modules/jquery/dist/jquery.min.js") }}</script>
     <script>{{ include_static("../node_modules/popper.js/dist/umd/popper.min.js") }}</script>
@@ -132,6 +133,12 @@
                             Psi
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#superpower-tab" role="tab" aria-controls="profile"
+                           aria-selected="false">
+                            Super-pouvoirs
+                        </a>
+                    </li>
                 {% endif %}
             {% elif universe == captain_voodoo %}
                 <li class="nav-item">
@@ -205,6 +212,9 @@
 
                     <!-- Psi board -->
                     {% include "psi_tab.html" %}
+
+                    <!-- Superpower board -->
+                    {% include "superpower_tab.html" %}
                 {% endif %}
             {% elif universe == captain_voodoo %}
                 <!-- Magic -->

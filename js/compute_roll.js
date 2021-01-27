@@ -10,24 +10,36 @@ class RollRow extends DataRow {
         return realm.match(realms) ? realm : ""
     }
 
+    formula_elem(element, fixed_realm = null) {
+        const elem_name = this.id + "-" + element
+        let checked_elem = $("input[name=" + elem_name + "]:checked")
+        if (element === "realm" && fixed_realm != null)
+            checked_elem = checked_elem.filter("[id*=\"-" + fixed_realm + "\"]")
+        if (checked_elem.length === 0)
+            return [0, $()]  // Allow partial formulas
+        const base_array = checked_elem[0].id.split("-")
+        const formula_base_name = base_array[base_array.length - 1]
+        let bonus = 0
+        if (formula_base_name === "resistance" && is_hobbit()) {
+            bonus += 1 // Hobbits have an increased resistance
+        }
+        if (!(this instanceof SuperpowerRow)) {
+            const components = SuperpowerRollTable.components()
+            if (components.includes(formula_base_name))
+                bonus += 4 // Super heroes have bonuses on all tests based on their component power
+        }
+        return [bonus + parseInt($("#" + formula_base_name).val()), checked_elem]
+    }
+
     compute_formula(fixed_realm = null) {
         const elements = ["component", "means", "realm"]
         let sum = 0
         const checked_elements = []
         for (let i = 0; i < elements.length; i++) {
-            const elem_name = this.id + "-" + elements[i]
-            let checked_elem = $("input[name=" + elem_name + "]:checked")
-            if (elements[i] === "realm" && fixed_realm != null)
-                checked_elem = checked_elem.filter("[id*=\"-" + fixed_realm + "\"]")
-            if (checked_elem.length === 0)
-                continue  // Allow partial formulas
-            checked_elements.push(checked_elem)
-            const base_array = checked_elem[0].id.split("-")
-            const formula_base_name = base_array[base_array.length - 1]
-            if (formula_base_name === "resistance" && is_hobbit()) {
-                sum += 1 // Hobbits have an increased resistance
-            }
-            sum += parseInt($("#" + formula_base_name).val())
+            const ret = this.formula_elem(elements[i], fixed_realm)
+            sum += ret[0]
+            if (ret[1].length > 0)
+                checked_elements.push(ret[1])
         }
         return [sum, checked_elements]
     }
@@ -101,7 +113,7 @@ class RollRow extends DataRow {
 
         // Do the actual roll
         const value = parseInt(this.get("value").text())
-        new Roll(roll_reason, value, difficulty, this.get("effect").val(),
+        new TalentRoll(roll_reason, value, difficulty, this.get("effect").val(),
             critical_increase, formula_elements, margin_throttle, false, "", "").trigger_roll()
         $('#roll-dialog').modal()
     }
@@ -212,7 +224,7 @@ class SpellRow extends RollRow {
 
         // Do the actual roll
         const value = parseInt(this.get("value", button).text())
-        new Roll(roll_reason, value, difficulty, this.get("effect").val(),
+        new TalentRoll(roll_reason, value, difficulty, this.get("effect").val(),
             critical_increase, formula_elements, margin_throttle, true, spell_distance,
             spell_duration).trigger_roll()
         $('#roll-dialog').modal()
@@ -328,6 +340,62 @@ class SpellRow extends RollRow {
 
         // Update adventure points
         compute_remaining_ap()
+    }
+}
+
+class SuperpowerRow extends RollRow {
+    realm(realm_based_div) {
+        return "" // No realm for superpowers
+    }
+
+    component_value() {
+        return this.formula_elem("component")[0]
+    }
+
+    means_value() {
+        return this.formula_elem("means")[0]
+    }
+
+    update_roll_value() {
+        // Recover component, means
+        let nbr_dices = this.component_value()
+        let under_value = this.means_value()
+
+        // Retrieve dice and value modifier
+        const component_modifier = parseInt(this.get("component-modifier").val())
+        if (!isNaN(component_modifier))
+            nbr_dices += component_modifier
+        const means_modifier = parseInt(this.get("means-modifier").val())
+        if (!isNaN(means_modifier))
+            under_value += means_modifier
+
+        // Update
+        this.get("nbr-dices").text(Math.max(0, nbr_dices))
+        this.get("under-value").text(Math.max(0, under_value))
+    }
+
+    roll(button) {
+        // Find either spell difficulty or talent level to detect critical rolls
+        const formula_elements = this.compute_formula()[1]
+        const roll_reason = this.get("name").val()
+        let nbr_dices = parseInt(this.get("nbr-dices").text())
+        if (isNaN(nbr_dices)) {
+            nbr_dices = 0
+        }
+        let under_value = parseInt(this.get("under-value").text())
+        if (isNaN(under_value)) {
+            under_value = 0
+        }
+        let power_distance = this.get("distance").val()
+        let power_duration = this.get("time").val()
+
+        // Reset all invested energies
+        $(".roll-dialog-energy").val(0)
+
+        // Do the actual roll
+        new SuperpowerRoll(roll_reason, nbr_dices, under_value, formula_elements, power_distance, power_duration,
+            this.get("effect").val()).trigger_roll()
+        $('#roll-dialog').modal()
     }
 }
 
@@ -488,6 +556,63 @@ class PsiRollTable extends SpellRollTable {
     }
 }
 
+class SuperpowerRollTable extends TalentRollTable {
+    row_class = SuperpowerRow
+
+    static components() {
+        // Get all of the superpower components
+        return $(".superpower").map((i, elem) => {
+            const component = SuperpowerRow.of(elem).formula_elem("component")[1].filter((i, elem) => {
+                return $(elem).attr("name").includes("component")
+            }).map((i, elem) => {
+                const base_array = elem.id.split("-")
+                return base_array[base_array.length - 1]
+            })
+            return component ? component[0] : []
+        }).toArray().flat()
+    }
+
+    trigger_roll(event) {
+        // Find the real target of the click
+        let button = $(event.target)
+        if (!button.hasClass("row-roll-trigger"))
+            button = $(event.target).parents(".row-roll-trigger")
+        SuperpowerRow.of(button).roll(button)
+    }
+
+    formula_changed(e) {
+        e.preventDefault()
+        SuperpowerRow.of(e.target).update_roll_value()
+
+        // Update all of the spell values
+        $(".spell-value").each((i, elem) => {
+            SpellRow.of(elem).update_roll_value()
+        })
+        // Update all the rolls
+        $(".roll-value,.dual_wielding-value").each((i, elem) => {
+            RollRow.of(elem).update_roll_value()
+        })
+    }
+
+    select_changed(e) {
+        SuperpowerRow.of(e.target).update_roll_value()
+    }
+
+    input_change(e) {
+        SuperpowerRow.of(e.target).update_roll_value()
+    }
+
+    add_custom_listener_to_row(row) {
+        super.add_custom_listener_to_row(row)
+        row.get("component-modifier").uon("change", this.input_change)
+        row.get("means-modifier").uon("change", this.input_change)
+    }
+
+    clone_row() {
+        return this.template_row.clone(true, false)
+    }
+}
+
 const talent_list_selector = ".talent input[id*='-name']"
 
 /* Helper functions */
@@ -538,6 +663,10 @@ $("#race,.realm,.component,.means," + talent_list_selector).on("change", _ => {
     $(".spell-value").each((i, elem) => {
         SpellRow.of(elem).update_roll_value()
     })
+    // Update all of the superpower values
+    $(".superpower").each((i, elem) => {
+        SuperpowerRow.of(elem).update_roll_value()
+    })
     // Update all the rolls
     $(".roll-value,.dual_wielding-value").each((i, elem) => {
         RollRow.of(elem).update_roll_value()
@@ -561,4 +690,5 @@ $(_ => {
     new SpellRollTable($("#spell-table"))
     new KiTable($("#ki-table"))
     new PsiRollTable($("#psi-table"))
+    new SuperpowerRollTable($("#superpower-table"))
 })

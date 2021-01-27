@@ -17,7 +17,9 @@ avec les éléments suivants en plus :
 - la proposition de règle non officielle sur
   [le combat à deux armes](https://www.facebook.com/groups/Simulacres/permalink/2507313226187735/) par Karl Karas.
 - le bon, le méchant et le druide
-  (voir [Casus Belli LPC n°17](http://joueursdurepaire.free.fr/casus_belli/cb_LPC17.html)).
+  (voir [Casus Belli LPC n°17](http://joueursdurepaire.free.fr/casus_belli/cb_LPC17.html))
+- les super-pouvoirs
+  (voir [Causus Belli HS 10 p.46](https://www.facebook.com/groups/Simulacres/permalink/2510465732539151/))
 - les pouvoirs psioniques
   (voir [Causus Belli HS 10 p.47](https://www.facebook.com/groups/Simulacres/permalink/2510465732539151/))
 

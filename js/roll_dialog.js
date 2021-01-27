@@ -64,19 +64,143 @@ const last_rolls = []
 let current_roll = null
 
 class Roll {
+    constructor(number = 2, type = 6) {
+        this.number = number
+        this.type = type
+        this.base_dices = []
+        this.timestamp = new Date()
+
+        // Add to the list of rolls
+        last_rolls.push(this)
+    }
+
+    roll_dices(number, type, dices) {
+        return roll_dices(number, type, dices)
+    }
+
+    dice_value() {
+        if (this.base_dices.length === 0) {
+            // Roll needed
+            this.roll_dices(this.number, this.type, this.base_dices)
+        }
+        return this.base_dices.reduce((a, b) => {
+            return a + b;
+        }, 0);
+    }
+
+    is_critical_failure() {
+        return this.dice_value() === 12
+    }
+
+    is_critical_success() {
+        return this.dice_value() <= 2
+    }
+
+    dice_buttons(dice_group, dices = []) {
+        const digits = ["", "one", "two", "three", "four", "five", "six"]
+        let text = "&nbsp;"
+        for (let i in dices) {
+            if (dices[i] > 0 && dices[i] <= 6)
+                text += '<span class="clickable btn-link roll-link" data-dice-group="' + dice_group
+                    + '" data-dice-idx="' + i + '" data-toggle="tooltip" data-placement="bottom" title="Relancer le dé">' +
+                    '<i class="fas fa-lg fa-dice-' + digits[dices[i]] + '"></i></span>'
+            else
+                text += dices[i]
+            if (parseInt(i) !== dices.length - 1)
+                text += "&nbsp;<i class=\"fas fa-sm fa-plus mt-1\"></i>&nbsp;"
+        }
+        return text + "&nbsp;"
+    }
+
+    modify_dialog(ignore_sliders) {
+        // Reset text
+        $("#roll-dialog-1d6-result").text("")
+        $("#roll-dialog-2d6-result").text("")
+        const critical_div = $("#roll-dialog-critical")
+        critical_div.text("")
+
+        // Check for critical rolls
+        critical_failure = false
+        critical_success = false
+        if (this.is_critical_failure()) {
+            critical_div.html("<b class='text-danger'>Échec critique... :'(</b>")
+            critical_failure = true
+        } else if (this.is_critical_success()) {
+            critical_div.html("<b class='text-success'>Succès critique !</b>")
+            critical_success = true
+        }
+
+        // Hide everything and show it afterwards if needed
+        const roll_effect_divs = $(".roll-dialog-effect-hide")
+        const roll_magic_divs = $(".roll-dialog-magic-hide")
+        roll_effect_divs.addClass("d-none")
+        roll_magic_divs.addClass("d-none")
+        $("#roll-dialog-result-label").html("Résultat du lancer de 2d6 = ")
+        $("#roll-dialog-result").html(this.dice_value())
+        $("#roll-dialog-details").html(this.dice_buttons("base_dices", this.base_dices)).removeClass("d-none")
+
+        $("#roll-dialog-title").html("<h2>Résultat du lancer</h2>"
+            + "<sm class='text-center'>" + this.timestamp.toLocaleString("fr-FR") + "</sm>")
+    }
+
+    make_dices_clickable() {
+        $(".roll-link").on("click", e => {
+            let target = $(e.target)
+            if (!target.hasClass("roll-link"))
+                target = target.parents(".roll-link")
+
+            const new_value = roll_dices(1, 6)
+            const dice_group = target.get(0).getAttribute("data-dice-group")
+            const dice_idx = target.get(0).getAttribute("data-dice-idx")
+            current_roll[dice_group][dice_idx] = new_value
+            target.tooltip("dispose")
+            current_roll.show_roll()
+        }).tooltip({disabled: false})
+    }
+
+    show_roll(ignore_sliders = false) {
+        // Update current roll
+        current_roll = this
+
+        // Show roll navigation
+        const forward = $("#roll-dialog-history-forward")
+        forward.addClass("invisible")
+        if (last_rolls[last_rolls.length - 1] !== this) {
+            forward.removeClass("invisible")
+        }
+        const backward = $("#roll-dialog-history-backward")
+        backward.addClass("invisible")
+        if (last_rolls[0] !== this) {
+            backward.removeClass("invisible")
+        }
+
+        this.modify_dialog(ignore_sliders)
+
+        // Make dices clickable to reroll
+        this.make_dices_clickable()
+
+        $(".roll-dialog-energy").parent().tooltip({disabled: false})
+    }
+
+    trigger_roll() {
+        this.show_roll()
+    }
+}
+
+class TalentRoll extends Roll {
     constructor(reason = "", max_value = NaN, talent_level = 0, effect = "",
                 critical_increase = 0, formula_elements = [], margin_throttle = NaN,
-                is_magic = false, distance = "", duration = "",
-                base_dices = [], critical_dices = [], effect_dices = [], power_dices = []) {
+                is_magic = false, distance = "", duration = "") {
+        super()
         this.reason = reason
         this.formula_elements = formula_elements
         this.max_value = max_value
         this.margin_throttle = margin_throttle
         this.talent_level = talent_level
         this.effect = effect
-        this.base_dices = base_dices
-        this.critical_dices = critical_dices
-        this.effect_dices = effect_dices
+        this.base_dices = []
+        this.critical_dices = []
+        this.effect_dices = []
 
         this.is_magic = is_magic
         this.distance = distance // Spell parameter increased by power
@@ -88,7 +212,7 @@ class Roll {
         this.optional_precision = NaN
         this.power = NaN
         this.optional_power = NaN
-        this.power_dices = power_dices
+        this.power_dices = []
         this.magic_power = NaN
         this.speed = NaN
         this.optional_speed = NaN
@@ -101,19 +225,12 @@ class Roll {
         this.margin_modifier = 0
         this.effect_modifier = 0
 
-        this.energy_investment_validated = !this.is_talent_roll() || !has_any_base_energy()
-
-        // Add to the list of rolls
-        last_rolls.push(this)
-    }
-
-    roll_dices(number, type, dices) {
-        return roll_dices(number, type, dices)
+        this.energy_investment_validated = !has_any_base_energy()
     }
 
     column_effect(column, modifier) {
         const total = this.post_test_margin() + this.effect_value() + this.effect_modifier + modifier
-        if (this.post_test_margin() < 0 || total < 0)
+        if (this.post_test_margin() <= 0 || total < 0)
             return 0
         if (total > 26) {
             const additional_ranges = Math.floor((total - 26) / 4) + 1
@@ -201,16 +318,6 @@ class Roll {
         update_max_invested_energies($("#precision")[0])
     }
 
-    dice_value() {
-        if (this.base_dices.length === 0) {
-            // Roll needed
-            this.roll_dices(2, 6, this.base_dices)
-        }
-        return this.base_dices.reduce((a, b) => {
-            return a + b;
-        }, 0);
-    }
-
     effect_value() {
         if (is_v7 && this.effect_dices.length === 0) {
             // Roll needed
@@ -246,14 +353,6 @@ class Roll {
         }, 0);
     }
 
-    is_talent_roll() {
-        return !isNaN(this.max_value)
-    }
-
-    is_critical_failure() {
-        return this.dice_value() === 12
-    }
-
     is_critical_success() {
         const precision = this.optional_precision == null ? 0 : this.optional_precision
         // talents at level -4 and -2 trigger a critical roll at the same probability as talents at level 0
@@ -265,36 +364,67 @@ class Roll {
             && (this.margin() > 0 || this.margin() === 0 && !is_v7 || this.is_critical_success())
     }
 
-    dice_buttons(dice_group, dices = []) {
-        const digits = ["", "one", "two", "three", "four", "five", "six"]
-        let text = "&nbsp;"
-        for (let i in dices) {
-            if (dices[i] > 0 && dices[i] <= 6)
-                text += '<span class="clickable btn-link roll-link" data-dice-group="' + dice_group
-                    + '" data-dice-idx="' + i + '" data-toggle="tooltip" data-placement="bottom" title="Relancer le dé">' +
-                    '<i class="fas fa-lg fa-dice-' + digits[dices[i]] + '"></i></span>'
-            else
-                text += dices[i]
-            if (parseInt(i) !== dices.length - 1)
-                text += "&nbsp;<i class=\"fas fa-sm fa-plus mt-1\"></i>&nbsp;"
-        }
-        return text + "&nbsp;"
+    critical_success_text() {
+        if (discovery)
+            return "<div class='row mx-1 align-middle'>Doublez l'effet grâce au succès critique</div>"
+        else
+            return "<div class='row mx-1 align-middle'>" + this.critical_dices.length + "d6 ajouté" + ((this.critical_dices.length > 1) ? "s" : "")
+                + " à la marge d'une valeur de " + this.critical_value() + this.dice_buttons("critical_dices", this.critical_dices) + "</div>"
     }
 
-    show_roll(ignore_sliders = false) {
-        // Update current roll
-        current_roll = this
-        // Show roll navigation
-        const forward = $("#roll-dialog-history-forward")
-        forward.addClass("invisible")
-        if (last_rolls[last_rolls.length - 1] !== this) {
-            forward.removeClass("invisible")
+    critical_failure_text() {
+        return "<div class='row mx-1 align-middle'>La marge est maximum 0 et c'est un échec</div>"
+    }
+
+    details_text() {
+        let effect_text = isNaN(this.margin_throttle) ? "" : "<div class='row mx-1 align-middle'>La marge maximum est de "
+            + this.margin_throttle + "</div>"
+        if (this.energy_investment_validated) {
+            let effect_dices_sum = 0
+            if (this.is_success() && this.optional_power > 0 && this.power_value() >= 0) {
+                effect_text += "<div id='roll-dialog-power-test' class='row mx-1 align-middle'>" + this.optional_power + "d6 de puissance rajoutés = "
+                    + this.power_value() + this.dice_buttons("power_dices", this.power_dices.slice(0, this.optional_power)) + "</div>"
+            }
+            if (is_v7) {
+                // Roll the two additional dices
+                effect_dices_sum = this.effect_value()
+                effect_text += "<div class='row mx-1 align-middle'>Dés d'effet = " + effect_dices_sum
+                    + this.dice_buttons("effect_dices", this.effect_dices) + "</div>"
+            } else if (!discovery) {
+                // DSS = MR // 3 and DES = 0 or (1 if 4 <= ME <= 6) or (2 if ME >= 7)
+                effect_text += "<div class='row mx-1 align-middle'>DSS =&nbsp;<span class='roll-dialog-dss'>" + this.dss()
+                    + "</span></div><div class='row mx-1 align-middle'>DES =&nbsp;<span class='roll-dialog-des'>" + this.des() + "</span></div>"
+            }
         }
-        const backward = $("#roll-dialog-history-backward")
-        backward.addClass("invisible")
-        if (last_rolls[0] !== this) {
-            backward.removeClass("invisible")
+
+        let racial_bonus = ""
+        for (let i in this.formula_elements) {
+            const base_array = this.formula_elements[i][0].id.split("-")
+            const formula_base_name = base_array[base_array.length - 1]
+            if (formula_base_name === "resistance" && is_hobbit()) {
+                racial_bonus = " (bonus ethnique déjà appliqué)" +
+                    "</div><div class='row mx-1 align-middle'>Ce test est raté s'il s'agit de résister à l'hypnose ou aux illusions"
+            }
         }
+
+        const threshold_name = intermediate_discovery ? "Valeur du test <=" : "Valeur seuil ="
+        let details_text
+        if (this.energy_investment_validated) {
+            details_text = "<div class='row mx-1 align-middle'>Somme des 2d6 = " + this.dice_value()
+                + this.dice_buttons("base_dices", this.base_dices)
+                + "</div><div class='row mx-1 align-middle'>" + threshold_name
+                + "&nbsp;<span id='roll-dialog-threshold'>"
+                + this.max_threshold() + "</span>" + racial_bonus + "</div>"
+        } else {
+            details_text ="<div class='row mx-1 align-middle'>" + threshold_name
+                + "&nbsp;<span id='roll-dialog-threshold'>"
+                + this.max_threshold() + "</span>" + racial_bonus + "</div>"
+        }
+
+        return [details_text, effect_text]
+    }
+
+    modify_dialog(ignore_sliders) {
 
         // Reset text
         $("#roll-dialog-1d6-result").text("")
@@ -304,22 +434,16 @@ class Roll {
 
         // Check for critical rolls
         let text_end = ""
-        let modifier = 0
         critical_failure = false
         critical_success = false
         this.update_energies()
         if (this.energy_investment_validated && this.is_critical_failure()) {
             critical_div.html("<b class='text-danger'>Échec critique... :'(</b>")
-            text_end = "<div class='row mx-1 align-middle'>La marge est maximum 0 et c'est un échec</div>"
+            text_end = this.critical_failure_text()
             critical_failure = true
         } else if (this.energy_investment_validated && this.is_critical_success()) {
             critical_div.html("<b class='text-success'>Succès critique !</b>")
-            modifier = this.critical_value()
-            if (discovery)
-                text_end = "<div class='row mx-1 align-middle'>Doublez l'effet grâce au succès critique</div>"
-            else
-                text_end = "<div class='row mx-1 align-middle'>" + this.critical_dices.length + "d6 ajouté" + ((this.critical_dices.length > 1) ? "s" : "")
-                    + " à la marge d'une valeur de " + modifier + this.dice_buttons("critical_dices", this.critical_dices) + "</div>"
+            text_end = this.critical_success_text()
             critical_success = true
         }
 
@@ -340,153 +464,110 @@ class Roll {
         const roll_effect_divs = $(".roll-dialog-effect-hide")
         const roll_magic_divs = $(".roll-dialog-magic-hide")
 
-        if (this.is_talent_roll()) {
-            roll_effect_divs.removeClass("d-none")
-            if (this.is_magic)
-                roll_magic_divs.removeClass("d-none")
-            else
-                roll_magic_divs.addClass("d-none")
-
-            const result = $("#roll-dialog-result")
-            const energy_inputs = $(".roll-dialog-energy")
-            let effect_text = isNaN(this.margin_throttle) ? "" : "<div class='row mx-1 align-middle'>La marge maximum est de "
-                + this.margin_throttle + "</div>"
-            if (this.energy_investment_validated) {
-                const validate_button = $("#roll-dialog-validate")
-                validate_button.addClass("d-none")
-                const heroism = $("#heroism")
-                if (heroism.length === 0 || parseInt(heroism.val()) === 0) {
-                    energy_inputs.attr("disabled", "disabled")
-                } else { // You can invest in other energies with heroism only if this was not done before roll
-                    energy_inputs.each((i, elem) => {
-                        if (this.invested_energies.includes(elem.id) || !this.is_success())
-                            $(elem).attr("disabled", "disabled")
-                        else
-                            $(elem).removeAttr("disabled", "disabled")
-                    })
-                }
-
-                result[0].setAttribute("value", this.post_test_margin().toString())
-                result.html(this.post_test_margin())
-
-                set_result_label(this.post_test_margin())
-
-                let effect_dices_sum = 0
-                if (this.is_success() && this.optional_power > 0 && this.power_value() >= 0) {
-                    effect_text += "<div id='roll-dialog-power-test' class='row mx-1 align-middle'>" + this.optional_power + "d6 de puissance rajoutés = "
-                        + this.power_value() + this.dice_buttons("power_dices", this.power_dices.slice(0, this.optional_power)) + "</div>"
-                }
-                if (is_v7) {
-                    // Roll the two additional dices
-                    effect_dices_sum = this.effect_value()
-                    effect_text += "<div class='row mx-1 align-middle'>Dés d'effet = " + effect_dices_sum
-                        + this.dice_buttons("effect_dices", this.effect_dices) + "</div>"
-                } else if (!discovery) {
-                    // DSS = MR // 3 and DES = 0 or (1 if 4 <= ME <= 6) or (2 if ME >= 7)
-                    effect_text += "<div class='row mx-1 align-middle'>DSS =&nbsp;<span class='roll-dialog-dss'>" + this.dss()
-                        + "</span></div><div class='row mx-1 align-middle'>DES =&nbsp;<span class='roll-dialog-des'>" + this.des() + "</span></div>"
-                }
-            } else {
-                result.html("")
-                energy_inputs.removeAttr("disabled", "disabled")
-            }
-
-            $(".energy").each((i, elem) => {
-                update_energy_investment_list(elem)
-            })
-
-            let racial_bonus = ""
-            for (let i in this.formula_elements) {
-                const base_array = this.formula_elements[i][0].id.split("-")
-                const formula_base_name = base_array[base_array.length - 1]
-                if (formula_base_name === "resistance" && is_hobbit()) {
-                    racial_bonus = " (bonus racial déjà appliqué)" +
-                        "</div><div class='row mx-1 align-middle'>Ce test est raté s'il s'agit de résister à l'hypnose ou aux illusions"
-                }
-            }
-
-            const details = $("#roll-dialog-details")
-            const threshold_name = intermediate_discovery ? "Valeur du test <=" : "Valeur seuil ="
-            if (this.energy_investment_validated) {
-                details.html("<div class='row mx-1 align-middle'>Somme des 2d6 = " + this.dice_value()
-                    + this.dice_buttons("base_dices", this.base_dices)
-                    + "</div><div class='row mx-1 align-middle'>" + threshold_name
-                    + "&nbsp;<span id='roll-dialog-threshold'>"
-                    + this.max_threshold() + "</span>" + racial_bonus + "</div>" + text_end + effect_text)
-                $("#roll-dialog-result-label").removeClass("d-none")
-            } else {
-                details.html("<div class='row mx-1 align-middle'>" + threshold_name
-                    + "&nbsp;<span id='roll-dialog-threshold'>"
-                    + this.max_threshold() + "</span>" + racial_bonus + "</div>" + text_end + effect_text)
-                $("#roll-dialog-result-label").addClass("d-none")
-            }
-
-            // Reset additional modifiers
-            if (!ignore_sliders) {
-                select_modifier.slider("setValue", this.margin_modifier)
-                select_effect_modifier.slider("setValue", this.effect_modifier)
-                select_modifier.slider("refresh", {useCurrentValue: true})
-                select_effect_modifier.slider("refresh", {useCurrentValue: true})
-            }
-            if (this.energy_investment_validated) {
-                $(".roll-dialog-slider").removeClass("d-none")
-            } else {
-                $(".roll-dialog-slider").addClass("d-none")
-            }
-
-            let effect = this.effect
-            if (this.energy_investment_validated) {
-                if (is_v7) {
-                    // Show the actual effect instead of [A] or [B+2]
-                    effect = effect.replaceAll(effect_column_regex, (match, prefix, column, modifier, suffix) => {
-                        prefix = prefix.replace(" ", "&nbsp;")
-                        modifier = typeof modifier === "undefined" ? 0 : parseInt(modifier)
-                        const effect_value = this.is_success() ? this.column_effect(column, modifier) : 0
-                        suffix = suffix.replace(" ", "&nbsp;")
-                        return prefix + "<span class='roll-dialog-effect' column='" + column + "' " + "modifier='" + modifier + "'>" + effect_value + "</span>" + suffix
-                    })
-                } else {
-                    // Update with the DSS if "DSS" is in the text
-                    effect = effect.replaceAll(effect_dss_regex, (match, prefix, _, suffix) => {
-                        return prefix.replace(" ", "&nbsp;") + "<span class='roll-dialog-dss'>" + this.dss() + "</span>"
-                            + suffix.replace(" ", "&nbsp;")
-                    })
-                    effect = effect.replaceAll(effect_des_regex, (match, prefix, _, suffix) => {
-                        return prefix.replace(" ", "&nbsp;") + "<span class='roll-dialog-des'>" + this.des() + "</span>"
-                            + suffix.replace(" ", "&nbsp;")
-                    })
-                }
-                effect = effect.replaceAll(effect_margin_regex, (match, prefix, _, suffix) => {
-                    return prefix.replace(" ", "&nbsp;")
-                        + "<span class='roll-dialog-margin'>" + this.post_test_margin() + "</span>"
-                        + suffix.replace(" ", "&nbsp;")
-                });
-            }
-            effect = "<div class='row mx-1 align-middle'>Effet:</div><div class='row mx-1 align-middle'>" + effect + "</div>"
-
-            if (this.is_magic && this.distance.length > 0) {
-                const distance = this.distance.replaceAll(/\d+/gi, (match) => {
-                    return String(parseInt(match) * Math.pow(2, this.magic_power))
-                })
-                effect = "<div class='row mx-1 align-middle'>Portée: " + distance + "</div>" + effect
-            }
-            if (this.is_magic && this.duration.length > 0) {
-                const duration = this.duration.replace(/\d+/gi, (match) => {
-                    return String(parseInt(match) / Math.pow(2, this.optional_speed))
-                })
-                effect = "<div class='row mx-1 align-middle'>Durée d'incantation: " + duration + "</div>" + effect
-            }
-
-            // Update with the MR if "MR" is in the text
-            $("#roll-dialog-effect").html(effect)
-
-        } else {
-            roll_effect_divs.addClass("d-none")
+        roll_effect_divs.removeClass("d-none")
+        if (this.is_magic)
+            roll_magic_divs.removeClass("d-none")
+        else
             roll_magic_divs.addClass("d-none")
-            $("#roll-dialog-result-label").html("Résultat du lancer de 2d6 = ")
-            $("#roll-dialog-result").html(this.dice_value())
-            $("#roll-dialog-details").html(this.dice_buttons("base_dices", this.base_dices)).removeClass("d-none")
+
+        const result = $("#roll-dialog-result")
+        const energy_inputs = $(".roll-dialog-energy")
+        if (this.energy_investment_validated) {
+            const validate_button = $("#roll-dialog-validate")
+            validate_button.addClass("d-none")
+            const heroism = $("#heroism")
+            if (heroism.length === 0 || parseInt(heroism.val()) === 0) {
+                energy_inputs.attr("disabled", "disabled")
+            } else { // You can invest in other energies with heroism only if this was not done before roll
+                energy_inputs.each((i, elem) => {
+                    if (this.invested_energies.includes(elem.id) || !this.is_success())
+                        $(elem).attr("disabled", "disabled")
+                    else
+                        $(elem).removeAttr("disabled", "disabled")
+                })
+            }
+
+            result[0].setAttribute("value", this.post_test_margin().toString())
+            result.html(this.post_test_margin())
+
+            set_result_label(this.post_test_margin())
+        } else {
+            result.html("")
+            energy_inputs.removeAttr("disabled", "disabled")
         }
+
+        $(".energy").each((i, elem) => {
+            update_energy_investment_list(elem)
+        })
+
+        const details = $("#roll-dialog-details")
+        const details_texts = this.details_text()
+        if (this.energy_investment_validated) {
+            $("#roll-dialog-result-label").removeClass("d-none")
+        } else {
+            $("#roll-dialog-result-label").addClass("d-none")
+        }
+        details.html(details_texts[0] + text_end + details_texts[1])
+
+        // Reset additional modifiers
+        if (!ignore_sliders) {
+            select_modifier.slider("setValue", this.margin_modifier)
+            select_effect_modifier.slider("setValue", this.effect_modifier)
+            select_modifier.slider("refresh", {useCurrentValue: true})
+            select_effect_modifier.slider("refresh", {useCurrentValue: true})
+        }
+        if (this.energy_investment_validated) {
+            $(".roll-dialog-slider").removeClass("d-none")
+        } else {
+            $(".roll-dialog-slider").addClass("d-none")
+        }
+
+        let effect = this.effect
+        if (this.energy_investment_validated) {
+            if (is_v7) {
+                // Show the actual effect instead of [A] or [B+2]
+                effect = effect.replaceAll(effect_column_regex, (match, prefix, column, modifier, suffix) => {
+                    prefix = prefix.replace(" ", "&nbsp;")
+                    modifier = typeof modifier === "undefined" ? 0 : parseInt(modifier)
+                    const effect_value = this.is_success() ? this.column_effect(column, modifier) : 0
+                    suffix = suffix.replace(" ", "&nbsp;")
+                    return prefix + "<span class='roll-dialog-effect' column='" + column + "' " + "modifier='" + modifier + "'>" + effect_value + "</span>" + suffix
+                })
+            } else {
+                // Update with the DSS if "DSS" is in the text
+                effect = effect.replaceAll(effect_dss_regex, (match, prefix, _, suffix) => {
+                    return prefix.replace(" ", "&nbsp;") + "<span class='roll-dialog-dss'>" + this.dss() + "</span>"
+                        + suffix.replace(" ", "&nbsp;")
+                })
+                effect = effect.replaceAll(effect_des_regex, (match, prefix, _, suffix) => {
+                    return prefix.replace(" ", "&nbsp;") + "<span class='roll-dialog-des'>" + this.des() + "</span>"
+                        + suffix.replace(" ", "&nbsp;")
+                })
+            }
+            effect = effect.replaceAll(effect_margin_regex, (match, prefix, _, suffix) => {
+                return prefix.replace(" ", "&nbsp;")
+                    + "<span class='roll-dialog-margin'>" + this.post_test_margin() + "</span>"
+                    + suffix.replace(" ", "&nbsp;")
+            });
+        }
+        effect = "<div class='row mx-1 align-middle'>Effet:</div><div class='row mx-1 align-middle'>" + effect + "</div>"
+
+        if (this.is_magic && this.distance.length > 0) {
+            const distance = this.distance.replaceAll(/\d+/gi, (match) => {
+                return String(parseInt(match) * Math.pow(2, this.magic_power))
+            })
+            effect = "<div class='row mx-1 align-middle'>Portée: " + distance + "</div>" + effect
+        }
+        if (this.is_magic && this.duration.length > 0) {
+            const duration = this.duration.replaceAll(/\d+/gi, (match) => {
+                return String(parseInt(match) / Math.pow(2, this.optional_speed))
+            })
+            effect = "<div class='row mx-1 align-middle'>Durée d'incantation: " + duration + "</div>" + effect
+        }
+
+        // Update with the MR if "MR" is in the text
+        $("#roll-dialog-effect").html(effect)
+
 
         let title = "<h2>" + ((this.reason.length > 0) ? this.reason : "Résultat du lancer")
             + "</h2>"
@@ -503,25 +584,169 @@ class Roll {
         $("#roll-dialog-title").html(title
             + "<sm class='text-center'>" + this.timestamp.toLocaleString("fr-FR") + "</sm>")
 
-        // Make dices clickable to reroll
-        $(".roll-link").on("click", e => {
-            let target = $(e.target)
-            if (!target.hasClass("roll-link"))
-                target = target.parents(".roll-link")
+        $("label[for='roll-dialog-optional-power']").text("MR + 1d6 (si réussi)")
+        $("label[for='roll-dialog-optional-precision']").text("Seuil critique + 1")
+        $(".roll-dialog-superpower-slider").addClass("d-none")
+    }
+}
 
-            const new_value = roll_dices(1, 6)
-            const dice_group = target.get(0).getAttribute("data-dice-group")
-            const dice_idx = target.get(0).getAttribute("data-dice-idx")
-            current_roll[dice_group][dice_idx] = new_value
-            target.tooltip("dispose")
-            current_roll.show_roll()
-        }).tooltip({disabled: false})
+class SuperpowerRoll extends TalentRoll {
 
-        $(".roll-dialog-energy").parent().tooltip({disabled: false})
+    constructor(reason = "", nbr_dices = 0, under_value = 0, formula_elements = [],
+                distance = "", duration = "", effect = "") {
+        super(reason, NaN, 0, effect, 0, formula_elements, NaN, true, distance, duration)
+        this.number = nbr_dices
+        this.under_value = under_value
+        this.superpower_modifier = 0
     }
 
-    trigger_roll() {
-        this.show_roll()
+    max_threshold() {
+        return this.under_value + (!isNaN(this.optional_precision) ? this.optional_precision : 0)
+    }
+
+    nbr_successes() {
+        return this.dice_value() + this.critical_value() + this.power_value() + this.superpower_modifier
+    }
+
+    margin() {
+        if (this.is_critical_failure()) // Cannot have more than 0 in case of critical failure
+            return 0
+        const modifier = this.power + this.speed + this.precision + this.margin_modifier + this.unease
+        if (this.nbr_successes() <= 0)
+            return modifier
+        return Math.pow(3, this.nbr_successes()) + modifier
+    }
+
+    post_test_margin() {
+        return this.margin()
+    }
+
+    dice_value() {
+        if (this.base_dices.length === 0) {
+            // Roll needed
+            this.roll_dices(this.number, this.type, this.base_dices)
+        }
+        return this.base_dices.map((elem) => {
+            return (elem <= this.max_threshold()) ? 1 : 0
+        }).reduce((a, b) => {
+            return a + b
+        }, 0)
+    }
+
+    power_value() {
+        if (this.power_dices.length === 0) {
+            // Power can only be increased up to 3 => roll all the dices directly
+            this.roll_dices(3, 6, this.power_dices)
+        }
+        return this.power_dices.slice(0, this.optional_power).map((elem) => {
+            return (elem <= this.max_threshold()) ? 1 : 0
+        }).reduce((a, b) => {
+            return a + b
+        }, 0)
+    }
+
+    critical_value() {
+        if (!this.is_critical_success()) {
+            return 0
+        }
+        if (this.critical_dices.length === 0) {
+            this.roll_dices(1, 6, this.critical_dices)
+        }
+        return this.critical_dices[0] <= this.max_threshold() ? 1 : 0
+    }
+
+    is_critical_success() {
+        // If all dices are equal to 1, this is a critical success
+        this.dice_value()
+        return this.base_dices.filter((elem) => {
+            return elem !== 1
+        }).length === 0
+    }
+
+    is_critical_failure() {
+        // If all dices are equal to 6, this is a critical failure
+        this.dice_value()
+        return this.base_dices.filter((elem) => {
+            return elem !== 6
+        }).length === 0
+    }
+
+    is_success() {
+        return !this.is_critical_failure()
+            && (this.margin() > 0 || this.is_critical_success())
+    }
+
+    critical_success_text() {
+        return "<div class='row mx-1 align-middle'>Grâce au succès critique, le dé"
+            + this.dice_buttons("critical_dices", this.critical_dices)+ "est ajouté "
+            + (this.critical_value() === 0 ? " mais n'augmente pas le nombre de réussites"
+                : " qui augmente le nombre de réussites de " + this.critical_value())
+            + "</div>"
+    }
+
+    critical_failure_text() {
+        return "<div class='row mx-1 align-middle'>Une catastrophe d'une ampleur gigantesque arrive au super-héros," +
+            " en fonction du nombre de 6</div>"
+    }
+
+    details_text() {
+        let effect_text = ""
+        if (this.energy_investment_validated) {
+            if (this.optional_power > 0) {
+                effect_text += "<div class='row mx-1 align-middle'>" + this.optional_power + "d6 de puissance " +
+                    "rajouté" + (this.optional_power > 1 ? "s" : "") + " au test initial qui augmente"
+                    + (this.optional_power > 1 ? "nt" : "") + " le nombre de réussites de " + this.power_value() +
+                    this.dice_buttons("power_dices", this.power_dices.slice(0, this.optional_power)) + "</div>"
+            }
+            if (is_v7) {
+                // Roll the two additional dices
+                const effect_dices_sum = this.effect_value()
+                effect_text += "<div class='row mx-1 align-middle'>Dés d'effet = " + effect_dices_sum
+                    + this.dice_buttons("effect_dices", this.effect_dices) + "</div>"
+            } else if (!discovery) {
+                // DSS = MR // 3 and DES = 0 or (1 if 4 <= ME <= 6) or (2 if ME >= 7)
+                effect_text += "<div class='row mx-1 align-middle'>DSS =&nbsp;<span class='roll-dialog-dss'>" + this.dss()
+                    + "</span></div><div class='row mx-1 align-middle'>DES =&nbsp;<span class='roll-dialog-des'>" + this.des() + "</span></div>"
+            }
+        }
+
+        let racial_bonus = ""
+        for (let i in this.formula_elements) {
+            const base_array = this.formula_elements[i][0].id.split("-")
+            const formula_base_name = base_array[base_array.length - 1]
+            if (formula_base_name === "resistance" && is_hobbit()) {
+                racial_bonus = " (bonus ethnique déjà appliqué)" +
+                    "</div><div class='row mx-1 align-middle'>Ce test est raté s'il s'agit de résister à l'hypnose ou aux illusions"
+            }
+        }
+
+        const threshold_name = "Valeur seuil de chaque dé ="
+        let details_text
+        if (this.energy_investment_validated) {
+            details_text = "<div class='row mx-1 align-middle'>Nombre de réussites = " + this.dice_value()
+                + this.dice_buttons("base_dices", this.base_dices)
+                + "</div><div class='row mx-1 align-middle'>" + threshold_name
+                + "&nbsp;<span id='roll-dialog-threshold'>"
+                + this.max_threshold() + "</span>" + racial_bonus + "</div>"
+        } else {
+            details_text ="<div class='row mx-1 align-middle'>" + threshold_name
+                + "&nbsp;<span id='roll-dialog-threshold'>"
+                + this.max_threshold() + "</span>" + racial_bonus + "</div>"
+        }
+
+        return [details_text, effect_text]
+    }
+
+    modify_dialog(ignore_sliders) {
+        super.modify_dialog(ignore_sliders)
+        $("label[for='roll-dialog-optional-power']").text("Dés lancés + 1")
+        $("label[for='roll-dialog-optional-precision']").text("Seuil + 1")
+        const modifier = $("#roll-dialog-superpower-modifier")
+        if (!ignore_sliders) {
+            modifier.slider("setValue", this.superpower_modifier)
+            modifier.slider("refresh", {useCurrentValue: true})
+        }
+        $(".roll-dialog-superpower-slider").removeClass("d-none")
     }
 }
 
@@ -533,6 +758,9 @@ function slider_value_changed(input) {
 
         if (input.id === "roll-dialog-modifier") { // Modify the MR only for MR modifier
             current_roll.margin_modifier = modifier
+            current_roll.show_roll(true)
+        } else if (input.id === "roll-dialog-superpower-modifier") {
+            current_roll.superpower_modifier = modifier
             current_roll.show_roll(true)
         } else {
             current_roll.effect_modifier = modifier
@@ -557,6 +785,8 @@ $(_ => {
     if (effect_modifier.length > 0)
         activate_slider(effect_modifier[0], slider_value_changed, _ => void 0,
             {tooltip: "always"})
+    activate_slider($("#roll-dialog-superpower-modifier")[0], slider_value_changed, _ => void 0,
+        {tooltip: "always"})
 })
 
 /* Quick roll button */
