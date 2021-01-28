@@ -1,4 +1,6 @@
-const row_id_regex = /(\w+-(x|\d+))-?(.*)/
+const row_id_regex = /((\w+)-(x|\d+))-?(.*)/
+
+row_classes_by_prefix = {}
 
 class DataRow {
 
@@ -19,7 +21,7 @@ class DataRow {
 }
 
 class DataTable {
-    row_class = DataRow
+    static row_class = DataRow
 
     constructor(table) {
         this.table = $(table)
@@ -50,6 +52,11 @@ class DataTable {
             onAdd: this.remove_row
         })
         this.add_custom_listeners()
+        this.register()
+    }
+
+    register() {
+        row_classes_by_prefix[this.name] = this.constructor.row_class
     }
 
     is_template_row(row) {
@@ -62,7 +69,7 @@ class DataTable {
     add_custom_listeners() {
         this.table.children().each((i, elem) => {
             if (!this.is_template_row(elem)) {
-                this.add_custom_listener_to_row(new this.row_class(elem))
+                this.add_custom_listener_to_row(new this.constructor.row_class(elem))
             }
         })
     }
@@ -101,7 +108,7 @@ class DataTable {
         new_elem.removeAttr("hidden")
 
         // Add custom listeners
-        const row = new this.row_class(new_elem)
+        const row = new this.constructor.row_class(new_elem)
         this.add_custom_listener_to_row(row)
         return row
     }
@@ -115,6 +122,17 @@ class DataTable {
         $(event.item).remove()
         changed_page = true
     }
+}
+
+/**
+ * Get a row instance of the row of the element in parameter
+ * @param row_element != null and it must be either a jquery object or a html element
+ * @returns {*} a row object instance
+ */
+function row_of(row_element) {
+    const prefix = $(row_element)[0].id.match(row_id_regex)[2]
+    const row_class = (prefix in row_classes_by_prefix) ? row_classes_by_prefix[prefix] : DataRow
+    return row_class.of(row_element)
 }
 
 $(_ => {

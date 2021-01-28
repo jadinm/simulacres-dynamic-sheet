@@ -103,7 +103,7 @@ function monk_power_cost() {
             consumed_points += diff
         }
 
-        const row = DataRow.of(elem)
+        const row = row_of(elem)
         let title = row.data.children().first()
         if (title.length > 0 && row.id !== "ki-x" && !intermediate_discovery) {
             title.each((i, elem) => elem.setAttribute("title", "Coût: " + diff + " PA"))

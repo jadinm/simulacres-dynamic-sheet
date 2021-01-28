@@ -402,23 +402,23 @@ class SuperpowerRow extends RollRow {
 }
 
 class TalentRollTable extends DataTable {
-    row_class = RollRow
+    static row_class = RollRow
 
     trigger_roll(event) {
         // Find the real target of the click
         let button = $(event.target)
         if (!button.hasClass("row-roll-trigger"))
             button = $(event.target).parents(".row-roll-trigger")
-        RollRow.of(button).roll(button)
+        row_of(button).roll(button)
     }
 
     formula_changed(e) {
         e.preventDefault()
-        RollRow.of(e.target).update_roll_value()
+        row_of(e.target).update_roll_value()
     }
 
     select_changed(e) {
-        RollRow.of(e.target).update_roll_value()
+        row_of(e.target).update_roll_value()
     }
 
     add_custom_listener_to_row(row) {
@@ -438,19 +438,11 @@ class TalentRollTable extends DataTable {
 }
 
 class SpellRollTable extends TalentRollTable {
-    row_class = SpellRow
-
-    trigger_roll(event) {
-        // Find the real target of the click
-        let button = $(event.target)
-        if (!button.hasClass("row-roll-trigger"))
-            button = $(event.target).parents(".row-roll-trigger")
-        SpellRow.of(button).roll(button)
-    }
+    static row_class = SpellRow
 
     formula_changed(e) {
         e.preventDefault()
-        const spell = SpellRow.of(e.target)
+        const spell = row_of(e.target)
         if (e.target.getAttribute("name").includes("-realm")) {
             spell.data.find("[name*=\"-realm\"]").each((i, elem) => {
                 spell.update_realm($(elem))
@@ -460,12 +452,12 @@ class SpellRollTable extends TalentRollTable {
     }
 
     select_changed(e) {
-        SpellRow.of(e.target).update_roll_value()
+        super.select_changed(e)
         compute_remaining_ap()
     }
 
     update_level(e) {
-        SpellRow.of(e.target).update_roll_value()
+        row_of(e.target).update_roll_value()
         compute_remaining_ap()
     }
 
@@ -478,7 +470,7 @@ class SpellRollTable extends TalentRollTable {
     }
 
     update_difficulty_slider(event) {
-        SpellRow.of(event.target).update_roll_value()
+        row_of(event.target).update_roll_value()
         // Update selections of spells because they depend on the level
         $("select.spell-select").each((i, elem) => {
             update_spell_select(elem)
@@ -486,11 +478,11 @@ class SpellRollTable extends TalentRollTable {
     }
 
     update_spell_value(event) {
-        SpellRow.of(event.target).update_roll_value()
+        row_of(event.target).update_roll_value()
     }
 
     update_list(event) {
-        SpellRow.of(event.target).update_list()
+        row_of(event.target).update_list()
     }
 
     add_custom_listener_to_row(row) {
@@ -519,7 +511,7 @@ class SpellRollTable extends TalentRollTable {
     }
 
     show_difficulty_builder(input) {
-        const spell = SpellRow.of(input)
+        const spell = row_of(input)
         return value => {
             const max = slider_max(input)
             const difficulty_elem = spell.get("difficulty", input)
@@ -550,7 +542,7 @@ class KiTable extends SpellRollTable {
 class PsiRollTable extends SpellRollTable {
 
     show_difficulty_builder(input) {
-        const spell = SpellRow.of(input)
+        const spell = row_of(input)
         return value => {
             spell.get("difficulty", input).text(value)
             return "0"
@@ -559,12 +551,12 @@ class PsiRollTable extends SpellRollTable {
 }
 
 class SuperpowerRollTable extends TalentRollTable {
-    row_class = SuperpowerRow
+    static row_class = SuperpowerRow
 
     static components() {
         // Get all of the superpower components
         return $(".superpower").map((i, elem) => {
-            const component = SuperpowerRow.of(elem).formula_elem("component")[1].filter((i, elem) => {
+            const component = row_of(elem).formula_elem("component")[1].filter((i, elem) => {
                 return $(elem).attr("name").includes("component")
             }).map((i, elem) => {
                 const base_array = elem.id.split("-")
@@ -574,34 +566,21 @@ class SuperpowerRollTable extends TalentRollTable {
         }).toArray().flat()
     }
 
-    trigger_roll(event) {
-        // Find the real target of the click
-        let button = $(event.target)
-        if (!button.hasClass("row-roll-trigger"))
-            button = $(event.target).parents(".row-roll-trigger")
-        SuperpowerRow.of(button).roll(button)
-    }
-
     formula_changed(e) {
-        e.preventDefault()
-        SuperpowerRow.of(e.target).update_roll_value()
+        super.formula_changed(e)
 
         // Update all of the spell values
         $(".spell-value").each((i, elem) => {
-            SpellRow.of(elem).update_roll_value()
+            row_of(elem).update_roll_value()
         })
         // Update all the rolls
         $(".roll-value,.dual_wielding-value").each((i, elem) => {
-            RollRow.of(elem).update_roll_value()
+            row_of(elem).update_roll_value()
         })
     }
 
-    select_changed(e) {
-        SuperpowerRow.of(e.target).update_roll_value()
-    }
-
     input_change(e) {
-        SuperpowerRow.of(e.target).update_roll_value()
+        row_of(e.target).update_roll_value()
     }
 
     add_custom_listener_to_row(row) {

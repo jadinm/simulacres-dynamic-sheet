@@ -154,7 +154,7 @@ function import_data(src_html, dst_html) {
                     if (old_spell_realm.length > 0) {
                         const realm_split = old_spell_realm[0].id.split("-")
                         const realm = realm_split[realm_split.length - 1]
-                        new_input = SpellRow.of(new_spell).get(difficulty_slider_match[2] + "-" + realm)
+                        new_input = row_of(new_spell).get(difficulty_slider_match[2] + "-" + realm)
                     }
                 } else if (matching) {
                     // Add rows to the tables until it finds the appropriate field
@@ -316,12 +316,8 @@ function import_data(src_html, dst_html) {
         dst_html.find("#character-image")[0].src = old_image[0].src
 
     // Update all of the spell values
-    $(".spell-value").each((i, elem) => {
-        SpellRow.of(elem).update_roll_value()
-    })
-    // Update all the rolls
-    $(".roll-value,.dual_wielding-value").each((i, elem) => {
-        RollRow.of(elem).update_roll_value()
+    $(".spell-value,.roll-value,.dual_wielding-value").each((i, elem) => {
+        row_of(elem).update_roll_value()
     })
 
     // Set the same theme

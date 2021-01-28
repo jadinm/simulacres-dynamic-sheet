@@ -17,19 +17,19 @@ class Note extends DataRow {
 }
 
 function row_show() {
-    Note.of(this).toggle_show_button(true)
+    row_of(this).toggle_show_button(true)
 }
 
 function row_hide() {
-    Note.of(this).toggle_show_button(false)
+    row_of(this).toggle_show_button(false)
 }
 
 function row_clean() {
-    Note.of(this).destroy_summernote()
+    row_of(this).destroy_summernote()
 }
 
 class NoteTable extends DataTable {
-    row_class = Note
+    static row_class = Note
 
     add_custom_listener_to_row(row) {
         super.add_custom_listener_to_row(row)

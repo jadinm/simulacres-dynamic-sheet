@@ -136,13 +136,13 @@ function update_spell_select(select) {
         include_spell_lists = include_spell_lists.split(',')
     let no_realm = select.getAttribute("data-no-realm-id")
     const elements = $(".spell-name").filter((i, elem) => {
-        const spell_list = SpellRow.of(elem).get("list").val()
+        const spell_list = row_of(elem).get("list").val()
         return elem.value && elem.value.length > 0
             && (exclude_spell_lists == null || spell_list == null || !exclude_spell_lists.includes(spell_list))
             && (include_spell_lists == null || spell_list == null || include_spell_lists.includes(spell_list))
     }).map((i, elem) => {
         // Get spell difficulties of each realm
-        const spell = SpellRow.of(elem)
+        const spell = row_of(elem)
         if (!no_realm) {
             const realm_list = spell.data.find("input[name*=-realm]:checked")
             return realm_list.map((j, checkbox) => {

@@ -103,7 +103,7 @@ function update_talent_select(select) {
     update_select(select, talent_list)
 }
 
-function add_talent(list, fixed_id = null) {
+function add_talent(list, fixed_id = null, bulk = false) {
     if (list.length === 0)
         return $()
     const initial_level = list[0].id.replace("talents_", "")
@@ -134,9 +134,11 @@ function add_talent(list, fixed_id = null) {
     update_talent_tooltip(new_talent[0])
 
     // Update all list selections of talents
-    $("select.talent-select").each((i, elem) => {
-        update_talent_select($(elem))
-    })
+    if (!bulk) {
+        $("select.talent-select").each((i, elem) => {
+            update_talent_select($(elem))
+        })
+    }
     // Update armor penalty
     recompute_armor_penalty()
     return new_talent
@@ -163,15 +165,17 @@ function add_missing_talents(talents) {
     for (const [level, level_talents] of Object.entries(talents)) {
         for (const talent of level_talents) {
             if (talent_from_name(talent).length === 0) {
-                const elem = add_talent($("#talents_" + level)).find("input")
+                const elem = add_talent($("#talents_" + level), null, true).find("input")
                 elem.val(talent)
                 elem.trigger("change")
             }
         }
     }
+    // Update all list selections of talents
+    $("select.talent-select").each((i, elem) => {
+        update_talent_select($(elem))
+    })
 }
-
-add_missing_talents(default_talents)
 
 function update_talent_tooltip(talent, target_list = null) {
     const current_level = talent_level(talent, target_list)
@@ -201,6 +205,7 @@ function update_talent_tooltip(talent, target_list = null) {
 }
 
 $(_ => {
+    add_missing_talents(default_talents)
     $(".talent").each((i, elem) => {
         if (elem.getAttribute("hidden") == null)
             update_talent_tooltip(elem)
@@ -216,13 +221,8 @@ function update_talent(event) {
     })
 
     // Update rolls
-    $(".roll-value,.dual_wielding-value").each((i, elem) => {
-        RollRow.of(elem).update_roll_value()
-    })
-
-    // Update spells (for hermetic spells)
-    $(".spell-value").each((i, elem) => {
-        SpellRow.of(elem).update_roll_value()
+    $(".roll-value,.dual_wielding-value,.spell-value").each((i, elem) => {
+        row_of(elem).update_roll_value()
     })
 
     // Update armor penalty
@@ -271,13 +271,8 @@ $('.remove-talent').sortable({
         $(event.item).remove()
 
         // Update rolls
-        $(".roll-value,.dual_wielding-value").each((i, elem) => {
-            RollRow.of(elem).update_roll_value()
-        })
-
-        // Update spells (for hermetic spells)
-        $(".spell-value").each((i, elem) => {
-            SpellRow.of(elem).update_roll_value()
+        $(".roll-value,.dual_wielding-value,.spell-value").each((i, elem) => {
+            row_of(elem).update_roll_value()
         })
 
         // Update all list selections of talents

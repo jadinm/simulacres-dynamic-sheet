@@ -44,7 +44,9 @@
         "-2": ["Armes légères", "Bouclier"],
         "0": ["Athlétisme", "Bagarre", "Observation"]
     }
-    add_missing_talents(default_talents)
+    $(_ => {
+        add_missing_talents(default_talents)
+    })
 
     /* Before removing this plugin, we need to update the AP computation and spell lists
      * because we are removing magical energies

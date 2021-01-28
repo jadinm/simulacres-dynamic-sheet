@@ -73,7 +73,7 @@ function compute_remaining_ap() {
     $(".spell").each((i, elem) => {
         diff = 0
         let name
-        const spell = SpellRow.of(elem)
+        const spell = row_of(elem)
         const spell_list_div = spell.get("list")
         const spell_list = spell_list_div.length > 0 ? spell.get("list")[0].value.trim() : ""
         const spell_level = parseInt(spell.get("level")[0].value.trim())
