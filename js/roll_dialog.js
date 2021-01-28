@@ -53,9 +53,9 @@ function has_any_base_energy() {
 }
 
 const effect_column_regex = /(^|\W?)\[([ABCDEFGHIJK])([+-]\d+)?](\W?|$)/gi
-const effect_margin_regex = /(^|\W)(MR)(\W|$)/gi
-const effect_dss_regex = /(^|\W)(DSS)(\W|$)/gi
-const effect_des_regex = /(^|\W)(DES)(\W|$)/gi
+const effect_margin_regex = /(^|\W?)(MR)(\W?|$)/gi
+const effect_dss_regex = /(^|\W?)(DSS)(\W?|$)/gi
+const effect_des_regex = /(^|\W?)(DES)(\W?|$)/gi
 
 let critical_failure = false
 let critical_success = false
