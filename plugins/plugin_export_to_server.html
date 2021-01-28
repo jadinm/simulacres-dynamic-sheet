@@ -80,7 +80,7 @@
                 },
                 error: (jqXHR, textStatus, errorThrown) => {
                     // Failed to export data
-                    let text = "La fiche n'a été exportée."
+                    let text = "La fiche n'a pas été exportée."
                     if (errorThrown)
                         text += " " + errorThrown + "."
                     else if (textStatus === "error" && jqXHR.readyState !== 4) {
