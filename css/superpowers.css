@@ -6,6 +6,10 @@
     min-width: 7.5em;
 }
 
+.superpower-effect {
+    min-width: 300px;
+}
+
 #roll-dialog-superpower-modifier-slider .slider-selection {
     background: black;
 }
