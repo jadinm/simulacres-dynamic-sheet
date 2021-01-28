@@ -190,7 +190,7 @@ class Roll {
 class TalentRoll extends Roll {
     constructor(reason = "", max_value = NaN, talent_level = 0, effect = "",
                 critical_increase = 0, formula_elements = [], margin_throttle = NaN,
-                is_magic = false, distance = "", duration = "") {
+                is_magic = false, distance = "", focus = "", duration = "") {
         super()
         this.reason = reason
         this.formula_elements = formula_elements
@@ -204,7 +204,8 @@ class TalentRoll extends Roll {
 
         this.is_magic = is_magic
         this.distance = distance // Spell parameter increased by power
-        this.duration = duration // Spell parameter decreased by speed
+        this.focus = focus // Spell parameter decreased by speed
+        this.duration = duration
 
         this.invested_energies = []
         this.critical_increase = critical_increase
@@ -531,7 +532,12 @@ class TalentRoll extends Roll {
             $(".roll-dialog-slider").addClass("d-none")
         }
 
-        let effect = this.effect
+        let effect = ""
+        if (this.is_magic && this.duration.length > 0) {
+            effect += "<div class='row mx-1 align-middle'>Durée de l'effet: " + this.duration + "</div>" + effect
+        }
+        effect += "<div class='row mx-1 align-middle'>Effet:</div><div class='row mx-1 align-middle'>" + this.effect
+
         if (this.energy_investment_validated) {
             if (is_v7) {
                 // Show the actual effect instead of [A] or [B+2]
@@ -559,7 +565,7 @@ class TalentRoll extends Roll {
                     + suffix.replace(" ", "&nbsp;")
             });
         }
-        effect = "<div class='row mx-1 align-middle'>Effet:</div><div class='row mx-1 align-middle'>" + effect + "</div>"
+        effect += "</div>"
 
         if (this.is_magic && this.distance.length > 0) {
             const distance = this.distance.replaceAll(/\d+/gi, (match) => {
@@ -567,11 +573,11 @@ class TalentRoll extends Roll {
             })
             effect = "<div class='row mx-1 align-middle'>Portée: " + distance + "</div>" + effect
         }
-        if (this.is_magic && this.duration.length > 0) {
-            const duration = this.duration.replaceAll(/\d+/gi, (match) => {
+        if (this.is_magic && this.focus.length > 0) {
+            const focus = this.focus.replaceAll(/\d+/gi, (match) => {
                 return String(parseInt(match) / Math.pow(2, this.optional_speed))
             })
-            effect = "<div class='row mx-1 align-middle'>Durée d'incantation: " + duration + "</div>" + effect
+            effect = "<div class='row mx-1 align-middle'>Durée de concentration: " + focus + "</div>" + effect
         }
 
         // Update with the MR if "MR" is in the text
@@ -602,8 +608,8 @@ class TalentRoll extends Roll {
 class SuperpowerRoll extends TalentRoll {
 
     constructor(reason = "", nbr_dices = 0, under_value = 0, formula_elements = [],
-                distance = "", duration = "", effect = "") {
-        super(reason, NaN, 0, effect, 0, formula_elements, NaN, true, distance, duration)
+                distance = "", focus = "", duration = "", effect = "") {
+        super(reason, NaN, 0, effect, 0, formula_elements, NaN, true, distance, focus, duration)
         this.number = nbr_dices
         this.under_value = under_value
         this.superpower_modifier = 0

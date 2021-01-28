@@ -216,7 +216,8 @@ class SpellRow extends RollRow {
             roll_reason = talent
         }
         let spell_distance = this.get("distance").val()
-        let spell_duration = this.get("time").val()
+        let spell_focus = this.get("time").val()
+        let spell_duration = this.get("duration").val()
         difficulty = isNaN(difficulty) ? 0 : difficulty
 
         // Reset all invested energies
@@ -226,7 +227,7 @@ class SpellRow extends RollRow {
         const value = parseInt(this.get("value", button).text())
         new TalentRoll(roll_reason, value, difficulty, this.get("effect").val(),
             critical_increase, formula_elements, margin_throttle, true, spell_distance,
-            spell_duration).trigger_roll()
+            spell_focus, spell_duration).trigger_roll()
         $('#roll-dialog').modal()
     }
 
@@ -387,14 +388,15 @@ class SuperpowerRow extends RollRow {
             under_value = 0
         }
         let power_distance = this.get("distance").val()
-        let power_duration = this.get("time").val()
+        let power_focus = this.get("time").val()
+        let power_duration = this.get("duration").val()
 
         // Reset all invested energies
         $(".roll-dialog-energy").val(0)
 
         // Do the actual roll
-        new SuperpowerRoll(roll_reason, nbr_dices, under_value, formula_elements, power_distance, power_duration,
-            this.get("effect").val()).trigger_roll()
+        new SuperpowerRoll(roll_reason, nbr_dices, under_value, formula_elements, power_distance, power_focus,
+            power_duration, this.get("effect").val()).trigger_roll()
         $('#roll-dialog').modal()
     }
 }

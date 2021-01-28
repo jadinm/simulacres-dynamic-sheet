@@ -1,6 +1,6 @@
 /* Spell table */
 .spell-name {
-    min-width: 300px;
+    min-width: 15em;
 }
 
 .spell-list {
