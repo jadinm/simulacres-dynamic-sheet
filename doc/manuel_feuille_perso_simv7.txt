@@ -94,6 +94,7 @@
 
 **Versions**
 
+| |bb| 1.0, dernières modifs Ki et pouvoirs
 | |b| 0.3, ajout des onglets Psi et Super-Pouvoirs
 | |bb| 0.2, ajout de l'onglet Ki
 | |b| 0.1, première adaptation v7 du mode d'emploi v8, multiples options
@@ -421,11 +422,11 @@ effets (qui est d'ailleurs repris dans un onglet).
     :width: 800px
     :align: center
     
-    **Résultat d'un test simple sous 11 :** le lancer a donné 6 (|3| + |3|),
+    **Résultat d'un test simple sous 11 :** le lancer a donné 6 : |3| + |3|,
     pour une MR de 5. Il n'y avait aucun investissement dans les Énergies de
     base, aucune difficulté ni aucun bonus, aucune modification sur les effets
     (comme la prise en compte de l'armure d'un adversaire). Le lancer pour le
-    calcul de l'effet dans la Table des Effets a donné 9 (|4| + |5|) ce qui,
+    calcul de l'effet dans la Table des Effets a donné 9 : |4| + |5|, ce qui,
     pour une Épée Longue à [F]PV et [B]PS, fera 4PV et 1PS.
 
 .. sidebar:: Relancer les dés
