@@ -99,7 +99,7 @@ function monk_power_cost() {
         let diff = 0
         const value = parseInt(elem.value)
         if (!isNaN(value) && value > 1 && value <= 3) {
-            diff = power_level_ap_cost
+            diff = (value - 1) * power_level_ap_cost
             consumed_points += diff
         }
 

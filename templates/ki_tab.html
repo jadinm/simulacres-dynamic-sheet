@@ -15,28 +15,30 @@
     </div>
     <!-- Power levels -->
     <div class="row col-12 mt-2"><b>Niveaux de pouvoirs débloqués pour chaque talent de moine</b></div>
-    <div class="table-responsive-xl col-12 m-0 p-0">
+    <div class="table-responsive col-12 m-0 p-0" style="overflow-y: hidden !important;">
         <table class="table table-hover m-0 p-0">
             <thead>
             <tr>
                 <th scope="col" class="col-3" style="width: 15%; min-width: 300px">Nom</th>
-                <th scope="col" class="col-2" style="width: 2.5%">Niveau</th>
+                <th scope="col" class="col-2" style="width: 2.5%">Niveau max</th>
                 <th scope="col" class="text-center" style="width: 2.5%">Formule</th>
                 <th scope="col" class="text-center" style="width: 5%">Valeur</th>
                 <th scope="col" class="text-center" style="width: 5%">Concentration</th>
+                <th scope="col" class="text-center" style="width: 5%"></th>
                 <th scope="col" class="text-center" style="width: 5%">Durée</th>
-                <th scope="col" style="width: 65%">Effet</th>
+                <th scope="col" style="width: 60%">Effet</th>
             </tr>
             </thead>
             <tbody id="ki-table" class="sortable-list">
             <tr id="ki-x" hidden>
                 <td class="md-form align-middle" data-toggle="tooltip" data-placement="bottom" title="">
                     <div class="row col-12 md-form my-0 py-0 align-middle d-flex">
-                    <label for="ki-x-talent"></label>
-                    <select class="show-tick form-control talent-select selectpicker spell-talent"
-                            data-live-search="true" id="ki-x-talent" data-style="col-10 ml-5 mx-0 px-3 align-middle">
-                    </select>
-                    <i class="fas fa-arrows-alt prefix h-100" style="font-size: 1.5em;"></i>
+                        <label for="ki-x-talent"></label>
+                        <select class="show-tick form-control talent-select selectpicker spell-talent"
+                                data-live-search="true" id="ki-x-talent"
+                                data-style="col-10 ml-5 mx-0 px-3 align-middle">
+                        </select>
+                        <i class="fas fa-arrows-alt prefix h-100" style="font-size: 1.5em;"></i>
                     </div>
                 </td>
                 <td class="md-form my-0 py-0 align-middle">
@@ -50,31 +52,50 @@
                     {% endwith %}
                 </td>
                 <td class="my-0 py-0 text-center align-middle">
-                    {% for realm in ["mineral", "vegetal", "animal", "humanoid", "mechanical", "void"] %}
-                        <div class="m-0 p-0 spell-value-row d-none">
-                                <span class="spell-realm">
-                                    <svg height="1em" width="1em" class="spell-difficulty-realm">
-                                        <use xlink:href="#svg-{{ realm }}"></use>
-                                    </svg>:
-                                </span>
-                            <span id="ki-x-value-{{ realm }}" class="spell-value"></span>
-                            <span id="ki-x-dice-{{ realm }}" class="clickable row-roll-trigger" hidden>
-                                    <i class="fas fa-dice"></i>
-                                </span>
-                        </div>
-                    {% endfor %}
-                </td>
+                    <div class="m-0 {{ padding }} p-0 spell-value-row">
+                        <span id="ki-x-value" class="spell-value"></span>
+                    </div>
                 <td class="md-form my-0 py-0 align-middle">
                     <input id="ki-x-time" class="spell-time form-control text-center" type="text">
                     <label for="ki-x-time"></label>
                 </td>
-                <td class="md-form my-0 py-0 align-middle">
-                    <input id="ki-x-duration" class="spell-duration form-control text-center" type="text">
-                    <label for="ki-x-duration"></label>
+                <td class="my-0 py-0 text-center align-middle">
+                    {% for level in range(1, 4) %}
+                        {% if level == 1 %}
+                            {% set classes = "" %}
+                        {% else %}
+                            {% set classes = "mt-4 pt-1 d-none" %}
+                        {% endif %}
+                        <div class="m-0 {{ classes }} p-0 ki-roll-row">
+                            <span class="ki-level-specific d-none">Niv. {{ level }}</span>
+                            <span id="ki-x-dice-{{ level }}" class="clickable row-roll-trigger" hidden>
+                                <i class="fas fa-dice"></i>
+                            </span>
+                        </div>
+                    {% endfor %}
                 </td>
                 <td class="md-form my-0 py-0 align-middle">
-                    <input id="ki-x-effect" class="spell-effect form-control" type="text">
-                    <label for="ki-x-effect"></label>
+                    {% for level in range(1, 4) %}
+                        {% if level == 1 %}
+                            {% set classes = "" %}
+                        {% else %}
+                            {% set classes = "d-none" %}
+                        {% endif %}
+                        <input id="ki-x-duration-{{ level }}"
+                               class="spell-duration form-control text-center {{ classes }}" type="text">
+                        <label for="ki-x-duration-{{ level }}"></label>
+                    {% endfor %}
+                </td>
+                <td class="md-form my-0 py-0 align-middle">
+                    {% for level in range(1, 4) %}
+                        {% if level == 1 %}
+                            {% set classes = "" %}
+                        {% else %}
+                            {% set classes = "d-none" %}
+                        {% endif %}
+                        <input id="ki-x-effect-{{ level }}" class="spell-effect form-control {{ classes }}" type="text">
+                        <label for="ki-x-effect-{{ level }}"></label>
+                    {% endfor %}
                 </td>
             </tr>
             </tbody>

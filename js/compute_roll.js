@@ -128,13 +128,13 @@ class SpellRow extends RollRow {
         return elem
     }
 
+    is_talent_based_spell() {
+        return this.is_hermetic_spell()
+    }
+
     is_hermetic_spell() {
         const value = this.get("list").val()
         return value && value.trim() === hermetic_energy
-    }
-
-    is_ki_power() {
-        return this.data.parents("#ki-table").length > 0
     }
 
     is_instinctive_magic() {
@@ -143,37 +143,37 @@ class SpellRow extends RollRow {
     }
 
     update_roll_value() {
-        this.data.find(".spell-value").each((i, value_div) => {
+        this.data.find(".row-roll-trigger").each((i, dice_div) => {
             let sum = 0
-            const realm = this.realm(value_div)
+            const realm = this.realm(dice_div)
 
             // Recover component, means and realm
             const formula = this.compute_formula(realm)[0]
             sum += formula
 
             // Recover difficulty
-            const difficulty = this.get("difficulty", value_div).text()
+            const difficulty = this.get("difficulty", dice_div).text()
             if (difficulty)
                 sum += parseInt(difficulty)
 
-            if (this.is_hermetic_spell() || this.is_ki_power()) {
+            if (this.is_talent_based_spell()) {
                 // Recover hermetic difficulty
-                const cast_diff = parseInt(this.get("hermetic-difficulty", value_div).val())
+                const cast_diff = parseInt(this.get("hermetic-difficulty", dice_div).val())
                 if (!isNaN(cast_diff)) {
                     sum += cast_diff
                 }
                 // Recover associated talent level
-                const name = this.get("talent").val()
-                if (name.length !== 0) {
+                const name = this.get("talent", dice_div).val()
+                if (name && name.length !== 0) {
                     const talent = talent_from_name(name)
                     // This is complicated because hermetic spells can have a penalty when they are not learned correctly
                     // (MR < 0) and this penalty can be outside of the talent levels, like -6 or -3
                     // However, once the talent is raised for the first time, this odd penalty disappears
                     let level = parseInt(talent_level(talent[0]))
                     let origin_level = parseInt(talent_base_level(talent[0]))
-                    let mr_learning = parseInt(this.get("hermetic-mr-learning", value_div).val())
+                    let mr_learning = parseInt(this.get("hermetic-mr-learning", dice_div).val())
 
-                    // In this case a level "X" does not mean that they cannot cast the spell (though it will be difficult)
+                    // For hermetic spells, a level "X" does not mean that they cannot cast the spell (though it will be difficult)
                     if (isNaN(level))
                         level = this.is_hermetic_spell() ? -5 : "X"
                     if (isNaN(origin_level))
@@ -191,8 +191,8 @@ class SpellRow extends RollRow {
             }
 
             // Update
-            $(value_div).text(sum)
-            this.get("dice", value_div)[0].removeAttribute("hidden")
+            this.get("value", dice_div).text(sum)
+            dice_div.removeAttribute("hidden")
         })
     }
 
@@ -205,19 +205,19 @@ class SpellRow extends RollRow {
         const spell_difficulty = this.get("difficulty", button)
         const formula_elements = this.compute_formula(realm)[1]
         let margin_throttle = NaN
-        if (!this.is_hermetic_spell() && !this.is_ki_power()) { // Spell
+        if (!this.is_talent_based_spell()) { // Spell
             difficulty = parseInt(spell_difficulty.text())
-            roll_reason = this.get("name").val()
+            roll_reason = this.get("name", button).val()
             margin_throttle = this.is_instinctive_magic(button[0]) ? 1 : NaN
         } else { // Talent
-            const talent_select = this.get("talent")
+            const talent_select = this.get("talent", button)
             const talent = talent_select.find("option:selected").val()
             difficulty = parseInt(talent_level(talent_from_name(talent)))
             roll_reason = talent
         }
-        let spell_distance = this.get("distance").val()
-        let spell_focus = this.get("time").val()
-        let spell_duration = this.get("duration").val()
+        let spell_distance = this.get("distance", button).val()
+        let spell_focus = this.get("time", button).val()
+        let spell_duration = this.get("duration", button).val()
         difficulty = isNaN(difficulty) ? 0 : difficulty
 
         // Reset all invested energies
@@ -225,7 +225,7 @@ class SpellRow extends RollRow {
 
         // Do the actual roll
         const value = parseInt(this.get("value", button).text())
-        new TalentRoll(roll_reason, value, difficulty, this.get("effect").val(),
+        new TalentRoll(roll_reason, value, difficulty, this.get("effect", button).val(),
             critical_increase, formula_elements, margin_throttle, true, spell_distance,
             spell_focus, spell_duration).trigger_roll()
         $('#roll-dialog').modal()
@@ -338,6 +338,67 @@ class SpellRow extends RollRow {
         $("select.spell-select").each((i, elem) => {
             update_spell_select(elem)
         })
+
+        // Update adventure points
+        compute_remaining_ap()
+    }
+}
+
+class KiRow extends SpellRow {
+
+    level(leveled_div) {
+        const level_split = $(leveled_div)[0].id.split("-")
+        const level = parseInt(level_split[level_split.length - 1])
+        return isNaN(level) ? "" : String(level)
+    }
+
+    get(element_id_suffix, leveled_div = null) {
+        let elem = super.get(element_id_suffix)
+        if (elem.length === 0 && leveled_div) {
+            elem = super.get(element_id_suffix + "-" + this.level(leveled_div))
+        }
+        return elem
+    }
+
+    is_talent_based_spell() {
+        return true
+    }
+
+    is_hermetic_spell() {
+        return false
+    }
+
+    is_instinctive_magic() {
+        return false
+    }
+
+    update_list() {
+    }
+
+    update_realm(realm_div) {
+    }
+
+    update_level() {
+        let power_level = parseInt(this.get("level").val())
+        if (isNaN(power_level))
+            power_level = 1
+        for (let i = 2; i <= power_level; i++) {
+            const dice = this.get("dice-" + i)
+            dice.parent().removeClass("d-none")
+            this.get("duration", dice).removeClass("d-none")
+            this.get("effect", dice).removeClass("d-none")
+        }
+        for (let i = power_level + 1; i <= 3; i++) {
+            const dice = this.get("dice-" + i)
+            dice.parent().addClass("d-none")
+            this.get("duration", dice).addClass("d-none")
+            this.get("effect", dice).addClass("d-none")
+        }
+        if (power_level > 1) {
+            this.data.find(".ki-level-specific").removeClass("d-none")
+        } else {
+            this.data.find(".ki-level-specific").addClass("d-none")
+        }
 
         // Update adventure points
         compute_remaining_ap()
@@ -537,6 +598,12 @@ class SpellRollTable extends TalentRollTable {
 }
 
 class KiTable extends SpellRollTable {
+    static row_class = KiRow
+
+    update_level(e) {
+        row_of(e.target).update_level()
+        super.update_level(e)
+    }
 }
 
 class PsiRollTable extends SpellRollTable {
@@ -569,12 +636,8 @@ class SuperpowerRollTable extends TalentRollTable {
     formula_changed(e) {
         super.formula_changed(e)
 
-        // Update all of the spell values
-        $(".spell-value").each((i, elem) => {
-            row_of(elem).update_roll_value()
-        })
-        // Update all the rolls
-        $(".roll-value,.dual_wielding-value").each((i, elem) => {
+        // Update all of the roll and spell values
+        $(".spell-value.roll-value,.dual_wielding-value").each((i, elem) => {
             row_of(elem).update_roll_value()
         })
     }
@@ -639,18 +702,10 @@ function is_hobbit() {
 
 /* Triggers */
 
-$("#race,.realm,.component,.means," + talent_list_selector).on("change", _ => {
+$("#race,.realm,.component,.means," + talent_list_selector).on("change", e => {
     // Update all of the spell values
-    $(".spell-value").each((i, elem) => {
-        SpellRow.of(elem).update_roll_value()
-    })
-    // Update all of the superpower values
-    $(".superpower").each((i, elem) => {
-        SuperpowerRow.of(elem).update_roll_value()
-    })
-    // Update all the rolls
-    $(".roll-value,.dual_wielding-value").each((i, elem) => {
-        RollRow.of(elem).update_roll_value()
+    $(".spell-value,.superpower,.roll-value,.dual_wielding-value").each((i, elem) => {
+        row_of(elem).update_roll_value()
     })
 })
 
