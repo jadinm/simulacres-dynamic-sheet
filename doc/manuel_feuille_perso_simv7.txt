@@ -417,6 +417,17 @@ résultat. Tous les paramètres sont alors intégrés et le résultat calculé, 
 que les effets en relançant 2 dés et en utilisant le tableau standard des
 effets (qui est d'ailleurs repris dans un onglet).
 
+.. figure:: images/jet_simple.jpg
+    :width: 800px
+    :align: center
+    
+    **Résultat d'un test simple sous 11 :** le lancer a donné 6 (|3| + |3|),
+    pour une MR de 5. Il n'y avait aucun investissement dans les Énergies de
+    base, aucune difficulté ni aucun bonus, aucune modification sur les effets
+    (comme la prise en compte de l'armure d'un adversaire). Le lancer pour le
+    calcul de l'effet dans la Table des Effets a donné 9 (|4| + |5|) ce qui,
+    pour une Épée Longue à [F]PV et [B]PS, fera 4PV et 1PS.
+
 .. sidebar:: Relancer les dés
 
     Dans la fenêtre du Lancer, il est toujours possible de cliquer sur les
@@ -571,26 +582,32 @@ Casus Belli n°98, p.76, en octobre 1996.
 Les pratiquants de cette discipline doivent investir dans une énergie
 spécifique appelée **Shaolin** |ki| par défaut, mais que l'on peut nommer
 selon l'univers concerné. Ils devront aussi ajouter le Talent **Méditation**
-dans l'onglet Talents, au niveau adapté à leurs investissements (idéalement, +1
-à la création, mais c'est un choix à faire).
+dans l'onglet Talents (au départ à -4), au niveau adapté à leurs
+investissements (idéalement, +1 à la création, mais c'est un choix à faire).
 
 Chaque pouvoir de Moine se gère comme un Talent, dans l'onglet Talent (colonne
-X), mais aussi par une ou plusieurs lignes supplémentaires dans l'onglet Ki.
-Comme pour les autres onglets, il suffit de cliquer sur **(+)**, puis de
-sélectionner le Talent, et enfin de préciser le niveau d'énergie de celui-ci,
-qui influencera la puissance des effets. La fiche gère automatiquement les
-dépenses de PAs faites pour augmenter la valeur du Talents (en le changeant de
-colonne), mais aussi celle requises pour faire progresser le niveau de celui-ci
-(en utilisant le compteur de niveau).
+X), mais aussi par une ligne supplémentaire dans l'onglet Ki. Comme pour les
+autres onglets, il suffit de cliquer sur **(+)**, puis de sélectionner le
+Talent, et enfin de préciser le niveau d'énergie de celui-ci, qui influencera
+la puissance des effets. La fiche gère automatiquement les dépenses de PAs
+faites pour augmenter la valeur du Talents (en le changeant de colonne), mais
+aussi celle requises pour faire progresser le niveau de celui-ci (en utilisant
+le compteur de niveau).
 
-Pour que les calculs de PAs restent cohérents et que les lancers de dés soient
-lisibles, il faut écrire une ligne par niveau de talent en précisant dans la
-description les effets de celui-ci pour chaque niveau. Ainsi par exemple, le
-moine Shaolin Khar'Adynn, qui possède Mains Dures au niveau 2, aura donc 2
-lignes pour cette discipline dans la table des Pouvoirs |n| : une pour Mains
-Dures au niveau 1 et une autre pour Mains dures au niveau 2. Chacune de ces
-lignes permettra d'indiquer les différences d'effets entre les différents
-niveaux d'Énergie.
+Lorsqu'un Pouvoir change de niveau, la fiche fait apparaître un test
+supplémentaire et une description correspondant à l'utilisation du Pouvoir à ce
+nouveau niveau.  Ainsi par exemple, le moine Shaolin Khar'Adynn, qui possède
+Mains Dures au niveau 2, aura donc deux boutons de test pour ce Pouvoir |n| :
+une pour Mains Dures au niveau 1 et une autre pour Mains dures au niveau 2.
+Comme une description est associée à chacun de ces tests, cela lui permettra
+d'indiquer les différences d'effets entre les différents niveaux d'Énergie.
+
+.. sidebar:: Cas particulier
+
+    Les règles précisent que le Pouvoir de **Concentration Psychique**
+    s'utilise avec le Talent **Méditation**, indépendamment du Pouvoir de
+    Méditation. Il faut donc créer une seconde ligne pour Concentration
+    Psychique en utilisant le Talent Méditation dans la table des Pouvoirs.
 
 Onglet Psi
 ----------
