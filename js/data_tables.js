@@ -127,6 +127,58 @@ class DataTable {
     }
 }
 
+class RuneTable extends DataTable {
+
+    add_row(fixed_idx = null) {
+        super.add_row(fixed_idx)
+        compute_remaining_ap() // Each rune cost AP
+    }
+
+    add_custom_listener_to_row(row) {
+        super.add_custom_listener_to_row(row)
+        row.get("name").uon("change", compute_remaining_ap)
+    }
+}
+
+class WordTable extends RuneTable {
+
+    add_custom_listener_to_row(row) {
+        super.add_custom_listener_to_row(row)
+        row.get("type").uon("changed.bs.select", compute_remaining_ap)
+        row.get("type").selectpicker()
+    }
+}
+
+$("#name-magic").on("change", e => {
+    const table = $("#word-table").parent().parent()
+    const title = table.prev()
+    const button = table.next()
+    if (parseInt($(e.target).val()) >= 1) {
+        table.removeClass("d-none")
+        title.removeClass("d-none")
+        button.removeClass("d-none")
+    } else {
+        table.addClass("d-none")
+        title.addClass("d-none")
+        button.addClass("d-none")
+    }
+})
+
+$("#runes").on("change", e => {
+    const table = $("#rune-table").parent().parent()
+    const title = table.prev().addClass("d-none")
+    const button = table.next()
+    if (parseInt($(e.target).val()) >= 1) {
+        table.removeClass("d-none")
+        title.removeClass("d-none")
+        button.removeClass("d-none")
+    } else {
+        table.addClass("d-none")
+        title.addClass("d-none")
+        button.addClass("d-none")
+    }
+})
+
 /**
  * Get a row instance of the row of the element in parameter
  * @param row_element != null and it must be either a jquery object or a html element
@@ -143,4 +195,6 @@ $(_ => {
     new DataTable($("#magical-equipment-table"))
     new DataTable($("#equipment-table"))
     new DataTable($("#limitedUse-equipment-table"))
+    new RuneTable($("#rune-table"))
+    new WordTable($("#word-table"))
 })

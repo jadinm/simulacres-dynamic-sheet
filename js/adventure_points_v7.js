@@ -26,8 +26,26 @@ let divine_spell_ap_cost = talent_increment_cost["x"]["0"]
 let good_nature_evil_base_cost = 1
 let good_nature_evil_level_cost = 3
 let spell_same_realm_discount = 1
+let rune_base_cost = 2
+let name_magic_cost = {
+    "species-name": 1,
+    "simple-verb": 2,
+    "race-name": 2,
+    "transformation-verb": 3,
+    "individual-name": 5,
+    "creation-destruction-verb": 5
+}
 
 let power_level_ap_cost = 5 // From 1 to 2 and from 2 to 3
+
+function update_tooltip_cost(row, diff) {
+    const title = row.data.children().first()
+    if (title.length > 0 && !row.id.includes("-x") && !intermediate_discovery) {
+        title.each((i, elem) => elem.setAttribute("title", "Coût: " + diff + " PA"))
+        title.tooltip("dispose")
+        title.tooltip()
+    }
+}
 
 function compute_remaining_ap() {
     let consumed_points = compute_component_means_cost() + compute_status_cost()
@@ -116,12 +134,34 @@ function compute_remaining_ap() {
         }
 
         // Update tooltip
-        title = spell.data.children().first()
-        if (title.length > 0 && spell.data.id !== "spell-x" && !intermediate_discovery) {
-            title.each((i, elem) => elem.setAttribute("title", "Coût: " + diff + " PA"))
-            title.tooltip("dispose")
-            title.tooltip()
+        update_tooltip_cost(spell, diff)
+    })
+
+    // Runes
+    $(".rune").each((i, elem) => {
+        const rune = row_of(elem)
+        const name = rune.get("name")
+        let diff = 0
+        if (name.val() && name.val().length > 0) {
+            diff += rune_base_cost
         }
+        // Update tooltip
+        update_tooltip_cost(rune, diff)
+        consumed_points += diff
+    })
+
+    // Name magic
+    $(".word").each((i, elem) => {
+        const rune = row_of(elem)
+        const name = rune.get("name")
+        const type = rune.get("type")
+        let diff = 0
+        if (name.val() && name.val().length > 0 && type.val() && type.val().length > 0) {
+            diff += name_magic_cost[type.val()]
+        }
+        // Update tooltip
+        update_tooltip_cost(rune, diff)
+        consumed_points += diff
     })
 
     // Monk powers

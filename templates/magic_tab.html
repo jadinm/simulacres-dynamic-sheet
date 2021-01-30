@@ -482,5 +482,102 @@
                 </div>
             </div>
         </div>
+
+        <!-- Known runes -->
+        <div class="row col-12 mt-2 m-0 p-0 d-none"><b>Runes apprises</b></div>
+        <div class="table-responsive col-12 m-0 p-0 pb-2 d-none" style="overflow-y: hidden !important;">
+            <table class="table table-hover m-0 p-0 mb-4">
+                <thead class="m-0 p-0">
+                <tr>
+                    <th scope="col" style="width: 25%">Nom</th>
+                    <th scope="col" style="width: 75%">Significations</th>
+                </tr>
+                </thead>
+                <tbody id="rune-table" class="sortable-list">
+                <tr id="rune-x" class="rune" hidden>
+                    <td class="md-form align-middle" data-toggle="tooltip" data-placement="bottom" title="">
+                        <i class="fas fa-arrows-alt prefix h-100" style="font-size: 1.5em;"></i>
+                        <label for="rune-x-name"></label>
+                        <input id="rune-x-name" class="spell-name form-control" type="text" value="">
+                    </td>
+                    <td class="md-form my-0 py-0 align-middle">
+                        <input id="rune-x-meaning" class="rune-meaning form-control" type="text">
+                        <label for="rune-x-meaning"></label>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row col-12 m-0 p-0 d-none">
+            <div class="col-lg-2 col-md-4 row">
+                <div class="col-6 px-0 mx-0">
+                    <button id="add-rune" class="btn btn-success btn-block">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <div class="col-6 px-0 mx-0">
+                    <div id="rune-table-remove" class="sortable-list text-center" style="min-height: 50px">
+                        <button class="btn-block btn btn-danger" style="cursor:default;" data-toggle="tooltip"
+                                data-html="true" data-placement="bottom"
+                                title="Déplacez un élément ici pour le supprimer">
+                            <i class="fas fa-trash-alt fa-1x"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Words learned for name magic -->
+        <div class="row col-12 mt-2 m-0 p-0 d-none"><b>Mots appris</b></div>
+        <div class="table-responsive col-12 m-0 p-0 pb-2 d-none" style="overflow-y: hidden !important;">
+            <table class="table table-hover m-0 p-0 mb-4">
+                <thead class="m-0 p-0">
+                <tr>
+                    <th scope="col" style="width: 25%">Type</th>
+                    <th scope="col" style="width: 75%">Mot</th>
+                </tr>
+                </thead>
+                <tbody id="word-table" class="sortable-list">
+                <tr id="word-x" class="word" hidden>
+                    <td class="md-form my-0 py-0 align-middle" data-toggle="tooltip" data-placement="bottom" title="">
+                        <label for="word-x-type"></label>
+                        <select class="show-tick form-control selectpicker word-type"
+                                data-live-search="true" id="word-x-type" title="Type de mot"
+                                data-style="col-10 ml-5 mx-0 px-3 align-middle" data-container="body">
+                            <option value="species-name">Nom d'espèce</option>
+                            <option value="simple-verb">Verbe simple</option>
+                            <option value="race-name">Nom de race</option>
+                            <option value="transformation-verb">Verbe de transformation</option>
+                            <option value="individual-name">Nom d'individu</option>
+                            <option value="creation-destruction-verb">Verbe de création/destruction</option>
+                        </select>
+                        <i class="fas fa-arrows-alt prefix h-100" style="font-size: 1.5em;"></i>
+                    </td>
+                    <td class="md-form align-middle">
+                        <label for="word-x-name"></label>
+                        <input id="word-x-name" class="spell-name form-control" type="text" value="">
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row col-12 m-0 p-0 d-none">
+            <div class="col-lg-2 col-md-4 row">
+                <div class="col-6 px-0 mx-0">
+                    <button id="add-word" class="btn btn-success btn-block">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <div class="col-6 px-0 mx-0">
+                    <div id="word-table-remove" class="sortable-list text-center" style="min-height: 50px">
+                        <button class="btn-block btn btn-danger" style="cursor:default;" data-toggle="tooltip"
+                                data-html="true" data-placement="bottom"
+                                title="Déplacez un élément ici pour le supprimer">
+                            <i class="fas fa-trash-alt fa-1x"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     {% endif %}
 </div>

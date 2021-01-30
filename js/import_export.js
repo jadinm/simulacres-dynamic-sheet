@@ -16,7 +16,7 @@ window.onbeforeunload = function () {
 
 $("select[id*='-x-']").selectpicker("destroy")  // Remove hidden select pickers for cloning
 
-$("select.talent-select, select.spell-list, select.spell-select, select.special-energy-select, select.realm-energy-select, select.component-select").each((i, select) => {
+$("select").each((i, select) => {
     $(select).parents('.bootstrap-select').first().replaceWith($(select))
 })
 
