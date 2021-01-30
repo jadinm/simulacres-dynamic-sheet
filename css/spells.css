@@ -21,8 +21,10 @@
 
 .spell-difficulty .slider-selection {
     background: black;
+    z-index: 1; /* Prevent checkboxes to overlap with it */
 }
 
 .spell-difficulty .slider-handle {
     background: black;
+    z-index: 1; /* Prevent checkboxes to overlap with it */
 }
