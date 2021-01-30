@@ -203,13 +203,10 @@ function update_talent_tooltip(talent, target_list = null) {
         $(talent).find(".talent-origin").text("")
     }
 }
-
-$(_ => {
-    add_missing_talents(default_talents)
-    $(".talent").each((i, elem) => {
-        if (elem.getAttribute("hidden") == null)
-            update_talent_tooltip(elem)
-    })
+add_missing_talents(default_talents)
+$(".talent").each((i, elem) => {
+    if (elem.getAttribute("hidden") == null)
+        update_talent_tooltip(elem)
 })
 
 function update_talent(event) {

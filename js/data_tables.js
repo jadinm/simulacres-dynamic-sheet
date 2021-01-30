@@ -14,6 +14,9 @@ class DataRow {
         return $("#" + this.row_index + "-" + element_id_suffix)
     }
 
+    update_roll_value() {
+    }
+
     static of(base_elem) {
         const base_id = $(base_elem)[0].id.match(row_id_regex)[1]
         return new this.prototype.constructor($("#" + base_id))
