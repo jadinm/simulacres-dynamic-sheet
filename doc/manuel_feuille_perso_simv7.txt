@@ -194,8 +194,8 @@ corrects avec leur MJ (ex. 18 points à répartir entre les 4 composantes).
     Vous pouvez importer une image pour illustrer votre personnage via le
     bouton « image ».
 
-Pour l'instant, laissons de côté les 2 champs notés « PAs non dépensés » et «
-PC », nous y reviendrons plus loin.
+Pour l'instant, laissons de côté les 2 champs notés « |n| PA non dépensés |n| »
+et « |n| PC |n| », nous y reviendrons plus loin.
 
 Choisir ses onglets
 -------------------
@@ -251,7 +251,7 @@ repérer dans la fiche, comme le passage d'un talent d'une colonne à une autre
 ou l'augmentation du score d'une composante, d'un moyen ou d'une énergie.
 
 Ceci permet de calculer automatiquement le compteur en haut de la fiche
-intitulé « PAs non dépensé» où est indiqué le nombre de PAs disponibles pour
+intitulé « PA non dépensés» où est indiqué le nombre de PAs disponibles pour
 les futures évolutions du personnage (si ce montant est négatif, c'est que vous
 avez effectué une évolution non autorisée par les règles avec les PAs à
 disposition).
@@ -486,9 +486,12 @@ Tests.
 
 Comme pour les Talents, on peut ajouter un sort en cliquant sur le **(+)** (et
 on peut également les ré-ordonner en utilisant la croix |move| |nbsp| de la
-même manière).  Chaque sort porte un nom et est associé à une Énergie à un
-certain niveau (pour pouvoir le lancer, il faut évidemment avoir atteint ce
-niveau dans cette Énergie Magique).
+même manière).
+
+Chaque sort porte un nom et est associé à une Énergie à un certain niveau (pour
+pouvoir le lancer, il faut évidemment avoir atteint ce niveau dans cette
+Énergie Magique). Les prètres utilisent l'Énergie **Divine** |divine| |n| pour
+enregistrer leurs sorts.
 
 La **Difficulté** est le compteur qui caractérise la maîtrise du sort par le
 mage : lorsqu'un sort est appris, sa Difficulté est de -4, puis elle va
