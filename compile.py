@@ -122,6 +122,7 @@ for root, dirs, filenames in os.walk(os.path.join(html_dir, "../font")):
 
 try:
     tag_version = subprocess.check_output(shlex.split("git describe --tags"), cwd=SRC_DIR, universal_newlines=True)[:-1]
+    base_tag_version = tag_version.split("-")[0]
 except subprocess.CalledProcessError:
     logging.error("Cannot get version of the code")
     sys.exit(1)
@@ -135,7 +136,8 @@ params.update({
     "discovery": args.discovery and args.version == V8,
     "intermediate_discovery": (args.discovery or args.intermediate_discovery) and args.version == V8,
     "V7": V7, "V8": V8, "captain_voodoo": CAPTAIN_VOODOO, "med_fantasy": MED_FANTASY,
-    "plugins": process_plugins(args.plugin), "tag_version": tag_version, "compilation_args": vars(args)
+    "plugins": process_plugins(args.plugin), "tag_version": tag_version, "base_tag_version": base_tag_version,
+    "compilation_args": vars(args)
 })
 template = env.get_template('base.html')
 compiled_html = template.render(params)

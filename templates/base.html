@@ -67,15 +67,23 @@
 <div class="container-fluid main-container px-4">
     <!-- Logo -->
     <div class="row align-middle justify-content-between">
-        <div class="col-md-1 col-2"></div>
-        <h1 class="mt-1 text-center">
+        <div class="col-md-1 col-2 justify-content-center align-middle">
+            {% if version == V7 %}
+                <a class="btn btn-light-blue rounded-lg col-12 px-0 mx-0" target="_blank" data-toggle="tooltip"
+                   data-html="true" data-placement="bottom" title="Télécharger le mode d'emploi"
+                   href="https://github.com/jadinm/simulacres-dynamic-sheet/releases/download/{{ base_tag_version }}/manuel_feuille_perso_simv7.pdf">
+                    <i class="fas fa-book"></i>
+                </a>
+            {% endif %}
+        </div>
+        <h1 class="mt-1 col-2 text-center">
             <svg height="1.5em" width="7em" class="input-prefix" data-toggle="tooltip" data-html="true"
                  data-placement="bottom"
                  title="Simulacres©™ - le jeu de rôle élémentaire a été créé par Pierre Rosenthal. Les règles de Simulacres © sont soumises à copyright et Simulacres™ est une marque déposée.">
                 <use xlink:href="#svg-simulacres"></use>
             </svg>
         </h1>
-        <div class="col-md-1 col-2 justify-content-center align-middle zero-clipboard">
+        <div class="col-md-1 col-2 justify-content-center align-middle">
             <div id="dark-mode" class="btn btn-dark rounded-lg col-12 px-0 mx-0"><i class="fas fa-moon"></i></div>
             <div id="light-mode" class="btn btn-light rounded-lg col-12 d-none px-0 mx-0"><i class="fas fa-sun"></i>
             </div>
