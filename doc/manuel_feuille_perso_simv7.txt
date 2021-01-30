@@ -522,6 +522,29 @@ optionnelles, et avec également les adaptations spécifiques pour la Magie comm
 la diminution de la durée de concentration ou l'amélioration des effets (durée
 ou portée multipliée, etc.).
 
+Magie Runique, Magie des Noms
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Les mages qui se spécialisent dans la **Magie Runique** |runic| disposent de
+sorts leur permettant d'apprendre et de manipuler la réalité à l'aide des
+*Runes*.
+
+D'une manière un peu similaire, les mages qui explorent la voie de la **Magie
+des Noms** |name| peuvent assimiler et utiliser des *Noms* de différents types
+pour agir sur leur environnement.
+
+Lorsqu'un personnage investi dans l'une ou l'autre de ces Énergies, une
+nouvelle section apparaît dans le tableau du bas de l'onglet, afin de permettre
+d'ajouter respectivement une Rune ou un Nom précédemment appris par le mage.
+
+Dans le cas d'une Rune, chaque nouvelle ligne permet d'indiquer un nom et une
+description afin de pouvoir spécifier les usages et les particularités de la
+Rune apprise.  Dans le cas d'un Nom, chaque ligne permet de choisir le *type de
+Nom* et de le décrire.
+
+Dans tous les cas, le calcul des PAs dépensés est spécifiques à ces magies et
+géré automatiquement par la feuille de personnage.
+
 Magie Hermétique
 ^^^^^^^^^^^^^^^^
 
