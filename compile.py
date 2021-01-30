@@ -43,6 +43,9 @@ args = parser.parse_args()
 if args.verbose:
     logging.basicConfig(level=logging.DEBUG)
 
+# Import libraries if not already done
+subprocess.run("yarn", check=True)
+
 regex_url = re.compile(r"url\(([\w\\./\-_]+)\)")
 
 

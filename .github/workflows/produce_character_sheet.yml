@@ -24,10 +24,6 @@ jobs:
     steps:
       - name: Checkout the event commit
         uses: actions/checkout@v2
-      - name: Load the JS and CSS libraries
-        uses: borales/actions-yarn@v2.0.0
-        with:
-          cmd: install  # yarn install
       - name: Compile Jinja template
         run: |
           git fetch --prune --unshallow --tags
