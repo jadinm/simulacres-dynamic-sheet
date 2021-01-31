@@ -14,9 +14,16 @@
     </div>
     <div class="row form-row mt-2 md-form p-0 m-0">
         <div class="col-12">
-            <label for="plugin-export-to-server-url">URL du serveur</label>
+            <label for="plugin-export-to-server-url">URL du serveur pour exporter la fiche</label>
             <input class="form-control" id="plugin-export-to-server-url" type="text"
                    value="https://votre-server/chemin">
+        </div>
+    </div>
+    <div class="row form-row mt-2 md-form p-0 m-0">
+        <div class="col-12">
+            <label for="plugin-export-to-server-roll-url">URL du serveur pour exporter le résultat des tests</label>
+            <input class="form-control" id="plugin-export-to-server-roll-url" type="text"
+                   value="https://votre-server/autre-chemin">
         </div>
     </div>
     <div class="form-row row mt-2 p-0 m-0 pr-2">
@@ -28,7 +35,7 @@
 
 <style id="plugin-css-export-to-server" class="plugin-css">
     /* Set font of url to a more readable font than Augusta */
-    #plugin-export-to-server-url {
+    #plugin-export-to-server-url,#plugin-export-to-server-roll-url {
         font-family: "Linux Libertine", serif;
     }
 </style>
@@ -39,6 +46,7 @@
     $(_ => {
         // Fix graphical bug with the label overlapping the default value
         $("#plugin-export-to-server-url").trigger("change")
+        $("#plugin-export-to-server-roll-url").trigger("change")
 
         /* Hide alert */
         $("#plugin-export-to-server-alert-button").on("click", _ => {
@@ -96,5 +104,50 @@
                 }
             })
         })
+        $(document).on("roll", ((_, roll) => {
+            const url = $("#plugin-export-to-server-roll-url").val()
+            if (!url || url.length === 0)
+                return
+
+            // Retrieve the name of the character
+            let character_name = $("input#character-name")[0].value
+            if (character_name === null || character_name.length === 0)
+                character_name = "Anonyme"
+
+            let data = new FormData()
+            data.append("name", character_name)
+            data.append("critical_success", roll.is_critical_success())
+            data.append("critical_failure", roll.is_critical_failure())
+            for (const [key, value] of Object.entries(roll)) {
+                data.append(key, value)
+            }
+            if (roll instanceof TalentRoll) {
+                data.append("margin", roll.post_test_margin())
+                data.append("threshold", roll.max_threshold())
+                data.set("power_dices", roll.power_dices_activated())
+                data.set("formula_elements", roll.formula())
+            }
+            $.ajax({
+                url: url,
+                method: "POST",
+                data: data,
+                processData: false,
+                contentType: false,
+                error: (jqXHR, textStatus, errorThrown) => {
+                    // Failed to export data
+                    let text = "Le résultat du roll n'a pas été exporté."
+                    if (errorThrown)
+                        text += " " + errorThrown + "."
+                    else if (textStatus === "error" && jqXHR.readyState !== 4) {
+                        text += " Cela peut arriver si le serveur n'est pas joignable" +
+                            " ou s'il n'a pas ajouté le header 'Access-Control-Allow-Origin: *' à sa réponse"
+                    } else {
+                        text += " La raison est '" + textStatus + "'"
+                    }
+                    text += "."
+                    console.log(text)
+                }
+            })
+        }))
     })
 </script>

@@ -184,6 +184,7 @@ class Roll {
 
     trigger_roll() {
         this.show_roll()
+        $(document).trigger("roll", this)
     }
 }
 
@@ -227,6 +228,13 @@ class TalentRoll extends Roll {
         this.effect_modifier = 0
 
         this.energy_investment_validated = !has_any_base_energy()
+    }
+
+    formula() {
+        return $.map(this.formula_elements, (elem) => {
+            const base_array = elem[0].id.split("-")
+            return base_array[base_array.length - 1]
+        })
     }
 
     column_effect(column, modifier) {
@@ -342,6 +350,10 @@ class TalentRoll extends Roll {
         }, 0);
     }
 
+    power_dices_activated() {
+        return this.power_dices.slice(0, this.optional_power)
+    }
+
     power_value() {
         if (!this.is_success())
             return 0
@@ -349,7 +361,7 @@ class TalentRoll extends Roll {
             // Power can only be increased up to 3 => roll all the dices directly
             this.roll_dices(3, 6, this.power_dices)
         }
-        return this.power_dices.slice(0, this.optional_power).reduce((a, b) => {
+        return this.power_dices_activated().reduce((a, b) => {
             return a + b;
         }, 0);
     }
@@ -384,7 +396,7 @@ class TalentRoll extends Roll {
             let effect_dices_sum = 0
             if (this.is_success() && this.optional_power > 0 && this.power_value() >= 0) {
                 effect_text += "<div id='roll-dialog-power-test' class='row mx-1 align-middle'>" + this.optional_power + "d6 de puissance rajoutés = "
-                    + this.power_value() + this.dice_buttons("power_dices", this.power_dices.slice(0, this.optional_power)) + "</div>"
+                    + this.power_value() + this.dice_buttons("power_dices", this.power_dices_activated()) + "</div>"
             }
             if (is_v7) {
                 // Roll the two additional dices
@@ -399,20 +411,17 @@ class TalentRoll extends Roll {
         }
 
         let racial_bonus = ""
-        for (let i in this.formula_elements) {
-            const base_array = this.formula_elements[i][0].id.split("-")
-            const formula_base_name = base_array[base_array.length - 1]
-            if (formula_base_name === "resistance" && is_hobbit()) {
+        const formula = this.formula()
+        for (let i in formula) {
+            if (formula[i] === "resistance" && is_hobbit()) {
                 racial_bonus = " (bonus ethnique déjà appliqué)" +
                     "</div><div class='row mx-1 align-middle'>Ce test est raté s'il s'agit de résister à l'hypnose ou aux illusions"
             }
         }
 
         let superpower_bonus = ""
-        for (let i in this.formula_elements) {
-            const base_array = this.formula_elements[i][0].id.split("-")
-            const formula_base_name = base_array[base_array.length - 1]
-            if (SuperpowerRollTable.components().includes(formula_base_name)) {
+        for (let i in formula) {
+            if (SuperpowerRollTable.components().includes(formula[i])) {
                 superpower_bonus = "</div><div class='row mx-1 align-middle'> La composante utilisée est celle d'un super-pouvoir (bonus de +4 déjà appliqué)"
             }
         }
@@ -603,6 +612,12 @@ class TalentRoll extends Roll {
         $("label[for='roll-dialog-optional-precision']").text("Seuil critique + 1")
         $(".roll-dialog-superpower-slider").addClass("d-none")
     }
+
+    trigger_roll() {
+        this.show_roll()
+        if (this.energy_investment_validated)
+            $(document).trigger("roll", this)
+    }
 }
 
 class SuperpowerRoll extends TalentRoll {
@@ -653,7 +668,7 @@ class SuperpowerRoll extends TalentRoll {
             // Power can only be increased up to 3 => roll all the dices directly
             this.roll_dices(3, 6, this.power_dices)
         }
-        return this.power_dices.slice(0, this.optional_power).map((elem) => {
+        return this.power_dices_activated().map((elem) => {
             return (elem <= this.max_threshold()) ? 1 : 0
         }).reduce((a, b) => {
             return a + b
@@ -711,7 +726,7 @@ class SuperpowerRoll extends TalentRoll {
                 effect_text += "<div class='row mx-1 align-middle'>" + this.optional_power + "d6 de puissance " +
                     "rajouté" + (this.optional_power > 1 ? "s" : "") + " au test initial qui augmente"
                     + (this.optional_power > 1 ? "nt" : "") + " le nombre de réussites de " + this.power_value() +
-                    this.dice_buttons("power_dices", this.power_dices.slice(0, this.optional_power)) + "</div>"
+                    this.dice_buttons("power_dices", this.power_dices_activated()) + "</div>"
             }
             if (is_v7) {
                 // Roll the two additional dices
@@ -726,10 +741,9 @@ class SuperpowerRoll extends TalentRoll {
         }
 
         let racial_bonus = ""
-        for (let i in this.formula_elements) {
-            const base_array = this.formula_elements[i][0].id.split("-")
-            const formula_base_name = base_array[base_array.length - 1]
-            if (formula_base_name === "resistance" && is_hobbit()) {
+        const formula = this.formula()
+        for (let i in formula) {
+            if (formula[i] === "resistance" && is_hobbit()) {
                 racial_bonus = " (bonus ethnique déjà appliqué)" +
                     "</div><div class='row mx-1 align-middle'>Ce test est raté s'il s'agit de résister à l'hypnose ou aux illusions"
             }
@@ -927,4 +941,5 @@ $("#roll-dialog-validate").on("click", _ => {
     })
     current_roll.invested_energies = invested_energies
     current_roll.show_roll()
+    $(document).trigger("roll", current_roll)
 })
