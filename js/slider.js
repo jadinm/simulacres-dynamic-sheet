@@ -9,13 +9,18 @@ function build_max_formatter(input) {
     }
 }
 
-function activate_slider(input, formatter_builder = build_max_formatter, post_build = _ => void 0, opts={}) {
+function activate_slider(input, formatter_builder = build_max_formatter, post_build = _ => void 0, opts={},
+                         slider_value_changed_event = null) {
     // Remove pre-existing sliders (this happens after a save of the html page)
     const elem = "#" + input.getAttribute("data-slider-id")
     $(elem).remove()
     input.setAttribute("style", {})
 
     opts["formatter"] = formatter_builder(input)
+    if (slider_value_changed_event) {
+        opts["triggerChangeEvent"] = true
+        $(input).on("change", slider_value_changed_event)
+    }
 
     const orientation = input.getAttribute("data-slider-reversed")
     if (orientation != null && orientation === "true") {

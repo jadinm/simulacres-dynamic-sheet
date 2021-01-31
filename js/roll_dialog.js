@@ -155,6 +155,7 @@ class Roll {
             current_roll[dice_group][dice_idx] = new_value
             target.tooltip("dispose")
             current_roll.show_roll()
+            $(document).trigger("update-roll", current_roll)
         }).tooltip({disabled: false})
     }
 
@@ -783,41 +784,59 @@ class SuperpowerRoll extends TalentRoll {
 
 function slider_value_changed(input) {
     return modifier => {
-        /* When it is called on creation, current_roll is null */
-        if (!current_roll)
-            return modifier
-
-        if (input.id === "roll-dialog-modifier") { // Modify the MR only for MR modifier
-            current_roll.margin_modifier = modifier
-            current_roll.show_roll(true)
-        } else if (input.id === "roll-dialog-superpower-modifier") {
-            current_roll.superpower_modifier = modifier
-            current_roll.show_roll(true)
-        } else {
-            current_roll.effect_modifier = modifier
-        }
-
-        // Update with scaled effect in the text
-        $(".roll-dialog-effect").each((i, elem) => {
-            const column = elem.getAttribute("column")
-            let column_modifier = elem.getAttribute("modifier")
-            column_modifier = column_modifier.length > 0 ? parseInt(column_modifier) : 0
-            const effect_value = current_roll.column_effect(column, column_modifier)
-            $(elem).html(effect_value)
-        })
         return modifier
     }
 }
 
+let timed_action = null
+
+function timed_update_roll_trigger() {
+    // We trigger the update-roll at most twice a second
+    // and we keep the last trigger
+    if (timed_action != null)
+        clearTimeout(timed_action)
+    timed_action = setTimeout(_ => { $(document).trigger("update-roll", current_roll) }, 500);
+}
+
+function slider_value_changed_event(e) {
+    const input = e.target
+    const modifier = parseInt($(input).val())
+    /* When it is called on creation, current_roll is null */
+    if (!current_roll || isNaN(modifier))
+        return
+
+    if (input.id === "roll-dialog-modifier") { // Modify the MR only for MR modifier
+        current_roll.margin_modifier = modifier
+        current_roll.show_roll(true)
+        timed_update_roll_trigger()
+    } else if (input.id === "roll-dialog-superpower-modifier") {
+        current_roll.superpower_modifier = modifier
+        current_roll.show_roll(true)
+        timed_update_roll_trigger()
+    } else if (input.id === "roll-dialog-effect-modifier") {
+        current_roll.effect_modifier = modifier
+        timed_update_roll_trigger()
+    }
+
+    // Update with scaled effect in the text
+    $(".roll-dialog-effect").each((i, elem) => {
+        const column = elem.getAttribute("column")
+        let column_modifier = elem.getAttribute("modifier")
+        column_modifier = column_modifier.length > 0 ? parseInt(column_modifier) : 0
+        const effect_value = current_roll.column_effect(column, column_modifier)
+        $(elem).html(effect_value)
+    })
+}
+
 $(_ => {
     activate_slider($("#roll-dialog-modifier")[0], slider_value_changed, _ => void 0,
-        {tooltip: "always"})
+        {tooltip: "always"}, slider_value_changed_event)
     const effect_modifier = $("#roll-dialog-effect-modifier")
     if (effect_modifier.length > 0)
         activate_slider(effect_modifier[0], slider_value_changed, _ => void 0,
-            {tooltip: "always"})
+            {tooltip: "always"}, slider_value_changed_event)
     activate_slider($("#roll-dialog-superpower-modifier")[0], slider_value_changed, _ => void 0,
-        {tooltip: "always"})
+        {tooltip: "always"}, slider_value_changed_event)
 })
 
 /* Quick roll button */
