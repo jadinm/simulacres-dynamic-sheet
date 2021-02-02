@@ -342,15 +342,11 @@ class TalentRoll extends Roll {
     update_component(input, current_value, force_update = false) {
         if (input.length > 0) {
             if (force_update) {
-                console.log("ERASE")
                 current_value = input.prop("checked") || false
-                console.log(current_value)
             } else { // Update input
                 if (current_value) {
-                    console.log("CHECK")
                     check_radio(input[0])
                 } else {
-                    console.log("UNCHECK")
                     uncheck_checkbox(input[0])
                 }
             }
@@ -361,18 +357,15 @@ class TalentRoll extends Roll {
     }
 
     update_components(force_update = false) {
-        console.log("incantation")
         const incantation = this.update_component($("#roll-dialog-incantation"), this.incantation, force_update)
         if (!this.energy_investment_validated)
             this.incantation = incantation
 
-        console.log("somatic")
         const somatic_component = this.update_component($("#roll-dialog-somatic-component"), this.somatic_component,
             force_update)
         if (!this.energy_investment_validated)
             this.somatic_component = somatic_component
 
-        console.log("material")
         const material_component = this.update_component($("#roll-dialog-material-component"), this.material_component,
             force_update)
         if (!this.energy_investment_validated)
