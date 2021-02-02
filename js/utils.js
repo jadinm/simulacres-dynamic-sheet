@@ -52,6 +52,39 @@ $("#character-name").on("change", e => {
         document.title = "SimulacreS"
 })
 
+// Test if there is a new version
+$(_ => {
+    $("#download-latest-version").addClass("d-none").tooltip("dispose")
+    let new_url = null
+    $.get({
+        url: "https://api.github.com/repos/jadinm/simulacres-dynamic-sheet/releases/latest",
+        method: "GET",
+        data: {},
+        dataType: "json",
+        success: (data) => {
+            // Check if version is higher than current version (since it is only going up,
+            // the latest version is the highest one as well
+            if (base_tag_version !== data["tag_name"]) {
+                new_url = $(data["assets"]).filter((i, elem) => {
+                    return base_sheet_name === elem["name"]
+                })
+
+                if (new_url.length > 0) {
+                    new_url = new_url[0]["browser_download_url"]
+                    const dl_button = $("#download-latest-version")
+                    dl_button.removeClass("d-none").attr("href", new_url)
+                    dl_button.tooltip()
+                }
+            }
+        },
+        error: (jqXHR, textStatus, errorThrown) => {
+            console.log("error")
+            console.log(jqXHR, textStatus, errorThrown)
+        },
+        timeout: 2000
+    })
+})
+
 // Set the right version of bootstrap for bootstrap-select
 $.fn.selectpicker.Constructor.BootstrapVersion = '4'
 

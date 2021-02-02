@@ -76,12 +76,16 @@
                 </a>
             {% endif %}
         </div>
-        <h1 class="mt-1 col-2 text-center">
+        <h1 class="mt-1 col-2 text-center d-flex">
             <svg height="1.5em" width="7em" class="input-prefix" data-toggle="tooltip" data-html="true"
                  data-placement="bottom"
                  title="Simulacres©™ - le jeu de rôle élémentaire a été créé par Pierre Rosenthal. Les règles de Simulacres © sont soumises à copyright et Simulacres™ est une marque déposée.">
                 <use xlink:href="#svg-simulacres"></use>
             </svg>
+            <a id="download-latest-version" target="_blank" data-toggle="tooltip" data-html="true"
+               data-placement="right" title="Téléchargez la nouvelle version de la fiche" class="btn-link d-none">
+                <i class="fas fa-angle-double-up fa-sm pl-1 pt-0 pb-3"></i>
+            </a>
         </h1>
         <div class="col-md-1 col-2 justify-content-center align-middle">
             <div id="dark-mode" class="btn btn-dark rounded-lg col-12 px-0 mx-0"><i class="fas fa-moon"></i></div>
@@ -386,6 +390,8 @@
 
 <!-- Custom Javascript -->
 <script>
+    const base_sheet_name = "{{ base_sheet_name }}"
+    const base_tag_version = "{{ base_tag_version }}"
     let is_v7 = true
     let localized_hp = false
     let matrix_4x4 = false

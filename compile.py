@@ -139,6 +139,33 @@ params.update({
     "plugins": process_plugins(args.plugin), "tag_version": tag_version, "base_tag_version": base_tag_version,
     "compilation_args": vars(args)
 })
+
+# Find release name
+
+params["base_sheet_name"] = ""
+if params["version"] == V7:
+    if params["localisation"]:
+        if params["dual_wielding"] and params["universe"] == MED_FANTASY:
+            params["base_sheet_name"] = "simulacres_v7_localisation_deux_armes_fiche_perso.html"
+        elif params["universe"] == MED_FANTASY:
+            params["base_sheet_name"] = "simulacres_v7_localisation_fiche_perso.html"
+    else:
+        params["base_sheet_name"] = "simulacres_v7_fiche_perso.html"
+else:  # V8
+    matrix_text = "_4x4" if params["matrix_4x4"] else ""
+    if params["universe"] == MED_FANTASY:
+        params["base_sheet_name"] = "simulacres_v8_fiche_perso{}.html".format(matrix_text)
+    elif params["universe"] == CAPTAIN_VOODOO:
+        params["base_sheet_name"] = "simulacres_v8_fiche_perso_capitaine_vaudou{}.html".format(matrix_text)
+    elif params["universe"] == "Autre":
+        if params["discovery"]:
+            params["base_sheet_name"] = "simulacres_v8_fiche_perso_minimale_decouverte{}.html".format(matrix_text)
+        elif params["intermediate_discovery"]:
+            params["base_sheet_name"] = "simulacres_v8_fiche_perso_minimale_decouverte_intermediaire{}.html" \
+                .format(matrix_text)
+        else:
+            params["base_sheet_name"] = "simulacres_v8_fiche_perso_minimale{}.html".format(matrix_text)
+
 template = env.get_template('base.html')
 compiled_html = template.render(params)
 
