@@ -131,6 +131,37 @@
                                            id="roll-dialog-magic-power" type="number" value="0" min="0" max="0">
                                 </div>
                             </div>
+                            <div class="row mx-1 roll-dialog-effect-hide">
+                                <b class="roll-dialog-component-hide d-none">
+                                    <br/>Pratiques magiques utilisées (MR + 1 par pratique)
+                                </b>
+                            </div>
+                            <div class="row mx-1 roll-dialog-effect-hide">
+                                <div class="custom-control custom-checkbox custom-control-inline roll-dialog-component-hide d-none">
+                                    <input type="checkbox" class="roll-dialog-component custom-control-input"
+                                           id="roll-dialog-incantation" name="roll-dialog-incantation">
+                                    <label class="custom-control-label" for="roll-dialog-incantation">
+                                        Incantation
+                                    </label>
+                                </div>
+                                <div class="custom-control custom-checkbox custom-control-inline roll-dialog-component-hide d-none">
+                                    <input type="checkbox" class="roll-dialog-component custom-control-input"
+                                           id="roll-dialog-somatic-component" name="roll-dialog-somatic-component">
+                                    <label class="custom-control-label" for="roll-dialog-somatic-component">
+                                        Gestuelle
+                                    </label>
+                                </div>
+                                <div class="custom-control custom-checkbox custom-control-inline roll-dialog-component-hide d-none">
+                                    <input type="checkbox" class="roll-dialog-component custom-control-input"
+                                           id="roll-dialog-material-component" name="roll-dialog-material-component">
+                                    <label class="custom-control-label" for="roll-dialog-material-component">
+                                        Composants matériels
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="roll-dialog-component-hide d-none">
+                                <br/>
+                            </div>
                         {% endif %}
                         <div id="roll-dialog-validate"
                              class="row mx-1 roll-dialog-effect-hide justify-content-center mt-2">

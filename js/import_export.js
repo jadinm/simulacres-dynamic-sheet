@@ -31,6 +31,10 @@ function check_radio(elem) {
     $(elem).prop("checked", true)
 }
 
+function uncheck_checkbox(elem) {
+    $(elem).prop("checked", false).removeAttr("checked")
+}
+
 function input_change(event) {
     event.target.setAttribute("value", event.target.value)
     changed_page = true
@@ -51,7 +55,7 @@ function checkbox_click(event) {
     if (already_present) { // Do not check if the same element was selected twice
         check_radio(event.target)
     } else {
-        $(event.target).prop("checked", false).removeAttr("checked")
+        uncheck_checkbox(event.target)
     }
     changed_page = true
 }

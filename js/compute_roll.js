@@ -110,11 +110,13 @@ class RollRow extends DataRow {
 
         // Reset all invested energies
         $(".roll-dialog-energy").val(0)
+        $(".roll-dialog-component").each((i, elem) => uncheck_checkbox(elem))
 
         // Do the actual roll
         const value = parseInt(this.get("value").text())
         new TalentRoll(roll_reason, value, difficulty, this.get("effect").val(),
-            critical_increase, formula_elements, margin_throttle, false, "", "").trigger_roll()
+            critical_increase, formula_elements, margin_throttle, false, false,
+            "", "").trigger_roll()
         $('#roll-dialog').modal()
     }
 }
@@ -222,12 +224,13 @@ class SpellRow extends RollRow {
 
         // Reset all invested energies
         $(".roll-dialog-energy").val(0)
+        $(".roll-dialog-component").each((i, elem) => uncheck_checkbox(elem))
 
         // Do the actual roll
         const value = parseInt(this.get("value", button).text())
         new TalentRoll(roll_reason, value, difficulty, this.get("effect", button).val(),
-            critical_increase, formula_elements, margin_throttle, true, spell_distance,
-            spell_focus, spell_duration).trigger_roll()
+            critical_increase, formula_elements, margin_throttle, this.data.hasClass("spell"),
+            true, spell_distance, spell_focus, spell_duration).trigger_roll()
         $('#roll-dialog').modal()
     }
 
@@ -454,6 +457,7 @@ class SuperpowerRow extends RollRow {
 
         // Reset all invested energies
         $(".roll-dialog-energy").val(0)
+        $(".roll-dialog-component").each((i, elem) => uncheck_checkbox(elem))
 
         // Do the actual roll
         new SuperpowerRoll(roll_reason, nbr_dices, under_value, formula_elements, power_distance, power_focus,

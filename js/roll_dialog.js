@@ -135,6 +135,7 @@ class Roll {
         const roll_magic_divs = $(".roll-dialog-magic-hide")
         roll_effect_divs.addClass("d-none")
         roll_magic_divs.addClass("d-none")
+        $(".roll-dialog-component-hide").addClass("d-none")
         $("#roll-dialog-result-label").html("Résultat du lancer de 2d6 = ")
         $("#roll-dialog-result").html(this.dice_value())
         $("#roll-dialog-details").html(this.dice_buttons("base_dices", this.base_dices)).removeClass("d-none")
@@ -192,7 +193,8 @@ class Roll {
 class TalentRoll extends Roll {
     constructor(reason = "", max_value = NaN, talent_level = 0, effect = "",
                 critical_increase = 0, formula_elements = [], margin_throttle = NaN,
-                is_magic = false, distance = "", focus = "", duration = "") {
+                is_magic = false, is_power = false, distance = "", focus = "",
+                duration = "") {
         super()
         this.reason = reason
         this.formula_elements = formula_elements
@@ -205,6 +207,7 @@ class TalentRoll extends Roll {
         this.effect_dices = []
 
         this.is_magic = is_magic
+        this.is_power = is_power || is_magic
         this.distance = distance // Spell parameter increased by power
         this.focus = focus // Spell parameter decreased by speed
         this.duration = duration
@@ -221,6 +224,11 @@ class TalentRoll extends Roll {
         this.optional_speed = NaN
         this.update_energies()
 
+        this.incantation = false
+        this.somatic_component = false
+        this.material_component = false
+        this.update_components()
+
         this.unease = get_unease()
         this.armor_penalty = get_armor_penalty()
         this.timestamp = new Date()
@@ -228,7 +236,8 @@ class TalentRoll extends Roll {
         this.margin_modifier = 0
         this.effect_modifier = 0
 
-        this.energy_investment_validated = !has_any_base_energy()
+        // Need to give energy investment or its magical components
+        this.energy_investment_validated = !has_any_base_energy() && !is_magic
     }
 
     formula() {
@@ -262,7 +271,9 @@ class TalentRoll extends Roll {
     }
 
     max_threshold() {
+        const components = this.is_magic ? this.incantation + this.somatic_component + this.material_component : 0
         return this.max_value + this.unease + this.power + this.speed + this.precision + this.margin_modifier
+            + components
     }
 
     margin() {
@@ -326,6 +337,46 @@ class TalentRoll extends Roll {
         update_max_invested_energies($("#power")[0])
         update_max_invested_energies($("#speed")[0])
         update_max_invested_energies($("#precision")[0])
+    }
+
+    update_component(input, current_value, force_update = false) {
+        if (input.length > 0) {
+            if (force_update) {
+                console.log("ERASE")
+                current_value = input.prop("checked") || false
+                console.log(current_value)
+            } else { // Update input
+                if (current_value) {
+                    console.log("CHECK")
+                    check_radio(input[0])
+                } else {
+                    console.log("UNCHECK")
+                    uncheck_checkbox(input[0])
+                }
+            }
+        } else {
+            current_value = false
+        }
+        return current_value
+    }
+
+    update_components(force_update = false) {
+        console.log("incantation")
+        const incantation = this.update_component($("#roll-dialog-incantation"), this.incantation, force_update)
+        if (!this.energy_investment_validated)
+            this.incantation = incantation
+
+        console.log("somatic")
+        const somatic_component = this.update_component($("#roll-dialog-somatic-component"), this.somatic_component,
+            force_update)
+        if (!this.energy_investment_validated)
+            this.somatic_component = somatic_component
+
+        console.log("material")
+        const material_component = this.update_component($("#roll-dialog-material-component"), this.material_component,
+            force_update)
+        if (!this.energy_investment_validated)
+            this.material_component = material_component
     }
 
     effect_value() {
@@ -436,7 +487,7 @@ class TalentRoll extends Roll {
                 + "&nbsp;<span id='roll-dialog-threshold'>"
                 + this.max_threshold() + "</span>" + racial_bonus + superpower_bonus + "</div>"
         } else {
-            details_text ="<div class='row mx-1 align-middle'>" + threshold_name
+            details_text = "<div class='row mx-1 align-middle'>" + threshold_name
                 + "&nbsp;<span id='roll-dialog-threshold'>"
                 + this.max_threshold() + "</span>" + racial_bonus + "</div>"
         }
@@ -483,19 +534,26 @@ class TalentRoll extends Roll {
         // Hide everything and show it afterwards if needed
         const roll_effect_divs = $(".roll-dialog-effect-hide")
         const roll_magic_divs = $(".roll-dialog-magic-hide")
+        const roll_component_divs = $(".roll-dialog-component-hide")
 
         roll_effect_divs.removeClass("d-none")
-        if (this.is_magic)
+        if (this.is_power)
             roll_magic_divs.removeClass("d-none")
         else
             roll_magic_divs.addClass("d-none")
+        if (this.is_magic)
+            roll_component_divs.removeClass("d-none")
+        else
+            roll_component_divs.addClass("d-none")
 
         const result = $("#roll-dialog-result")
         const energy_inputs = $(".roll-dialog-energy")
+        const component_inputs = $(".roll-dialog-component")
         if (this.energy_investment_validated) {
             const validate_button = $("#roll-dialog-validate")
             validate_button.addClass("d-none")
             const heroism = $("#heroism")
+            component_inputs.attr("disabled", "disabled")
             if (heroism.length === 0 || parseInt(heroism.val()) === 0) {
                 energy_inputs.attr("disabled", "disabled")
             } else { // You can invest in other energies with heroism only if this was not done before roll
@@ -514,6 +572,7 @@ class TalentRoll extends Roll {
         } else {
             result.html("")
             energy_inputs.removeAttr("disabled", "disabled")
+            component_inputs.removeAttr("disabled", "disabled")
         }
 
         $(".energy").each((i, elem) => {
@@ -543,7 +602,7 @@ class TalentRoll extends Roll {
         }
 
         let effect = ""
-        if (this.is_magic && this.duration.length > 0) {
+        if (this.is_power && this.duration.length > 0) {
             effect += "<div class='row mx-1 align-middle'>Durée de l'effet: " + this.duration + "</div>" + effect
         }
         effect += "<div class='row mx-1 align-middle'>Effet:</div><div class='row mx-1 align-middle'>" + this.effect
@@ -577,22 +636,22 @@ class TalentRoll extends Roll {
         }
         effect += "</div>"
 
-        if (this.is_magic && this.distance.length > 0) {
+        if (this.is_power && this.distance.length > 0) {
             const distance = this.distance.replaceAll(/\d+/gi, (match) => {
                 return String(parseInt(match) * Math.pow(2, this.magic_power))
             })
             effect = "<div class='row mx-1 align-middle'>Portée: " + distance + "</div>" + effect
         }
-        if (this.is_magic && this.focus.length > 0) {
+        if (this.is_power && this.focus.length > 0) {
+            const components = this.is_magic ? this.incantation + this.somatic_component + this.material_component : 0
             const focus = this.focus.replaceAll(/\d+/gi, (match) => {
-                return String(parseInt(match) / Math.pow(2, this.optional_speed))
+                return String((1 + components) * parseInt(match) / Math.pow(2, this.optional_speed))
             })
             effect = "<div class='row mx-1 align-middle'>Durée de concentration: " + focus + "</div>" + effect
         }
 
         // Update with the MR if "MR" is in the text
         $("#roll-dialog-effect").html(effect)
-
 
         let title = "<h2>" + ((this.reason.length > 0) ? this.reason : "Résultat du lancer")
             + "</h2>"
@@ -625,7 +684,7 @@ class SuperpowerRoll extends TalentRoll {
 
     constructor(reason = "", nbr_dices = 0, under_value = 0, formula_elements = [],
                 distance = "", focus = "", duration = "", effect = "") {
-        super(reason, NaN, 0, effect, 0, formula_elements, NaN, true, distance, focus, duration)
+        super(reason, NaN, 0, effect, 0, formula_elements, NaN, false, true, distance, focus, duration)
         this.number = nbr_dices
         this.under_value = under_value
         this.superpower_modifier = 0
@@ -709,7 +768,7 @@ class SuperpowerRoll extends TalentRoll {
 
     critical_success_text() {
         return "<div class='row mx-1 align-middle'>Grâce au succès critique, le dé"
-            + this.dice_buttons("critical_dices", this.critical_dices)+ "est ajouté "
+            + this.dice_buttons("critical_dices", this.critical_dices) + "est ajouté "
             + (this.critical_value() === 0 ? " mais n'augmente pas le nombre de réussites"
                 : " qui augmente le nombre de réussites de " + this.critical_value())
             + "</div>"
@@ -759,7 +818,7 @@ class SuperpowerRoll extends TalentRoll {
                 + "&nbsp;<span id='roll-dialog-threshold'>"
                 + this.max_threshold() + "</span>" + racial_bonus + "</div>"
         } else {
-            details_text ="<div class='row mx-1 align-middle'>" + threshold_name
+            details_text = "<div class='row mx-1 align-middle'>" + threshold_name
                 + "&nbsp;<span id='roll-dialog-threshold'>"
                 + this.max_threshold() + "</span>" + racial_bonus + "</div>"
         }
@@ -795,7 +854,9 @@ function timed_update_roll_trigger() {
     // and we keep the last trigger
     if (timed_action != null)
         clearTimeout(timed_action)
-    timed_action = setTimeout(_ => { $(document).trigger("update-roll", current_roll) }, 500);
+    timed_action = setTimeout(_ => {
+        $(document).trigger("update-roll", current_roll)
+    }, 500);
 }
 
 function slider_value_changed_event(e) {
@@ -844,6 +905,7 @@ $(_ => {
 $("#roll-2d6").on("click", _ => {
     // Reset invested energies
     $(".roll-dialog-energy").val(0)
+    $(".roll-dialog-component").each((i, elem) => uncheck_checkbox(elem))
     // Trigger roll
     new Roll().trigger_roll()
     $('#roll-dialog').modal()
@@ -921,6 +983,13 @@ $(".roll-dialog-energy").on("change", e => {
     // Trigger the same roll but with the correct precision
     current_roll.update_energies(true)
     $(e.target).parent().tooltip("dispose")
+    current_roll.show_roll()
+})
+
+$(".roll-dialog-component").on("click", _ => {
+    if (!current_roll)
+        return
+    current_roll.update_components(true)
     current_roll.show_roll()
 })
 
