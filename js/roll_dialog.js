@@ -659,9 +659,11 @@ class TalentRoll extends Roll {
             title += "<h4>"
             for (let i = 0; i < this.formula_elements.length; i++) {
                 const symbol = $("label[for='" + this.formula_elements[i][0].id + "'] svg").get(0)
-                title += symbol.outerHTML
-                if (i !== this.formula_elements.length - 1)
-                    title += "&nbsp;+&nbsp;"
+                if (symbol) {
+                    title += symbol.outerHTML
+                    if (i !== this.formula_elements.length - 1)
+                        title += "&nbsp;+&nbsp;"
+                }
             }
             title += "</h4>"
         }
