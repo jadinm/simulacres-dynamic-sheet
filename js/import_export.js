@@ -339,6 +339,19 @@ function import_data(src_html, dst_html) {
 
 const plugin_selectors = [".plugin-tab", ".plugin-button", ".plugin-css", ".plugin-js"]
 
+function query_raw_plugin(url, success_function, error_function) {
+    $.get({
+        // We only download the plugin for the matching version if any
+        url: url,
+        method: "GET",
+        data: {},
+        dataType: "html",
+        success: success_function,
+        error: error_function,
+        timeout: 2000
+    })
+}
+
 function build_plugin_list() {
     const plugin_list = $("#about-sheet-plugins")
 
@@ -363,6 +376,32 @@ function build_plugin_list() {
         const new_element = template.clone(true, true)
         new_element.removeClass("d-none").addClass("d-flex")
         new_element.children().first().text(plugins[i])
+        const upgrade = new_element.find(".plugin-update")
+        const url = "https://raw.githubusercontent.com/jadinm/simulacres-dynamic-sheet/" + latest_released_version + "/plugins/plugin_" + plugins[i].replaceAll("-", "_") + ".html"
+        query_raw_plugin(url, () => {
+            upgrade.removeClass("invisible")
+        }, () => { // No matching plugin
+            upgrade.addClass("invisible")
+        })
+        upgrade.on("click", _ => {
+            query_raw_plugin(url, (data) => {
+                const plugin = $(data)
+                let tab = plugin.find(".plugin-tab")
+                if (tab.length === 0)
+                    tab = plugin.filter(".plugin-tab")
+                if (tab.length > 0) {
+                    const current_plugin_version = $("#" + tab[0].id)
+                    if (current_plugin_version.length > 0) {
+                        import_data(current_plugin_version, tab)
+                    }
+                }
+
+                insert_or_replace_plugins(plugin) // Upgrade plugin
+                upgrade.removeClass("invisible")
+            }, () => {
+                upgrade.addClass("invisible")
+            })
+        })
         plugin_list.append(new_element)
     }
 

@@ -53,9 +53,9 @@ $("#character-name").on("change", e => {
 })
 
 // Test if there is a new version
+let latest_released_version = base_tag_version
 $(_ => {
     $("#download-latest-version").addClass("d-none").tooltip("dispose")
-    let new_url = null
     $.get({
         url: "https://api.github.com/repos/jadinm/simulacres-dynamic-sheet/releases/latest",
         method: "GET",
@@ -64,8 +64,9 @@ $(_ => {
         success: (data) => {
             // Check if version is higher than current version (since it is only going up,
             // the latest version is the highest one as well
+            latest_released_version = data["tag_name"]
             if (base_tag_version !== data["tag_name"]) {
-                new_url = $(data["assets"]).filter((i, elem) => {
+                let new_url = $(data["assets"]).filter((i, elem) => {
                     return base_sheet_name === elem["name"]
                 })
 
@@ -75,11 +76,8 @@ $(_ => {
                     dl_button.removeClass("d-none").attr("href", new_url)
                     dl_button.tooltip()
                 }
+                build_plugin_list()
             }
-        },
-        error: (jqXHR, textStatus, errorThrown) => {
-            console.log("error")
-            console.log(jqXHR, textStatus, errorThrown)
         },
         timeout: 2000
     })
