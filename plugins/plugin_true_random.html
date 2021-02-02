@@ -1,0 +1,76 @@
+<script id="plugin-js-true-random" class="plugin-js">
+    $(_ => {
+        let true_random_d6s = []
+        function fetch_true_randoms(needed_numbers = 100) {
+            $.get({
+                url: "https://www.random.org/integers/",
+                method: "GET",
+                data: {
+                    "num": String(needed_numbers),
+                    "min": "1",
+                    "max": "6",
+                    "base": "10",
+                    "format": "plain",
+                    "col": "1",
+                    "rnd": "new"
+                },
+                success: (data) => {
+                    true_random_d6s = true_random_d6s.concat(String(data).trim().split("\n"))
+                },
+                error: (jqXHR, textStatus, errorThrown) => {
+                    // Failed to fetch randoms
+                    console.log("Impossible d'importer des nombres de random.org: ", textStatus, " - ", errorThrown)
+                },
+                timeout: 120000 // random.org advises for a couple of minute of timeout
+            })
+        }
+        fetch_true_randoms()
+
+        // Replace roll_dice function by our own that uses true random from random.org result if any available
+        const old_roll_dices = Roll.prototype.roll_dices
+        function roll_true_random(number, type, dices) {
+            if (true_random_d6s.length < 20) {
+                // Refill random numbers
+                fetch_true_randoms()
+            }
+            if (type > 0 && type <= 6 && true_random_d6s.length >= number) {
+                // We have remaining random numbers to take
+                let sum = 0
+                for (let i = 0; i < number; i++) {
+                    // We take a random index inside it to prevent predictability from players
+                    const idx = Math.floor(Math.random() * true_random_d6s.length)
+                    const single_roll = true_random_d6s[idx] % type + 1
+                    true_random_d6s.splice(idx, 1)
+                    if (dices)
+                        dices.push(single_roll)
+                    sum += single_roll
+                }
+                return sum
+            }
+            return roll_dices(number, type, dices)
+        }
+        Roll.prototype.roll_dices = roll_true_random
+
+        $("#roll-dialog-1d6").off().on("click", _ => {
+            const dice_value = roll_true_random(1, 6, null)
+            $("#roll-dialog-1d6-result").text("1d6 additionnel: " + dice_value)
+        })
+        $("#spell-margin-good-nature-evil-1d3").off().on("click", _ => {
+            const dice_value = roll_true_random(1, 3, null)
+            $("#spell-margin-good-nature-evil-1d3-result").text("1d3: " + dice_value)
+        })
+
+        /* To remove a plugin, it might not always be sufficient to remove every block
+         * Sometimes, additional cleaning is needed depending on the plugin
+         *
+         * To do so, we create a function for that and register it
+         * This function will be called after removing all the blocks of this plugin
+         */
+        function dispose_plugin_true_random() {
+            // Reset correct function
+            Roll.prototype.roll_dices = old_roll_dices
+        }
+        // Register the function (avoid typos here or the method won't be called)
+        plugin_dispose_methods["true-random"] = dispose_plugin_true_random
+    })
+</script>

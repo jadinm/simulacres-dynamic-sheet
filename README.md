@@ -162,6 +162,12 @@ Le bouton pour importer un plugin se trouve en bas de la fiche.
 Pour le moment nous avons les plugins suivants :
 
 - Un [plugin exemple](plugins/plugin_example.html) pour le test et la documentation.
+- Un [plugin utilisant un véritable générateur aléatoire](plugins/plugin_true_random.html).
+  Le générateur d'aléatoire d'un PC dépend des calculs qu'il fait et n'est donc pas entièrement
+  aléatoire (voir
+  [wikipédia pour les détails](https://fr.wikipedia.org/wiki/G%C3%A9n%C3%A9rateur_de_nombres_pseudo-al%C3%A9atoires)).
+  Ce plugin va récupérer des nombres aléatoires générés par https://random.org quand ce site est accessible.
+  Si le site n'est pas joignable, il bascule sur le générateur de la machine.
 - Un [plugin rajoutant des talents et des énergies magiques](plugins/plugin_other_world.html)
   à une fiche de base (peu importe la version). Ce plugin sert d'exemple
   pour construire une fiche SimulacreS d'un univers de campagne

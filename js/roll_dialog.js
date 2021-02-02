@@ -16,11 +16,6 @@ $("#roll-dialog-1d6").on("click", _ => {
     $("#roll-dialog-1d6-result").text("1d6 additionnel: " + dice_value)
 })
 
-$("#roll-dialog-2d6").on("click", _ => {
-    const dice_value = roll_dices()
-    $("#roll-dialog-2d6-result").text("2d6 additionnels: " + dice_value)
-})
-
 effect_table = {
     /*  0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 */
     A: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3],
@@ -115,7 +110,6 @@ class Roll {
     modify_dialog(ignore_sliders) {
         // Reset text
         $("#roll-dialog-1d6-result").text("")
-        $("#roll-dialog-2d6-result").text("")
         const critical_div = $("#roll-dialog-critical")
         critical_div.text("")
 
@@ -145,12 +139,13 @@ class Roll {
     }
 
     make_dices_clickable() {
+        const roll_fn = this.roll_dices
         $(".roll-link").on("click", e => {
             let target = $(e.target)
             if (!target.hasClass("roll-link"))
                 target = target.parents(".roll-link")
 
-            const new_value = roll_dices(1, 6)
+            const new_value = roll_fn(1, 6)
             const dice_group = target.get(0).getAttribute("data-dice-group")
             const dice_idx = target.get(0).getAttribute("data-dice-idx")
             current_roll[dice_group][dice_idx] = new_value
@@ -492,7 +487,6 @@ class TalentRoll extends Roll {
 
         // Reset text
         $("#roll-dialog-1d6-result").text("")
-        $("#roll-dialog-2d6-result").text("")
         const critical_div = $("#roll-dialog-critical")
         critical_div.text("")
 
