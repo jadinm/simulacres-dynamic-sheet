@@ -318,6 +318,9 @@ function import_data(src_html, dst_html) {
     const old_image = src_html.find("#character-image")
     if (old_image.length > 0 && old_image[0].src && old_image[0].src.length > 0)
         dst_html.find("#character-image")[0].src = old_image[0].src
+    const old_background = src_html.filter("#main-container").css("background-image")
+    if (old_background)
+        dst_html.find("#main-container").css("background-image", old_background)
 
     // Update all of the spell values
     $(".spell-value,.roll-value,.dual_wielding-value").each((i, elem) => {
@@ -562,6 +565,22 @@ $("#import-image").on("change", event => {
 
         event.target.setAttribute("value", "")
         $(event.target).next().text("Image")
+    }
+    reader.readAsDataURL(event.target.files[0])
+})
+
+/* Import character image */
+$("#import-background-image").on("change", event => {
+    if (event.target.files.length === 0)
+        return
+
+    const reader = new FileReader()
+    reader.onload = _ => {
+        // Executed at the completion of the read
+        $("#main-container").css("background-image", "url(\"" + reader.result + "\")")
+
+        event.target.setAttribute("value", "")
+        $(event.target).next().text("Image de fond")
     }
     reader.readAsDataURL(event.target.files[0])
 })

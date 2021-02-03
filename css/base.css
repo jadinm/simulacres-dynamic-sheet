@@ -36,3 +36,14 @@ input {
 .fa-arrows-alt {
     display: block;
 }
+
+/* Prepare background image style */
+#main-container {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+footer {
+    max-height: 2em;
+}
