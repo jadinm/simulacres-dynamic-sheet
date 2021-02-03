@@ -1,4 +1,4 @@
-<style id="plugin-css-generic-world" class="plugin-css">
+<style id="plugin-css-generic-world" class="plugin-css" data-plugin-version="1.0.0">
     /* Change font the sheet */
     body {
         font-family: "Linux Biolinum", "Linux Libertine", serif;
@@ -43,32 +43,36 @@
         plugin_dispose_methods["generic-world"] = dispose_plugin_generic_world
 
         /* Adds your energy to the list of base energies if not already present */
-        if (elem.length === 0) {
-            const energy_list = $("#energy-title").parents("div.card")
-            const row = energy_list.children().last().clone(true, false)
-            const svg = row.find("svg")
-            // The following svg images are exported from the "Simulacres Bats.ttf" font found
-            // on https://www.facebook.com/groups/Simulacres/permalink/2205424619709932/
-            // and created by Pierre Rosenthal
-            svg.html("<path fill=\"currentColor\"\n d=\"M858 108l-412 706l-411 -706h823z\" />")
-            svg[0].setAttribute("viewBox", "-10 0 903 1000")
-
-            row.find("[data-toggle]")[0].setAttribute("title", "Énergie extraordinaire")
-            row.find("label")[0].setAttribute("for", "plugin-generic-world-energy")
-            elem = row.find("input")
-            elem[0].setAttribute("id", "plugin-generic-world-energy")
-            energy_list.append(row)
-
-            add_save_to_dom_listeners(row)
-            row.find('[data-toggle="tooltip"]').tooltip()
-            /* Trigger Adventure Point computation on change of your magic energy level */
-            elem.on("change", _ => { // Update lists of special energies
-                $("select.special-energy-select").each((i, elem) => {
-                    update_special_energy_select(elem)
-                })
-                compute_remaining_ap()
-            })
-            elem.trigger("change")
+        let current_val = "0"
+        if (elem.length > 0) { // In case of upgrade, the field already exists
+            current_val = elem.val()
+            elem.parents("div.row").first().remove()
         }
+        const energy_list = $("#energy-title").parents("div.card")
+        const row = energy_list.children().last().clone(true, false)
+        const svg = row.find("svg")
+        // The following svg images are exported from the "Simulacres Bats.ttf" font found
+        // on https://www.facebook.com/groups/Simulacres/permalink/2205424619709932/
+        // and created by Pierre Rosenthal
+        svg.html("<path fill=\"currentColor\"\n d=\"M858 108l-412 706l-411 -706h823z\" />")
+        svg[0].setAttribute("viewBox", "-10 0 903 1000")
+
+        row.find("[data-toggle]")[0].setAttribute("title", "Énergie extraordinaire")
+        row.find("label")[0].setAttribute("for", "plugin-generic-world-energy")
+        elem = row.find("input")
+        elem[0].setAttribute("id", "plugin-generic-world-energy")
+        energy_list.append(row)
+
+        add_save_to_dom_listeners(row)
+        row.find('[data-toggle="tooltip"]').tooltip()
+        /* Trigger Adventure Point computation on change of your magic energy level */
+        elem.on("change", _ => { // Update lists of special energies
+            $("select.special-energy-select").each((i, elem) => {
+                update_special_energy_select(elem)
+            })
+            compute_remaining_ap()
+        })
+        elem.val(current_val)
+        elem.trigger("change")
     })
 </script>

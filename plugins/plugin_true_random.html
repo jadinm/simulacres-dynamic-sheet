@@ -1,4 +1,8 @@
-<script id="plugin-js-true-random" class="plugin-js">
+<script id="plugin-js-true-random" class="plugin-js" data-plugin-version="1.0.0">
+    if (!window.hasOwnProperty('plugin_true_random_old_roll_dices')) {
+        // When we do not upgrade the plugin, fetch the roll function
+        window.plugin_true_random_old_roll_dices = Roll.prototype.roll_dices
+    }
     $(_ => {
         let true_random_d6s = []
         function fetch_true_randoms(needed_numbers = 100) {
@@ -27,7 +31,6 @@
         fetch_true_randoms()
 
         // Replace roll_dice function by our own that uses true random from random.org result if any available
-        const old_roll_dices = Roll.prototype.roll_dices
         function roll_true_random(number, type, dices) {
             if (true_random_d6s.length < 20) {
                 // Refill random numbers
@@ -68,7 +71,8 @@
          */
         function dispose_plugin_true_random() {
             // Reset correct function
-            Roll.prototype.roll_dices = old_roll_dices
+            Roll.prototype.roll_dices = window.plugin_true_random_old_roll_dices
+            delete window.plugin_true_random_old_roll_dices
         }
         // Register the function (avoid typos here or the method won't be called)
         plugin_dispose_methods["true-random"] = dispose_plugin_true_random

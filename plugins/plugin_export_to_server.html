@@ -1,4 +1,4 @@
-<li id="plugin-button-export-to-server" class="plugin-button nav-item">
+<li id="plugin-button-export-to-server" class="plugin-button nav-item" data-plugin-version="1.0.0">
     <a class="nav-link" data-toggle="tab" href="#plugin-tab-export-to-server" role="tab" aria-controls="profile"
        aria-selected="false">
         Exporter
@@ -150,7 +150,7 @@
                 }
             })
         })
-        $(document).on("roll", update_roll)
-        $(document).on("update-roll", update_roll)
+        $(document).off("roll").on("roll", update_roll)
+        $(document).off("update-roll").on("update-roll", update_roll)
     })
 </script>
