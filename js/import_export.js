@@ -352,6 +352,38 @@ function query_raw_plugin(url, success_function, error_function) {
     })
 }
 
+function get_plugin_version(plugin) {
+    let version = null
+    $(plugin).children().each((i, elem) => {
+        const attr = elem.getAttribute("data-plugin-version")
+        if (attr)
+            version = attr
+    })
+    return version
+}
+
+function is_older_than(version_a, version_b) {
+    if (!version_a)
+        return true
+    if (!version_b)
+        return false
+    if (version_a === version_b)
+        return false
+    const split_a = version_a.split(".")
+    const split_b = version_b.split(".")
+    for (let i = 0; i < split_a.length && i < split_b.length; i++) {
+        const part_a = parseInt(split_a[i])
+        const part_b = parseInt(split_b[i])
+        if (part_a > part_b)
+            return false
+        if (part_a < part_b)
+            return true
+    }
+    // This is a new version only if b has a more specified version
+    // e.g., a == "1.0" and b == "1.0.1"
+    return split_a.length < split_b.length
+}
+
 function build_plugin_list() {
     const plugin_list = $("#about-sheet-plugins")
 
@@ -360,12 +392,16 @@ function build_plugin_list() {
 
     // Get the list of plugin ids
     let plugins = []
+    let plugin_versions = {}
     $(plugin_selectors.join(", ")).each((i, elem) => {
         let plugin_id = elem.id.match(/plugin-(?:tab|button|css|js)-(.+)/)
         if (plugin_id && plugin_id.length >= 1) {
             plugin_id = plugin_id[1]
             if (!plugins.includes(plugin_id))
                 plugins.push(plugin_id)
+            const version = elem.getAttribute("data-plugin-version")
+            if (version)
+                plugin_versions[plugin_id] = version
         }
     })
     plugins = plugins.reverse()
@@ -378,8 +414,14 @@ function build_plugin_list() {
         new_element.children().first().text(plugins[i])
         const upgrade = new_element.find(".plugin-update")
         const url = "https://raw.githubusercontent.com/jadinm/simulacres-dynamic-sheet/" + latest_released_version + "/plugins/plugin_" + plugins[i].replaceAll("-", "_") + ".html"
-        query_raw_plugin(url, () => {
-            upgrade.removeClass("invisible")
+        query_raw_plugin(url, (data) => {
+            const remote_version = get_plugin_version($(data))
+            if (is_older_than(plugin_versions[plugins[i]], remote_version)) {
+                // Have a candidate for upgrade
+                upgrade.removeClass("invisible")
+            } else {
+                upgrade.addClass("invisible")
+            }
         }, () => { // No matching plugin
             upgrade.addClass("invisible")
         })
