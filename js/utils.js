@@ -114,14 +114,14 @@ function enable_dark_mode() {
         ignoreImageAnalysis: []
     }
     DarkReader.enable({brightness: 100, contrast: 100, sepia: 0}, fixes)
-    $("#dark-mode").addClass("d-none")
-    $("#light-mode").removeClass("d-none")
+    $("#dark-mode").addClass("d-none").tooltip("dispose")
+    $("#light-mode").removeClass("d-none").tooltip()
 }
 
 function disable_dark_mode() {
     DarkReader.disable()
-    $("#light-mode").addClass("d-none")
-    $("#dark-mode").removeClass("d-none")
+    $("#light-mode").addClass("d-none").tooltip("dispose")
+    $("#dark-mode").removeClass("d-none").tooltip()
 }
 
 $("#light-mode").on("click", _ => {
