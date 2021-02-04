@@ -133,8 +133,9 @@ function reset_tab_selection(html) {
  * Overwrite data from input fields, images, select options, radio buttons and sortables of the destination
  * @param src_html source jquery object
  * @param dst_html destination jquery object
+ * @param full_sheet whether this is a full sheet update
  */
-function import_data(src_html, dst_html) {
+function import_data(src_html, dst_html, full_sheet) {
     // Retrieve and copy all of the input values of the src_html
     const table_row_input_id = /(.+)-(\d+)-.+/
     const talent_input_id = /^(x|(?:-4)|(?:-2)|0|1)(\d+)-name$/
@@ -328,10 +329,12 @@ function import_data(src_html, dst_html) {
     })
 
     // Set the same theme
-    if (is_dark_mode(src_html) && !is_dark_mode()) {
-        enable_dark_mode()
-    } else if (!is_dark_mode(src_html) && is_dark_mode()) {
-        disable_dark_mode()
+    if (full_sheet) {
+        if (is_dark_mode(src_html) && !is_dark_mode()) {
+            enable_dark_mode()
+        } else if (!is_dark_mode(src_html) && is_dark_mode()) {
+            disable_dark_mode()
+        }
     }
 
     // Hide the same tabs
@@ -437,7 +440,7 @@ function build_plugin_list() {
                 if (tab.length > 0) {
                     const current_plugin_version = $("#" + tab[0].id)
                     if (current_plugin_version.length > 0) {
-                        import_data(current_plugin_version, tab)
+                        import_data(current_plugin_version, tab, false)
                     }
                 }
 
@@ -539,7 +542,7 @@ $("#import-page").on("change", function (event) {
         if (old_html.find("#import-page").length === 0)
             alert("Le document n'est pas une fiche de personnage. Si vous essayez d'importer un plugin, utilisez l'autre bouton.")
 
-        import_data(old_html, $("html"))
+        import_data(old_html, $("html"), true)
         reset_tab_selection($("html"))
         // We insert new plugins from the old character sheet
         // but we keep the current version of existing plugins
@@ -606,7 +609,7 @@ $("#import-plugin").on("change", event => {
         if (tab.length > 0) {
             const current_plugin_version = $("#" + tab[0].id)
             if (current_plugin_version.length > 0) {
-                import_data(current_plugin_version, tab)
+                import_data(current_plugin_version, tab, false)
             }
         }
 
