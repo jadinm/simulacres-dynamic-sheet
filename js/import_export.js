@@ -116,6 +116,18 @@ $("#save-page").on("click", function (_) {
 $(".waves-ripple").remove()
 
 /**
+ * Show the modal with import warnings
+ */
+function show_import_warnings(missing_inputs) {
+    const list = $("#import-warning-missing")
+    list.children().remove()
+    $(missing_inputs).each((i, elem) => {
+        list.append($("<li class=\"list-group-item align-items-center py-1 my-0\">" + elem + "</li>"))
+    })
+    $("#import-warning").modal()
+}
+
+/**
  * Update tabs, reset the first tab as the default one
  * @param html the jquery object of the page
  */
@@ -140,6 +152,8 @@ function import_data(src_html, dst_html, full_sheet) {
     const table_row_input_id = /(.+)-(\d+)-.+/
     const talent_input_id = /^(x|(?:-4)|(?:-2)|0|1)(\d+)-name$/
     const spell_difficulty_input_id = /^(spell-\d+)-(difficulty-input|hermetic-difficulty)$/
+
+    const missing_inputs = []
 
     src_html.find("input").each((i, old_input) => {
         if (old_input.id && old_input.id.length > 0) {
@@ -255,6 +269,9 @@ function import_data(src_html, dst_html, full_sheet) {
                     new_input.trigger("change")
                 }
             }
+            if (new_input.length === 0 && !old_input.id.includes("plugin-") && !old_input.id.includes("note-dialog-")) { // The old input is lost
+                missing_inputs.push(old_input.id)
+            }
         }
     })
 
@@ -267,9 +284,13 @@ function import_data(src_html, dst_html, full_sheet) {
             new_input.val(old_value)
             new_input.html(old_value)
 
-            // Update associated summernote (the editors for the notes are initialized lazily)
-            if (!new_input[0].id.includes("note-"))
+            if (new_input.length === 0) { // The old input is lost
+                if (!old_input.id.includes("plugin-"))
+                    missing_inputs.push(old_input.id)
+            } else if (!new_input[0].id.includes("note-")) {
+                // Update associated summernote (the editors for the notes are initialized lazily)
                 new_input.summernote("code", new_input.val())
+            }
         }
     })
 
@@ -341,6 +362,10 @@ function import_data(src_html, dst_html, full_sheet) {
     src_html.find("#nav-tabs a[role=\"tab\"].d-none").each((i, old_tab) => {
         dst_html.find("#nav-tabs a[role=\"tab\"][href=\"" + old_tab.getAttribute("href") + "\"]").addClass("d-none")
     })
+
+    if (full_sheet && missing_inputs.length > 0) {
+        show_import_warnings(missing_inputs)
+    }
 }
 
 const plugin_selectors = [".plugin-tab", ".plugin-button", ".plugin-css", ".plugin-js"]

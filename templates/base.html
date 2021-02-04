@@ -387,6 +387,40 @@
     </div>
 </div>
 
+<div class="container">
+    <div class="modal fade bd-modal-lg" id="import-warning" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="font-family: 'Linux Libertine', serif">
+                <div class="modal-header justify-content-center">
+                    <h4 class="text-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Problème à l'importation
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </h4>
+                </div>
+                <div class="modal-body align-middle">
+                    <p class="mx-1">
+                        Les données de votre ancienne fiche n'ont pas pu être toutes importées.
+                        Vérifiez que vous avez pris la bonne version de la fiche.
+                        Si c'est le cas, vérifiez que toutes vos données se trouvent bien dans la nouvelle fiche.
+                    </p>
+                    <p class="mx-1">
+                        Si jamais vous rencontrez ce problème, n'hésitez pas à en parler en
+                        <a href="https://github.com/jadinm/simulacres-dynamic-sheet/issues/new">créant une "issue"</a>
+                        et en y mentionnant les données qui n'ont pas été importées (voir la liste ci-dessous)
+                    </p>
+                    <hr/>
+                    <div class="row mx-1 align-middle">
+                        <h5>Données manquantes</h5>
+                    </div>
+                    <ul id="import-warning-missing" class="list-group-flush col-12">
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Status -->
 {% include "status_dialogs.html" %}
 
