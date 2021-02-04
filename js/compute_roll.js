@@ -78,7 +78,7 @@ class RollRow extends DataRow {
                 if (level === "x")
                     sum = "X"
                 else // Fixed penalty of using dual wielding
-                    sum += parseInt(level) - 2
+                    sum += Math.min(parseInt(level) - 2, 0)
             }
         }
 
