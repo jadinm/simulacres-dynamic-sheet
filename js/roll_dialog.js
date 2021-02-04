@@ -60,6 +60,10 @@ let current_roll = null
 
 class Roll {
     constructor(number = 2, type = 6) {
+        // Reset all invested energies
+        $(".roll-dialog-energy").val(0)
+        $(".roll-dialog-component").each((i, elem) => uncheck_checkbox(elem))
+
         this.number = number
         this.type = type
         this.base_dices = []
@@ -133,6 +137,7 @@ class Roll {
         $("#roll-dialog-result-label").html("Résultat du lancer de 2d6 = ")
         $("#roll-dialog-result").html(this.dice_value())
         $("#roll-dialog-details").html(this.dice_buttons("base_dices", this.base_dices)).removeClass("d-none")
+        $("#roll-dialog-redo").removeClass("d-none").prev().removeClass("d-none")
 
         $("#roll-dialog-title").html("<h2>Résultat du lancer</h2>"
             + "<sm class='text-center'>" + this.timestamp.toLocaleString("fr-FR") + "</sm>")
@@ -182,6 +187,11 @@ class Roll {
     trigger_roll() {
         this.show_roll()
         $(document).trigger("roll", this)
+    }
+
+    /* Trigger the same roll */
+    reroll() {
+        new this.constructor(this.number, this.type).trigger_roll()
     }
 }
 
@@ -660,12 +670,25 @@ class TalentRoll extends Roll {
         $("label[for='roll-dialog-optional-power']").text("MR + 1d6 (si réussi)")
         $("label[for='roll-dialog-optional-precision']").text("Seuil critique + 1")
         $(".roll-dialog-superpower-slider").addClass("d-none")
+
+        if (this.energy_investment_validated) {
+            $("#roll-dialog-redo").removeClass("d-none").prev().removeClass("d-none")
+        } else {
+            $("#roll-dialog-redo").addClass("d-none").prev().addClass("d-none")
+        }
     }
 
     trigger_roll() {
         this.show_roll()
         if (this.energy_investment_validated)
             $(document).trigger("roll", this)
+    }
+
+    /* Trigger the same roll */
+    reroll() {
+        new this.constructor(this.reason, this.max_value, this.talent_level, this.effect, this.critical_increase,
+            this.formula_elements, this.margin_throttle, this.is_magic, this.is_power, this.distance, this.focus,
+            this.duration).trigger_roll()
     }
 }
 
@@ -827,6 +850,12 @@ class SuperpowerRoll extends TalentRoll {
         if (this.energy_investment_validated) {
             $(".roll-dialog-superpower-slider").removeClass("d-none")
         }
+    }
+
+    /* Trigger the same roll */
+    reroll() {
+        new this.constructor(this.reason, this.number, this.under_value, this.formula_elements, this.distance,
+            this.focus, this.duration, this.effect).trigger_roll()
     }
 }
 
@@ -1006,6 +1035,12 @@ $("#roll-dialog-history-forward").on("click", _ => {
     if (idx < last_rolls.length) {
         last_rolls[idx].show_roll()
     }
+})
+
+$("#roll-dialog-redo").on("click", _ => {
+    if (!current_roll)
+        return
+    current_roll.reroll()
 })
 
 $("#roll-dialog-validate").on("click", _ => {

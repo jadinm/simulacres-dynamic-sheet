@@ -108,10 +108,6 @@ class RollRow extends DataRow {
         }
         difficulty = isNaN(difficulty) ? 0 : difficulty
 
-        // Reset all invested energies
-        $(".roll-dialog-energy").val(0)
-        $(".roll-dialog-component").each((i, elem) => uncheck_checkbox(elem))
-
         // Do the actual roll
         const value = parseInt(this.get("value").text())
         new TalentRoll(roll_reason, value, difficulty, this.get("effect").val(),
@@ -221,10 +217,6 @@ class SpellRow extends RollRow {
         let spell_focus = this.get("time", button).val()
         let spell_duration = this.get("duration", button).val()
         difficulty = isNaN(difficulty) ? 0 : difficulty
-
-        // Reset all invested energies
-        $(".roll-dialog-energy").val(0)
-        $(".roll-dialog-component").each((i, elem) => uncheck_checkbox(elem))
 
         // Do the actual roll
         const value = parseInt(this.get("value", button).text())
@@ -454,10 +446,6 @@ class SuperpowerRow extends RollRow {
         let power_distance = this.get("distance").val()
         let power_focus = this.get("time").val()
         let power_duration = this.get("duration").val()
-
-        // Reset all invested energies
-        $(".roll-dialog-energy").val(0)
-        $(".roll-dialog-component").each((i, elem) => uncheck_checkbox(elem))
 
         // Do the actual roll
         new SuperpowerRoll(roll_reason, nbr_dices, under_value, formula_elements, power_distance, power_focus,
