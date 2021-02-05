@@ -40,7 +40,7 @@
                         <div class="row mx-1 roll-dialog-effect-hide">
                             <b class="roll-dialog-energy-investment d-none"><br/>Energies investies</b>
                         </div>
-                        <div class="row md-form form-row mx-1 mt-2 mb-0 roll-dialog-effect-hide">
+                        <div class="row md-form form-row mx-1 mt-2 mb-0 roll-dialog-effect-hide roll-dialog-base-energy-hide">
                             <div class="align-middle input-with-pre-icon col-md-4 col-6 m-0 d-none"
                                  data-toggle="tooltip" data-placement="bottom"
                                     {% if version == V7 %}
@@ -52,7 +52,7 @@
                                     <use xlink:href="#svg-power"></use>
                                 </svg>
                                 {% if version == V7 %}
-                                    <label for="roll-dialog-power">Test + 1</label>
+                                    <label for="roll-dialog-power"></label>
                                 {% endif %}
                                 <input class="roll-dialog-energy form-control text-center" id="roll-dialog-power"
                                        type="number" value="0" min="0" max="0">
@@ -68,7 +68,7 @@
                                     <use xlink:href="#svg-speed"></use>
                                 </svg>
                                 {% if version == V7 %}
-                                    <label for="roll-dialog-speed">Test + 1</label>
+                                    <label for="roll-dialog-speed"></label>
                                 {% endif %}
                                 <input class="roll-dialog-energy form-control text-center" id="roll-dialog-speed"
                                        type="number" value="0" min="0" max="0">
@@ -84,7 +84,7 @@
                                     <use xlink:href="#svg-precision"></use>
                                 </svg>
                                 {% if version == V7 %}
-                                    <label for="roll-dialog-precision">Test + 1</label>
+                                    <label for="roll-dialog-precision"></label>
                                 {% endif %}
                                 <input class="roll-dialog-energy form-control text-center" id="roll-dialog-precision"
                                        type="number" value="0" min="0" max="0">
@@ -93,32 +93,29 @@
                         {% if version == V7 %}
                             <div class="row md-form form-row mx-1 mt-2 mb-0 roll-dialog-effect-hide roll-dialog-focus-hide">
                                 <div class="align-middle input-with-pre-icon col-md-4 col-6 m-0 d-none"
-                                     data-toggle="tooltip" data-placement="bottom"
-                                     title="Puissance investie pour augmenter la marge de 1d6 en cas de réussite">
+                                     data-toggle="tooltip" data-placement="bottom" title="">
                                     <svg height="3em" width="2em" class="input-prefix">
                                         <use xlink:href="#svg-power"></use>
                                     </svg>
-                                    <label for="roll-dialog-optional-power">MR + 1d6 (si réussi)</label>
+                                    <label for="roll-dialog-optional-power"></label>
                                     <input class="roll-dialog-energy form-control text-center"
                                            id="roll-dialog-optional-power" type="number" value="0" min="0" max="0">
                                 </div>
                                 <div class="align-middle input-with-pre-icon col-md-4 col-6 m-0 d-none"
-                                     data-toggle="tooltip" data-placement="bottom"
-                                     title="Rapidité investie pour diminuer le temps de l'action">
+                                     data-toggle="tooltip" data-placement="bottom" title="">
                                     <svg height="3em" width="2em" class="input-prefix">
                                         <use xlink:href="#svg-speed"></use>
                                     </svg>
-                                    <label for="roll-dialog-optional-speed">Temps / 2</label>
+                                    <label for="roll-dialog-optional-speed"></label>
                                     <input class="roll-dialog-energy form-control text-center"
                                            id="roll-dialog-optional-speed" type="number" value="0" min="0" max="0">
                                 </div>
                                 <div class="align-middle input-with-pre-icon col-md-4 col-6 m-0 d-none"
-                                     data-toggle="tooltip" data-placement="bottom"
-                                     title="Précision investie pour augmenter le seuil de succès critique">
+                                     data-toggle="tooltip" data-placement="bottom" title="">
                                     <svg height="3em" width="2em" class="input-prefix">
                                         <use xlink:href="#svg-precision"></use>
                                     </svg>
-                                    <label for="roll-dialog-optional-precision">Seuil critique + 1</label>
+                                    <label for="roll-dialog-optional-precision"></label>
                                     <input class="roll-dialog-energy form-control text-center"
                                            id="roll-dialog-optional-precision"
                                            type="number" value="0" min="0" max="0">
@@ -126,12 +123,11 @@
                             </div>
                             <div class="row md-form form-row mx-1 mt-2 mb-0 roll-dialog-magic-hide">
                                 <div class="align-middle input-with-pre-icon col-md-4 col-6 m-0 d-none"
-                                     data-toggle="tooltip" data-placement="bottom"
-                                     title="Puissance investie pour augmenter la portée ou la zone d'effet d'une capacité">
+                                     data-toggle="tooltip" data-placement="bottom" title="">
                                     <svg height="3em" width="2em" class="input-prefix">
                                         <use xlink:href="#svg-power"></use>
                                     </svg>
-                                    <label for="roll-dialog-magic-power">Distance &times; 2</label>
+                                    <label for="roll-dialog-magic-power"></label>
                                     <input class="roll-dialog-energy form-control text-center"
                                            id="roll-dialog-magic-power" type="number" value="0" min="0" max="0">
                                 </div>

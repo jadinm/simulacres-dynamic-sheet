@@ -299,15 +299,6 @@
                 <input class="form-control" id="malemagite" type="number" value="0" min="0">
             </div>
         </div>
-        <div class="row col-12 mt-2 m-0 p-0 d-none">
-            <b>Lancer 1d3 (pour la marge des sorts du Bien, de la Nature et du Mal)</b>
-        </div>
-        <div class="row col-12 mt-2 p-0 m-0 d-none">
-            <div id="spell-margin-good-nature-evil-1d3" class="btn btn-info">
-                <i class="fas fa-dice-three"></i>
-            </div>
-            <div id="spell-margin-good-nature-evil-1d3-result" class="mt-3"></div>
-        </div>
     {% elif universe == captain_voodoo %}
         <!-- Magical energies -->
         <div class="row col-12 m-0 p-0"><b>Énergies magiques</b></div>
@@ -454,6 +445,9 @@
                                 </span>
                             </div>
                         {% endfor %}
+                        <span id="spell-x-dice-evil-nature-good" class="clickable row-roll-trigger d-none">
+                            <i class="fas fa-dice"></i>
+                        </span>
                     </td>
                     <td class="md-form my-0 py-0 align-middle">
                         <input id="spell-x-time" class="spell-time form-control text-center" type="text">

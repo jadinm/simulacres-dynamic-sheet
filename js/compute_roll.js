@@ -140,7 +140,19 @@ class SpellRow extends RollRow {
         return value && value.trim() === instinctive_magic
     }
 
+    is_priest_magic() {
+        const value = this.get("list").val()
+        return value && value.trim() === priest_energy
+    }
+
+    is_evil_nature_good() {
+        const value = this.get("list").val()
+        return value && good_nature_evil_energies.includes(value.trim())
+    }
+
     update_roll_value() {
+        if (this.is_evil_nature_good())
+            return
         this.data.find(".row-roll-trigger").each((i, dice_div) => {
             let sum = 0
             const realm = this.realm(dice_div)
@@ -224,10 +236,15 @@ class SpellRow extends RollRow {
         difficulty = isNaN(difficulty) ? 0 : difficulty
 
         // Do the actual roll
-        const value = parseInt(this.get("value", button).text())
-        new TalentRoll(roll_reason, value, difficulty, this.get("effect", button).val(),
-            critical_increase, formula_elements, margin_throttle, this.data.hasClass("spell"),
-            true, spell_distance, spell_focus, spell_duration, spell_level).trigger_roll()
+        if (this.is_evil_nature_good()) {
+            new GoodNatureEvilMagicRoll(roll_reason, this.get("effect", button).val(),
+                spell_distance, spell_focus, spell_duration, spell_level).trigger_roll()
+        } else {
+            const value = parseInt(this.get("value", button).text())
+            new TalentRoll(roll_reason, value, difficulty, this.get("effect", button).val(),
+                critical_increase, formula_elements, margin_throttle, this.data.hasClass("spell"),
+                true, spell_distance, spell_focus, spell_duration, spell_level).trigger_roll()
+        }
         $('#roll-dialog').modal()
     }
 
@@ -256,7 +273,6 @@ class SpellRow extends RollRow {
     }
 
     update_list() {
-        const list = this.get("list")
         const slider = this.data.find(".spell-difficulty-input")
         if (slider.length === 0 || slider[0].id.includes("-x-"))
             return
@@ -267,11 +283,10 @@ class SpellRow extends RollRow {
         const hermetic_talent = this.get("talent")
         const name = this.get("name")
         const handle = this.get("name-handle")
-        const dice_3 = $("#spell-margin-good-nature-evil-1d3").parent()
+        const dice_3 = this.get("dice-evil-nature-good")
 
         // Reset visibility of elements
         dice_3.addClass("d-none")
-        dice_3.prev().addClass("d-none")
         radio_buttons.prop("disabled", false).removeAttr("disabled")
         radio_buttons.parent().children().removeClass("d-none")
         hermetic_difficulty.parent().addClass("d-none")
@@ -281,13 +296,13 @@ class SpellRow extends RollRow {
         handle.removeClass("d-none")
         difficulty.parent().removeClass("d-none")
 
-        if (list.val() && ([priest_energy, instinctive_magic].includes(list.val().trim()))) {
+        if (this.is_instinctive_magic() || this.is_priest_magic()) {
             // Fix the level to 0 if divine energy
             slider.each((i, elem) => {
                 $(elem).val(10).slider("setValue", 10).slider("refresh", {useCurrentValue: true}).slider("disable")
                 $($(elem).slider("getElement")).parent().addClass("d-none")
             })
-        } else if (list.val() && list.val().trim() === hermetic_energy) {
+        } else if (this.is_hermetic_spell()) {
             // Show control specific to hermetic energy
             slider.each((i, elem) => {
                 $(elem).val(10).slider("setValue", 10).slider("refresh", {useCurrentValue: true}).slider("disable")
@@ -310,12 +325,13 @@ class SpellRow extends RollRow {
                 $(elem).trigger("click").trigger("change")
             })
             radio_buttons.prop("disabled", true)[0].setAttribute("disabled", "")
-        } else if (list.val() && good_nature_evil_energies.includes(list.val())) {
+        } else if (this.is_evil_nature_good()) {
             radio_buttons.parent().children().addClass("d-none")
             const checked_radio_buttons = radio_buttons.filter(":checked")
             checked_radio_buttons.each((i, elem) => {
                 $(elem).trigger("click").trigger("change")
             })
+            dice_3.removeClass("d-none")
         } else {
             // Other mage lists
             slider.each((i, elem) => {
@@ -323,13 +339,6 @@ class SpellRow extends RollRow {
                 $($(elem).slider("getElement")).parent().removeClass("d-none")
             })
         }
-
-        $("select.spell-list").each((i, elem) => {
-            if (good_nature_evil_energies.includes($(elem).val())) {
-                dice_3.removeClass("d-none")
-                dice_3.prev().removeClass("d-none")
-            }
-        })
 
         // Update spell value
         this.update_roll_value()
@@ -791,11 +800,6 @@ $("#race,.realm,.component,.means," + talent_list_selector).on("change", e => {
     $(".spell-value,.superpower,.roll-value,.dual_wielding-value").each((i, elem) => {
         row_of(elem).update_roll_value()
     })
-})
-
-$("#spell-margin-good-nature-evil-1d3").on("click", _ => {
-    const dice_value = roll_dices(1, 3)
-    $("#spell-margin-good-nature-evil-1d3-result").text("1d3: " + dice_value)
 })
 
 $(_ => {

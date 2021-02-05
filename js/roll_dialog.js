@@ -198,6 +198,26 @@ class Roll {
 }
 
 class TalentRoll extends Roll {
+
+    labels = {
+        "power": "Test + 1",
+        "speed": "Test + 1",
+        "precision": "Test + 1",
+        "optional-power": "MR + 1d6 (si réussi)",
+        "optional-speed": "Temps / 2",
+        "optional-precision": "Seuil critique + 1",
+        "magic-power": "Distance &times; 2"
+    }
+    tooltips = {
+        "power": "Puissance investie pour augmenter la marge",
+        "speed": "Rapidité investie pour augmenter la marge",
+        "precision": "Précision investie pour augmenter la marge",
+        "optional-power": "Puissance investie pour augmenter la marge de 1d6 en cas de réussite",
+        "optional-speed": "Rapidité investie pour diminuer le temps de l'action",
+        "optional-precision": "Précision investie pour augmenter le seuil de succès critique",
+        "magic-power": "Puissance investie pour augmenter la portée ou la zone d'effet d'une capacité"
+    }
+
     constructor(reason = "", max_value = NaN, talent_level = 0, effect = "",
                 critical_increase = 0, formula_elements = [], margin_throttle = NaN,
                 is_magic = false, is_power = false, distance = "", focus = "",
@@ -425,7 +445,7 @@ class TalentRoll extends Roll {
             return 0
         if (this.power_dices.length === 0) {
             // Power can only be increased up to 3 => roll all the dices directly
-            this.roll_dices(3, 6, this.power_dices)
+            this.roll_dices(3, this.type, this.power_dices)
         }
         return this.power_dices_activated().reduce((a, b) => {
             return a + b;
@@ -501,8 +521,9 @@ class TalentRoll extends Roll {
         if (this.energy_investment_validated) {
             let effect_dices_sum = 0
             if (this.is_success() && this.optional_power > 0 && this.power_value() >= 0) {
-                effect_text += "<div id='roll-dialog-power-test' class='row mx-1 align-middle'>" + this.optional_power + "d6 de puissance rajoutés = "
-                    + this.power_value() + this.dice_buttons("power_dices", this.power_dices_activated()) + "</div>"
+                effect_text += "<div id='roll-dialog-power-test' class='row mx-1 align-middle'>" + this.optional_power
+                    + "d" + this.type + " de puissance rajoutés = "
+                    + this.power_value() + this.dice_buttons("power_dices", this.power_dices_activated(), this.type) + "</div>"
             }
             if (is_v7) {
                 // Roll the two additional dices
@@ -606,6 +627,15 @@ class TalentRoll extends Roll {
         const result = $("#roll-dialog-result")
         const energy_inputs = $(".roll-dialog-energy")
         const component_inputs = $(".roll-dialog-component")
+
+        energy_inputs.each((i, elem) => {
+            const tooltip_div = $(elem).parent()
+            const key = elem.id.replace("roll-dialog-", "")
+            tooltip_div.attr("data-original-title", this.tooltips[key])
+            tooltip_div.tooltip("update")
+            tooltip_div.find("label").html(this.labels[key])
+        })
+
         if (this.energy_investment_validated) {
             const validate_button = $("#roll-dialog-validate")
             validate_button.addClass("d-none")
@@ -716,8 +746,6 @@ class TalentRoll extends Roll {
         $("#roll-dialog-title").html(title
             + "<sm class='text-center'>" + this.timestamp.toLocaleString("fr-FR") + "</sm>")
 
-        $("label[for='roll-dialog-optional-power']").text("MR + 1d6 (si réussi)")
-        $("label[for='roll-dialog-optional-precision']").text("Seuil critique + 1")
         $(".roll-dialog-superpower-slider").addClass("d-none")
 
         if (this.energy_investment_validated) {
@@ -749,6 +777,10 @@ class SuperpowerRoll extends TalentRoll {
         this.number = nbr_dices
         this.under_value = under_value
         this.superpower_modifier = 0
+        this.labels["optional-power"] = "Dés lancés + 1"
+        this.labels["optional-precision"] = "Seuil + 1"
+        this.tooltips["optional-power"] = "Puissance investie pour augmenter le nombre de dés lancés"
+        this.tooltips["optional-precision"] = "Précision investie pour augmenter le seuil de succès des dés lancés"
     }
 
     max_threshold() {
@@ -889,8 +921,6 @@ class SuperpowerRoll extends TalentRoll {
 
     modify_dialog(ignore_sliders) {
         super.modify_dialog(ignore_sliders)
-        $("label[for='roll-dialog-optional-power']").text("Dés lancés + 1")
-        $("label[for='roll-dialog-optional-precision']").text("Seuil + 1")
         const modifier = $("#roll-dialog-superpower-modifier")
         if (!ignore_sliders) {
             modifier.slider("setValue", this.superpower_modifier)
@@ -985,6 +1015,110 @@ class FocusMagicRoll extends TalentRoll {
         $(".roll-dialog-magic-hide").addClass("d-none")
         $(".roll-dialog-component-hide").addClass("d-none")
         $(".roll-dialog-focus-hide").addClass("d-none")
+
+        const result = $("#roll-dialog-result")
+        if (this.energy_investment_validated && this.is_success()) {
+            result.html(this.post_test_margin() + this.dice_buttons("margin_dices", this.margin_dices, 3))
+        }
+    }
+}
+
+class GoodNatureEvilMagicRoll extends TalentRoll {
+    constructor(reason = "", effect = "", distance = "", focus = "", duration = "",
+                base_energy_cost = 0) {
+        super(reason, NaN, 0, effect, 0, [], NaN, true, true, distance, focus, duration, base_energy_cost)
+        this.energy_investment_validated = !has_any_base_energy() // Cannot invest in energies when using a focus object
+        this.margin_dices = []
+        this.precision_dices = []
+        this.type = 3
+
+        this.labels["optional-power"] = "MR + 1d3"
+        this.labels["optional-precision"] = "MR + 1d3"
+        this.tooltips["optional-power"] = "Puissance investie pour augmenter la marge de 1d3"
+        this.tooltips["optional-precision"] = "Précision investie pour augmenter la marge de 1d3"
+    }
+
+    max_threshold() {
+        return NaN
+    }
+
+    margin() {
+        if (this.margin_dices.length === 0) {
+            // Roll needed
+            this.roll_dices(1, 3, this.margin_dices)
+        }
+        return this.margin_dices.reduce((a, b) => {
+            return a + b;
+        }, 0) + this.power_value() + this.precision_value() + this.margin_modifier;
+    }
+
+    post_test_margin() {
+        return this.margin()
+    }
+
+    precision_dices_activated() {
+        return this.precision_dices.slice(0, this.optional_precision)
+    }
+
+    precision_value() {
+        if (this.precision_dices.length === 0) {
+            // Precision can only be increased up to 3 => roll all the dices directly
+            this.roll_dices(3, this.type, this.precision_dices)
+        }
+        return this.precision_dices_activated().reduce((a, b) => {
+            return a + b;
+        }, 0);
+    }
+
+    is_critical_failure() {
+        return false
+    }
+
+    is_critical_success() {
+        return false
+    }
+
+    is_success() {
+        return true
+    }
+
+    energy_cost_text() {
+        let text = "<div class='row mx-1 align-middle'>Coût du sort: "
+        if (this.base_energy_cost === 0) {
+            text += "1 PS"
+        } else {
+            text += this.base_energy_cost + " EP (chaque EP est remplaçable par 2 PS)"
+        }
+        if (this.energy_cost() > this.base_energy_cost) {
+            text += "</div><div class='row mx-1 align-middle'>Coût des énergies: "
+                + (this.energy_cost() - this.base_energy_cost)
+        }
+        return text + "</div>"
+    }
+
+    format_details(racial_bonus, superpower_bonus) {
+        return this.energy_cost_text()
+    }
+
+    details_text() {
+        const data = super.details_text()
+        let effect_text = data[1]
+        if (this.energy_investment_validated) {
+            if (this.is_success() && this.optional_precision > 0 && this.precision_value() >= 0) {
+                effect_text = "<div class='row mx-1 align-middle'>" + this.optional_precision
+                    + "d" + this.type + " de précision rajoutés = "
+                    + this.precision_value()
+                    + this.dice_buttons("precision_dices", this.precision_dices_activated(), this.type)
+                    + "</div>" + effect_text
+            }
+        }
+        return [data[0], effect_text]
+    }
+
+    modify_dialog(ignore_sliders) {
+        super.modify_dialog(ignore_sliders)
+        $(".roll-dialog-component-hide").addClass("d-none")
+        $(".roll-dialog-base-energy-hide").addClass("d-none")
 
         const result = $("#roll-dialog-result")
         if (this.energy_investment_validated && this.is_success()) {
