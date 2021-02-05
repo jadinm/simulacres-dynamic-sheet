@@ -602,7 +602,7 @@ class TalentRoll extends Roll {
             penalty_text += "\nMalaise courant: " + this.unease + " (déjà appliqué)\n"
         }
         if (parseInt(this.armor_penalty) !== 0) {
-            penalty_text += "\nMalaise d'armure: " + this.armor_penalty + " (cela s'applique sur les actions physiques)\n"
+            penalty_text += "\nMalaise d'armure: " + this.armor_penalty + " (à appliquer manuellement sur les actions physiques)\n"
         }
         $("#roll-dialog-penalties").text(penalty_text)
 
