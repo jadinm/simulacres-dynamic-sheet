@@ -241,7 +241,8 @@ class SpellRow extends RollRow {
                 spell_distance, spell_focus, spell_duration, spell_level).trigger_roll()
         } else {
             const value = parseInt(this.get("value", button).text())
-            new TalentRoll(roll_reason, value, difficulty, this.get("effect", button).val(),
+            const type = this.data[0].id.includes("psi-") ? PsiRoll : TalentRoll
+            new type(roll_reason, value, difficulty, this.get("effect", button).val(),
                 critical_increase, formula_elements, margin_throttle, this.data.hasClass("spell"),
                 true, spell_distance, spell_focus, spell_duration, spell_level).trigger_roll()
         }

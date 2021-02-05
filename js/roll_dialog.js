@@ -482,9 +482,9 @@ class TalentRoll extends Roll {
             return ""
         if (this.is_magic) {
             let text = "</div><div class='row mx-1 align-middle'>Coût en Points de Magie: "
-            if (this.is_critical_success() && this.energy_cost() > 1) {
+            if (this.energy_investment_validated && this.is_critical_success() && this.energy_cost() > 1) {
                 text += "Entre 1 et " + this.energy_cost() + " (les points dépensés par un focus sont quand-même dépensés)"
-            } else if (this.is_critical_failure()) {
+            } else if (this.energy_investment_validated && this.is_critical_failure()) {
                 text += (2 * this.energy_cost())
                     + "</div><div class='row mx-1 align-middle'>Le coût est doublé à cause de l'échec critique"
                     + "</div><div class='row mx-1 align-middle'>La perte en plus est à retirer d'abord du focus" +
@@ -1020,6 +1020,26 @@ class FocusMagicRoll extends TalentRoll {
         if (this.energy_investment_validated && this.is_success()) {
             result.html(this.post_test_margin() + this.dice_buttons("margin_dices", this.margin_dices, 3))
         }
+    }
+}
+
+class PsiRoll extends TalentRoll {
+
+    energy_cost_text() {
+        let text = "</div><div class='row mx-1 align-middle'>Coût du pouvoir (en EP): "
+        if (this.energy_investment_validated && this.is_critical_failure()) {
+            text += (this.base_energy_cost + this.energy_cost())
+                + "</div><div class='row mx-1 align-middle'>Le coût est doublé à cause de l'échec critique"
+                + "</div><div class='row mx-1 align-middle'>La perte en plus est à retirer d'abord des EP,"
+                + " après des PS et enfin des PVs."
+        } else {
+            text += this.base_energy_cost
+        }
+        if (this.energy_cost() > this.base_energy_cost) {
+            text += "</div><div class='row mx-1 align-middle'>Coût en énergies: "
+                + (this.energy_cost() - this.base_energy_cost)
+        }
+        return text
     }
 }
 
