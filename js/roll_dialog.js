@@ -95,13 +95,14 @@ class Roll {
         return this.dice_value() <= 2
     }
 
-    dice_buttons(dice_group, dices = []) {
+    dice_buttons(dice_group, dices = [], type = 6) {
         const digits = ["", "one", "two", "three", "four", "five", "six"]
         let text = "&nbsp;"
         for (let i in dices) {
             if (dices[i] > 0 && dices[i] <= 6)
                 text += '<span class="clickable btn-link roll-link" data-dice-group="' + dice_group
-                    + '" data-dice-idx="' + i + '" data-toggle="tooltip" data-placement="bottom" title="Relancer le dé">' +
+                    + '" data-dice-type="' + type + '" data-dice-idx="' + i
+                    + '" data-toggle="tooltip" data-placement="bottom" title="Relancer le dé">' +
                     '<i class="fas fa-lg fa-dice-' + digits[dices[i]] + '"></i></span>'
             else
                 text += dices[i]
@@ -150,7 +151,8 @@ class Roll {
             if (!target.hasClass("roll-link"))
                 target = target.parents(".roll-link")
 
-            const new_value = roll_fn(1, 6)
+            const type = target.attr("data-dice-type")
+            const new_value = roll_fn(1, type ? type : 6)
             const dice_group = target.get(0).getAttribute("data-dice-group")
             const dice_idx = target.get(0).getAttribute("data-dice-idx")
             current_roll[dice_group][dice_idx] = new_value
@@ -439,6 +441,21 @@ class TalentRoll extends Roll {
         return "<div class='row mx-1 align-middle'>La marge est maximum 0 et c'est un échec</div>"
     }
 
+    format_details(racial_bonus, superpower_bonus) {
+        const threshold_name = intermediate_discovery ? "Valeur du test <=" : "Valeur seuil ="
+        if (this.energy_investment_validated) {
+            return "<div class='row mx-1 align-middle'>Somme des 2d6 = " + this.dice_value()
+                + this.dice_buttons("base_dices", this.base_dices)
+                + "</div><div class='row mx-1 align-middle'>" + threshold_name
+                + "&nbsp;<span id='roll-dialog-threshold'>"
+                + this.max_threshold() + "</span>" + racial_bonus + superpower_bonus + "</div>"
+        } else {
+            return "<div class='row mx-1 align-middle'>" + threshold_name
+                + "&nbsp;<span id='roll-dialog-threshold'>"
+                + this.max_threshold() + "</span>" + racial_bonus + superpower_bonus + "</div>"
+        }
+    }
+
     details_text() {
         let effect_text = isNaN(this.margin_throttle) ? "" : "<div class='row mx-1 align-middle'>La marge maximum est de "
             + this.margin_throttle + "</div>"
@@ -476,21 +493,25 @@ class TalentRoll extends Roll {
             }
         }
 
-        const threshold_name = intermediate_discovery ? "Valeur du test <=" : "Valeur seuil ="
-        let details_text
-        if (this.energy_investment_validated) {
-            details_text = "<div class='row mx-1 align-middle'>Somme des 2d6 = " + this.dice_value()
-                + this.dice_buttons("base_dices", this.base_dices)
-                + "</div><div class='row mx-1 align-middle'>" + threshold_name
-                + "&nbsp;<span id='roll-dialog-threshold'>"
-                + this.max_threshold() + "</span>" + racial_bonus + superpower_bonus + "</div>"
-        } else {
-            details_text = "<div class='row mx-1 align-middle'>" + threshold_name
-                + "&nbsp;<span id='roll-dialog-threshold'>"
-                + this.max_threshold() + "</span>" + racial_bonus + "</div>"
-        }
-
+        let details_text = this.format_details(racial_bonus, superpower_bonus)
         return [details_text, effect_text]
+    }
+
+    title_formula() {
+        let title = ""
+        if (this.formula_elements.length > 0) {
+            title += "<h4>"
+            for (let i = 0; i < this.formula_elements.length; i++) {
+                const symbol = $("label[for='" + this.formula_elements[i][0].id + "'] svg").get(0)
+                if (symbol) {
+                    title += symbol.outerHTML
+                    if (i !== this.formula_elements.length - 1)
+                        title += "&nbsp;+&nbsp;"
+                }
+            }
+            title += "</h4>"
+        }
+        return title
     }
 
     modify_dialog(ignore_sliders) {
@@ -652,18 +673,7 @@ class TalentRoll extends Roll {
 
         let title = "<h2>" + ((this.reason.length > 0) ? this.reason : "Résultat du lancer")
             + "</h2>"
-        if (this.formula_elements.length > 0) {
-            title += "<h4>"
-            for (let i = 0; i < this.formula_elements.length; i++) {
-                const symbol = $("label[for='" + this.formula_elements[i][0].id + "'] svg").get(0)
-                if (symbol) {
-                    title += symbol.outerHTML
-                    if (i !== this.formula_elements.length - 1)
-                        title += "&nbsp;+&nbsp;"
-                }
-            }
-            title += "</h4>"
-        }
+        title += this.title_formula()
         $("#roll-dialog-title").html(title
             + "<sm class='text-center'>" + this.timestamp.toLocaleString("fr-FR") + "</sm>")
 
@@ -856,6 +866,93 @@ class SuperpowerRoll extends TalentRoll {
     reroll() {
         new this.constructor(this.reason, this.number, this.under_value, this.formula_elements, this.distance,
             this.focus, this.duration, this.effect).trigger_roll()
+    }
+}
+
+class FocusMagicRoll extends TalentRoll {
+    constructor(reason = "", max_value = NaN, level = 0, effect = "",
+                distance = "", focus = "", duration = "") {
+        super(reason, max_value, level, effect, 0, [], NaN, true, true, distance, focus, duration)
+        this.energy_investment_validated = !has_any_base_energy() // Cannot invest in energies when using a focus object
+        this.margin_dices = []
+    }
+
+    formula() {
+        return FocusMagicRow.formula
+    }
+
+    margin() {
+        if (this.margin_dices.length === 0) {
+            // Roll needed
+            this.roll_dices(1, 3, this.margin_dices)
+        }
+        return this.margin_dices.reduce((a, b) => {
+            return a + b;
+        }, 0);
+    }
+
+    post_test_margin() {
+        return this.is_success() ? super.post_test_margin() : 0;
+    }
+
+    critical_value() {
+        return 0
+    }
+
+    critical_success_text() {
+        return ""
+    }
+
+    focus_test() {
+        return super.margin()
+    }
+
+    is_success() {
+        return !this.is_critical_failure()
+            && (this.focus_test() > 0 || this.focus_test() === 0 && !is_v7 || this.is_critical_success())
+    }
+
+    title_formula() {
+        let title = "<h4>"
+        for (let i = 0; i < FocusMagicRow.formula.length; i++) {
+            const symbol = $("#" + FocusMagicRow.formula[i]).parent().find(".input-prefix").get(0)
+            console.log(symbol)
+            if (symbol) {
+                console.log($(symbol.outerHTML).attr("height", "1em").attr("width", "1em"))
+                title += $(symbol.outerHTML).attr("height", "1em").attr("width", "1em").get(0).outerHTML
+                title += "&nbsp;+&nbsp;"
+            }
+        }
+        title += "AM</h4>"
+        return title
+    }
+
+    format_details(racial_bonus, superpower_bonus) {
+        const threshold_name = intermediate_discovery ? "Valeur du test <=" : "Valeur seuil ="
+        if (this.energy_investment_validated) {
+            return "<div class='row mx-1 align-middle'>Test d'utilisation du focus  = " + this.focus_test()
+                + "</div><div class='row mx-1 align-middle'>Somme des 2d6 = " + this.dice_value()
+                + this.dice_buttons("base_dices", this.base_dices)
+                + "</div><div class='row mx-1 align-middle'>" + threshold_name
+                + "&nbsp;<span id='roll-dialog-threshold'>"
+                + this.max_threshold() + "</span>" + racial_bonus + superpower_bonus + "</div>"
+        } else {
+            return "<div class='row mx-1 align-middle'>" + threshold_name
+                + "&nbsp;<span id='roll-dialog-threshold'>"
+                + this.max_threshold() + "</span>" + racial_bonus + "</div>"
+        }
+    }
+
+    modify_dialog(ignore_sliders) {
+        super.modify_dialog(ignore_sliders)
+        $(".roll-dialog-magic-hide").addClass("d-none")
+        $(".roll-dialog-component-hide").addClass("d-none")
+        $(".roll-dialog-focus-hide").addClass("d-none")
+
+        const result = $("#roll-dialog-result")
+        if (this.energy_investment_validated && this.is_success()) {
+            result.html(this.post_test_margin() + this.dice_buttons("margin_dices", this.margin_dices, 3))
+        }
     }
 }
 

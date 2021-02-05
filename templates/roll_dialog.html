@@ -52,7 +52,7 @@
                                     <use xlink:href="#svg-power"></use>
                                 </svg>
                                 {% if version == V7 %}
-                                    <label for="roll-dialog-power">MR + 1</label>
+                                    <label for="roll-dialog-power">Test + 1</label>
                                 {% endif %}
                                 <input class="roll-dialog-energy form-control text-center" id="roll-dialog-power"
                                        type="number" value="0" min="0" max="0">
@@ -68,7 +68,7 @@
                                     <use xlink:href="#svg-speed"></use>
                                 </svg>
                                 {% if version == V7 %}
-                                    <label for="roll-dialog-speed">MR + 1</label>
+                                    <label for="roll-dialog-speed">Test + 1</label>
                                 {% endif %}
                                 <input class="roll-dialog-energy form-control text-center" id="roll-dialog-speed"
                                        type="number" value="0" min="0" max="0">
@@ -84,14 +84,14 @@
                                     <use xlink:href="#svg-precision"></use>
                                 </svg>
                                 {% if version == V7 %}
-                                    <label for="roll-dialog-precision">MR + 1</label>
+                                    <label for="roll-dialog-precision">Test + 1</label>
                                 {% endif %}
                                 <input class="roll-dialog-energy form-control text-center" id="roll-dialog-precision"
                                        type="number" value="0" min="0" max="0">
                             </div>
                         </div>
                         {% if version == V7 %}
-                            <div class="row md-form form-row mx-1 mt-2 mb-0 roll-dialog-effect-hide">
+                            <div class="row md-form form-row mx-1 mt-2 mb-0 roll-dialog-effect-hide roll-dialog-focus-hide">
                                 <div class="align-middle input-with-pre-icon col-md-4 col-6 m-0 d-none"
                                      data-toggle="tooltip" data-placement="bottom"
                                      title="Puissance investie pour augmenter la marge de 1d6 en cas de réussite">

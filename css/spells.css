@@ -28,3 +28,7 @@
     background: black;
     z-index: 1; /* Prevent checkboxes to overlap with it */
 }
+
+.focus-magic-name, .focus-magic-focus {
+    min-width: 15em;
+}

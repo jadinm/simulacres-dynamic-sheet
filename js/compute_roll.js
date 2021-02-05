@@ -629,7 +629,7 @@ class SuperpowerRollTable extends TalentRollTable {
         super.formula_changed(e)
 
         // Update all of the roll and spell values
-        $(".spell-value.roll-value,.dual_wielding-value").each((i, elem) => {
+        $(".spell-value,.roll-value,.dual_wielding-value").each((i, elem) => {
             row_of(elem).update_roll_value()
         })
     }
@@ -646,6 +646,96 @@ class SuperpowerRollTable extends TalentRollTable {
 
     clone_row() {
         return this.template_row.clone(true, false)
+    }
+}
+
+class FocusMagicRow extends SpellRow {
+    static formula = ["mind", "action", "void"]
+    static magic_talent = "Art magique"
+
+    static magic_talent_level() {
+        const talent = talent_from_name(this.magic_talent)
+        let level = NaN
+        if (talent.length > 0) {
+            level = parseInt(talent_level(talent[0]))
+        }
+        if (isNaN(level)) {
+            return "X"
+        }
+        return level
+    }
+
+    is_talent_based_spell() {
+        return true
+    }
+
+    is_hermetic_spell() {
+        return false
+    }
+
+    is_instinctive_magic() {
+        return false
+    }
+
+    compute_formula() {
+        let value = 0
+        const components = SuperpowerRollTable.components()
+        for (let i = 0; i < this.constructor.formula.length; i++) {
+            value += parseInt($("#" + this.constructor.formula[i]).val())
+        }
+        // Super heroes have bonuses on all tests based on their component power
+        const bonus = (components.includes(this.constructor.formula[0])) ? 4 : 0
+        return [bonus + value, []]
+    }
+
+    update_roll_value() {
+        this.data.find(".row-roll-trigger").each((i, dice_div) => {
+            let sum = 0
+
+            // Recover component, means and realm
+            const formula = this.compute_formula()[0]
+            sum += formula
+            console.log(sum)
+
+            // Recover associated talent level
+            let level = this.constructor.magic_talent_level()
+            if (!isNaN(level)) {
+                sum += level
+            } else {
+                sum = "X"
+            }
+            console.log(level)
+            console.log(sum)
+
+            // Update
+            this.get("value").text(sum)
+            console.log(this.get("value"))
+        })
+    }
+
+    roll(button) {
+        // Find either spell difficulty or talent level to detect critical rolls
+        let roll_reason = this.get("name").val()
+        let spell_distance = this.get("distance").val()
+        let spell_focus = this.get("time").val()
+        let spell_duration = this.get("duration").val()
+
+        // Do the actual roll
+        const value = parseInt(this.get("value").text())
+        let level = this.constructor.magic_talent_level()
+        level = !isNaN(level) ? level : 0
+        new FocusMagicRoll(roll_reason, value, level, this.get("effect").val(), spell_distance, spell_focus,
+            spell_duration).trigger_roll()
+        $('#roll-dialog').modal()
+    }
+}
+
+class FocusMagicRollTable extends SpellRollTable {
+    static row_class = FocusMagicRow
+
+    add_custom_listener_to_row(row) {
+        super.add_custom_listener_to_row(row)
+        row.update_roll_value()
     }
 }
 
@@ -719,4 +809,5 @@ $(_ => {
     new KiTable($("#ki-table"))
     new PsiRollTable($("#psi-table"))
     new SuperpowerRollTable($("#superpower-table"))
+    new FocusMagicRollTable($("#focus-magic-table"))
 })
