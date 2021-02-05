@@ -1,4 +1,4 @@
-const row_id_regex = /(([\w-]+)-(x|\d+))-?(.*)/
+const row_id_regex = /((\w+)-(x|\d+))-?(.*)/
 
 row_classes_by_prefix = {}
 

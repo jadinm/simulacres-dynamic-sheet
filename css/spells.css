@@ -7,7 +7,7 @@
     min-width: 10em;
 }
 
-.spell-effect, .focus-magic-effect, .rune-meaning {
+.spell-effect, .focusMagic-effect, .rune-meaning {
     min-width: 300px;
 }
 
@@ -29,6 +29,6 @@
     z-index: 1; /* Prevent checkboxes to overlap with it */
 }
 
-.focus-magic-name, .focus-magic-focus {
+.focusMagic-name, .focusMagic-focus {
     min-width: 15em;
 }
