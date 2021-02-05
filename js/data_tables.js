@@ -149,11 +149,11 @@ class WordTable extends RuneTable {
     }
 }
 
-$("#name-magic").on("change", e => {
-    const table = $("#word-table").parent().parent()
-    const title = table.prev()
+function toggle_energy_dependent_table(energy, table_body) {
+    const table = table_body.parent().parent()
+    const title = table.prev().addClass("d-none")
     const button = table.next()
-    if (parseInt($(e.target).val()) >= 1) {
+    if (parseInt(energy.val()) >= 1) {
         table.removeClass("d-none")
         title.removeClass("d-none")
         button.removeClass("d-none")
@@ -162,21 +162,15 @@ $("#name-magic").on("change", e => {
         title.addClass("d-none")
         button.addClass("d-none")
     }
+    new Popper()
+}
+
+$("#name-magic").on("change", e => {
+    toggle_energy_dependent_table($(e.target), $("#word-table"))
 })
 
 $("#runes").on("change", e => {
-    const table = $("#rune-table").parent().parent()
-    const title = table.prev().addClass("d-none")
-    const button = table.next()
-    if (parseInt($(e.target).val()) >= 1) {
-        table.removeClass("d-none")
-        title.removeClass("d-none")
-        button.removeClass("d-none")
-    } else {
-        table.addClass("d-none")
-        title.addClass("d-none")
-        button.addClass("d-none")
-    }
+    toggle_energy_dependent_table($(e.target), $("#rune-table"))
 })
 
 /**
@@ -195,6 +189,7 @@ $(_ => {
     new DataTable($("#magical-equipment-table"))
     new DataTable($("#equipment-table"))
     new DataTable($("#limitedUse-equipment-table"))
+    new DataTable($("#tomte-mixture-table"))
     new RuneTable($("#rune-table"))
     new WordTable($("#word-table"))
 })

@@ -27,6 +27,9 @@ parser.add_argument("--localisation", help="Use localisation of HP and armor (on
                     action='store_true')
 parser.add_argument("--dual-wielding", help="Use the non official rules of dual wielding (only valid for version 7)",
                     action="store_true")
+parser.add_argument("--tomte-magic", help="Use the non official rules of tomte magic"
+                                          " (only valid for version 7 and medieval fantasy universe)",
+                    action="store_true")
 parser.add_argument("--matrix-4x4", help="Add instincts and desire to the stat matrix (only valid for version 8)",
                     action='store_true')
 parser.add_argument("--universe", help="Universe of the adventure", choices=[MED_FANTASY, CAPTAIN_VOODOO, "Autre"],
@@ -133,6 +136,7 @@ params.update({
     "version": args.version, "localisation": args.localisation and args.version == V7, "universe": args.universe,
     "matrix_4x4": args.version == V7 or args.matrix_4x4,
     "dual_wielding": args.version == V7 and args.dual_wielding,
+    "tomte_magic": args.version == V7 and args.tomte_magic and args.universe == MED_FANTASY,
     "discovery": args.discovery and args.version == V8,
     "intermediate_discovery": (args.discovery or args.intermediate_discovery) and args.version == V8,
     "V7": V7, "V8": V8, "captain_voodoo": CAPTAIN_VOODOO, "med_fantasy": MED_FANTASY,

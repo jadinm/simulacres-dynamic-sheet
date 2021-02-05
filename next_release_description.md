@@ -18,6 +18,7 @@
 
 - **simulacres_v7_localisation_deux_armes_fiche_perso.html** ajoute à la fiche précédente:
     - la proposition de règle non officielle sur [le combat à deux armes](https://www.facebook.com/groups/Simulacres/permalink/2507313226187735/)
+    - la proposition de règle non officielle sur l'utilisation de [la pipe magique des Tomtes de Sîl](https://www.facebook.com/groups/Simulacres/permalink/2406479912937734/)
 
 - **simulacres_v8_fiche_perso.html** inclut:
     - les règles de campagne de [SimulacreS version 8](https://www.facebook.com/groups/Simulacres/permalink/2324033054515754/)
