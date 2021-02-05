@@ -162,7 +162,6 @@ function toggle_energy_dependent_table(energy, table_body) {
         title.addClass("d-none")
         button.addClass("d-none")
     }
-    new Popper()
 }
 
 $("#name-magic").on("change", e => {
