@@ -7,7 +7,7 @@
     min-width: 10em;
 }
 
-.spell-effect {
+.spell-effect, .focus-magic-effect, .rune-meaning {
     min-width: 300px;
 }
 
