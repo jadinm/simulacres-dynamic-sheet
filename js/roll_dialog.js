@@ -201,7 +201,7 @@ class TalentRoll extends Roll {
     constructor(reason = "", max_value = NaN, talent_level = 0, effect = "",
                 critical_increase = 0, formula_elements = [], margin_throttle = NaN,
                 is_magic = false, is_power = false, distance = "", focus = "",
-                duration = "") {
+                duration = "", base_energy_cost = 0) {
         super()
         this.reason = reason
         this.formula_elements = formula_elements
@@ -218,6 +218,9 @@ class TalentRoll extends Roll {
         this.distance = distance // Spell parameter increased by power
         this.focus = focus // Spell parameter decreased by speed
         this.duration = duration
+        this.base_energy_cost = parseInt(base_energy_cost)
+        if (isNaN(this.base_energy_cost))
+            this.base_energy_cost = 0
 
         this.invested_energies = []
         this.critical_increase = critical_increase
@@ -245,6 +248,17 @@ class TalentRoll extends Roll {
 
         // Need to give energy investment or its magical components
         this.energy_investment_validated = !has_any_base_energy() && !is_magic
+    }
+
+    energy_cost() {
+        if (is_v7) {
+            return this.base_energy_cost + this.power + this.speed + this.precision + this.optional_power
+                + this.optional_speed + this.optional_precision + this.magic_power
+        } else {
+            // heroism counts in the optional part only
+            return this.base_energy_cost + 2 * this.power - this.optional_power
+                + 2 * this.speed - this.optional_speed + 2 * this.precision - this.optional_precision
+        }
     }
 
     formula() {
@@ -432,13 +446,36 @@ class TalentRoll extends Roll {
     critical_success_text() {
         if (discovery)
             return "<div class='row mx-1 align-middle'>Doublez l'effet grâce au succès critique</div>"
-        else
+        else {
+            const value = this.critical_value() // Triggers the roll
             return "<div class='row mx-1 align-middle'>" + this.critical_dices.length + "d6 ajouté" + ((this.critical_dices.length > 1) ? "s" : "")
-                + " à la marge d'une valeur de " + this.critical_value() + this.dice_buttons("critical_dices", this.critical_dices) + "</div>"
+                + " à la marge d'une valeur de " + value + this.dice_buttons("critical_dices", this.critical_dices) + "</div>"
+        }
     }
 
     critical_failure_text() {
         return "<div class='row mx-1 align-middle'>La marge est maximum 0 et c'est un échec</div>"
+    }
+
+    energy_cost_text() {
+        if (this.energy_cost() === 0)
+            return ""
+        if (this.is_magic) {
+            let text = "</div><div class='row mx-1 align-middle'>Coût en Points de Magie: "
+            if (this.is_critical_success() && this.energy_cost() > 1) {
+                text += "Entre 1 et " + this.energy_cost() + " (les points dépensés par un focus sont quand-même dépensés)"
+            } else if (this.is_critical_failure()) {
+                text += (2 * this.energy_cost())
+                    + "</div><div class='row mx-1 align-middle'>Le coût est doublé à cause de l'échec critique"
+                    + "</div><div class='row mx-1 align-middle'>La perte en plus est à retirer d'abord du focus" +
+                    " (si un a été utilisé), puis des PS, après des EP et enfin en PV."
+            } else {
+                text += this.energy_cost()
+            }
+            return text
+        } else {
+            return "</div><div class='row mx-1 align-middle'>Coût en énergies: " + this.energy_cost()
+        }
     }
 
     format_details(racial_bonus, superpower_bonus) {
@@ -448,11 +485,13 @@ class TalentRoll extends Roll {
                 + this.dice_buttons("base_dices", this.base_dices)
                 + "</div><div class='row mx-1 align-middle'>" + threshold_name
                 + "&nbsp;<span id='roll-dialog-threshold'>"
-                + this.max_threshold() + "</span>" + racial_bonus + superpower_bonus + "</div>"
+                + this.max_threshold() + "</span>" + racial_bonus + superpower_bonus + this.energy_cost_text()
+                + "</div>"
         } else {
             return "<div class='row mx-1 align-middle'>" + threshold_name
                 + "&nbsp;<span id='roll-dialog-threshold'>"
-                + this.max_threshold() + "</span>" + racial_bonus + superpower_bonus + "</div>"
+                + this.max_threshold() + "</span>" + racial_bonus + superpower_bonus + this.energy_cost_text()
+                + "</div>"
         }
     }
 
@@ -838,11 +877,11 @@ class SuperpowerRoll extends TalentRoll {
                 + this.dice_buttons("base_dices", this.base_dices)
                 + "</div><div class='row mx-1 align-middle'>" + threshold_name
                 + "&nbsp;<span id='roll-dialog-threshold'>"
-                + this.max_threshold() + "</span>" + racial_bonus + "</div>"
+                + this.max_threshold() + "</span>" + racial_bonus + this.energy_cost_text() + "</div>"
         } else {
             details_text = "<div class='row mx-1 align-middle'>" + threshold_name
                 + "&nbsp;<span id='roll-dialog-threshold'>"
-                + this.max_threshold() + "</span>" + racial_bonus + "</div>"
+                + this.max_threshold() + "</span>" + racial_bonus + this.energy_cost_text() + "</div>"
         }
 
         return [details_text, effect_text]
@@ -871,8 +910,8 @@ class SuperpowerRoll extends TalentRoll {
 
 class FocusMagicRoll extends TalentRoll {
     constructor(reason = "", max_value = NaN, level = 0, effect = "",
-                distance = "", focus = "", duration = "") {
-        super(reason, max_value, level, effect, 0, [], NaN, true, true, distance, focus, duration)
+                distance = "", focus = "", duration = "", base_energy_cost = 0) {
+        super(reason, max_value, level, effect, 0, [], NaN, true, true, distance, focus, duration, base_energy_cost)
         this.energy_investment_validated = !has_any_base_energy() // Cannot invest in energies when using a focus object
         this.margin_dices = []
     }
@@ -916,9 +955,7 @@ class FocusMagicRoll extends TalentRoll {
         let title = "<h4>"
         for (let i = 0; i < FocusMagicRow.formula.length; i++) {
             const symbol = $("#" + FocusMagicRow.formula[i]).parent().find(".input-prefix").get(0)
-            console.log(symbol)
             if (symbol) {
-                console.log($(symbol.outerHTML).attr("height", "1em").attr("width", "1em"))
                 title += $(symbol.outerHTML).attr("height", "1em").attr("width", "1em").get(0).outerHTML
                 title += "&nbsp;+&nbsp;"
             }
@@ -935,11 +972,11 @@ class FocusMagicRoll extends TalentRoll {
                 + this.dice_buttons("base_dices", this.base_dices)
                 + "</div><div class='row mx-1 align-middle'>" + threshold_name
                 + "&nbsp;<span id='roll-dialog-threshold'>"
-                + this.max_threshold() + "</span>" + racial_bonus + superpower_bonus + "</div>"
+                + this.max_threshold() + "</span>" + racial_bonus + superpower_bonus + this.energy_cost_text() + "</div>"
         } else {
             return "<div class='row mx-1 align-middle'>" + threshold_name
                 + "&nbsp;<span id='roll-dialog-threshold'>"
-                + this.max_threshold() + "</span>" + racial_bonus + "</div>"
+                + this.max_threshold() + "</span>" + racial_bonus + this.energy_cost_text() + "</div>"
         }
     }
 

@@ -194,6 +194,10 @@ class SpellRow extends RollRow {
         })
     }
 
+    level(button) {
+        return this.get("level", button).val()
+    }
+
     roll(button) {
         // Find either spell difficulty or talent level to detect critical rolls
         let difficulty
@@ -216,13 +220,14 @@ class SpellRow extends RollRow {
         let spell_distance = this.get("distance", button).val()
         let spell_focus = this.get("time", button).val()
         let spell_duration = this.get("duration", button).val()
+        let spell_level = this.level(button)
         difficulty = isNaN(difficulty) ? 0 : difficulty
 
         // Do the actual roll
         const value = parseInt(this.get("value", button).text())
         new TalentRoll(roll_reason, value, difficulty, this.get("effect", button).val(),
             critical_increase, formula_elements, margin_throttle, this.data.hasClass("spell"),
-            true, spell_distance, spell_focus, spell_duration).trigger_roll()
+            true, spell_distance, spell_focus, spell_duration, spell_level).trigger_roll()
         $('#roll-dialog').modal()
     }
 
@@ -695,7 +700,6 @@ class FocusMagicRow extends SpellRow {
             // Recover component, means and realm
             const formula = this.compute_formula()[0]
             sum += formula
-            console.log(sum)
 
             // Recover associated talent level
             let level = this.constructor.magic_talent_level()
@@ -704,12 +708,9 @@ class FocusMagicRow extends SpellRow {
             } else {
                 sum = "X"
             }
-            console.log(level)
-            console.log(sum)
 
             // Update
             this.get("value").text(sum)
-            console.log(this.get("value"))
         })
     }
 
@@ -719,13 +720,14 @@ class FocusMagicRow extends SpellRow {
         let spell_distance = this.get("distance").val()
         let spell_focus = this.get("time").val()
         let spell_duration = this.get("duration").val()
+        let spell_level = this.get("level").val()
 
         // Do the actual roll
         const value = parseInt(this.get("value").text())
         let level = this.constructor.magic_talent_level()
         level = !isNaN(level) ? level : 0
         new FocusMagicRoll(roll_reason, value, level, this.get("effect").val(), spell_distance, spell_focus,
-            spell_duration).trigger_roll()
+            spell_duration, spell_level).trigger_roll()
         $('#roll-dialog').modal()
     }
 }
@@ -809,5 +811,5 @@ $(_ => {
     new KiTable($("#ki-table"))
     new PsiRollTable($("#psi-table"))
     new SuperpowerRollTable($("#superpower-table"))
-    new FocusMagicRollTable($("#focus-magic-table"))
+    new FocusMagicRollTable($("#focusMagic-table"))
 })
