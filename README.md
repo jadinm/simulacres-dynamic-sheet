@@ -189,6 +189,8 @@ Pour le moment nous avons les plugins suivants :
   ```
   Pour qu'il fonctionne, le serveur cible doit envoyer le header
   'Access-Control-Allow-Origin: *' avec sa réponse.
+- Un [plugin de calcul des probabilités de réussite](plugins/plugin_roll_probability.html)
+  qui affiche la probabilité de réussite d'un jet avant de lancer celui-ci.
 
 ### Mettre à jour un plugin
 
