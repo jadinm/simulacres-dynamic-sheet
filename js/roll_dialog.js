@@ -313,7 +313,7 @@ class TalentRoll extends Roll {
 
     max_threshold() {
         const components = this.is_magic ? this.incantation + this.somatic_component + this.material_component : 0
-        return this.max_value + this.unease + this.power + this.speed + this.precision + this.margin_modifier
+        return this.max_value + this.power + this.speed + this.precision + this.margin_modifier
             + components
     }
 
