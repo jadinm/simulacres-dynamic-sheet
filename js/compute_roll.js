@@ -46,6 +46,7 @@ class RollRow extends DataRow {
 
     update_roll_value() {
         let sum = 0
+        sum += get_unease()
 
         // Recover component, means and realm
         const formula = this.compute_formula()[0]
@@ -155,6 +156,7 @@ class SpellRow extends RollRow {
             return
         this.data.find(".row-roll-trigger").each((i, dice_div) => {
             let sum = 0
+            sum += get_unease()
             const realm = this.realm(dice_div)
 
             // Recover component, means and realm
@@ -706,6 +708,7 @@ class FocusMagicRow extends SpellRow {
     update_roll_value() {
         this.data.find(".row-roll-trigger").each((i, dice_div) => {
             let sum = 0
+            sum += get_unease()
 
             // Recover component, means and realm
             const formula = this.compute_formula()[0]

@@ -252,6 +252,12 @@ function get_unease() {
     return isNaN(unease) ? 0 : unease
 }
 
+function unease_value_changed_event() {
+    $(".spell-value,.superpower,.roll-value,.dual_wielding-value").each((i, elem) => {
+        row_of(elem).update_roll_value()
+    })
+}
+
 $(_ => {
 
     /**
@@ -280,7 +286,7 @@ $(_ => {
                 $("#unease-value").text(unease)
                 return text
             }
-        })
+        }, _ => void 0, {}, unease_value_changed_event)
 
         $(".hp-link").on("click", e => {
             let dialog_id = e.target.getAttribute("data-target")
