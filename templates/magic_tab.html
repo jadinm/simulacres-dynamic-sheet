@@ -1,7 +1,7 @@
 <div id="magic-tab" class="tab-pane fade row container-fluid m-0 pt-2">
     {% if universe == med_fantasy %}
         <!-- Magical energies -->
-        <div class="row col-12 m-0 p-0"><b>Énergies magiques</b></div>
+        <div class="row col-12 m-0 p-0 justify-content-center mb-3"><b>Énergies magiques</b></div>
         <div class="row col-12 form-row mt-2 md-form p-0 m-0">
             <div class="col-md-2 input-with-pre-icon">
                 <svg height="3em" width="2em" class="input-prefix">
@@ -285,10 +285,11 @@
                        value="0" min="0" max="3">
             </div>
         </div>
+        <hr/>
 
         <!-- Black magic & misc -->
-        <div class="row col-12 mt-2 m-0 p-0"><b>Compteurs</b></div>
-        <div class="row col-12 form-row md-form mt-2 p-0 m-0">
+        <div class="row col-12 mt-2 m-0 p-0 justify-content-center mb-3"><b>Compteurs</b></div>
+        <div class="row col-12 form-row md-form mt-2 p-0 m-0 justify-content-center">
             <div class="col-md-2">
                 <label for="black-magic">Magie noire</label>
                 <input class="form-control" id="black-magic" type="number" value="0" min="0">
@@ -299,9 +300,10 @@
                 <input class="form-control" id="malemagite" type="number" value="0" min="0">
             </div>
         </div>
+        <hr/>
     {% elif universe == captain_voodoo %}
         <!-- Magical energies -->
-        <div class="row col-12 m-0 p-0"><b>Énergies magiques</b></div>
+        <div class="row col-12 m-0 p-0 justify-content-center mb-3"><b>Énergies magiques</b></div>
         <div class="row col-12 mt-2 form-row md-form p-0 m-0">
             <div class="col-md-4 input-with-pre-icon">
                 <svg height="3em" width="2em" class="input-prefix">
@@ -330,12 +332,13 @@
                        type="number" value="0" min="0" max="3">
             </div>
         </div>
+        <hr/>
     {% endif %}
 
     {% if version == V7 %}
         {# Only Version 7 consider spells as special talents. Version 8 considers them as regular talents. #}
         <!-- Spells -->
-        <div class="row col-12 mt-2 m-0 p-0"><b>Sorts</b></div>
+        <div class="row col-12 mt-2 m-0 p-0 justify-content-center"><b>Sorts</b></div>
         <div class="table-responsive col-12 m-0 p-0 pb-2" style="overflow-y: hidden !important;">
             <table class="table table-hover m-0 p-0 mb-4">
                 <thead class="m-0 p-0">
@@ -487,15 +490,18 @@
                 </div>
             </div>
         </div>
+        <hr/>
 
         <!-- Spells of focuses -->
-        <div class="row col-12 mt-2 m-0 p-0"><b>Sorts d'objets à focus</b></div>
+        <div class="row col-12 mt-2 m-0 p-0 justify-content-center">
+            <b>Sorts lié à un objets à focus</b>
+        </div>
         <div class="table-responsive col-12 m-0 p-0" style="overflow-y: hidden !important;">
             <table class="table table-hover m-0 p-0">
                 <thead class="m-0 p-0">
                 <tr>
                     <th scope="col" style="width: 10%">Nom</th>
-                    <th scope="col" style="width: 10%">Focus</th>
+                    <th scope="col" style="width: 10%">Objet</th>
                     <th scope="col" class="text-center" style="width: 2.5%">Niveau</th>
                     <th scope="col" class="text-center" style="width: 5%">Valeur</th>
                     <th scope="col" class="text-center" style="width: 5%">Concentration</th>
@@ -570,9 +576,12 @@
                 </div>
             </div>
         </div>
+        <hr/>
 
         <!-- Known runes -->
-        <div class="row col-12 mt-2 m-0 p-0 d-none"><b>Runes apprises</b></div>
+        <div class="row col-12 mt-2 m-0 p-0 d-none justify-content-center">
+            <b>Runes apprises</b>
+        </div>
         <div class="table-responsive col-12 m-0 p-0 d-none" style="overflow-y: hidden !important;">
             <table class="table table-hover m-0 p-0">
                 <thead class="m-0 p-0">
@@ -614,9 +623,10 @@
                 </div>
             </div>
         </div>
+        <hr/>
 
         <!-- Words learned for name magic -->
-        <div class="row col-12 mt-2 m-0 p-0 d-none"><b>Mots appris</b></div>
+        <div class="row col-12 mt-2 m-0 p-0 d-none justify-content-center"><b>Mots appris</b></div>
         <div class="table-responsive col-12 m-0 p-0 d-none" style="overflow-y: hidden !important;">
             <table class="table table-hover m-0 p-0">
                 <thead class="m-0 p-0">
