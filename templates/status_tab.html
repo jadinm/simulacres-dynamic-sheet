@@ -3,6 +3,11 @@
 {% else %}
     {% set max_slider = 4 %}
 {% endif %}
+{% if version == V7 %}
+    {% set max_breath_slider = 4 %}
+{% else %}
+    {% set max_breath_slider = 5 %}
+{% endif %}
 <div id="status-tab" class="tab-pane fade show active justify-content-center">
     <div class="row col-12 justify-content-center">
         <div class="col-lg-3 col-md-4 col-sm-6 ml-1">
@@ -26,8 +31,8 @@
             </div>
             <div class="row mb-3">
                 <input id="breath" data-slider-id="breath-slider" type="text" data-slider-min="0"
-                       data-slider-max="{{ max_slider }}" data-slider-step="1" data-slider-value="{{ max_slider }}"
-                       data-slider-reversed="true"
+                       data-slider-max="{{ max_breath_slider }}" data-slider-step="1"
+                       data-slider-value="{{ max_breath_slider }}" data-slider-reversed="true"
                        class="input-slider" data-slider-handle="custom" data-slider-tooltip-position="bottom"/>
             </div>
             <div class="row clickable btn-link" data-toggle="modal" data-target="#psychic-max-update">
