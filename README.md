@@ -9,6 +9,7 @@ dans une campagne de Simulacres.
 Ce projet supporte les règles de campagne de
 [SimulacreS version 7](https://www.facebook.com/groups/Simulacres/permalink/1512926132293121/)
 avec les éléments suivants en plus :
+
 - les points de vie localisés, l'armure localisée et le bouclier
   (voir [Casus Belli HS n°16](http://confrerie-acier.chez-alice.fr/localisation%20armures%20et%20autres.htm)),
 - les utilisations optionnelles des énergies classiques
@@ -29,6 +30,7 @@ avec les éléments suivants en plus :
 Ce projet supporte aussi les règles de campagne et de découverte de
 [SimulacreS version 8](https://www.facebook.com/groups/Simulacres/permalink/2324033054515754/)
 avec les éléments suivants en plus :
+
 - les talents détaillés et l'armure
   (voir [ces règles optionnelles](https://www.facebook.com/groups/Simulacres/permalink/2186771051575289/))
 - la [matrice 4x4](https://www.facebook.com/groups/Simulacres/permalink/2532857676966623/)
@@ -148,6 +150,7 @@ $ python3 compile.py simulacres_fiche_perso.html
 ```
 
 La documentation des paramètres de ce script est accessible avec la commande suivante :
+
 ```console
 $ python3 compile.py -h
 ```
@@ -160,7 +163,7 @@ Vous pouvez insérer de nouveaux onglets dans la fiche en créant et en importan
 
 Vous pouvez importer n'importe quel fichier qui se trouve
 dans le [dossier plugin](plugins) ou un que vous aurez créé
-(voir [Contruire son propre plugin](#construire-son-propre-plugin)).
+(voir [Construire son propre plugin](#construire-son-propre-plugin)).
 Le bouton pour importer un plugin se trouve en bas de la fiche.
 Pour le moment nous avons les plugins suivants :
 
@@ -178,17 +181,10 @@ Pour le moment nous avons les plugins suivants :
 - Un [plugin rajoutant une énergie magique](plugins/plugin_generic_world.html)
   à une fiche de base (peu importe la version) sans rajouter d'onglet.
   Il montre aussi comment changer la police.
-- Un [plugin d'export](plugins/plugin_export_to_server.html) de fiche vers un server distant
-  qui permet d'envoyer le contenu de la fiche à une URL
-  en faisant une requête POST qui contient les données suivantes :
-  ```json
-  {
-    "name": "Le nom du personnage",
-    "page": "Le contenu de la page"
-  }
-  ```
-  Pour qu'il fonctionne, le serveur cible doit envoyer le header
-  'Access-Control-Allow-Origin: *' avec sa réponse.
+- Un [plugin d'export](plugins/plugin_export_to_server.html)
+  vers un server distant qui permet d'envoyer le contenu de
+  la fiche à une URL et exporte tous les jets faits sur la fiche
+  (voir la [section sur l'export de ces données](#export-de-données) pour le format)
 - Un [plugin de calcul des probabilités de réussite](plugins/plugin_roll_probability.html)
   qui affiche la probabilité de réussite d'un jet avant de lancer celui-ci.
 
@@ -220,9 +216,111 @@ mais utilisez ça avec prudence car cela peut introduire des bugs.
 
 #### Important : une fois votre plugin disponible, ne changez plus le moindre id
 
-En effet, si vous changez les ids des champs, les utilisateurs perdront l'information
-encodée dans ces champs à la mise à jour.
-De plus, si vous changez les ids des blocks, les vieilles composantes ne seront
-pas remplacées par les nouvelles mais ces dernières seront quand-même insérées.
-Donc vous ne devez pas non plus supprimer de block (contentez-vous de vider
-le contenu du block si vous voulez le "supprimer").
+En effet, si vous changez les ids des champs, les utilisateurs perdront l'information encodée dans ces champs à la mise
+à jour. De plus, si vous changez les ids des blocks, les vieilles composantes ne seront pas remplacées par les nouvelles
+mais ces dernières seront quand-même insérées. Donc vous ne devez pas non plus supprimer de block (contentez-vous de
+vider le contenu du block si vous voulez le "supprimer").
+
+### Export de données
+
+Comme mentionné précédemment, vous pouvez utiliser
+[plugin d'export](plugins/plugin_export_to_server.html)
+pour exporter la fiche et les rolls vers un serveur.
+
+Pour que l'export fonctionne, le serveur cible doit envoyer le header
+'Access-Control-Allow-Origin: \*' avec sa réponse.
+
+Les données sont envoyées dans une requête POST dans tous les cas.
+
+#### Export de la fiche
+
+Les données suivantes sont envoyées :
+
+```json5
+{
+  "name": "Le nom du personnage",
+  "page": "Le contenu de la page"
+}
+```
+
+#### Export des lancers de dés
+
+Lorsqu'un lancer est effectué, une requête POST est envoyée au serveur. De même que si un modificateur du jet est
+changé, une autre requête est faite au serveur
+(pour un maximum de deux requêtes par seconde).
+
+C'est la responsabilité du serveur d'agréger ces données s'il le souhaite
+(par exemple, en utilisant le timestamp).
+
+Il y a 3 types de lancers dans la fiche et donc 3 types de données qui peuvent être envoyées.
+
+##### Lancers simples
+
+Dans l'exemple suivant, "Albus Haupenroll" lance 2d6 :
+
+```json5
+{
+  "name": "Albus Haupenroll",
+  "number": 2, // nombre de dés à lancer
+  "type": 6, // type de dés à lancer
+  "base_dices": [1, 5], // les dés lancés
+  "timestamp": "Tue Feb 09 2021 10:05:37 GMT+0100 (Central European Standard Time)"
+}
+```
+
+##### Talents, pouvoirs ou sorts
+
+```json5
+{
+  // [...] Les champs déjà mentionnés à la section précédente
+  "reason": "Épée longue", // Le nom du sort ou du talent
+  "formula_elements": ["body", "action", "mechanical"],
+  "max_value": 12, // La valeur seuil, incluant le malaise dans la nouvelle version mais n'inculant pas les modificateurs, pratiques magiques ou investissement en énergie
+  "threshold": 11, // La valeur seuil incluant tout
+  "margin": 4, // La marge calculée bien et incluant tout
+  "critical_success": false,
+  "critical_failure": false,
+  "margin_throttle": 0, // Utile pour la magie instinctive dont la marge est limitée à 1
+  "talent_level": 0, // Niveau du talent ou difficulté du sort/pouvoir (bref, ce que t'utilise pour savoir si t'as un critique)
+  "effect": "[F] PV et [B] PS",
+  "critical_dices": [], // Les dés rajoutés en cas de succès critique (si c'est pas un critique, la liste est vide)
+  "effect_dices": [1, 5], // Les 2d6 lancés pour mesurer l'effet
+  "is_magic": false, // Si c'est un sort => si on peut utiliser des composantes
+  "is_power": false, // true si c'est un sort/superpouvoir/pouvoir de moine
+  "distance": "", // Si le pouvoir a une portée
+  "focus": "", // Si le pouvoir a un temps de concentration
+  "duration": "", // Si le pouvoir a une durée limitée
+  "base_energy_cost": "", // le coût en énergie juste pour faire le roll (sans investissement en énergie et succès critique non pris en compte)
+  "invested_energies": ["power", "speed", "precision", "optional-power", "optional-speed", "optional-precision", "magic-power"], // Investissement en énergies hors héroïsme
+  "critical_increase": 0, // > 0 en cas de dual wielding ou autre cas particulier
+  "precision": 0, // Seuil + 1
+  "optional_precision": 0, // Seuil critique + 1
+  "power": 0, // Seuil + 1
+  "optional_power": 0, // MR + 1d6
+  "magic_power": 0, // Portée x 2
+  "speed": 0, // Seuil + 1
+  "optional_speed": 0, // Temps / 2
+  "power_dices": [], // Si on investit en puissance pour +1d6, ces dés apparaissent là
+  "incantation": false, // Pratique magique: Seuil + 1
+  "somatic_component": false, // Pratique magique: Seuil + 1
+  "material_component": false, // Pratique magique: Seuil + 1
+  "unease": 0, // le malaise au moment du roll
+  "armor_penalty": "", // la pénalité d'armure (sous forme de string car c'est une description)
+  "margin_modifier": 0, // valeur du modificateur circonstanciel
+  "effect_modifier": 0, // valeur du modificateur d'effet
+  "energy_investment_validated": true // si l'investissement en énergie est validé
+}
+```
+
+##### Super-pouvoirs
+
+En plus des données précédentes, les tests de super-pouvoirs incluent les informations suivantes :
+
+```json5
+{
+  // [...] Les champs déjà mentionnés à la section précédente
+  "number": 5, // le nombre de dés à lancer (sans modificateur ou investissement en énergie)
+  "under_value": 3, // les dés doivent être <= à ça pour être compté
+  "superpower_modifier": 0 // le nombre de dés en plus ou en moins à roll
+}
+```
