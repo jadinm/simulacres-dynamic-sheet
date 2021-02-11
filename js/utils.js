@@ -109,6 +109,32 @@ function enable_dark_mode() {
             "}\n" +
             ".bs-tooltip-auto[x-placement^=right] .arrow::before, .bs-tooltip-right .arrow::before {\n" +
             "    border-right-color: ${white} !important;\n" +
+            "}\n" +
+            ".spell-difficulty .slider-selection {\n" +
+            "    background: white;\n" +
+            "    z-index: 1; /* Prevent checkboxes to overlap with it */\n" +
+            "}\n" +
+            ".spell-difficulty .slider-handle {\n" +
+            "    background: white;\n" +
+            "    z-index: 1; /* Prevent checkboxes to overlap with it */\n" +
+            "}\n" +
+            "#roll-dialog-modifier-slider .slider-selection {\n" +
+            "    background: white;\n" +
+            "}\n" +
+            "#roll-dialog-modifier-slider .slider-handle {\n" +
+            "    background: white;\n" +
+            "}\n" +
+            "#roll-dialog-effect-modifier-slider .slider-selection {\n" +
+            "    background: white;\n" +
+            "}\n" +
+            "#roll-dialog-effect-modifier-slider .slider-handle {\n" +
+            "    background: white;\n" +
+            "}\n" +
+            "#roll-dialog-superpower-modifier-slider .slider-selection {\n" +
+            "    background: white;\n" +
+            "}\n" +
+            "#roll-dialog-superpower-modifier-slider .slider-handle {\n" +
+            "    background: white;\n" +
             "}",
         ignoreInlineStyle: [],
         ignoreImageAnalysis: []
