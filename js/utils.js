@@ -135,6 +135,9 @@ function enable_dark_mode() {
             "}\n" +
             "#roll-dialog-superpower-modifier-slider .slider-handle {\n" +
             "    background: white;\n" +
+            "}\n" +
+            ".card.border-heavy {\n" +
+            "    border-image: var(--darkModeBorder) 15% fill / 65px 65px / 0.05rem round !important;\n" +
             "}",
         ignoreInlineStyle: [],
         ignoreImageAnalysis: []
