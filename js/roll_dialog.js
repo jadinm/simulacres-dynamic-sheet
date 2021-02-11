@@ -47,7 +47,7 @@ function has_any_base_energy() {
     }).length > 0
 }
 
-const effect_column_regex = /(^|\W?)\[([ABCDEFGHIJK])([+-]\d+)?](\W?|$)/gi
+const effect_column_regex = /(^|\W?)\[ *([ABCDEFGHIJK]) *([+-] *\d+)? *](\W?|$)/gi
 const effect_margin_regex = /(^|\W?)(MR)(\W?|$)/gi
 const effect_dss_regex = /(^|\W?)(DSS)(\W?|$)/gi
 const effect_des_regex = /(^|\W?)(DES)(\W?|$)/gi
@@ -699,7 +699,7 @@ class TalentRoll extends Roll {
                 // Show the actual effect instead of [A] or [B+2]
                 effect = effect.replaceAll(effect_column_regex, (match, prefix, column, modifier, suffix) => {
                     prefix = prefix.replace(" ", "&nbsp;")
-                    modifier = typeof modifier === "undefined" ? 0 : parseInt(modifier)
+                    modifier = typeof modifier === "undefined" ? 0 : parseInt(modifier.replaceAll(" ", ""))
                     const effect_value = this.is_success() ? this.column_effect(column, modifier) : 0
                     suffix = suffix.replace(" ", "&nbsp;")
                     return prefix + "<span class='roll-dialog-effect' column='" + column + "' " + "modifier='" + modifier + "'>" + effect_value + "</span>" + suffix
