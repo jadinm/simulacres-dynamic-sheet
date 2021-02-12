@@ -291,6 +291,8 @@ Dans l'exemple suivant, "Albus Haupenroll" lance 2d6 :
   "focus": "", // Si le pouvoir a un temps de concentration
   "duration": "", // Si le pouvoir a une durée limitée
   "base_energy_cost": "", // le coût en énergie juste pour faire le roll (sans investissement en énergie et succès critique non pris en compte)
+  "black_magic": "", // la description de la prise de magie noire s'il y en a
+  "magic_resistance": "", // la description de la résistance magique s'il y en a
   "invested_energies": ["power", "speed", "precision", "optional-power", "optional-speed", "optional-precision", "magic-power"], // Investissement en énergies hors héroïsme
   "critical_increase": 0, // > 0 en cas de dual wielding ou autre cas particulier
   "precision": 0, // Seuil + 1
