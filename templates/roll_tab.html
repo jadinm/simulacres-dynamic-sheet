@@ -12,6 +12,7 @@
                     <th scope="col" class="text-center" style="width: 5%">Formule</th>
                     <th scope="col" class="text-center" style="width: 5%">Valeur</th>
                     <th scope="col" style="min-width: 300px; width: 65%">Effet</th>
+                    <th scope="col" class="text-center"></th>
                 </tr>
                 </thead>
                 <tbody id="dual_wielding-table" class="sortable-list">
@@ -53,6 +54,39 @@
                         <input id="dual_wielding-x-effect" class="dual_wielding-effect form-control" type="text">
                         <label for="dual_wielding-x-effect"></label>
                     </td>
+                    <td class="md-form m-0 p-0 align-middle">
+                        <div id="dual_wielding-x-show-details" data-toggle="tooltip" data-placement="top"
+                             title="Voir les détails du test"
+                             class="btn btn-link rounded-lg mx-0 my-0 py-2 px-2">
+                            <i class="fas fa-cogs"></i>
+                        </div>
+                        <div class="container">
+                            <div class="modal fade bd-modal-lg" id="dual_wielding-x-details" tabindex="-1" role="dialog"
+                                 aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header justify-content-center">
+                                            <h4 id="dual_wielding-x-details-title"></h4>
+                                        </div>
+                                        <div class="modal-body align-middle">
+                                            <span id="dual_wielding-x-details-effect" class="row col-12 mx-1"></span>
+                                            <hr/>
+                                            <div class="row col-12 mx-1">
+                                                Modificateur permanent à appliquer au test
+                                            </div>
+                                            <div class="row mx-1 md-form col-md-2 py-0 my-0 mt-2">
+                                                <label class="py-0 my-0" for="dual_wielding-x-details-bonus">
+                                                </label>
+                                                <input class="form-control py-0 my-0 text-center"
+                                                       id="dual_wielding-x-details-bonus"
+                                                       type="number" value="0">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -88,6 +122,7 @@
                 <th scope="col" class="text-center" style="width: 5%">Formule</th>
                 <th scope="col" class="text-center" style="width: 5%">Valeur</th>
                 <th scope="col" style="min-width: 300px; width: 75%">Effet</th>
+                <th scope="col" class="text-center"></th>
             </tr>
             </thead>
             <tbody id="roll-table" class="sortable-list">
@@ -118,6 +153,44 @@
                 <td class="md-form my-0 py-0 align-middle">
                     <input id="roll-x-effect" class="roll-effect form-control" type="text">
                     <label for="roll-x-effect"></label>
+                </td>
+                <td class="md-form m-0 p-0 align-middle">
+                    <div id="roll-x-show-details" data-toggle="tooltip" data-placement="top"
+                         title="Voir les détails du test"
+                         class="btn btn-link rounded-lg mx-0 my-0 py-2 px-2">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <div class="container">
+                        <div class="modal fade bd-modal-lg" id="roll-x-details" tabindex="-1" role="dialog"
+                             aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header justify-content-center">
+                                        <h4 id="roll-x-details-title"></h4>
+                                    </div>
+                                    <div class="modal-body align-middle">
+                                        <span id="roll-x-details-effect" class="row col-12 mx-1"></span>
+                                        <hr/>
+                                        <div class="row col-12 mx-1">
+                                            Modificateur permanent à appliquer au test
+                                            {% if universe == med_fantasy %}
+                                                <br/>
+                                                (par exemple, les elfes et les nains ont un malus de -1 aux tests de
+                                                résistance magique)
+                                            {% endif %}
+                                        </div>
+                                        <div class="row mx-1 md-form col-md-2 py-0 my-0 mt-2">
+                                            <label class="py-0 my-0" for="roll-x-details-bonus">
+                                            </label>
+                                            <input class="form-control py-0 my-0 text-center"
+                                                   id="roll-x-details-bonus"
+                                                   type="number" value="0">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </td>
             </tr>
             </tbody>

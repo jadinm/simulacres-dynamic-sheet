@@ -221,7 +221,8 @@ class TalentRoll extends Roll {
     constructor(reason = "", max_value = NaN, talent_level = 0, effect = "",
                 critical_increase = 0, formula_elements = [], margin_throttle = NaN,
                 is_magic = false, is_power = false, distance = "", focus = "",
-                duration = "", base_energy_cost = 0) {
+                duration = "", base_energy_cost = 0, black_magic = "",
+                magic_resistance = "") {
         super()
         this.reason = reason
         this.formula_elements = formula_elements
@@ -241,6 +242,8 @@ class TalentRoll extends Roll {
         this.base_energy_cost = parseInt(base_energy_cost)
         if (isNaN(this.base_energy_cost))
             this.base_energy_cost = 0
+        this.black_magic = black_magic ? black_magic : ""
+        this.magic_resistance = magic_resistance ? magic_resistance : ""
 
         this.invested_energies = []
         this.critical_increase = critical_increase
@@ -736,6 +739,12 @@ class TalentRoll extends Roll {
             })
             effect = "<div class='row mx-1 align-middle'>Durée de concentration: " + focus + "</div>" + effect
         }
+        if (this.magic_resistance.length > 0) {
+            effect = "<div class='row mx-1 align-middle'>Résistance: " + this.magic_resistance + "</div>" + effect
+        }
+        if (this.black_magic.length > 0) {
+            effect = "<div class='row mx-1 align-middle'>Magie noire: " + this.black_magic + "</div>" + effect
+        }
 
         // Update with the MR if "MR" is in the text
         $("#roll-dialog-effect").html(effect)
@@ -765,7 +774,7 @@ class TalentRoll extends Roll {
     reroll() {
         new this.constructor(this.reason, this.max_value, this.talent_level, this.effect, this.critical_increase,
             this.formula_elements, this.margin_throttle, this.is_magic, this.is_power, this.distance, this.focus,
-            this.duration).trigger_roll()
+            this.duration, this.base_energy_cost, this.black_magic, this.magic_resistance).trigger_roll()
     }
 }
 
@@ -940,8 +949,10 @@ class SuperpowerRoll extends TalentRoll {
 
 class FocusMagicRoll extends TalentRoll {
     constructor(reason = "", max_value = NaN, level = 0, effect = "",
-                distance = "", focus = "", duration = "", base_energy_cost = 0) {
-        super(reason, max_value, level, effect, 0, [], NaN, true, true, distance, focus, duration, base_energy_cost)
+                distance = "", focus = "", duration = "", base_energy_cost = 0,
+                black_magic = "", magic_resistance = "") {
+        super(reason, max_value, level, effect, 0, [], NaN, true, true, distance, focus, duration, base_energy_cost,
+            black_magic, magic_resistance)
         this.energy_investment_validated = !has_any_base_energy() // Cannot invest in energies when using a focus object
         this.margin_dices = []
     }
@@ -1045,8 +1056,9 @@ class PsiRoll extends TalentRoll {
 
 class GoodNatureEvilMagicRoll extends TalentRoll {
     constructor(reason = "", effect = "", distance = "", focus = "", duration = "",
-                base_energy_cost = 0) {
-        super(reason, NaN, 0, effect, 0, [], NaN, true, true, distance, focus, duration, base_energy_cost)
+                base_energy_cost = 0, black_magic = "", magic_resistance = "") {
+        super(reason, NaN, 0, effect, 0, [], NaN, true, true, distance, focus, duration, base_energy_cost,
+            black_magic, magic_resistance)
         this.energy_investment_validated = !has_any_base_energy() // Cannot invest in energies when using a focus object
         this.margin_dices = []
         this.precision_dices = []

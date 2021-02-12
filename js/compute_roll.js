@@ -58,6 +58,11 @@ class RollRow extends DataRow {
             return
         talent = talent.val()
 
+        const bonus = this.get("details-bonus")
+        if (bonus.length > 0 && !isNaN(parseInt(bonus.val()))) {
+            sum += parseInt(bonus.val())
+        }
+
         const talent_div = talent_from_name(talent)
         if (talent.length !== 0 && talent_div.length !== 0) {
             const level = talent_level(talent_div[0])
@@ -88,30 +93,36 @@ class RollRow extends DataRow {
         this.get("dice")[0].removeAttribute("hidden")
     }
 
+    roll_reason() {
+        const talent = this.get("talent").find("option:selected").val()
+        const tap_talent_select = this.get("tap-talent")
+        if (tap_talent_select.length > 0) {
+            const tap_talent = tap_talent_select.find("option:selected").val()
+            return "Combat à deux armes: " + talent + " & " + tap_talent
+        }
+        return talent
+    }
+
     roll(button) {
         // Find either spell difficulty or talent level to detect critical rolls
         let difficulty
-        let roll_reason
         let critical_increase = 0
         const formula_elements = this.compute_formula()[1]
         let margin_throttle = NaN
         const talent_select = this.get("talent")
         const talent = talent_select.find("option:selected").val()
         difficulty = parseInt(talent_level(talent_from_name(talent)))
-        roll_reason = talent
 
         // Dual wielding
         const tap_talent_select = this.get("tap-talent")
         if (tap_talent_select.length > 0) {
-            const tap_talent = tap_talent_select.find("option:selected").val()
-            roll_reason = "Combat à deux armes: " + talent + " & " + tap_talent
             critical_increase += 1
         }
         difficulty = isNaN(difficulty) ? 0 : difficulty
 
         // Do the actual roll
         const value = parseInt(this.get("value").text())
-        new TalentRoll(roll_reason, value, difficulty, this.get("effect").val(),
+        new TalentRoll(this.roll_reason(), value, difficulty, this.get("effect").val(),
             critical_increase, formula_elements, margin_throttle, false, false,
             "", "").trigger_roll()
         $('#roll-dialog').modal()
@@ -163,6 +174,11 @@ class SpellRow extends RollRow {
             const formula = this.compute_formula(realm)[0]
             sum += formula
 
+            const bonus = this.get("details-bonus", dice_div)
+            if (bonus.length > 0 && !isNaN(parseInt(bonus.val()))) {
+                sum += parseInt(bonus.val())
+            }
+
             // Recover difficulty
             const difficulty = this.get("difficulty", dice_div).text()
             if (difficulty)
@@ -212,10 +228,17 @@ class SpellRow extends RollRow {
         return this.get("level", button).val()
     }
 
+    roll_reason() {
+        if (!this.is_talent_based_spell()) { // Spell
+            return this.get("name").val()
+        }
+        const talent_select = this.get("talent")
+        return talent_select.find("option:selected").val()
+    }
+
     roll(button) {
         // Find either spell difficulty or talent level to detect critical rolls
         let difficulty
-        let roll_reason
         let critical_increase = 0
         const realm = this.realm(button)
         const spell_difficulty = this.get("difficulty", button)
@@ -223,13 +246,11 @@ class SpellRow extends RollRow {
         let margin_throttle = NaN
         if (!this.is_talent_based_spell()) { // Spell
             difficulty = parseInt(spell_difficulty.text())
-            roll_reason = this.get("name", button).val()
             margin_throttle = this.is_instinctive_magic(button[0]) ? 1 : NaN
         } else { // Talent
             const talent_select = this.get("talent", button)
             const talent = talent_select.find("option:selected").val()
             difficulty = parseInt(talent_level(talent_from_name(talent)))
-            roll_reason = talent
         }
         let spell_distance = this.get("distance", button).val()
         let spell_focus = this.get("time", button).val()
@@ -239,14 +260,18 @@ class SpellRow extends RollRow {
 
         // Do the actual roll
         if (this.is_evil_nature_good()) {
-            new GoodNatureEvilMagicRoll(roll_reason, this.get("effect", button).val(),
-                spell_distance, spell_focus, spell_duration, spell_level).trigger_roll()
+            new GoodNatureEvilMagicRoll(this.roll_reason(), this.get("effect", button).val(),
+                spell_distance, spell_focus, spell_duration, spell_level,
+                this.get("details-black-magic", button).val(),
+                this.get("details-resistance", button).val()).trigger_roll()
         } else {
             const value = parseInt(this.get("value", button).text())
             const type = this.data[0].id.includes("psi-") ? PsiRoll : TalentRoll
-            new type(roll_reason, value, difficulty, this.get("effect", button).val(),
+            new type(this.roll_reason(), value, difficulty, this.get("effect", button).val(),
                 critical_increase, formula_elements, margin_throttle, this.data.hasClass("spell"),
-                true, spell_distance, spell_focus, spell_duration, spell_level).trigger_roll()
+                true, spell_distance, spell_focus, spell_duration, spell_level,
+                this.get("details-black-magic", button).val(),
+                this.get("details-resistance", button).val()).trigger_roll()
         }
         $('#roll-dialog').modal()
     }
@@ -448,10 +473,13 @@ class SuperpowerRow extends RollRow {
         this.get("under-value").text(Math.max(0, under_value))
     }
 
+    roll_reason() {
+        return this.get("name").val()
+    }
+
     roll(button) {
         // Find either spell difficulty or talent level to detect critical rolls
         const formula_elements = this.compute_formula()[1]
-        const roll_reason = this.get("name").val()
         let nbr_dices = parseInt(this.get("nbr-dices").text())
         if (isNaN(nbr_dices)) {
             nbr_dices = 0
@@ -465,7 +493,7 @@ class SuperpowerRow extends RollRow {
         let power_duration = this.get("duration").val()
 
         // Do the actual roll
-        new SuperpowerRoll(roll_reason, nbr_dices, under_value, formula_elements, power_distance, power_focus,
+        new SuperpowerRoll(this.roll_reason(), nbr_dices, under_value, formula_elements, power_distance, power_focus,
             power_duration, this.get("effect").val()).trigger_roll()
         $('#roll-dialog').modal()
     }
@@ -491,6 +519,30 @@ class TalentRollTable extends DataTable {
         row_of(e.target).update_roll_value()
     }
 
+    view_details(_) {
+        const row = row_of(this)
+        row.get("details-title").text(row.roll_reason())
+        let text = ""
+        const focus = row.get("time")
+        if (focus.length > 0)
+            text += "Concentration: " + focus.val() + "<br/>"
+        const distance = row.get("distance")
+        if (distance.length > 0)
+            text += "Portée: " + distance.val() + "<br/>"
+        const duration = row.get("duration")
+        if (duration.length > 0)
+            text += "Durée: " + duration.val() + "<br/>"
+        const effect = row.get("effect")
+        if (effect.length > 0)
+            text += "Effet: " + effect.val()
+        row.get("details-effect").html(text)
+        row.get("details").modal()
+    }
+
+    update_value(e) {
+        row_of(e.target).update_roll_value()
+    }
+
     add_custom_listener_to_row(row) {
         super.add_custom_listener_to_row(row)
         add_save_to_dom_listeners(row.data)
@@ -500,6 +552,8 @@ class TalentRollTable extends DataTable {
         row.data.find("select.talent-select").each((i, elem) => {
             $(elem).selectpicker()
         })
+        row.get("show-details").uon("click", this.view_details).tooltip()
+        row.get("details-bonus").uon("change", this.update_value)
     }
 
     clone_row() {
@@ -547,7 +601,7 @@ class SpellRollTable extends TalentRollTable {
         })
     }
 
-    update_spell_value(event) {
+    update_value(event) {
         row_of(event.target).update_roll_value()
     }
 
@@ -561,8 +615,8 @@ class SpellRollTable extends TalentRollTable {
         row.data.find(".spell-level").uon("change", this.update_level)
         row.data.find("select.spell-list").uon("changed.bs.select", this.update_list)
         row.data.find(".spell-difficulty-input").uon("change", this.update_difficulty_slider)
-        row.data.find(".hermetic-difficulty").uon("change", this.update_spell_value)
-        row.data.find(".hermetic-mr-learning").uon("change", this.update_spell_value)
+        row.data.find(".hermetic-difficulty").uon("change", this.update_value)
+        row.data.find(".hermetic-mr-learning").uon("change", this.update_value)
 
         row.data.find("[id*=\"-difficulty-input\"").each((i, elem) => {
             activate_slider(elem, this.show_difficulty_builder)
@@ -651,14 +705,14 @@ class SuperpowerRollTable extends TalentRollTable {
         })
     }
 
-    input_change(e) {
+    update_value(e) {
         row_of(e.target).update_roll_value()
     }
 
     add_custom_listener_to_row(row) {
         super.add_custom_listener_to_row(row)
-        row.get("component-modifier").uon("change", this.input_change)
-        row.get("means-modifier").uon("change", this.input_change)
+        row.get("component-modifier").uon("change", this.update_value)
+        row.get("means-modifier").uon("change", this.update_value)
     }
 
     clone_row() {
@@ -710,6 +764,11 @@ class FocusMagicRow extends SpellRow {
             let sum = 0
             sum += get_unease()
 
+            const bonus = this.get("details-bonus")
+            if (bonus.length > 0 && !isNaN(parseInt(bonus.val()))) {
+                sum += parseInt(bonus.val())
+            }
+
             // Recover component, means and realm
             const formula = this.compute_formula()[0]
             sum += formula
@@ -727,9 +786,12 @@ class FocusMagicRow extends SpellRow {
         })
     }
 
+    roll_reason() {
+        return this.get("name").val()
+    }
+
     roll(button) {
         // Find either spell difficulty or talent level to detect critical rolls
-        let roll_reason = this.get("name").val()
         let spell_distance = this.get("distance").val()
         let spell_focus = this.get("time").val()
         let spell_duration = this.get("duration").val()
@@ -739,8 +801,9 @@ class FocusMagicRow extends SpellRow {
         const value = parseInt(this.get("value").text())
         let level = this.constructor.magic_talent_level()
         level = !isNaN(level) ? level : 0
-        new FocusMagicRoll(roll_reason, value, level, this.get("effect").val(), spell_distance, spell_focus,
-            spell_duration, spell_level).trigger_roll()
+        new FocusMagicRoll(this.roll_reason(), value, level, this.get("effect").val(), spell_distance,
+            spell_focus, spell_duration, spell_level, this.get("details-black-magic", button).val(),
+            this.get("details-resistance", button).val()).trigger_roll()
         $('#roll-dialog').modal()
     }
 }

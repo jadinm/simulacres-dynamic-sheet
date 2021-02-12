@@ -353,6 +353,7 @@
                     <th scope="col" class="text-center" style="width: 5%">Portée</th>
                     <th scope="col" class="text-center" style="width: 5%">Durée</th>
                     <th scope="col" style="width: 45%">Effet</th>
+                    <th scope="col" class="text-center"></th>
                 </tr>
                 </thead>
                 <tbody id="spell-table" class="sortable-list">
@@ -468,6 +469,16 @@
                         <input id="spell-x-effect" class="spell-effect form-control" type="text">
                         <label for="spell-x-effect"></label>
                     </td>
+                    <td class="md-form m-0 p-0 align-middle">
+                        <div id="spell-x-show-details" data-toggle="tooltip" data-placement="top"
+                             title="Voir les détails du test"
+                             class="btn btn-link rounded-lg mx-0 my-0 py-2 px-2">
+                            <i class="fas fa-cogs"></i>
+                        </div>
+                        {% with row_type = "spell" %}
+                            {% include "spell_modal.html" %}
+                        {% endwith %}
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -508,6 +519,7 @@
                     <th scope="col" class="text-center" style="width: 5%">Portée</th>
                     <th scope="col" class="text-center" style="width: 5%">Durée</th>
                     <th scope="col" style="width: 57.5%">Effet</th>
+                    <th scope="col" class="text-center"></th>
                 </tr>
                 </thead>
                 <tbody id="focusMagic-table" class="sortable-list">
@@ -553,6 +565,16 @@
                     <td class="md-form my-0 py-0 align-middle">
                         <input id="focusMagic-x-effect" class="focusMagic-effect form-control" type="text">
                         <label for="focusMagic-x-effect"></label>
+                    </td>
+                    <td class="md-form m-0 p-0 align-middle">
+                        <div id="focusMagic-x-show-details" data-toggle="tooltip" data-placement="top"
+                             title="Voir les détails du test"
+                             class="btn btn-link rounded-lg mx-0 my-0 py-2 px-2">
+                            <i class="fas fa-cogs"></i>
+                        </div>
+                        {% with row_type = "focusMagic" %}
+                            {% include "spell_modal.html" %}
+                        {% endwith %}
                     </td>
                 </tr>
                 </tbody>

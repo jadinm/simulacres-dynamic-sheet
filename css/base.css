@@ -56,3 +56,7 @@ footer {
     background-color: transparent !important;
     border-image: var(--lightModeBorder) 15% fill / 65px 65px / 0.05rem round !important;
 }
+
+.modal {
+    font-size: 1rem;
+}

@@ -30,6 +30,7 @@
                 <th scope="col" class="text-center" style="width: 5%">Portée</th>
                 <th scope="col" class="text-center" style="width: 5%">Durée</th>
                 <th scope="col" style="width: 55%">Effet</th>
+                <th scope="col" class="text-center"></th>
             </tr>
             </thead>
             <tbody id="psi-table" class="sortable-list">
@@ -107,6 +108,39 @@
                 <td class="md-form my-0 py-0 align-middle">
                     <input id="psi-x-effect" class="spell-effect form-control" type="text">
                     <label for="psi-x-effect"></label>
+                </td>
+                <td class="md-form m-0 p-0 align-middle">
+                    <div id="psi-x-show-details" data-toggle="tooltip" data-placement="top"
+                         title="Voir les détails du test"
+                         class="btn btn-link rounded-lg mx-0 my-0 py-2 px-2">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <div class="container">
+                        <div class="modal fade bd-modal-lg" id="psi-x-details" tabindex="-1" role="dialog"
+                             aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header justify-content-center">
+                                        <h4 id="psi-x-details-title"></h4>
+                                    </div>
+                                    <div class="modal-body align-middle">
+                                        <span id="psi-x-details-effect" class="row col-12 mx-1"></span>
+                                        <hr/>
+                                        <div class="row col-12 mx-1">
+                                            Modificateur permanent à appliquer au test
+                                        </div>
+                                        <div class="row mx-1 md-form col-md-2 py-0 my-0 mt-2">
+                                            <label class="py-0 my-0" for="psi-x-details-bonus">
+                                            </label>
+                                            <input class="form-control py-0 my-0 text-center"
+                                                   id="psi-x-details-bonus"
+                                                   type="number" value="0">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </td>
             </tr>
             </tbody>
