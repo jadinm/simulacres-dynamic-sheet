@@ -1188,17 +1188,9 @@ function slider_value_changed_event(e) {
         timed_update_roll_trigger()
     } else if (input.id === "roll-dialog-effect-modifier") {
         current_roll.effect_modifier = modifier
+        current_roll.show_roll(true)
         timed_update_roll_trigger()
     }
-
-    // Update with scaled effect in the text
-    $(".roll-dialog-effect").each((i, elem) => {
-        const column = elem.getAttribute("column")
-        let column_modifier = elem.getAttribute("modifier")
-        column_modifier = column_modifier.length > 0 ? parseInt(column_modifier) : 0
-        const effect_value = current_roll.column_effect(column, column_modifier)
-        $(elem).html(effect_value)
-    })
 }
 
 $(_ => {
