@@ -296,7 +296,7 @@ class TalentRoll extends Roll {
         if (this.post_test_margin() <= 0 || total < 0)
             return 0
         if (total > 26) {
-            const additional_ranges = Math.floor((total - 26) / 4) + 1
+            const additional_ranges = Math.ceil((total - 26) / 4)
             return effect_table[column][26] + effect_upgrade[column] * additional_ranges
         }
         return effect_table[column][total]
