@@ -535,8 +535,8 @@ class TalentRoll extends Roll {
                     + this.dice_buttons("effect_dices", this.effect_dices) + "</div>"
             } else if (!discovery) {
                 // DSS = MR // 3 and DES = 0 or (1 if 4 <= ME <= 6) or (2 if ME >= 7)
-                effect_text += "<div class='row mx-1 align-middle'>DSS =&nbsp;<span class='roll-dialog-dss'>" + this.dss()
-                    + "</span></div><div class='row mx-1 align-middle'>DES =&nbsp;<span class='roll-dialog-des'>" + this.des() + "</span></div>"
+                effect_text += "<div class='row mx-1 align-middle'>DSS =&nbsp;" + this.dss()
+                    + "</div><div class='row mx-1 align-middle'>DES =&nbsp;" + this.des() + "</div>"
             }
         }
 
@@ -701,27 +701,21 @@ class TalentRoll extends Roll {
             if (is_v7) {
                 // Show the actual effect instead of [A] or [B+2]
                 effect = effect.replaceAll(effect_column_regex, (match, prefix, column, modifier, suffix) => {
-                    prefix = prefix.replace(" ", "&nbsp;")
                     modifier = typeof modifier === "undefined" ? 0 : parseInt(modifier.replaceAll(" ", ""))
                     const effect_value = this.is_success() ? this.column_effect(column, modifier) : 0
-                    suffix = suffix.replace(" ", "&nbsp;")
-                    return prefix + "<span class='roll-dialog-effect' column='" + column + "' " + "modifier='" + modifier + "'>" + effect_value + "</span>" + suffix
+                    return prefix.replace(" ", "&nbsp;") + effect_value + suffix.replace(" ", "&nbsp;")
                 })
             } else {
                 // Update with the DSS if "DSS" is in the text
                 effect = effect.replaceAll(effect_dss_regex, (match, prefix, _, suffix) => {
-                    return prefix.replace(" ", "&nbsp;") + "<span class='roll-dialog-dss'>" + this.dss() + "</span>"
-                        + suffix.replace(" ", "&nbsp;")
+                    return prefix.replace(" ", "&nbsp;") + this.dss() + suffix.replace(" ", "&nbsp;")
                 })
                 effect = effect.replaceAll(effect_des_regex, (match, prefix, _, suffix) => {
-                    return prefix.replace(" ", "&nbsp;") + "<span class='roll-dialog-des'>" + this.des() + "</span>"
-                        + suffix.replace(" ", "&nbsp;")
+                    return prefix.replace(" ", "&nbsp;") + this.des() + suffix.replace(" ", "&nbsp;")
                 })
             }
             effect = effect.replaceAll(effect_margin_regex, (match, prefix, _, suffix) => {
-                return prefix.replace(" ", "&nbsp;")
-                    + "<span class='roll-dialog-margin'>" + this.post_test_margin() + "</span>"
-                    + suffix.replace(" ", "&nbsp;")
+                return prefix.replace(" ", "&nbsp;") + this.post_test_margin() + suffix.replace(" ", "&nbsp;")
             });
         }
         effect += "</div>"
