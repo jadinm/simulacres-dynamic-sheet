@@ -224,72 +224,182 @@
                         <div id="roll-dialog-1d6-result" class="mt-3"></div>
                     </div>
                     <hr/>
-                    {% if version == V7 %}
-                        <ul class="nav nav-tabs" role="tablist">
-                            {% if localisation %}
-                                <li class="nav-item">
-                                    <a class="nav-link active" data-toggle="tab" href="#localization-tab" role="tab"
-                                       aria-controls="localization-tab" aria-selected="true">
-                                        Localisation
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#damage-tab" role="tab"
-                                       aria-controls="damage-tab" aria-selected="false">
-                                        Table des dégâts et effets
-                                    </a>
-                                </li>
-                            {% else %}
-                                <li class="nav-item">
-                                    <a class="nav-link active" data-toggle="tab" href="#damage-tab" role="tab"
-                                       aria-controls="damage-tab" aria-selected="false">
-                                        Table des dégâts et effets
-                                    </a>
-                                </li>
-                            {% endif %}
-                        </ul>
+                    <ul class="nav nav-tabs" role="tablist">
+                        {% if localisation %}
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#localization-tab" role="tab"
+                                   aria-controls="localization-tab" aria-selected="true">
+                                    Localisation
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#damage-tab" role="tab"
+                                   aria-controls="damage-tab" aria-selected="false">
+                                    Table des dégâts et effets
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#range-tab" role="tab"
+                                   aria-controls="range-tab" aria-selected="false">
+                                    Portée
+                                </a>
+                            </li>
+                        {% elif version == V7 %}
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#damage-tab" role="tab"
+                                   aria-controls="damage-tab" aria-selected="true">
+                                    Table des dégâts et effets
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#range-tab" role="tab"
+                                   aria-controls="range-tab" aria-selected="false">
+                                    Portée
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#range-tab" role="tab"
+                                   aria-controls="range-tab" aria-selected="true">
+                                    Portée
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
 
-                        <div class="tab-content">
-                            {% if localisation %}
-                                <div id="localization-tab" class="tab-pane fade show active row mx-1">
-                                    <div style="white-space: pre-line;">
-                                        1: La tête
-                                        2: Le torse
-                                        3: Le torse au contact, le bras droit à distance
-                                        4: Le bras droit au contact, le bras gauche à distance
-                                        5: Le bras gauche au contact, la jambe droite à distance
-                                        6: Une des jambes au contact* et la jambe gauche à distance
-
-                                        Sur un 6, au contact, il faut relancer 1d6. Si le résultat est pair, il s'agit
-                                        de la droite et sinon la gauche.
-                                    </div>
-                                </div>
-                                {% set active = "" %}
-                            {% else %}
-                                {% set active = "show active" %}
-                            {% endif %}
-                            <div id="damage-tab" class="tab-pane {{ active }} fade row mx-1">
+                    <div class="tab-content">
+                        {% if localisation %}
+                            <div id="localization-tab" class="tab-pane fade show active row mx-1">
                                 <div class="table-responsive col-12" style="overflow-y: hidden !important;">
                                     <table class="table table-hover table-bordered table-striped my-1">
                                         <thead>
                                         <tr>
-                                            <th scope="col" class="col-1 text-center" style="white-space: nowrap">
-                                                MR+2d6
+                                            <th scope="col" class="text-center align-middle" style="width: 20%">
+                                                1d6
                                             </th>
-                                            <th scope="col" class="col-1 text-center">A</th>
-                                            <th scope="col" class="col-1 text-center">B</th>
-                                            <th scope="col" class="col-1 text-center">C</th>
-                                            <th scope="col" class="col-1 text-center">D</th>
-                                            <th scope="col" class="col-1 text-center">E</th>
-                                            <th scope="col" class="col-1 text-center">F</th>
-                                            <th scope="col" class="col-1 text-center">G</th>
-                                            <th scope="col" class="col-1 text-center">H</th>
-                                            <th scope="col" class="col-1 text-center">I</th>
-                                            <th scope="col" class="col-1 text-center">J</th>
-                                            <th scope="col" class="col-1 text-center">K</th>
+                                            <th scope="col" class="text-center align-middle" style="width: 20%">
+                                                Contact sans viser
+                                            </th>
+                                            <th scope="col" class="text-center align-middle" style="width: 20%">
+                                                Distance sans viser
+                                            </th>
+                                            <th scope="col" class="text-center align-middle" style="width: 20%">
+                                                Viser le haut (-2)
+                                            </th>
+                                            <th scope="col" class="text-center align-middle" style="width: 20%">
+                                                Viser le bas (-2)
+                                            </th>
                                         </tr>
                                         </thead>
-                                        <tbody id="damage-table" class="sortable-list">
+                                        <tbody>
+                                        <tr>
+                                            <th class="text-center">1</th>
+                                            <td class="text-center">Tête</td>
+                                            <td class="text-center">Tête</td>
+                                            <td class="text-center">Bras gauche</td>
+                                            <td class="text-center">Jambe gauche</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center">2</td>
+                                            <td class="text-center">Torse</td>
+                                            <td class="text-center">Torse</td>
+                                            <td class="text-center">Bras gauche</td>
+                                            <td class="text-center">Jambe gauche</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center">3</td>
+                                            <td class="text-center">Torse</td>
+                                            <td class="text-center">Bras gauche</td>
+                                            <td class="text-center">Torse</td>
+                                            <td class="text-center">Jambe gauche</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center">4</td>
+                                            <td class="text-center">Bras gauche</td>
+                                            <td class="text-center">Bras droite</td>
+                                            <td class="text-center">Torse</td>
+                                            <td class="text-center">Jambe droite</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center">5</td>
+                                            <td class="text-center">Bras droite</td>
+                                            <td class="text-center">Jambe gauche</td>
+                                            <td class="text-center">Bras droite</td>
+                                            <td class="text-center">Jambe droite</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center">6 pair/impair</td>
+                                            <td class="text-center">Jambe gauche/droite</td>
+                                            <td class="text-center">Jambe droite</td>
+                                            <td class="text-center">Bras droite</td>
+                                            <td class="text-center">Jambe droite</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="row col-12 mx-1 mt-2">Malus pour viser</div>
+                                <div class="table-responsive col-12" style="overflow-y: hidden !important;">
+                                    <table class="table table-hover table-bordered table-striped my-1">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col" class="col-3 text-center align-middle"
+                                                style="width: 25%">
+                                                Le haut/le bas
+                                            </th>
+                                            <th scope="col" class="col-3 text-center align-middle"
+                                                style="width: 25%">
+                                                La tête et le bras d'arme au contact
+                                            </th>
+                                            <th scope="col" class="col-3 text-center align-middle"
+                                                style="width: 25%">
+                                                Une autre zone au contact
+                                            </th>
+                                            <th scope="col" class="col-3 text-center align-middle"
+                                                style="width: 25%">
+                                                Une zone à distance
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td class="text-center">-2</td>
+                                            <td class="text-center">-4</td>
+                                            <td class="text-center">-3</td>
+                                            <td class="text-center">-4</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            {% set damage_active = "" %}
+                        {% else %}
+                            {% set damage_active = "show active" %}
+                        {% endif %}
+                        {% if version == V7 %}
+                            <div id="damage-tab" class="tab-pane {{ damage_active }} fade row mx-1">
+                                <div class="table-responsive col-12" style="overflow-y: hidden !important;">
+                                    <table class="table table-hover table-bordered table-striped my-1">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col" class="col-1 text-center"
+                                                style="white-space: nowrap; width: 8.3%">
+                                                MR+2d6
+                                            </th>
+                                            <th scope="col" class="col-1 text-center" style="width: 8.3%">A</th>
+                                            <th scope="col" class="col-1 text-center" style="width: 8.3%">B</th>
+                                            <th scope="col" class="col-1 text-center" style="width: 8.3%">C</th>
+                                            <th scope="col" class="col-1 text-center" style="width: 8.3%">D</th>
+                                            <th scope="col" class="col-1 text-center" style="width: 8.3%">E</th>
+                                            <th scope="col" class="col-1 text-center" style="width: 8.3%">F</th>
+                                            <th scope="col" class="col-1 text-center" style="width: 8.3%">G</th>
+                                            <th scope="col" class="col-1 text-center" style="width: 8.3%">H</th>
+                                            <th scope="col" class="col-1 text-center" style="width: 8.3%">I</th>
+                                            <th scope="col" class="col-1 text-center" style="width: 8.3%">J</th>
+                                            <th scope="col" class="col-1 text-center" style="width: 8.3%">K</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
                                         <tr>
                                             <th class="text-center">3</th>
                                             <td class="text-center">0</td>
@@ -420,8 +530,98 @@
                                     </table>
                                 </div>
                             </div>
+                            {% set range_active = "" %}
+                        {% else %}
+                            {% set range_active = "show active" %}
+                        {% endif %}
+                        <div id="range-tab" class="tab-pane {{ range_active }} fade row mx-1">
+                            {% if version == V8 %}
+                                <div class="table-responsive col-12" style="overflow-y: hidden !important;">
+                                    <table class="table table-hover table-bordered table-striped my-1">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col" class="col-3 text-center align-middle" style="width: 16.6%">
+                                            </th>
+                                            <th scope="col" class="col-3 text-center align-middle"
+                                                style="width: 16.6%">
+                                                Bout portant
+                                            </th>
+                                            <th scope="col" class="col-3 text-center align-middle"
+                                                style="width: 16.6%">
+                                                Près
+                                            </th>
+                                            <th scope="col" class="col-3 text-center align-middle"
+                                                style="width: 16.6%">
+                                                Normal
+                                            </th>
+                                            <th scope="col" class="col-3 text-center align-middle"
+                                                style="width: 16.6%">
+                                                Loin
+                                            </th>
+                                            <th scope="col" class="col-3 text-center align-middle"
+                                                style="width: 16.6%">
+                                                Très loin
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <th class="text-center align-middle">Difficulté du test</th>
+                                            <td class="text-center align-middle">+4</td>
+                                            <td class="text-center align-middle">+2</td>
+                                            <td class="text-center align-middle">0</td>
+                                            <td class="text-center align-middle">-2</td>
+                                            <td class="text-center align-middle">-4</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% else %}
+                                <div class="table-responsive col-12" style="overflow-y: hidden !important;">
+                                    <table class="table table-hover table-bordered table-striped my-1">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col" class="col-3 text-center align-middle" style="width: 16.6%">
+                                            </th>
+                                            <th scope="col" class="col-3 text-center align-middle"
+                                                style="width: 20%">
+                                                Bout portant
+                                            </th>
+                                            <th scope="col" class="col-3 text-center align-middle"
+                                                style="width: 20%">
+                                                Normal
+                                            </th>
+                                            <th scope="col" class="col-3 text-center align-middle"
+                                                style="width: 20%">
+                                                Loin
+                                            </th>
+                                            <th scope="col" class="col-3 text-center align-middle"
+                                                style="width: 20%">
+                                                Très loin
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <th class="text-center align-middle">Colonne de dégâts</th>
+                                            <td class="text-center align-middle">+2 colonnes</td>
+                                            <td class="text-center align-middle">-</td>
+                                            <td class="text-center align-middle">-1 colonne</td>
+                                            <td class="text-center align-middle">-2 colonnes</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-center align-middle">Difficulté du test</th>
+                                            <td class="text-center align-middle">selon les circonstances</td>
+                                            <td class="text-center align-middle">0</td>
+                                            <td class="text-center align-middle">-2</td>
+                                            <td class="text-center align-middle">-4</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% endif %}
                         </div>
-                    {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
