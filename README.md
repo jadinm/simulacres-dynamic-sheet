@@ -275,18 +275,19 @@ Dans l'exemple suivant, "Albus Haupenroll" lance 2d6 :
   // [...] Les champs déjà mentionnés à la section précédente
   "reason": "Épée longue", // Le nom du sort ou du talent
   "formula_elements": ["body", "action", "mechanical"],
-  "max_value": 12, // La valeur seuil, incluant le malaise dans la nouvelle version mais n'inculant pas les modificateurs, pratiques magiques ou investissement en énergie
+  "max_value": 12, // La valeur seuil, incluant le malaise dans la nouvelle version mais n'incluant pas les modificateurs, pratiques magiques ou investissement en énergie
   "threshold": 11, // La valeur seuil incluant tout
   "margin": 4, // La marge calculée bien et incluant tout
   "critical_success": false,
   "critical_failure": false,
   "margin_throttle": 0, // Utile pour la magie instinctive dont la marge est limitée à 1
-  "talent_level": 0, // Niveau du talent ou difficulté du sort/pouvoir (bref, ce que t'utilise pour savoir si t'as un critique)
+  "talent_level": 0, // Niveau du talent ou difficulté du sort/pouvoir (pour savoir si c'est un critique)
   "effect": "[F] PV et [B] PS",
   "critical_dices": [], // Les dés rajoutés en cas de succès critique (si c'est pas un critique, la liste est vide)
   "effect_dices": [1, 5], // Les 2d6 lancés pour mesurer l'effet
+  "localisation_dices": [], // Si la localisation des PVs est activée, la valeur des deux dés de localisation s'y trouvera (le deuxième dé sert uniquement au contact si le premier dé est un 6)
   "is_magic": false, // Si c'est un sort => si on peut utiliser des composantes
-  "is_power": false, // true si c'est un sort/superpouvoir/pouvoir de moine
+  "is_power": false, // true si c'est un sort/super-pouvoir/pouvoir de moine
   "distance": "", // Si le pouvoir a une portée
   "focus": "", // Si le pouvoir a un temps de concentration
   "duration": "", // Si le pouvoir a une durée limitée

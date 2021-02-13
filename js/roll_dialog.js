@@ -178,6 +178,9 @@ class Roll {
             backward.removeClass("invisible")
         }
 
+        // Hide tab highlights
+        $(".localisation-row").removeClass("success-color-dark")
+
         this.modify_dialog(ignore_sliders)
 
         // Make dices clickable to reroll
@@ -233,6 +236,9 @@ class TalentRoll extends Roll {
         this.base_dices = []
         this.critical_dices = []
         this.effect_dices = []
+        this.localisation_dices = []
+        if (localized_hp)
+            this.roll_dices(2, 6, this.localisation_dices)
 
         this.is_magic = is_magic
         this.is_power = is_power || is_magic
@@ -533,6 +539,17 @@ class TalentRoll extends Roll {
                 effect_dices_sum = this.effect_value()
                 effect_text += "<div class='row mx-1 align-middle'>Dés d'effet = " + effect_dices_sum
                     + this.dice_buttons("effect_dices", this.effect_dices) + "</div>"
+                if (this.localisation_dices.length > 0) {
+                    effect_text += "<div class='row mx-1 align-middle'>"
+                    const localisation_six = this.localisation_dices[0] === 6
+                    effect_text += "Dé" + (localisation_six ? "s" : "") +  " de localisation ="
+                        + this.dice_buttons("localisation_dices",
+                            this.localisation_dices.slice(0, (localisation_six ? 2 : 1)))
+                    if (localisation_six) {
+                        effect_text += ((this.localisation_dices[1] % 2 === 0) ? "&nbsp;6 pair" : "&nbsp;6 impair")
+                    }
+                    effect_text += "</div>"
+                }
             } else if (!discovery) {
                 // DSS = MR // 3 and DES = 0 or (1 if 4 <= ME <= 6) or (2 if ME >= 7)
                 effect_text += "<div class='row mx-1 align-middle'>DSS =&nbsp;" + this.dss()
@@ -659,6 +676,8 @@ class TalentRoll extends Roll {
             result.html(this.post_test_margin())
 
             set_result_label(this.post_test_margin())
+
+            $("#localisation-row-" + this.localisation_dices[0]).addClass("success-color-dark")
         } else {
             result.html("")
             energy_inputs.removeAttr("disabled", "disabled")

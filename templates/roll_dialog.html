@@ -213,11 +213,7 @@
                          style="white-space: pre-line;"></div>
                     <hr/>
                     <div class="row mx-1">
-                        {% if version == V7 %}
-                            Le test nécessite parfois de lancer un autre dé, par exemple pour localiser l'effet:
-                        {% else %}
-                            Le test nécessite parfois de lancer un autre dé:
-                        {% endif %}
+                        Le test nécessite parfois de lancer un autre dé:
                     </div>
                     <div class="row mx-1">
                         <div id="roll-dialog-1d6" class="btn btn-info"><i class="fas fa-dice-six"></i></div>
@@ -227,8 +223,8 @@
                     <ul class="nav nav-tabs" role="tablist">
                         {% if localisation %}
                             <li class="nav-item">
-                                <a class="nav-link active" data-toggle="tab" href="#localization-tab" role="tab"
-                                   aria-controls="localization-tab" aria-selected="true">
+                                <a class="nav-link active" data-toggle="tab" href="#localisation-tab" role="tab"
+                                   aria-controls="localisation-tab" aria-selected="true">
                                     Localisation
                                 </a>
                             </li>
@@ -269,7 +265,7 @@
 
                     <div class="tab-content">
                         {% if localisation %}
-                            <div id="localization-tab" class="tab-pane fade show active row mx-1">
+                            <div id="localisation-tab" class="tab-pane fade show active row mx-1">
                                 <div class="table-responsive col-12" style="overflow-y: hidden !important;">
                                     <table class="table table-hover table-bordered table-striped my-1">
                                         <thead>
@@ -292,42 +288,42 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr>
+                                        <tr id="localisation-row-1" class="localisation-row">
                                             <th class="text-center">1</th>
                                             <td class="text-center">Tête</td>
                                             <td class="text-center">Tête</td>
                                             <td class="text-center">Bras gauche</td>
                                             <td class="text-center">Jambe gauche</td>
                                         </tr>
-                                        <tr>
+                                        <tr id="localisation-row-2" class="localisation-row">
                                             <td class="text-center">2</td>
                                             <td class="text-center">Torse</td>
                                             <td class="text-center">Torse</td>
                                             <td class="text-center">Bras gauche</td>
                                             <td class="text-center">Jambe gauche</td>
                                         </tr>
-                                        <tr>
+                                        <tr id="localisation-row-3" class="localisation-row">
                                             <td class="text-center">3</td>
                                             <td class="text-center">Torse</td>
                                             <td class="text-center">Bras gauche</td>
                                             <td class="text-center">Torse</td>
                                             <td class="text-center">Jambe gauche</td>
                                         </tr>
-                                        <tr>
+                                        <tr id="localisation-row-4" class="localisation-row">
                                             <td class="text-center">4</td>
                                             <td class="text-center">Bras gauche</td>
                                             <td class="text-center">Bras droite</td>
                                             <td class="text-center">Torse</td>
                                             <td class="text-center">Jambe droite</td>
                                         </tr>
-                                        <tr>
+                                        <tr id="localisation-row-5" class="localisation-row">
                                             <td class="text-center">5</td>
                                             <td class="text-center">Bras droite</td>
                                             <td class="text-center">Jambe gauche</td>
                                             <td class="text-center">Bras droite</td>
                                             <td class="text-center">Jambe droite</td>
                                         </tr>
-                                        <tr>
+                                        <tr id="localisation-row-6" class="localisation-row">
                                             <td class="text-center">6 pair/impair</td>
                                             <td class="text-center">Jambe gauche/droite</td>
                                             <td class="text-center">Jambe droite</td>
