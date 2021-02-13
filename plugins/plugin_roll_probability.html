@@ -1,4 +1,4 @@
-<script id="plugin-js-roll-probability" class="plugin-js" data-plugin-version="1.0.0">
+<script id="plugin-js-roll-probability" class="plugin-js" data-plugin-version="1.0.1">
     if (!window.hasOwnProperty('plugin_roll_probability_old_fn')) {
         // When we do not upgrade the plugin, fetch the roll function
         window.plugin_roll_probability_old_fn = {
@@ -34,14 +34,22 @@
             return count / combinations.length * 100
         }
 
-        function row_tab_probabilities() {
-            let text = ""
+        function row_tab_header() {
+            let text = "<thead><tr>"
             for (let i = 2; i <= 12; i++) {
-                text += "<div class='row col-12 d-flex justify-content-center m-0 p-0'><div class='col-2 m-0 p-0'>Sous "
-                    + i + "</div><div class='col-2 m-0 p-0'>"
-                    + probability_sum_below(i).toLocaleString("fr-BE", {maximumFractionDigits: 2}) + "%</div></div>"
+                text += "<th scope='col' class='text-center align-middle' style='width: 9.09%'>"
+                    + ((is_v7) ? "&le;" : "&lt;") + i + "</th>"
             }
-            return text
+            return text + "</tr></thead>"
+        }
+
+        function row_tab_probabilities() {
+            let text = "<tbody><tr>"
+            for (let i = 2; i <= 12; i++) {
+                text += "<td class='text-center align-middle'>"
+                    + probability_sum_below(i).toLocaleString("fr-BE", {maximumFractionDigits: 2}) + "%</td>"
+            }
+            return text + "</tr></tbody>"
         }
 
         /* Add tab for probabilities in roll dialog */
@@ -57,7 +65,9 @@
         const table = $("#roll-dialog .tab-content")
         table.find("#plugin-roll-probability-roll-dialog-tab").remove()
         table.append("<div id=\"plugin-roll-probability-roll-dialog-tab\" class=\"tab-pane fade row mx-1 pt-2\">" +
-            row_tab_probabilities() + "</div>")
+            "<div class=\"table-responsive col-12\" style=\"overflow-y: hidden !important;\">" +
+            "<table class=\"table table-hover table-bordered table-striped my-1\">" +
+            row_tab_header() + row_tab_probabilities() + "</table></div></div>")
 
         /* Add a function to execute after the update of the roll value */
         function probability_text(test_value) {
