@@ -554,6 +554,13 @@ class TalentRollTable extends DataTable {
         })
         row.get("show-details").uon("click", this.view_details).tooltip()
         row.get("details-bonus").uon("change", this.update_value)
+        if (row.get("tap-talent").length > 0) {
+            check_radio(row.get("body")[0])
+            check_radio(row.get("action")[0])
+            check_radio(row.get("mechanical")[0])
+            row.data.find(".formula-elem").attr("disabled", "disabled")
+            row.update_roll_value()
+        }
     }
 
     clone_row() {
