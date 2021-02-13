@@ -88,11 +88,11 @@ class Roll {
     }
 
     is_critical_failure() {
-        return this.dice_value() === 12
+        return this.dice_value() === 12 && this.type === 6 && this.number === 2
     }
 
     is_critical_success() {
-        return this.dice_value() <= 2
+        return this.dice_value() <= 2 && this.type === 6 && this.number === 2
     }
 
     dice_buttons(dice_group, dices = [], type = 6) {
