@@ -180,6 +180,7 @@ class Roll {
 
         // Hide tab highlights
         $(".localisation-row").removeClass("success-color-dark")
+        $("#damage-tab td").removeClass("success-color-dark")
 
         this.modify_dialog(ignore_sliders)
 
@@ -301,9 +302,30 @@ class TalentRoll extends Roll {
         const total = this.post_test_margin() + this.effect_value() + this.effect_modifier + modifier
         if (this.post_test_margin() <= 0 || total < 0)
             return 0
+
+        // Find the column index in the damage table
+        let column_idx = -1
+        $("#damage-tab thead th").each((i, elem) => {
+            if ($(elem).text() === column) {
+                column_idx = i
+            }
+        })
+
         if (total > 26) {
             const additional_ranges = Math.ceil((total - 26) / 4)
+            if (column_idx > 0) {
+                // Highlight the appropriate cell
+                $("#damage-tab tbody tr").last().find("td").eq(column_idx - 1).addClass("success-color-dark")
+            }
             return effect_table[column][26] + effect_upgrade[column] * additional_ranges
+        }
+
+        if (column_idx > 0) {
+            // Highlight the appropriate cell
+            $("#damage-tab tbody tr").filter((i, elem) => {
+                // Find the row matching the value
+                return $(elem).find("th").text().match(new RegExp("^(\\d+ )*" + total + "( \\d+)*$"))
+            }).find("td").eq(column_idx - 1).addClass("success-color-dark")
         }
         return effect_table[column][total]
     }
