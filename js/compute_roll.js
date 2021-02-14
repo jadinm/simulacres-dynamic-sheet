@@ -621,12 +621,12 @@ class SpellRollTable extends TalentRollTable {
         row.data.find(".spell-name").uon("change", this.update_spell_name)
         row.data.find(".spell-level").uon("change", this.update_level)
         row.data.find("select.spell-list").uon("changed.bs.select", this.update_list)
-        row.data.find(".spell-difficulty-input").uon("change", this.update_difficulty_slider)
         row.data.find(".hermetic-difficulty").uon("change", this.update_value)
         row.data.find(".hermetic-mr-learning").uon("change", this.update_value)
 
         row.data.find("[id*=\"-difficulty-input\"").each((i, elem) => {
-            activate_slider(elem, this.show_difficulty_builder)
+            activate_slider(elem, this.show_difficulty_builder, _ => void 0, {},
+                this.update_difficulty_slider)
         })
         row.get("talent").selectpicker()
         row.get("list").selectpicker({sanitize: false})
@@ -642,8 +642,8 @@ class SpellRollTable extends TalentRollTable {
     }
 
     show_difficulty_builder(input) {
-        const spell = row_of(input)
         return value => {
+            const spell = row_of(input)
             const max = slider_max(input)
             const difficulty_elem = spell.get("difficulty", input)
             let difficulty // Use the count of the spell casted to compute difficulty
