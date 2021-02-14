@@ -118,11 +118,15 @@ $(".waves-ripple").remove()
 /**
  * Show the modal with import warnings
  */
-function show_import_warnings(missing_inputs) {
-    const list = $("#import-warning-missing")
-    list.children().remove()
+function show_import_warnings(missing_inputs, duplicated_inputs) {
+    const list_missing = $("#import-warning-missing")
+    list_missing.children().remove()
     $(missing_inputs).each((i, elem) => {
-        list.append($("<li class=\"list-group-item align-items-center py-1 my-0\">" + elem + "</li>"))
+        list_missing.append($("<li class=\"list-group-item align-items-center py-1 my-0\">" + elem + "</li>"))
+    })
+    const list_duplicated = $("#import-warning-duplicated")
+    $(duplicated_inputs).each((i, elem) => {
+        list_duplicated.append($("<li class=\"list-group-item align-items-center py-1 my-0\">" + elem + "</li>"))
     })
     $("#import-warning").modal()
 }
@@ -154,9 +158,16 @@ function import_data(src_html, dst_html, full_sheet) {
     const spell_difficulty_input_id = /^(spell-\d+)-(difficulty-input|hermetic-difficulty)$/
 
     const missing_inputs = []
+    const duplicated_inputs = []
 
+    const existing_ids = []
     src_html.find("input").each((i, old_input) => {
         if (old_input.id && old_input.id.length > 0) {
+            if (existing_ids.includes(old_input.id) && !old_input.id.includes("plugin-") && !old_input.id.includes("note-dialog-") && !old_input.id.includes("ColorPicker"))
+                duplicated_inputs.push(old_input.id)
+            else
+                existing_ids.push(old_input.id)
+
             const old_input_sel = "#" + old_input.id
             let new_input = dst_html.find(old_input_sel)
 
@@ -269,7 +280,7 @@ function import_data(src_html, dst_html, full_sheet) {
                     new_input.trigger("change")
                 }
             }
-            if (new_input.length === 0 && !old_input.id.includes("plugin-") && !old_input.id.includes("note-dialog-")) { // The old input is lost
+            if (new_input.length === 0 && !old_input.id.includes("plugin-") && !old_input.id.includes("note-dialog-") && !old_input.id.includes("ColorPicker")) { // The old input is lost
                 missing_inputs.push(old_input.id)
             }
         }
@@ -290,6 +301,11 @@ function import_data(src_html, dst_html, full_sheet) {
             } else if (!new_input[0].id.includes("note-")) {
                 // Update associated summernote (the editors for the notes are initialized lazily)
                 new_input.summernote("code", new_input.val())
+
+                if (existing_ids.includes(old_input.id) && !old_input.id.includes("plugin-"))
+                    duplicated_inputs.push(old_input.id)
+                else
+                    existing_ids.push(old_input.id)
             }
         }
     })
@@ -363,8 +379,8 @@ function import_data(src_html, dst_html, full_sheet) {
         dst_html.find("#nav-tabs a[role=\"tab\"][href=\"" + old_tab.getAttribute("href") + "\"]").addClass("d-none")
     })
 
-    if (full_sheet && missing_inputs.length > 0) {
-        show_import_warnings(missing_inputs)
+    if (full_sheet && (missing_inputs.length > 0 || duplicated_inputs.length > 0)) {
+        show_import_warnings(missing_inputs, duplicated_inputs)
     }
 }
 
