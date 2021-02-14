@@ -106,7 +106,8 @@ class RollRow extends DataRow {
         sum = this.cap_roll_value(sum)
 
         // Unease is applied at the end
-        sum += get_unease()
+        if (!isNaN(sum))
+            sum += get_unease()
 
         // Update
         this.get("value").text(sum)
@@ -241,7 +242,8 @@ class SpellRow extends RollRow {
             sum = this.cap_roll_value(sum)
 
             // Unease is applied at the end
-            sum += get_unease()
+            if (!isNaN(sum))
+                sum += get_unease()
 
             // Update
             this.get("value", dice_div).text(sum)
@@ -833,7 +835,8 @@ class FocusMagicRow extends SpellRow {
             sum = this.cap_roll_value(sum)
 
             // Unease is applied at the end
-            sum += get_unease()
+            if (!isNaN(sum))
+                sum += get_unease()
 
             // Update
             this.get("value").text(sum)
