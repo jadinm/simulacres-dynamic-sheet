@@ -26,6 +26,7 @@ function hp_update(event) {
             unease_sum += 1
     }
     set_slider_min($("#unease"), unease_sum)
+    unease_value_changed_event()
 }
 
 /* Update armor penalty */
