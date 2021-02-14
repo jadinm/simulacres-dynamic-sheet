@@ -1,0 +1,44 @@
+<div class="container">
+    <div class="modal fade bd-modal-lg" id="{{ row_type }}-x-details" tabindex="-1" role="dialog"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header justify-content-center">
+                    <h4 id="{{ row_type }}-x-details-title"></h4>
+                </div>
+                <div class="modal-body align-middle">
+                    <span id="{{ row_type }}-x-details-effect" class="row col-12 mx-1"></span>
+                    {% block previous_fields %}
+                    {% endblock %}
+                    <hr/>
+                    <div class="row col-12 mx-1">
+                        Modificateur permanent à appliquer au test
+                    </div>
+                    <div class="row mx-1 md-form col-md-2 py-0 my-0">
+                        <label class="py-0 my-0" for="{{ row_type }}-x-details-bonus">
+                        </label>
+                        <input class="form-control py-0 my-0 text-center"
+                               id="{{ row_type }}-x-details-bonus"
+                               type="number" value="0">
+                    </div>
+                    <div class="row col-12 mx-1">
+                        Valeur minimale du test (une valeur vide signifie qu'il n'y a pas de minimum)
+                    </div>
+                    <div class="row mx-1 md-form col-md-2 py-0 my-0">
+                        <label class="py-0 my-0" for="{{ row_type }}-x-details-min"></label>
+                        <input class="form-control py-0 my-0 text-center" id="{{ row_type }}-x-details-min"
+                               type="number" value="">
+                    </div>
+                    <div class="row col-12 mx-1">
+                        Valeur maximale du test (une valeur vide signifie qu'il n'y a pas de maximum)
+                    </div>
+                    <div class="row mx-1 md-form col-md-2 py-0 my-0">
+                        <label class="py-0 my-0" for="{{ row_type }}-x-details-max"></label>
+                        <input class="form-control py-0 my-0 text-center" id="{{ row_type }}-x-details-max"
+                               type="number" value="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

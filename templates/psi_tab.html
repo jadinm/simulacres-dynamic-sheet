@@ -115,32 +115,9 @@
                          class="btn btn-link rounded-lg mx-0 my-0 py-2 px-2">
                         <i class="fas fa-cogs"></i>
                     </div>
-                    <div class="container">
-                        <div class="modal fade bd-modal-lg" id="psi-x-details" tabindex="-1" role="dialog"
-                             aria-hidden="true">
-                            <div class="modal-dialog modal-lg">
-                                <div class="modal-content">
-                                    <div class="modal-header justify-content-center">
-                                        <h4 id="psi-x-details-title"></h4>
-                                    </div>
-                                    <div class="modal-body align-middle">
-                                        <span id="psi-x-details-effect" class="row col-12 mx-1"></span>
-                                        <hr/>
-                                        <div class="row col-12 mx-1">
-                                            Modificateur permanent à appliquer au test
-                                        </div>
-                                        <div class="row mx-1 md-form col-md-2 py-0 my-0 mt-2">
-                                            <label class="py-0 my-0" for="psi-x-details-bonus">
-                                            </label>
-                                            <input class="form-control py-0 my-0 text-center"
-                                                   id="psi-x-details-bonus"
-                                                   type="number" value="0">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    {% with row_type = "psi" %}
+                        {% include "roll_modal.html" %}
+                    {% endwith %}
                 </td>
             </tr>
             </tbody>

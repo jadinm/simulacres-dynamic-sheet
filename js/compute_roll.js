@@ -44,9 +44,23 @@ class RollRow extends DataRow {
         return [sum, checked_elements]
     }
 
+    cap_roll_value(sum) {
+        // Optional min and max
+        const min = parseInt(this.get("details-min").val())
+        if (!isNaN(min)) {
+            if (isNaN(sum))
+                sum = min
+            else
+                sum = Math.max(min, sum)
+        }
+        const max = parseInt(this.get("details-max").val())
+        if (!isNaN(max) && !isNaN(sum))
+            sum = Math.min(max, sum)
+        return sum
+    }
+
     update_roll_value() {
         let sum = 0
-        sum += get_unease()
 
         // Recover component, means and realm
         const formula = this.compute_formula()[0]
@@ -87,6 +101,12 @@ class RollRow extends DataRow {
                     sum += Math.min(parseInt(level) - 2, 0)
             }
         }
+
+        // Optional min and max
+        sum = this.cap_roll_value(sum)
+
+        // Unease is applied at the end
+        sum += get_unease()
 
         // Update
         this.get("value").text(sum)
@@ -167,7 +187,6 @@ class SpellRow extends RollRow {
             return
         this.data.find(".row-roll-trigger").each((i, dice_div) => {
             let sum = 0
-            sum += get_unease()
             const realm = this.realm(dice_div)
 
             // Recover component, means and realm
@@ -217,6 +236,12 @@ class SpellRow extends RollRow {
                     }
                 }
             }
+
+            // Optional min and max
+            sum = this.cap_roll_value(sum)
+
+            // Unease is applied at the end
+            sum += get_unease()
 
             // Update
             this.get("value", dice_div).text(sum)
@@ -554,6 +579,8 @@ class TalentRollTable extends DataTable {
         })
         row.get("show-details").uon("click", this.view_details).tooltip()
         row.get("details-bonus").uon("change", this.update_value)
+        row.get("details-min").uon("change", this.update_value)
+        row.get("details-max").uon("change", this.update_value)
         if (row.get("tap-talent").length > 0) {
             check_radio(row.get("body")[0])
             check_radio(row.get("action")[0])
@@ -769,7 +796,6 @@ class FocusMagicRow extends SpellRow {
     update_roll_value() {
         this.data.find(".row-roll-trigger").each((i, dice_div) => {
             let sum = 0
-            sum += get_unease()
 
             const bonus = this.get("details-bonus")
             if (bonus.length > 0 && !isNaN(parseInt(bonus.val()))) {
@@ -787,6 +813,12 @@ class FocusMagicRow extends SpellRow {
             } else {
                 sum = "X"
             }
+
+            // Optional min and max
+            sum = this.cap_roll_value(sum)
+
+            // Unease is applied at the end
+            sum += get_unease()
 
             // Update
             this.get("value").text(sum)

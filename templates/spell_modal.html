@@ -1,45 +1,20 @@
-<div class="container">
-    <div class="modal fade bd-modal-lg" id="{{ row_type }}-x-details" tabindex="-1" role="dialog"
-         aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header justify-content-center">
-                    <h4 id="{{ row_type }}-x-details-title"></h4>
-                </div>
-                <div class="modal-body align-middle">
-                    <span id="{{ row_type }}-x-details-effect" class="row col-12 mx-1"></span>
-                    <hr/>
-                    <div class="row col-12 mx-1">
-                        Magie noire:
-                    </div>
-                    <div class="row mx-1 md-form col-12 py-0 my-0 mb-2">
-                        <label class="py-0 my-0" for="{{ row_type }}-x-details-black-magic">
-                        </label>
-                        <input class="form-control py-0 my-0" type="text" value=""
-                               id="{{ row_type }}-x-details-black-magic">
-                    </div>
-                    <div class="row col-12 mx-1">
-                        Résistance:
-                    </div>
-                    <div class="row mx-1 md-form col-12 py-0 my-0">
-                        <label class="py-0 my-0" for="{{ row_type }}-x-details-resistance">
-                        </label>
-                        <input class="form-control py-0 my-0" type="text" value=""
-                               id="{{ row_type }}-x-details-resistance">
-                    </div>
-                    <hr/>
-                    <div class="row col-12 mx-1">
-                        Modificateur permanent à appliquer au test
-                    </div>
-                    <div class="row mx-1 md-form col-md-2 py-0 my-0">
-                        <label class="py-0 my-0" for="{{ row_type }}-x-details-bonus">
-                        </label>
-                        <input class="form-control py-0 my-0 text-center"
-                               id="{{ row_type }}-x-details-bonus"
-                               type="number" value="0">
-                    </div>
-                </div>
-            </div>
-        </div>
+{% extends "roll_modal.html" %}
+
+{% block previous_fields %}
+    <hr/>
+    <div class="row col-12 mx-1">
+        Magie noire:
     </div>
-</div>
+    <div class="row mx-1 md-form col-12 py-0 my-0 mb-2">
+        <label class="py-0 my-0" for="{{ row_type }}-x-details-black-magic"></label>
+        <input class="form-control py-0 my-0" type="text" value=""
+               id="{{ row_type }}-x-details-black-magic">
+    </div>
+    <div class="row col-12 mx-1">
+        Résistance:
+    </div>
+    <div class="row mx-1 md-form col-12 py-0 my-0">
+        <label class="py-0 my-0" for="{{ row_type }}-x-details-resistance"></label>
+        <input class="form-control py-0 my-0" type="text" value="" id="{{ row_type }}-x-details-resistance">
+    </div>
+{% endblock %}
