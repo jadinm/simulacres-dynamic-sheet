@@ -546,7 +546,22 @@ class TalentRollTable extends DataTable {
 
     view_details(_) {
         const row = row_of(this)
-        row.get("details-title").text(row.roll_reason())
+        const formula = row.compute_formula()[1]
+        let title = "<h2>" + row.roll_reason() + "</h2>"
+        if (formula.length > 0) {
+            title += "<h4>"
+            for (let i = 0; i < formula.length; i++) {
+                const symbol = $("label[for='" + formula[i][0].id + "'] svg").first().clone(false, false)
+                if (symbol.length > 0) {
+                    symbol.removeClass("input-prefix")
+                    title += symbol.get(0).outerHTML
+                    if (i !== formula.length - 1)
+                        title += "&nbsp;+&nbsp;"
+                }
+            }
+            title += "</h4>"
+        }
+        row.get("details-title").html(title)
         let text = ""
         const focus = row.get("time")
         if (focus.length > 0)
