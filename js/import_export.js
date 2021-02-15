@@ -244,8 +244,10 @@ function import_data(src_html, dst_html, full_sheet) {
                         update_talent({item: row[0], to: list[0]})
                     } else {
                         // We change the value and trigger the change in case of a listener
-                        new_input.val(old_input.value)
-                        new_input.trigger("change")
+                        if (new_input[0].value !== old_input.value) {
+                            new_input.val(old_input.value)
+                            new_input.trigger("change")
+                        }
                     }
                 }
             } else {
@@ -276,8 +278,10 @@ function import_data(src_html, dst_html, full_sheet) {
                     }
                 } else {
                     // We change the value and trigger the change in case of a listener
-                    new_input.val(old_input.value)
-                    new_input.trigger("change")
+                    if (new_input.length > 0 && new_input[0].value !== old_input.value) {
+                        new_input.val(old_input.value)
+                        new_input.trigger("change")
+                    }
                 }
             }
             if (new_input.length === 0 && !old_input.id.includes("plugin-") && !old_input.id.includes("note-dialog-") && !old_input.id.includes("ColorPicker")) { // The old input is lost
