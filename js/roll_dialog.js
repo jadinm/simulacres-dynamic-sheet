@@ -129,13 +129,18 @@ class Roll {
             critical_success = true
         }
 
+        // If this is a 1d6, it could be for localisation
+        if (localized_target_hp && this.type === 6 && this.number === 1) {
+            $("#localisation-row-" + this.base_dices[0]).addClass("success-color-dark")
+        }
+
         // Hide everything and show it afterwards if needed
         const roll_effect_divs = $(".roll-dialog-effect-hide")
         const roll_magic_divs = $(".roll-dialog-magic-hide")
         roll_effect_divs.addClass("d-none")
         roll_magic_divs.addClass("d-none")
         $(".roll-dialog-component-hide").addClass("d-none")
-        $("#roll-dialog-result-label").html("Résultat du lancer de 2d6 = ")
+        $("#roll-dialog-result-label").html("Résultat du lancer de " + this.number + "d" + this.type + " = ")
         $("#roll-dialog-result").html(this.dice_value())
         $("#roll-dialog-details").html(this.dice_buttons("base_dices", this.base_dices)).removeClass("d-none")
         $("#roll-dialog-redo").removeClass("d-none").prev().removeClass("d-none")
@@ -1246,6 +1251,15 @@ $(_ => {
 })
 
 /* Quick roll button */
+
+$("#roll-1d6").on("click", _ => {
+    // Reset invested energies
+    $(".roll-dialog-energy").val(0)
+    $(".roll-dialog-component").each((i, elem) => uncheck_checkbox(elem))
+    // Trigger roll
+    new Roll(1).trigger_roll()
+    $('#roll-dialog').modal()
+})
 
 $("#roll-2d6").on("click", _ => {
     // Reset invested energies
