@@ -221,7 +221,7 @@
                     </div>
                     <hr/>
                     <ul class="nav nav-tabs" role="tablist">
-                        {% if localisation %}
+                        {% if localisation_target %}
                             <li class="nav-item">
                                 <a class="nav-link active" data-toggle="tab" href="#localisation-tab" role="tab"
                                    aria-controls="localisation-tab" aria-selected="true">
@@ -264,7 +264,7 @@
                     </ul>
 
                     <div class="tab-content">
-                        {% if localisation %}
+                        {% if localisation_target %}
                             <div id="localisation-tab" class="tab-pane fade show active row mx-1">
                                 <div class="table-responsive col-12" style="overflow-y: hidden !important;">
                                     <table class="table table-hover table-bordered table-striped my-1">

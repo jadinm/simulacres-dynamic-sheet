@@ -443,9 +443,13 @@
     const base_tag_version = "{{ base_tag_version }}"
     let is_v7 = true
     let localized_hp = false
+    let localized_target_hp = false
     let matrix_4x4 = false
     {% if localisation %}
         localized_hp = true
+    {% endif %}
+    {% if localisation_target %}
+        localized_target_hp = true
     {% endif %}
     {% if version != V7 %}
         is_v7 = false

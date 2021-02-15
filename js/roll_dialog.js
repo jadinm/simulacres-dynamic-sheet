@@ -238,7 +238,7 @@ class TalentRoll extends Roll {
         this.critical_dices = []
         this.effect_dices = []
         this.localisation_dices = []
-        if (localized_hp)
+        if (localized_target_hp)
             this.roll_dices(2, 6, this.localisation_dices)
 
         this.is_magic = is_magic

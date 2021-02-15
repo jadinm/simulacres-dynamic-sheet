@@ -25,6 +25,9 @@ parser.add_argument("output_html", help="The path to the resulting HTML file")
 parser.add_argument("--version", help="Version of SimulacreS", choices=[V7, V8], default=V7)
 parser.add_argument("--localisation", help="Use localisation of HP and armor (only valid for version 7)",
                     action='store_true')
+parser.add_argument("--localisation-target",
+                    help="Use localisation of roll effects (only valid for version 7 and implied by --localisation)",
+                    action='store_true')
 parser.add_argument("--dual-wielding", help="Use the non official rules of dual wielding (only valid for version 7)",
                     action="store_true")
 parser.add_argument("--tomte-magic", help="Use the non official rules of tomte magic"
@@ -133,7 +136,10 @@ except subprocess.CalledProcessError:
 # Build html sheet
 
 params.update({
-    "version": args.version, "localisation": args.localisation and args.version == V7, "universe": args.universe,
+    "version": args.version,
+    "localisation": args.localisation and args.version == V7,
+    "localisation_target": args.localisation or args.localisation_target and args.version == V7,
+    "universe": args.universe,
     "matrix_4x4": args.version == V7 or args.matrix_4x4,
     "dual_wielding": args.version == V7 and args.dual_wielding,
     "tomte_magic": args.version == V7 and args.tomte_magic and args.universe == MED_FANTASY,
