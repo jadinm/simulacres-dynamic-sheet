@@ -1221,7 +1221,7 @@ function slider_value_changed_event(e) {
     const input = e.target
     const modifier = parseInt($(input).val())
     /* When it is called on creation, current_roll is null */
-    if (!current_roll || isNaN(modifier))
+    if (!current_roll || !(current_roll instanceof TalentRoll) || isNaN(modifier))
         return
 
     if (input.id === "roll-dialog-modifier") { // Modify the MR only for MR modifier
@@ -1268,6 +1268,18 @@ $("#roll-2d6").on("click", _ => {
     // Trigger roll
     new Roll().trigger_roll()
     $('#roll-dialog').modal()
+})
+
+$("#roll-free").on("click", _ => {
+    // Reset invested energies
+    $(".roll-dialog-energy").val(0)
+    $(".roll-dialog-component").each((i, elem) => uncheck_checkbox(elem))
+    // Trigger roll
+    const number = parseInt($("#roll-free-number").val())
+    if (!isNaN(number)) {
+        new Roll(number).trigger_roll()
+        $('#roll-dialog').modal()
+    }
 })
 
 /* Energies */
@@ -1337,7 +1349,7 @@ $(".energy").on("change", event => {
 })
 
 $(".roll-dialog-energy").on("change", e => {
-    if (!current_roll)
+    if (!current_roll || !(current_roll instanceof TalentRoll))
         return
     // Trigger the same roll but with the correct precision
     current_roll.update_energies(true)
@@ -1346,7 +1358,7 @@ $(".roll-dialog-energy").on("change", e => {
 })
 
 $(".roll-dialog-component").on("click", _ => {
-    if (!current_roll)
+    if (!current_roll || !(current_roll instanceof TalentRoll))
         return
     current_roll.update_components(true)
     current_roll.show_roll()
