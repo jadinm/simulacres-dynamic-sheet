@@ -500,6 +500,32 @@ $("#race,.realm,.component,.means," + talent_list_selector).on("change", _ => {
     })
 })
 
+function toggle_energy_dependent_table(energy, table_body) {
+    const table = table_body.parent().parent()
+    const title = table.prev()
+    const hrule = title.prev()
+    const button = table.next()
+    if (parseInt(energy.val()) >= 1) {
+        table.removeClass("d-none")
+        hrule.removeClass("d-none")
+        title.removeClass("d-none")
+        button.removeClass("d-none")
+    } else {
+        table.addClass("d-none")
+        hrule.addClass("d-none")
+        title.addClass("d-none")
+        button.addClass("d-none")
+    }
+}
+
+$("#name-magic").on("change", e => {
+    toggle_energy_dependent_table($(e.target), $("#word-table"))
+})
+
+$("#runes").on("change", e => {
+    toggle_energy_dependent_table($(e.target), $("#rune-table"))
+})
+
 $(_ => {
     // Initialize spell lists
     $("select.spell-list").each((i, input) => {

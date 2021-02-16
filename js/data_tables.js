@@ -149,29 +149,6 @@ class WordTable extends RuneTable {
     }
 }
 
-function toggle_energy_dependent_table(energy, table_body) {
-    const table = table_body.parent().parent()
-    const title = table.prev().addClass("d-none")
-    const button = table.next()
-    if (parseInt(energy.val()) >= 1) {
-        table.removeClass("d-none")
-        title.removeClass("d-none")
-        button.removeClass("d-none")
-    } else {
-        table.addClass("d-none")
-        title.addClass("d-none")
-        button.addClass("d-none")
-    }
-}
-
-$("#name-magic").on("change", e => {
-    toggle_energy_dependent_table($(e.target), $("#word-table"))
-})
-
-$("#runes").on("change", e => {
-    toggle_energy_dependent_table($(e.target), $("#rune-table"))
-})
-
 function toggle_table() {
     const table_selector = this.getAttribute("data-hide-table")
     const table_frame = $(table_selector).parents(".table-responsive")
