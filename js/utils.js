@@ -198,8 +198,10 @@ function number_filter(value, min, max) {
 
 $(_ => {
     /* Tooltip initializations */
-    $('[data-toggle="tooltip"]:visible').tooltip()
-    $('button[data-toggle="tooltip"]').tooltip()
+    $('[data-toggle="tooltip"]').each((i, elem) => {
+        if (!elem.getAttribute("hidden") && !$(elem).hasClass("d-none"))
+            $(elem).tooltip()
+    })
     $('.absorption').parent().tooltip()
 
     // Dark mode initialization
