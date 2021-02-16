@@ -521,6 +521,11 @@ $("#runes").on("change", e => {
     toggle_energy_dependent_table($(e.target), $("#rune-table"))
 })
 
+$("#magic-search").on("change", event => {
+    let value = $(event.target).val().toLowerCase()
+    search_tables(value, $("#spell-table tr,#focusMagic-table tr,#rune-table tr,#word-table tr"))
+})
+
 $(_ => {
     // Initialize spell lists
     $("select.spell-list").each((i, input) => {

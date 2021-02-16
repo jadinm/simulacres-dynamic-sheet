@@ -372,6 +372,11 @@ function is_hobbit() {
 
 /* Triggers */
 
+$("#roll-search").on("change", event => {
+    let value = $(event.target).val().toLowerCase()
+    search_tables(value, $("#dual_wielding-table tr,#close_combat-table tr,#range_combat-table tr,#roll-table tr"))
+})
+
 $("#race,.realm,.component,.means," + talent_list_selector).on("change", _ => {
     // Update all of the spell values
     $(".roll-value,.dual_wielding-value").each((i, elem) => {

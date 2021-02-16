@@ -280,3 +280,17 @@ $('.remove-talent').sortable({
         changed_page = true
     }
 })
+
+$("#talent-search").on("change", event => {
+    let value = $(event.target).val().toLowerCase()
+    $(".talent input").each((i, elem) => {
+        if (!elem.getAttribute("hidden")) {
+            const content = $(elem).val().toLowerCase()
+            if (content.includes(value)) {
+                $(elem).parents(".talent").removeClass("d-none")
+            } else {
+                $(elem).parents(".talent").addClass("d-none")
+            }
+        }
+    })
+})

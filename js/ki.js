@@ -68,6 +68,11 @@ class KiTable extends SpellRollTable {
     }
 }
 
+$("#ki-search").on("change", event => {
+    let value = $(event.target).val().toLowerCase()
+    search_tables(value, $("#ki-table tr"))
+})
+
 $(_ => {
     // Initialize tables
     new KiTable($("#ki-table"))

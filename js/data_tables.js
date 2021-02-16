@@ -1,4 +1,4 @@
-const row_id_regex = /((\w+)-(x|\d+))-?(.*)/
+const row_id_regex = /((\w+|limitedUse-equipment|magical-equipment)-(x|\d+))-?(.*)/
 
 row_classes_by_prefix = {}
 
@@ -15,6 +15,17 @@ class DataRow {
     }
 
     update_roll_value() {
+    }
+
+    search(value) {
+        let found = false
+        this.data.find("input, select").each((i, elem) => {
+            const val = $(elem).val()
+            if (val && typeof val === "string" && val.toLowerCase().includes(value)) {
+                found = true
+            }
+        })
+        return found
     }
 
     static of(base_elem) {
@@ -183,6 +194,24 @@ function row_of(row_element) {
     const row_class = (prefix in row_classes_by_prefix) ? row_classes_by_prefix[prefix] : DataRow
     return row_class.of(row_element)
 }
+
+function search_tables(value, selector) {
+    selector.each((i, elem) => {
+        if (!elem.id.includes("-x")) {
+            const row = row_of(elem)
+            if (value.length === 0 || row.search(value)) {
+                $(elem).removeClass("d-none")
+            } else {
+                $(elem).addClass("d-none")
+            }
+        }
+    })
+}
+
+$("#equipment-search").on("change", event => {
+    let value = $(event.target).val().toLowerCase()
+    search_tables(value, $("#focus-table tr,#magical-equipment-table tr,#equipment-table tr,#limitedUse-equipment-table tr"))
+})
 
 $(_ => {
     new DataTable($("#focus-table"))

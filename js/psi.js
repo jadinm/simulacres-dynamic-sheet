@@ -9,6 +9,11 @@ class PsiRollTable extends SpellRollTable {
     }
 }
 
+$("#psi-search").on("change", event => {
+    let value = $(event.target).val().toLowerCase()
+    search_tables(value, $("#psi-table tr"))
+})
+
 $(_ => {
     new PsiRollTable($("#psi-table"))
 })
