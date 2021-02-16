@@ -1,5 +1,11 @@
 class SpellRow extends RollRow {
 
+    realm(realm_based_div) {
+        const realm_split = $(realm_based_div)[0].id.split("-")
+        const realm = realm_split[realm_split.length - 1]
+        return realm.match(realms) ? realm : ""
+    }
+
     get(element_id_suffix, realm_div = null) {
         let elem = super.get(element_id_suffix)
         if (elem.length === 0 && realm_div)

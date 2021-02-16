@@ -1,4 +1,211 @@
 <div id="roll-tab" class="tab-pane fade row my-1 container-fluid m-0">
+    <div class="row col-12 justify-content-center mb-2">
+        <div class="btn btn-light rounded-lg py-2 hide-table" data-hide-table="#close_combat-table">
+            Combat au contact&nbsp;<i class="far fa-eye"></i>
+        </div>
+        <div class="btn btn-light rounded-lg py-2 hide-table" data-hide-table="#range_combat-table">
+            Combat à distance&nbsp;<i class="far fa-eye"></i>
+        </div>
+        {% if dual_wielding %}
+            <div class="btn btn-light rounded-lg py-2 hide-table" data-hide-table="#dual_wielding-table">
+                Combat à deux armes&nbsp;<i class="far fa-eye"></i>
+            </div>
+        {% endif %}
+        <div class="btn btn-light rounded-lg py-2 hide-table" data-hide-table="#roll-table">
+            Tests courants&nbsp;<i class="far fa-eye"></i>
+        </div>
+    </div>
+
+    <div class="row col-12 justify-content-center mb-2">
+        <b>Combat au contact</b>
+    </div>
+    <div class="row col-12 table-responsive m-0 p-0" style="overflow-y: hidden !important;">
+        <table class="table table-hover col-12 m-0 p-0">
+            <thead>
+            <tr>
+                <th scope="col" style="min-width: 200px; width: 15%">Talent</th>
+                <th scope="col" class="text-center" style="width: 5%">Formule</th>
+                <th scope="col" class="text-center" style="width: 5%">Valeur</th>
+                <th scope="col" style="min-width: 300px; width: 75%">Effet</th>
+                <th scope="col" class="text-center"></th>
+            </tr>
+            </thead>
+            <tbody id="close_combat-table" class="sortable-list">
+            <tr id="close_combat-x" class="align-middle" hidden>
+                <td class="align-middle">
+                    <div class="row col-12 md-form mx-0 px-0 my-0 py-0">
+                        <label for="close_combat-x-talent"></label>
+                        <select class="show-tick form-control talent-select selectpicker close_combat-talent"
+                                data-live-search="true" id="close_combat-x-talent"
+                                data-style="col-9 ml-5 px-3 align-middle" data-container="body" title="&nbsp;">
+                        </select>
+                        <i class="fas fa-arrows-alt prefix mt-3 ml-1" style="font-size: 1.5em;"></i>
+                    </div>
+                </td>
+                <td class="my-0 py-0 roll-formula align-middle">
+                    {% with row_type = "close_combat" %}
+                        {% include "roll_formula.html" %}
+                    {% endwith %}
+                </td>
+                <td class="my-0 py-0 text-center align-middle">
+                    <div>
+                        <span id="close_combat-x-value" class="roll-value"></span>
+                        <span id="close_combat-x-dice" class="clickable row-roll-trigger" hidden>
+                            <i class="fas fa-dice"></i>
+                        </span>
+                    </div>
+                </td>
+                <td class="md-form my-0 py-0 align-middle">
+                    <input id="close_combat-x-effect" class="roll-effect form-control" type="text">
+                    <label for="close_combat-x-effect"></label>
+                </td>
+                <td class="md-form m-0 p-0 align-middle">
+                    <div id="close_combat-x-show-details" data-toggle="tooltip" data-placement="top"
+                         title="Voir les détails du test"
+                         class="btn btn-link rounded-lg mx-0 my-0 py-2 px-2">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    {% with row_type = "close_combat" %}
+                        {% include "roll_modal.html" %}
+                    {% endwith %}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="row col-12">
+        <div class="col-lg-2 col-md-4 row">
+            <div class="col-6 px-0 mx-0">
+                <button id="add-close_combat" class="btn btn-success btn-block">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <div class="col-6 px-0 mx-0">
+                <div id="close_combat-table-remove" class="sortable-list text-center" style="min-height: 50px">
+                    <button class="btn-block btn btn-danger" style="cursor:default;" data-toggle="tooltip"
+                            data-html="true" data-placement="bottom"
+                            title="Déplacez un élément ici pour le supprimer">
+                        <i class="fas fa-trash-alt fa-1x"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row col-12 justify-content-center mb-2">
+        <b>Combat à distance</b>
+    </div>
+    <div class="row col-12 table-responsive m-0 p-0" style="overflow-y: hidden !important;">
+        <table class="table table-hover col-12 m-0 p-0">
+            <thead>
+            <tr>
+                <th scope="col" style="min-width: 200px; width: 15%">Talent</th>
+                <th scope="col" class="text-center" style="width: 5%">Formule</th>
+                <th scope="col" class="text-center" style="width: 5%">Valeur</th>
+                {% if version == V7 %}
+                    <th scope="col" class="text-center" style="width: 15%">Portée</th>
+                {% endif %}
+                <th scope="col" style="min-width: 300px; width: 60%">Effet</th>
+                <th scope="col" class="text-center"></th>
+            </tr>
+            </thead>
+            <tbody id="range_combat-table" class="sortable-list">
+            <tr id="range_combat-x" class="align-middle" hidden>
+                <td class="align-middle">
+                    <div class="row col-12 md-form mx-0 px-0 my-0 py-0">
+                        <label for="range_combat-x-talent"></label>
+                        <select class="show-tick form-control talent-select selectpicker range_combat-talent"
+                                data-live-search="true" id="range_combat-x-talent"
+                                data-style="col-9 ml-5 px-3 align-middle" data-container="body" title="&nbsp;">
+                        </select>
+                        <i class="fas fa-arrows-alt prefix mt-3 ml-1" style="font-size: 1.5em;"></i>
+                    </div>
+                </td>
+                <td class="my-0 py-0 roll-formula align-middle">
+                    {% with row_type = "range_combat" %}
+                        {% include "roll_formula.html" %}
+                    {% endwith %}
+                </td>
+                <td class="my-0 py-0 text-center align-middle">
+                    {% if version == V7 %}
+                        {% set ranges = {"-normal": "Normal", "-point_blank": "Bout portant", "-slightly_far": "Loin", "-very_far": "Très loin"} %}
+                    {% else %}
+                        {% set ranges = {"": ""} %}
+                    {% endif %}
+                    {% for range in ranges %}
+                        <div class="row col-12 m-0 p-0 my-2 justify-content-center">
+                            <span id="range_combat-x-value{{ range }}" class="roll-value"></span>
+                            <span id="range_combat-x-dice{{ range }}" class="clickable row-roll-trigger" hidden>
+                                <i class="fas fa-dice"></i>
+                            </span>
+                        </div>
+                    {% endfor %}
+                </td>
+                {% if version == V7 %}
+                    <td class="my-0 py-0 text-center align-middle pt-1">
+                        {% for range in ranges %}
+                            <div class="row form-row md-form col-12 m-0 p-0">
+                                <input id="range_combat-x-distance{{ range }}"
+                                       class="roll-distance form-control m-0 mb-1 p-0"
+                                       type="text" value="Entre 0 m et 1 m">
+                                <label for="range_combat-x-distance{{ range }}">{{ ranges[range] }}</label>
+                            </div>
+                        {% endfor %}
+                    </td>
+                {% endif %}
+                <td class="md-form my-0 py-0 align-middle">
+                    {% for range in ranges %}
+                        <div class="row col-12 m-0 p-0 my-2">
+                            {% if range == "-normal" or range == "" %}
+                                <label for="range_combat-x-effect{{ range }}"></label>
+                                <input id="range_combat-x-effect{{ range }}" class="roll-effect form-control m-0 p-0"
+                                       type="text">
+                            {% else %}
+                                <label for="range_combat-x-effect{{ range }}"></label>
+                                <input id="range_combat-x-effect{{ range }}" class="d-none" type="text">
+                                <span id="range_combat-x-effect{{ range }}" class="roll-effect"
+                                      style="color: #6c757d; font-size: 1rem">
+                                    &nbsp;
+                                </span>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </td>
+                <td class="md-form m-0 p-0 align-middle">
+                    <div id="range_combat-x-show-details" data-toggle="tooltip" data-placement="top"
+                         title="Voir les détails du test"
+                         class="btn btn-link rounded-lg mx-0 my-0 py-2 px-2">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    {% with row_type = "range_combat" %}
+                        {% include "roll_modal.html" %}
+                    {% endwith %}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="row col-12">
+        <div class="col-lg-2 col-md-4 row">
+            <div class="col-6 px-0 mx-0">
+                <button id="add-range_combat" class="btn btn-success btn-block">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <div class="col-6 px-0 mx-0">
+                <div id="range_combat-table-remove" class="sortable-list text-center" style="min-height: 50px">
+                    <button class="btn-block btn btn-danger" style="cursor:default;" data-toggle="tooltip"
+                            data-html="true" data-placement="bottom"
+                            title="Déplacez un élément ici pour le supprimer">
+                        <i class="fas fa-trash-alt fa-1x"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     {% if dual_wielding %}
         <div class="row col-12 justify-content-center mb-2">
             <b>Combat à deux armes</b>

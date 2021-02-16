@@ -172,6 +172,27 @@ $("#runes").on("change", e => {
     toggle_energy_dependent_table($(e.target), $("#rune-table"))
 })
 
+function toggle_table() {
+    const table_selector = this.getAttribute("data-hide-table")
+    const table_frame = $(table_selector).parents(".table-responsive")
+    const svg = $(this).children("svg.svg-inline--fa").first()
+    if (!table_frame.hasClass("d-none")) {
+        table_frame.addClass("d-none")
+        table_frame.prev().addClass("d-none")
+        table_frame.next().addClass("d-none")
+        svg.addClass("fa-eye-slash").removeClass("fa-eye")
+        $(this).addClass("btn-dark").removeClass("btn-light")
+    } else {
+        table_frame.removeClass("d-none")
+        table_frame.prev().removeClass("d-none")
+        table_frame.next().removeClass("d-none")
+        svg.removeClass("fa-eye-slash").addClass("fa-eye")
+        $(this).removeClass("btn-dark").addClass("btn-light")
+    }
+}
+
+$(".hide-table").uon("click", toggle_table)
+
 /**
  * Get a row instance of the row of the element in parameter
  * @param row_element != null and it must be either a jquery object or a html element
