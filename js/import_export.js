@@ -378,6 +378,23 @@ function import_data(src_html, dst_html, full_sheet) {
         }
     }
 
+    // Hide the same sections
+    dst_html.find(".hide-section").each((i, elem) => {
+        const hide_table = elem.getAttribute("data-hide-table")
+        const hide_row = elem.getAttribute("data-hide-row")
+        let src_elem = $()
+        if (hide_table) {
+            src_elem = src_html.find("[data-hide-table=\"" + hide_table + "\"]")
+        } else if (hide_row) {
+            src_elem = src_html.find("[data-hide-row=\"" + hide_row + "\"]")
+        }
+        if (src_elem.length > 0
+            && (src_elem.hasClass("btn-dark") && $(elem).hasClass("btn-light")
+                || src_elem.hasClass("btn-light") && $(elem).hasClass("btn-dark"))) {
+            $(elem).click()
+        }
+    })
+
     // Hide the same tabs
     src_html.find("#nav-tabs a[role=\"tab\"].d-none").each((i, old_tab) => {
         dst_html.find("#nav-tabs a[role=\"tab\"][href=\"" + old_tab.getAttribute("href") + "\"]").addClass("d-none")
