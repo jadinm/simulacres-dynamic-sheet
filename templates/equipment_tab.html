@@ -1,7 +1,27 @@
 <div id="equipment-tab" class="tab-pane fade row container-fluid m-0">
+    <div class="row col-12 justify-content-center mb-2">
+        <div class="btn btn-light rounded-lg py-2 hide-section" data-hide-row="#money-row">
+            Fortune&nbsp;<i class="far fa-eye"></i>
+        </div>
+        {% if universe == med_fantasy %}
+            <div class="btn btn-light rounded-lg py-2 hide-section" data-hide-table="#focus-table">
+                Focus&nbsp;<i class="far fa-eye"></i>
+            </div>
+            <div class="btn btn-light rounded-lg py-2 hide-section" data-hide-table="#magical-equipment-table">
+                Équipement à charge&nbsp;<i class="far fa-eye"></i>
+            </div>
+        {% endif %}
+        <div class="btn btn-light rounded-lg py-2 hide-section" data-hide-table="#equipment-table">
+            Équipement&nbsp;<i class="far fa-eye"></i>
+        </div>
+        <div class="btn btn-light rounded-lg py-2 hide-section" data-hide-table="#limitedUse-equipment-table">
+            Équipement à solidité/usage limité(e)&nbsp;<i class="far fa-eye"></i>
+        </div>
+    </div>
+
     <!-- Money -->
     <div class="row col-12 mt-2"><b>Fortune</b></div>
-    <div class="row col-12 form-row mt-2 md-form p-0 m-0">
+    <div id="money-row" class="row col-12 form-row mt-2 md-form p-0 m-0">
         {% if universe == med_fantasy %}
             <div class="col-lg-1 col-3">
                 <label for="gold-coins"></label>
@@ -42,268 +62,228 @@
             </div>
         {% endif %}
     </div>
+    <hr/>
 
     <!-- Focus -->
     {% if universe == med_fantasy %}
-        <div class="col-12 mt-2 m-0 p-0 card">
-            <div class="row col-12 m-0 p-0 card-header">
-                <div class="col-10 m-0 p-0 d-flex align-items-center">
-                    <h5 class="m-0 p-0 d-block ml-2">Focus</h5>
+        <div class="row col-12 justify-content-center mb-2">
+            <b>Focus</b>
+        </div>
+        <div class="table-responsive row col-12 m-0 p-0" style="overflow-y: hidden !important;">
+            <table class="table table-hover m-0 p-0">
+                <thead>
+                <tr>
+                    <th scope="col" class="col-8" style="width: 75%; min-width: 300px">Aspect</th>
+                    <th scope="col" class="col-2 text-center" style="width: 12.5%">Charge actuelle</th>
+                    <th scope="col" class="col-2 text-center" style="width: 12.5%">Charge maximum</th>
+                </tr>
+                </thead>
+                <tbody id="focus-table" class="sortable-list">
+                <tr id="focus-x" hidden>
+                    <td class="md-form my-0 py-0 align-middle">
+                        <i class="fas fa-arrows-alt prefix mt-2 ml-1" style="font-size: 1.5em;"></i>
+                        <label for="focus-x-name"></label>
+                        <input id="focus-x-name" class="focus-name form-control" type="text" value="">
+                    </td>
+                    <td class="md-form my-0 py-0 align-middle">
+                        <input id="focus-x-charge" class="focus-charge form-control text-center" type="number"
+                               value="" min="0">
+                        <label for="focus-x-charge"></label>
+                    </td>
+                    <td class="md-form my-0 py-0 align-middle">
+                        <input id="focus-x-max" class="focus-max form-control text-center" type="number"
+                               value="" min="0">
+                        <label for="focus-x-max"></label>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row col-12">
+            <div class="col-lg-2 col-md-4 row">
+                <div class="col-6 px-0 mx-0">
+                    <button id="add-focus" class="btn btn-success btn-block">
+                        <i class="fas fa-plus"></i>
+                    </button>
                 </div>
-                <button class="collapse-button btn btn-info rounded-lg ml-auto col-md-1 col-2"
-                        data-toggle="collapse" data-target="#focus-collapse" aria-expanded="false"
-                        aria-controls="#focus-collapse">
-                    <i class="fas fa-angle-down"></i>
-                </button>
-            </div>
-            <div id="focus-collapse" class="collapse m-0 p-0">
-                <div class="card-body table-responsive row col-12 m-0 p-0" style="overflow-y: hidden !important;">
-                    <table class="table table-hover m-0 p-0">
-                        <thead>
-                        <tr>
-                            <th scope="col" class="col-8" style="width: 75%; min-width: 300px">Aspect</th>
-                            <th scope="col" class="col-2 text-center" style="width: 12.5%">Charge actuelle</th>
-                            <th scope="col" class="col-2 text-center" style="width: 12.5%">Charge maximum</th>
-                        </tr>
-                        </thead>
-                        <tbody id="focus-table" class="sortable-list">
-                        <tr id="focus-x" hidden>
-                            <td class="md-form my-0 py-0 align-middle">
-                                <i class="fas fa-arrows-alt prefix mt-2 ml-1" style="font-size: 1.5em;"></i>
-                                <label for="focus-x-name"></label>
-                                <input id="focus-x-name" class="focus-name form-control" type="text" value="">
-                            </td>
-                            <td class="md-form my-0 py-0 align-middle">
-                                <input id="focus-x-charge" class="focus-charge form-control text-center" type="number"
-                                       value="" min="0">
-                                <label for="focus-x-charge"></label>
-                            </td>
-                            <td class="md-form my-0 py-0 align-middle">
-                                <input id="focus-x-max" class="focus-max form-control text-center" type="number"
-                                       value="" min="0">
-                                <label for="focus-x-max"></label>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="row col-12">
-                    <div class="col-lg-2 col-md-4 row">
-                        <div class="col-6 px-0 mx-0">
-                            <button id="add-focus" class="btn btn-success btn-block">
-                                <i class="fas fa-plus"></i>
-                            </button>
-                        </div>
-                        <div class="col-6 px-0 mx-0">
-                            <div id="focus-table-remove" class="sortable-list text-center" style="min-height: 50px">
-                                <button class="btn-block btn btn-danger" style="cursor:default;" data-toggle="tooltip"
-                                        data-html="true" data-placement="bottom"
-                                        title="Déplacez un élément ici pour le supprimer">
-                                    <i class="fas fa-trash-alt fa-1x"></i>
-                                </button>
-                            </div>
-                        </div>
+                <div class="col-6 px-0 mx-0">
+                    <div id="focus-table-remove" class="sortable-list text-center" style="min-height: 50px">
+                        <button class="btn-block btn btn-danger" style="cursor:default;" data-toggle="tooltip"
+                                data-html="true" data-placement="bottom"
+                                title="Déplacez un élément ici pour le supprimer">
+                            <i class="fas fa-trash-alt fa-1x"></i>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
+        <hr/>
 
         <!-- Magical/Charge equipment -->
-        <div class="col-12 m-0 p-0 card">
-            <div class="row col-12 m-0 p-0 card-header">
-                <div class="col-10 m-0 p-0 d-flex align-items-center">
-                    <h5 class="m-0 p-0 d-block ml-2">Équipement à charge</h5>
+        <div class="row col-12 justify-content-center mb-2">
+            <b>Équipement à charge</b>
+        </div>
+        <div class="table-responsive col-12 m-0 p-0" style="overflow-y: hidden !important;">
+            <table class="table table-hover m-0 p-0">
+                <thead>
+                <tr>
+                    <th scope="col" class="col-3" style="width: 20%; min-width: 200px">Nom</th>
+                    <th scope="col" class="col-2 text-center" style="width: 10%;">Nbr utilisations</th>
+                    <th scope="col" class="col-7" style="width: 70%; min-width: 500px">Fonctionnement</th>
+                </tr>
+                </thead>
+                <tbody id="magical-equipment-table" class="sortable-list">
+                <tr id="magical-equipment-x" hidden>
+                    <td class="md-form my-0 py-0 align-middle">
+                        <i class="fas fa-arrows-alt prefix mt-2 ml-1" style="font-size: 1.5em;"></i>
+                        <label for="magical-equipment-x-name"></label>
+                        <input id="magical-equipment-x-name" class="magical-equipment-name form-control"
+                               type="text"
+                               value="">
+                    </td>
+                    <td class="md-form my-0 py-0 align-middle">
+                        <input id="magical-equipment-x-charge"
+                               class="magical-equipment-charge form-control text-center" type="text">
+                        <label for="magical-equipment-x-charge"></label>
+                    </td>
+                    <td class="md-form my-0 py-0 align-middle">
+                        <label for="magical-equipment-x-details"></label>
+                        <input id="magical-equipment-x-details" class="magical-equipment-details form-control"
+                               type="text" value="">
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row col-12 m-0 p-0">
+            <div class="col-lg-2 col-md-4 row">
+                <div class="col-6 px-0 mx-0">
+                    <button id="add-magical-equipment" class="btn btn-success btn-block">
+                        <i class="fas fa-plus"></i>
+                    </button>
                 </div>
-                <button class="collapse-button btn btn-info rounded-lg ml-auto col-md-1 col-2"
-                        data-toggle="collapse" data-target="#magical-equipment-collapse" aria-expanded="false"
-                        aria-controls="#magical-equipment-collapse">
-                    <i class="fas fa-angle-down"></i>
-                </button>
-            </div>
-            <div id="magical-equipment-collapse" class="collapse m-0 p-0">
-                <div class="card-body table-responsive col-12 m-0 p-0" style="overflow-y: hidden !important;">
-                    <table class="table table-hover m-0 p-0">
-                        <thead>
-                        <tr>
-                            <th scope="col" class="col-3" style="width: 20%; min-width: 200px">Nom</th>
-                            <th scope="col" class="col-2 text-center" style="width: 10%;">Nbr utilisations</th>
-                            <th scope="col" class="col-7" style="width: 70%; min-width: 500px">Fonctionnement</th>
-                        </tr>
-                        </thead>
-                        <tbody id="magical-equipment-table" class="sortable-list">
-                        <tr id="magical-equipment-x" hidden>
-                            <td class="md-form my-0 py-0 align-middle">
-                                <i class="fas fa-arrows-alt prefix mt-2 ml-1" style="font-size: 1.5em;"></i>
-                                <label for="magical-equipment-x-name"></label>
-                                <input id="magical-equipment-x-name" class="magical-equipment-name form-control"
-                                       type="text"
-                                       value="">
-                            </td>
-                            <td class="md-form my-0 py-0 align-middle">
-                                <input id="magical-equipment-x-charge"
-                                       class="magical-equipment-charge form-control text-center" type="text">
-                                <label for="magical-equipment-x-charge"></label>
-                            </td>
-                            <td class="md-form my-0 py-0 align-middle">
-                                <label for="magical-equipment-x-details"></label>
-                                <input id="magical-equipment-x-details" class="magical-equipment-details form-control"
-                                       type="text" value="">
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="row col-12 m-0 p-0">
-                    <div class="col-lg-2 col-md-4 row">
-                        <div class="col-6 px-0 mx-0">
-                            <button id="add-magical-equipment" class="btn btn-success btn-block">
-                                <i class="fas fa-plus"></i>
-                            </button>
-                        </div>
-                        <div class="col-6 px-0 mx-0">
-                            <div id="magical-equipment-table-remove" class="sortable-list text-center"
-                                 style="min-height: 50px">
-                                <button class="btn-block btn btn-danger" style="cursor:default;" data-toggle="tooltip"
-                                        data-html="true" data-placement="bottom"
-                                        title="Déplacez un élément ici pour le supprimer">
-                                    <i class="fas fa-trash-alt fa-1x"></i>
-                                </button>
-                            </div>
-                        </div>
+                <div class="col-6 px-0 mx-0">
+                    <div id="magical-equipment-table-remove" class="sortable-list text-center"
+                         style="min-height: 50px">
+                        <button class="btn-block btn btn-danger" style="cursor:default;" data-toggle="tooltip"
+                                data-html="true" data-placement="bottom"
+                                title="Déplacez un élément ici pour le supprimer">
+                            <i class="fas fa-trash-alt fa-1x"></i>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
+        <hr/>
     {% endif %}
 
     <!-- Regular Equipment -->
-    <div class="col-12 m-0 p-0 card">
-        <div class="row col-12 m-0 p-0 card-header">
-            <div class="col-10 m-0 p-0 d-flex align-items-center">
-                <h5 class="m-0 p-0 d-block ml-2">Équipement</h5>
+    <div class="row col-12 justify-content-center mb-2">
+        <b>Équipement</b>
+    </div>
+    <div class="table-responsive col-12 m-0 p-0" style="overflow-y: hidden !important;">
+        <table class="table table-hover m-0 p-0">
+            <thead>
+            <tr>
+                <th scope="col" class="col-2" style="width: 10%">Quantité</th>
+                <th scope="col" class="col-8" style="width: 80%; min-width: 300px">Description</th>
+                <th scope="col" class="col-2 text-center" style="width: 10%">
+                    Prix à l'unité&nbsp;<span class="price-currency"></span>
+                </th>
+            </tr>
+            </thead>
+            <tbody id="equipment-table" class="sortable-list">
+            <tr id="equipment-x" hidden>
+                <td class="md-form my-0 py-0 align-middle">
+                    <i class="fas fa-arrows-alt prefix mt-2 ml-1" style="font-size: 1.5em;"></i>
+                    <input id="equipment-x-quantity" class="equipment quantity form-control text-center"
+                           type="number" value="0" min="0">
+                    <label for="equipment-x-quantity"></label>
+                </td>
+                <td class="md-form my-0 py-0 align-middle">
+                    <label for="equipment-x-name"></label>
+                    <input id="equipment-x-name" class="equipment-name form-control" type="text" value="">
+                </td>
+                <td class="md-form my-0 py-0 align-middle">
+                    <input id="equipment-x-price" class="equipment-price form-control text-center"
+                           type="number" value="0" min="0">
+                    <label for="equipment-x-price"></label>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="row col-12 m-0 p-0">
+        <div class="col-lg-2 col-md-4 row">
+            <div class="col-6 px-0 mx-0">
+                <button id="add-equipment" class="btn btn-success btn-block">
+                    <i class="fas fa-plus"></i>
+                </button>
             </div>
-            <button class="collapse-button btn btn-info rounded-lg ml-auto col-md-1 col-2"
-                    data-toggle="collapse" data-target="#equipment-collapse" aria-expanded="false"
-                    aria-controls="#equipment-collapse">
-                <i class="fas fa-angle-down"></i>
-            </button>
-        </div>
-        <div id="equipment-collapse" class="collapse m-0 p-0">
-            <div class="card-body table-responsive col-12 m-0 p-0" style="overflow-y: hidden !important;">
-                <table class="table table-hover m-0 p-0">
-                    <thead>
-                    <tr>
-                        <th scope="col" class="col-2" style="width: 10%">Quantité</th>
-                        <th scope="col" class="col-8" style="width: 80%; min-width: 300px">Description</th>
-                        <th scope="col" class="col-2 text-center" style="width: 10%">
-                            Prix à l'unité&nbsp;<span class="price-currency"></span>
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody id="equipment-table" class="sortable-list">
-                    <tr id="equipment-x" hidden>
-                        <td class="md-form my-0 py-0 align-middle">
-                            <i class="fas fa-arrows-alt prefix mt-2 ml-1" style="font-size: 1.5em;"></i>
-                            <input id="equipment-x-quantity" class="equipment quantity form-control text-center"
-                                   type="number" value="0" min="0">
-                            <label for="equipment-x-quantity"></label>
-                        </td>
-                        <td class="md-form my-0 py-0 align-middle">
-                            <label for="equipment-x-name"></label>
-                            <input id="equipment-x-name" class="equipment-name form-control" type="text" value="">
-                        </td>
-                        <td class="md-form my-0 py-0 align-middle">
-                            <input id="equipment-x-price" class="equipment-price form-control text-center"
-                                   type="number" value="0" min="0">
-                            <label for="equipment-x-price"></label>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="row col-12 m-0 p-0">
-                <div class="col-lg-2 col-md-4 row">
-                    <div class="col-6 px-0 mx-0">
-                        <button id="add-equipment" class="btn btn-success btn-block">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
-                    <div class="col-6 px-0 mx-0">
-                        <div id="equipment-table-remove" class="sortable-list text-center" style="min-height: 50px">
-                            <button class="btn-block btn btn-danger" style="cursor:default;" data-toggle="tooltip"
-                                    data-html="true" data-placement="bottom"
-                                    title="Déplacez un élément ici pour le supprimer">
-                                <i class="fas fa-trash-alt fa-1x"></i>
-                            </button>
-                        </div>
-                    </div>
+            <div class="col-6 px-0 mx-0">
+                <div id="equipment-table-remove" class="sortable-list text-center" style="min-height: 50px">
+                    <button class="btn-block btn btn-danger" style="cursor:default;" data-toggle="tooltip"
+                            data-html="true" data-placement="bottom"
+                            title="Déplacez un élément ici pour le supprimer">
+                        <i class="fas fa-trash-alt fa-1x"></i>
+                    </button>
                 </div>
             </div>
         </div>
     </div>
+    <hr/>
 
     <!-- Equipment with limited number of uses -->
-    <div class="col-12 m-0 p-0 card">
-        <div class="row col-12 m-0 p-0 card-header">
-            <div class="col-10 m-0 p-0 d-flex align-items-center">
-                <h5 class="m-0 p-0 d-block ml-2">Équipement à solidité/usage limité(e)</h5>
+    <div class="row col-12 justify-content-center mb-2">
+        <b>Équipement à solidité/usage limité(e)</b>
+    </div>
+    <div class="table-responsive col-12 m-0 p-0" style="overflow-y: hidden !important;">
+        <table class="table table-hover m-0 p-0">
+            <thead>
+            <tr>
+                <th scope="col" class="col-3" style="width: 20%; min-width: 200px">Nom</th>
+                <th scope="col" class="col-2 text-center" style="width: 10%;">Nbr utilisations/solidité</th>
+                <th scope="col" class="col-7" style="width: 70%; min-width: 500px">Description</th>
+            </tr>
+            </thead>
+            <tbody id="limitedUse-equipment-table" class="sortable-list">
+            <tr id="limitedUse-equipment-x" hidden>
+                <td class="md-form my-0 py-0 align-middle">
+                    <i class="fas fa-arrows-alt prefix mt-2 ml-1" style="font-size: 1.5em;"></i>
+                    <label for="limitedUse-equipment-x-name"></label>
+                    <input id="limitedUse-equipment-x-name" class="magical-equipment-name form-control"
+                           type="text"
+                           value="">
+                </td>
+                <td class="md-form my-0 py-0 align-middle">
+                    <input id="limitedUse-equipment-x-charge"
+                           class="magical-equipment-charge form-control text-center" type="number">
+                    <label for="limitedUse-equipment-x-charge"></label>
+                </td>
+                <td class="md-form my-0 py-0 align-middle">
+                    <label for="limitedUse-equipment-x-details"></label>
+                    <input id="limitedUse-equipment-x-details" class="magical-equipment-details form-control"
+                           type="text" value="">
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="row col-12 m-0 p-0">
+        <div class="col-lg-2 col-md-4 row">
+            <div class="col-6 px-0 mx-0">
+                <button id="add-limitedUse-equipment" class="btn btn-success btn-block">
+                    <i class="fas fa-plus"></i>
+                </button>
             </div>
-            <button class="collapse-button btn btn-info rounded-lg ml-auto col-md-1 col-2"
-                    data-toggle="collapse" data-target="#limitedUse-equipment-collapse" aria-expanded="false"
-                    aria-controls="#limitedUse-equipment-collapse">
-                <i class="fas fa-angle-down"></i>
-            </button>
-        </div>
-        <div id="limitedUse-equipment-collapse" class="collapse m-0 p-0">
-            <div class="card-body table-responsive col-12 m-0 p-0" style="overflow-y: hidden !important;">
-                <table class="table table-hover m-0 p-0">
-                    <thead>
-                    <tr>
-                        <th scope="col" class="col-3" style="width: 20%; min-width: 200px">Nom</th>
-                        <th scope="col" class="col-2 text-center" style="width: 10%;">Nbr utilisations/solidité</th>
-                        <th scope="col" class="col-7" style="width: 70%; min-width: 500px">Description</th>
-                    </tr>
-                    </thead>
-                    <tbody id="limitedUse-equipment-table" class="sortable-list">
-                    <tr id="limitedUse-equipment-x" hidden>
-                        <td class="md-form my-0 py-0 align-middle">
-                            <i class="fas fa-arrows-alt prefix mt-2 ml-1" style="font-size: 1.5em;"></i>
-                            <label for="limitedUse-equipment-x-name"></label>
-                            <input id="limitedUse-equipment-x-name" class="magical-equipment-name form-control"
-                                   type="text"
-                                   value="">
-                        </td>
-                        <td class="md-form my-0 py-0 align-middle">
-                            <input id="limitedUse-equipment-x-charge"
-                                   class="magical-equipment-charge form-control text-center" type="number">
-                            <label for="limitedUse-equipment-x-charge"></label>
-                        </td>
-                        <td class="md-form my-0 py-0 align-middle">
-                            <label for="limitedUse-equipment-x-details"></label>
-                            <input id="limitedUse-equipment-x-details" class="magical-equipment-details form-control"
-                                   type="text" value="">
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="row col-12 m-0 p-0">
-                <div class="col-lg-2 col-md-4 row">
-                    <div class="col-6 px-0 mx-0">
-                        <button id="add-limitedUse-equipment" class="btn btn-success btn-block">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
-                    <div class="col-6 px-0 mx-0">
-                        <div id="limitedUse-equipment-table-remove" class="sortable-list text-center"
-                             style="min-height: 50px">
-                            <button class="btn-block btn btn-danger" style="cursor:default;" data-toggle="tooltip"
-                                    data-html="true" data-placement="bottom"
-                                    title="Déplacez un élément ici pour le supprimer">
-                                <i class="fas fa-trash-alt fa-1x"></i>
-                            </button>
-                        </div>
-                    </div>
+            <div class="col-6 px-0 mx-0">
+                <div id="limitedUse-equipment-table-remove" class="sortable-list text-center"
+                     style="min-height: 50px">
+                    <button class="btn-block btn btn-danger" style="cursor:default;" data-toggle="tooltip"
+                            data-html="true" data-placement="bottom"
+                            title="Déplacez un élément ici pour le supprimer">
+                        <i class="fas fa-trash-alt fa-1x"></i>
+                    </button>
                 </div>
             </div>
         </div>

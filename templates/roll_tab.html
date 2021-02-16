@@ -1,17 +1,17 @@
 <div id="roll-tab" class="tab-pane fade row my-1 container-fluid m-0">
     <div class="row col-12 justify-content-center mb-2">
-        <div class="btn btn-light rounded-lg py-2 hide-table" data-hide-table="#close_combat-table">
+        <div class="btn btn-light rounded-lg py-2 hide-section" data-hide-table="#close_combat-table">
             Combat au contact&nbsp;<i class="far fa-eye"></i>
         </div>
-        <div class="btn btn-light rounded-lg py-2 hide-table" data-hide-table="#range_combat-table">
+        <div class="btn btn-light rounded-lg py-2 hide-section" data-hide-table="#range_combat-table">
             Combat à distance&nbsp;<i class="far fa-eye"></i>
         </div>
         {% if dual_wielding %}
-            <div class="btn btn-light rounded-lg py-2 hide-table" data-hide-table="#dual_wielding-table">
+            <div class="btn btn-light rounded-lg py-2 hide-section" data-hide-table="#dual_wielding-table">
                 Combat à deux armes&nbsp;<i class="far fa-eye"></i>
             </div>
         {% endif %}
-        <div class="btn btn-light rounded-lg py-2 hide-table" data-hide-table="#roll-table">
+        <div class="btn btn-light rounded-lg py-2 hide-section" data-hide-table="#roll-table">
             Tests courants&nbsp;<i class="far fa-eye"></i>
         </div>
     </div>
@@ -73,7 +73,6 @@
             </tbody>
         </table>
     </div>
-
     <div class="row col-12">
         <div class="col-lg-2 col-md-4 row">
             <div class="col-6 px-0 mx-0">
@@ -92,6 +91,7 @@
             </div>
         </div>
     </div>
+    <hr/>
 
     <div class="row col-12 justify-content-center mb-2">
         <b>Combat à distance</b>
@@ -186,7 +186,6 @@
             </tbody>
         </table>
     </div>
-
     <div class="row col-12">
         <div class="col-lg-2 col-md-4 row">
             <div class="col-6 px-0 mx-0">
@@ -205,6 +204,7 @@
             </div>
         </div>
     </div>
+    <hr/>
 
     {% if dual_wielding %}
         <div class="row col-12 justify-content-center mb-2">
@@ -275,7 +275,6 @@
                 </tbody>
             </table>
         </div>
-
         <div class="row col-12">
             <div class="col-lg-2 col-md-4 row">
                 <div class="col-6 px-0 mx-0">
@@ -294,6 +293,7 @@
                 </div>
             </div>
         </div>
+        <hr/>
     {% endif %}
     <div class="row col-12 justify-content-center mb-2">
         <b>Tests courants</b>
@@ -352,7 +352,6 @@
             </tbody>
         </table>
     </div>
-
     <div class="row col-12">
         <div class="col-lg-2 col-md-4 row">
             <div class="col-6 px-0 mx-0">
@@ -371,6 +370,7 @@
             </div>
         </div>
     </div>
+    <hr/>
 
     <div class="row mt-3">
         <div class="col-12">Lancers de dés libre</div>

@@ -501,20 +501,15 @@ $("#race,.realm,.component,.means," + talent_list_selector).on("change", _ => {
 })
 
 function toggle_energy_dependent_table(energy, table_body) {
-    const table = table_body.parent().parent()
-    const title = table.prev()
-    const hrule = title.prev()
-    const button = table.next()
-    if (parseInt(energy.val()) >= 1) {
-        table.removeClass("d-none")
-        hrule.removeClass("d-none")
-        title.removeClass("d-none")
-        button.removeClass("d-none")
-    } else {
-        table.addClass("d-none")
-        hrule.addClass("d-none")
-        title.addClass("d-none")
-        button.addClass("d-none")
+    const toggle_button = $("[data-hide-table='#" + table_body.get(0).id + "']")
+    if (parseInt(energy.val()) >= 1 && toggle_button.hasClass("d-none")) {
+        toggle_button.removeClass("d-none")
+        if (toggle_button.hasClass("btn-dark"))
+            toggle_button.click()
+    } else if (parseInt(energy.val()) === 0 && !toggle_button.hasClass("d-none")) {
+        if (toggle_button.hasClass("btn-light"))
+            toggle_button.click()
+        toggle_button.addClass("d-none")
     }
 }
 
