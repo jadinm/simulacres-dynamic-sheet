@@ -218,8 +218,8 @@ function update_talent(event) {
     })
 
     // Update rolls
-    $(".roll-value,.dual_wielding-value,.spell-value").each((i, elem) => {
-        row_of(elem).update_roll_value()
+    $(".row-roll-trigger").each((i, elem) => {
+        row_of(elem).update_roll_value(elem)
     })
 
     // Update armor penalty
@@ -268,8 +268,8 @@ $('.remove-talent').sortable({
         $(event.item).remove()
 
         // Update rolls
-        $(".roll-value,.dual_wielding-value,.spell-value").each((i, elem) => {
-            row_of(elem).update_roll_value()
+        $(".row-roll-trigger").each((i, elem) => {
+            row_of(elem).update_roll_value(elem)
         })
 
         // Update all list selections of talents

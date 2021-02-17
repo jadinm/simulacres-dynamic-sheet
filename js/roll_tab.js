@@ -55,8 +55,10 @@ class RollRow extends DataRow {
         return sum
     }
 
-    update_roll_value() {
-        this.data.find(".row-roll-trigger").each((i, dice_div) => {
+    update_roll_value(dice_div = $()) {
+        dice_div = $(dice_div)
+        dice_div = (dice_div.length > 0) ? dice_div : this.data.find(".row-roll-trigger")
+        dice_div.each((i, dice_div) => {
             let sum = 0
 
             // Recover component, means and realm
@@ -401,8 +403,8 @@ $("#roll-search").on("change", event => {
 
 $("#race,.realm,.component,.means," + talent_list_selector).on("change", _ => {
     // Update all of the spell values
-    $(".roll-value,.dual_wielding-value").each((i, elem) => {
-        row_of(elem).update_roll_value()
+    $(".row-roll-trigger").each((i, elem) => {
+        row_of(elem).update_roll_value(elem)
     })
 })
 

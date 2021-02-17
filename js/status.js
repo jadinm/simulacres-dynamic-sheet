@@ -256,8 +256,8 @@ function get_unease() {
 }
 
 function unease_value_changed_event() {
-    $(".spell-value,.superpower,.roll-value,.dual_wielding-value").each((i, elem) => {
-        row_of(elem).update_roll_value()
+    $(".row-roll-trigger").each((i, elem) => {
+        row_of(elem).update_roll_value(elem)
     })
 }
 

@@ -37,10 +37,12 @@ class SpellRow extends RollRow {
         return value && good_nature_evil_energies.includes(value.trim())
     }
 
-    update_roll_value() {
+    update_roll_value(dive_div) {
         if (this.is_evil_nature_good())
             return
-        this.data.find(".row-roll-trigger").each((i, dice_div) => {
+        dive_div = $(dive_div)
+        dive_div = (dive_div.length > 0) ? dive_div : this.data.find(".row-roll-trigger")
+        dive_div.each((i, dice_div) => {
             let sum = 0
             const realm = this.realm(dice_div)
 
@@ -301,8 +303,10 @@ class FocusMagicRow extends SpellRow {
         return [bonus + value, []]
     }
 
-    update_roll_value() {
-        this.data.find(".row-roll-trigger").each(() => {
+    update_roll_value(dice_div = $()) {
+        dice_div = $(dice_div)
+        dice_div = (dice_div.length > 0) ? dice_div : this.data.find(".row-roll-trigger")
+        dice_div.each(() => {
             let sum = 0
 
             const bonus = this.get("details-bonus")
@@ -492,13 +496,6 @@ function init_spell_list(input) {
 }
 
 /* Triggers */
-
-$("#race,.realm,.component,.means," + talent_list_selector).on("change", _ => {
-    // Update all of the spell values
-    $(".spell-value").each((i, elem) => {
-        row_of(elem).update_roll_value()
-    })
-})
 
 function toggle_energy_dependent_table(energy, table_body) {
     const toggle_button = $("[data-hide-table='#" + table_body.get(0).id + "']")

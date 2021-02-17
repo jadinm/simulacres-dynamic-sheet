@@ -1,4 +1,4 @@
-<script id="plugin-js-roll-probability" class="plugin-js" data-plugin-version="1.0.1">
+<script id="plugin-js-roll-probability" class="plugin-js" data-plugin-version="1.0.2">
     if (!window.hasOwnProperty('plugin_roll_probability_old_fn')) {
         // When we do not upgrade the plugin, fetch the roll function
         window.plugin_roll_probability_old_fn = {
@@ -79,11 +79,13 @@
         }
 
         function update_roll_tooltip_fn(base_fn) {
-            function hook() {
+            function hook(dive_div) {
                 // We call the old function and pass "this" in its context
-                base_fn.call(this)
+                base_fn.call(this, dive_div)
                 // Add tooltips
-                this.data.find(".row-roll-trigger").each((i, roll_elem) => {
+                dive_div = $(dive_div)
+                dive_div = (dive_div.length > 0) ? dive_div : this.data.find(".row-roll-trigger")
+                dive_div.each((i, roll_elem) => {
                     roll_elem = $(roll_elem)
                     const value_elem = this.get("value", roll_elem)
                     const value = parseInt(value_elem.text())
@@ -107,8 +109,8 @@
             value[0].prototype.update_roll_value = update_roll_tooltip_fn(value[1])
         }
         // Bootstrap tooltips on existing rows
-        $(".roll-value,.dual_wielding-value,.spell-value").each((i, elem) => {
-            row_of(elem).update_roll_value()
+        $(".row-roll-trigger").each((i, elem) => {
+            row_of(elem).update_roll_value(elem)
         })
 
         /* To remove a plugin, it might not always be sufficient to remove every block

@@ -365,9 +365,9 @@ function import_data(src_html, dst_html, full_sheet) {
     if (old_background)
         dst_html.find("#main-container").css("background-image", old_background)
 
-    // Update all of the spell values
-    $(".spell-value,.roll-value,.dual_wielding-value").each((i, elem) => {
-        row_of(elem).update_roll_value()
+    // Update all of the roll values
+    $(".row-roll-trigger").each((i, elem) => {
+        row_of(elem).update_roll_value(elem)
     })
 
     // Set the same theme

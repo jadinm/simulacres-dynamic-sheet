@@ -75,8 +75,8 @@ class SuperpowerRollTable extends TalentRollTable {
         super.formula_changed(e)
 
         // Update all of the roll and spell values
-        $(".spell-value,.roll-value,.dual_wielding-value").each((i, elem) => {
-            row_of(elem).update_roll_value()
+        $(".row-roll-trigger").each((i, elem) => {
+            row_of(elem).update_roll_value(elem)
         })
     }
 
@@ -96,13 +96,6 @@ class SuperpowerRollTable extends TalentRollTable {
 }
 
 /* Triggers */
-
-$("#race,.realm,.component").on("change", _ => {
-    // Update all of the spell values
-    $(".superpower").each((i, elem) => {
-        row_of(elem).update_roll_value()
-    })
-})
 
 $("#superpower-search").on("change", event => {
     let value = $(event.target).val().toLowerCase()
