@@ -1,0 +1,13 @@
+{% extends "roll_modal.html" %}
+
+{% block previous_fields %}
+    <hr/>
+    <div class="row col-12 mx-1">
+        Nom du test (si vous voulez différencier des tests basés sur le même talent):
+    </div>
+    <div class="row mx-1 md-form col-12 py-0 my-0 mb-2">
+        <label class="py-0 my-0" for="{{ row_type }}-x-details-name"></label>
+        <input class="form-control py-0 my-0" type="text" value=""
+               id="{{ row_type }}-x-details-name">
+    </div>
+{% endblock %}

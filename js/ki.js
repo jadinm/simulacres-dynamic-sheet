@@ -57,6 +57,16 @@ class KiRow extends SpellRow {
         // Update adventure points
         compute_remaining_ap()
     }
+
+    roll_reason() {
+        const talent = this.get("talent").find("option:selected").val()
+        const name = this.get("name").text()
+        let title = talent
+        if (name.length > 0) {
+            title = name + ((title.length > 0) ? " (" + title + ")" : "")
+        }
+        return title
+    }
 }
 
 class KiTable extends SpellRollTable {

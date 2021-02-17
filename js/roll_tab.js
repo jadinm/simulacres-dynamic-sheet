@@ -117,11 +117,16 @@ class RollRow extends DataRow {
     roll_reason() {
         const talent = this.get("talent").find("option:selected").val()
         const tap_talent_select = this.get("tap-talent")
+        const name = this.get("name").text()
+        let title = talent
         if (tap_talent_select.length > 0) {
             const tap_talent = tap_talent_select.find("option:selected").val()
-            return "Combat à deux armes: " + talent + " & " + tap_talent
+            title = "Combat à deux armes: " + talent + " & " + tap_talent
         }
-        return talent
+        if (name.length > 0) {
+            title = name + ((title.length > 0) ? " (" + title + ")" : "")
+        }
+        return title
     }
 
     roll(button) {
@@ -147,6 +152,18 @@ class RollRow extends DataRow {
             critical_increase, formula_elements, margin_throttle, false, false,
             "", "").trigger_roll()
         $('#roll-dialog').modal()
+    }
+
+    update_title() {
+        const candidate_title = this.get("details-name").val()
+        const title_div = this.get("name")
+        if (candidate_title != null && title_div.length > 0) {
+            title_div.text(candidate_title)
+            if (candidate_title.length > 0)
+                title_div.removeClass("d-none")
+            else
+                title_div.addClass("d-none")
+        }
     }
 }
 
@@ -295,6 +312,10 @@ class TalentRollTable extends DataTable {
         row_of(e.target).update_roll_value()
     }
 
+    update_title(e) {
+        row_of(e.target).update_title()
+    }
+
     add_custom_listener_to_row(row) {
         super.add_custom_listener_to_row(row)
         add_save_to_dom_listeners(row.data)
@@ -315,6 +336,7 @@ class TalentRollTable extends DataTable {
             row.data.find(".formula-elem").attr("disabled", "disabled")
             row.update_roll_value()
         }
+        row.get("details-name").uon("change", this.update_title)
     }
 
     clone_row() {

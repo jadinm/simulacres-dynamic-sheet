@@ -39,13 +39,19 @@
             </thead>
             <tbody id="ki-table" class="sortable-list">
             <tr id="ki-x" hidden>
-                <td class="md-form align-middle" data-toggle="tooltip" data-placement="bottom" title="">
-                    <div class="row col-12 md-form my-0 py-0 align-middle d-flex">
-                        <label for="ki-x-talent"></label>
-                        <select class="show-tick form-control talent-select selectpicker spell-talent"
-                                data-live-search="true" id="ki-x-talent"
-                                data-style="col-10 ml-5 mx-0 px-3 align-middle">
-                        </select>
+                <td class="md-form align-middle my-0 mr-0 pr-0 py-0" data-toggle="tooltip" data-placement="bottom"
+                    title="">
+                    <div class="row col-12 md-form mx-0 px-0 my-0 py-0 align-middle d-flex">
+                        <div class="col-12 m-0 p-0 align-middle">
+                            <div id="ki-x-name" class="row col-12 ml-5 text-center d-none"></div>
+                            <div class="row col-12">
+                                <label for="ki-x-talent"></label>
+                                <select class="show-tick form-control talent-select selectpicker spell-talent"
+                                        data-live-search="true" id="ki-x-talent"
+                                        data-style="col-10 ml-5 mx-0 px-3 align-middle">
+                                </select>
+                            </div>
+                        </div>
                         <i class="fas fa-arrows-alt prefix h-100" style="font-size: 1.5em;"></i>
                     </div>
                 </td>
@@ -112,7 +118,7 @@
                         <i class="fas fa-cogs"></i>
                     </div>
                     {% with row_type = "ki" %}
-                        {% include "roll_modal.html" %}
+                        {% include "talent_roll_modal.html" %}
                     {% endwith %}
                 </td>
             </tr>
