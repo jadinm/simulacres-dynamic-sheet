@@ -19,6 +19,7 @@ function hp_update(event) {
     }
     // Recompute minimum unease
     let unease_sum = 0
+    const old_unease = get_unease()
     const hp_sliders = $(".hp.input-slider")
     for (let i = 0; i < hp_sliders.length; i++) {
         const max_value = parseInt(hp_sliders[i].getAttribute("data-slider-max"))
@@ -26,7 +27,8 @@ function hp_update(event) {
             unease_sum += 1
     }
     set_slider_min($("#unease"), unease_sum)
-    unease_value_changed_event()
+    if (get_unease() !== old_unease)
+        unease_value_changed_event()
 }
 
 /* Update armor penalty */
@@ -305,10 +307,9 @@ $(_ => {
 
     $('.hp.input-slider').each((i, input) => {
         activate_slider(input, build_max_formatter, slider => {
-            slider.on("change", hp_update)
             $(slider.slider("getElement")).addClass("hp-slider")
             hp_update({target: slider[0]})
-        })
+        }, {}, hp_update)
     })
 
     activate_slider($('#breath')[0], (input) => {
