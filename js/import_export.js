@@ -278,7 +278,8 @@ function import_data(src_html, dst_html, full_sheet) {
                     }
                 } else {
                     // We change the value and trigger the change in case of a listener
-                    if (new_input.length > 0 && new_input[0].value !== old_input.value) {
+                    if (new_input.length > 0 && new_input[0].value !== old_input.value
+                        || new_input.hasClass("input-slider")) {
                         new_input.val(old_input.value)
                         new_input.trigger("change")
                     }
