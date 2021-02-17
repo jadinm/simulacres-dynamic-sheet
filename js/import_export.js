@@ -634,6 +634,10 @@ $("#import-image").on("change", event => {
     reader.readAsDataURL(event.target.files[0])
 })
 
+$("#image-remove").on("click", _ => {
+    $("#character-image").removeAttr("src")
+})
+
 /* Import character image */
 $("#import-background-image").on("change", event => {
     if (event.target.files.length === 0)
@@ -648,6 +652,10 @@ $("#import-background-image").on("change", event => {
         $(event.target).next().text("Image de fond")
     }
     reader.readAsDataURL(event.target.files[0])
+})
+
+$("#background-image-remove").on("click", _ => {
+    $("#main-container").css("background-image", "none")
 })
 
 /* Import tab */
