@@ -182,7 +182,7 @@ class RangeRow extends RollRow {
 
     update_roll_value_hook(sum, dice_div) {
         const range = this.range(dice_div)
-        if (range === "")
+        if (range === "" || isNaN(sum))
             return sum
         return sum + this.constructor.modifier_by_range[range]
     }
