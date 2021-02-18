@@ -348,13 +348,13 @@ class TalentRollTable extends DataTable {
 
 class CloseCombatRollTable extends TalentRollTable {
 
-    checked_radio = ["body", "action"]
+    static checked_radio = ["body", "action"]
 
     add_custom_listener_to_row(row) {
         super.add_custom_listener_to_row(row)
 
-        check_radio(row.get(this.checked_radio[0])[0])
-        check_radio(row.get(this.checked_radio[1])[0])
+        check_radio(row.get(this.constructor.checked_radio[0])[0])
+        check_radio(row.get(this.constructor.checked_radio[1])[0])
         row.data.find(".formula-elem").filter((i, elem) => {
             return elem.id.search(realms) === -1
         }).attr("disabled", "disabled")
@@ -364,7 +364,7 @@ class CloseCombatRollTable extends TalentRollTable {
 
 class RangeCombatRollTable extends CloseCombatRollTable {
     static row_class = RangeRow
-    checked_radio = ["body", "perception"]
+    static checked_radio = ["body", "perception"]
 
     update_effects(e) {
         row_of($(e.target)).update_effects()
@@ -406,17 +406,4 @@ $("#race,.realm,.component,.means," + talent_list_selector).on("change", _ => {
     $(".row-roll-trigger").each((i, elem) => {
         row_of(elem).update_roll_value(elem)
     })
-})
-
-$(_ => {
-    // Initialize spell lists
-    $("select.spell-list").each((i, input) => {
-        init_spell_list(input)
-    })
-
-    // Initialize tables
-    new TalentRollTable($("#roll-table"))
-    new TalentRollTable($("#dual_wielding-table"))
-    new CloseCombatRollTable($("#close_combat-table"))
-    new RangeCombatRollTable($("#range_combat-table"))
 })

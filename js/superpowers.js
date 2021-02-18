@@ -101,7 +101,3 @@ $("#superpower-search").on("change", event => {
     let value = $(event.target).val().toLowerCase()
     search_tables(value, $("#superpower-table tr"))
 })
-
-$(_ => {
-    new SuperpowerRollTable($("#superpower-table"))
-})

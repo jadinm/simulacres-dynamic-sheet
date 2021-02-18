@@ -524,14 +524,3 @@ $("#magic-search").on("change", event => {
     let value = $(event.target).val().toLowerCase()
     search_tables(value, $("#spell-table tr,#focusMagic-table tr,#rune-table tr,#word-table tr"))
 })
-
-$(_ => {
-    // Initialize spell lists
-    $("select.spell-list").each((i, input) => {
-        init_spell_list(input)
-    })
-
-    // Initialize tables
-    new SpellRollTable($("#spell-table"))
-    new FocusMagicRollTable($("#focusMagic-table"))
-})

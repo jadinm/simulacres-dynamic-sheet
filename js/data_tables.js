@@ -43,6 +43,7 @@ class DataTable {
             return
         this.id = this.table[0].id
         this.name = this.id.replace("-table", "")
+        this.register()
 
         this.template_row = $("#" + this.name + "-x")
         this.add_button = $("#add-" + this.name)
@@ -66,7 +67,6 @@ class DataTable {
             onAdd: this.remove_row
         })
         this.add_custom_listeners()
-        this.register()
     }
 
     register() {
