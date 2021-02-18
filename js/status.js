@@ -231,6 +231,22 @@ $("[id^=decrement-hp]").on("click", e => {
     compute_remaining_ap()
 })
 
+/* Update the tooltip */
+$("[id^=details-hp]").on("change", e => {
+    const hp_id = e.target.id.split("details-")[1]
+    const hp = $("[data-target=\"#" + hp_id + "-max-update\"")
+    const note = $(e.target).val()
+    let text = ""
+    if (!note || note.length === 0) {
+        text = hp[0].getAttribute("data-original-title-base")
+    } else {
+        text = note + "<br/><br/>" + hp[0].getAttribute("data-original-title-base")
+    }
+    hp[0].setAttribute("data-original-title", text)
+    hp.tooltip("dispose")
+    hp.tooltip()
+})
+
 /* Show/hide absorption on click */
 $("#toggle-absorption").on("click", e => {
     const show = $(e.target).text().includes("Voir")

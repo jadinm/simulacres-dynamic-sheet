@@ -2,6 +2,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <!-- Localized HP and protection -->
+            {% set tooltip_base = "Cliquez pour modifier le maximum des PVs ou ajouter une note" %}
             <div class="col-lg-5 col-md-7 col-sm-12 col-xs-12">
                 <div class="row">
                     <div class="offset-4 col-4 align-middle text-center">
@@ -25,7 +26,7 @@
                         </div>
                         <div class="clickable btn-link hp-link" data-toggle="tooltip" data-html="true"
                              data-placement="right" data-target="#hp-head-max-update"
-                             title="Touché sur 1<br/><br/>Cliquez pour ajouter ou retirer définitivement des PVs">
+                             title="{{ tooltip_base }}" data-original-title-base="{{ tooltip_base }}">
                             <svg height="4.5em" width="4.5em">
                                 <use xlink:href="#svg-head"></use>
                             </svg>
@@ -64,7 +65,7 @@
                                data-slider-reversed="true"/>
                         <svg class="clickable btn-link hp-link" height="4.5em" width="4.5em" data-toggle="tooltip"
                              data-html="true" data-placement="top" data-target="#hp-right-arm-max-update"
-                             title="Touché sur 4 au contact<br/>Touché sur 3 à distance<br/><br/>Cliquez pour ajouter ou retirer définitivement des PVs">
+                             title="{{ tooltip_base }}" data-original-title-base="{{ tooltip_base }}">
                             <use xlink:href="#svg-right-hand"></use>
                         </svg>
                     </div>
@@ -89,7 +90,7 @@
                         </div>
                         <div class="clickable btn-link hp-link" data-toggle="tooltip" data-html="true"
                              data-placement="top" data-target="#hp-trunk-max-update"
-                             title="Touché sur 2 ou 3 au contact<br/>Touché sur 2 à distance<br/><br/>Cliquez pour ajouter ou retirer définitivement des PVs">
+                             title="{{ tooltip_base }}" data-original-title-base="{{ tooltip_base }}">
                             <svg height="4.5em" width="4.5em">
                                 <use xlink:href="#svg-chest"></use>
                             </svg>
@@ -119,7 +120,7 @@
                         </div>
                         <svg class="clickable btn-link hp-link" height="4.5em" width="4.5em" data-toggle="tooltip"
                              data-html="true" data-placement="top" data-target="#hp-left-arm-max-update"
-                             title="Touché sur 5 au contact<br/>Touché sur 4 à distance<br/><br/>Cliquez pour ajouter ou retirer définitivement des PVs">
+                             title="{{ tooltip_base }}" data-original-title-base="{{ tooltip_base }}">
                             <use xlink:href="#svg-left-hand"></use>
                         </svg>
                         <label for="hp-left-arm" hidden></label>
@@ -139,7 +140,7 @@
                                data-slider-reversed="true"/>
                         <svg class="clickable btn-link hp-link" height="4.5em" width="4.5em" data-toggle="tooltip"
                              data-html="true" data-placement="top" data-target="#hp-right-leg-max-update"
-                             title="Touché sur 6p au contact<br/>Touché sur 5 à distance<br/><br/>Cliquez pour ajouter ou retirer définitivement des PVs">
+                             title="{{ tooltip_base }}" data-original-title-base="{{ tooltip_base }}">
                             <use xlink:href="#svg-right-foot"></use>
                         </svg>
                         <div class="md-form form-sm m-0 align-middle input-with-pre-icon" data-toggle="tooltip"
@@ -163,7 +164,7 @@
                     <div class="offset-lg-0 offset-md-1 col-4 align-middle text-center px-0">
                         <svg class="clickable btn-link hp-link" height="4.5em" width="4.5em" data-toggle="tooltip"
                              data-html="true" data-placement="top" data-target="#hp-left-leg-max-update"
-                             title="Touché sur 6i au contact<br/>Touché sur 6 à distance<br/><br/>Cliquez pour ajouter ou retirer définitivement des PVs">
+                             title="{{ tooltip_base }}" data-original-title-base="{{ tooltip_base }}">
                             <use xlink:href="#svg-left-foot"></use>
                         </svg>
                         <label for="hp-left-leg" hidden></label>
