@@ -37,12 +37,16 @@ class SpellRow extends RollRow {
         return value && good_nature_evil_energies.includes(value.trim())
     }
 
+    filter_invisible_dices(i, elem) {
+        return elem && !$(elem).hasClass("d-none") && !$(elem).parents(".spell-value-row").hasClass("d-none")
+    }
+
     update_roll_value(dive_div) {
         if (this.is_evil_nature_good())
             return
         dive_div = $(dive_div)
         dive_div = (dive_div.length > 0) ? dive_div : this.data.find(".row-roll-trigger")
-        dive_div.each((i, dice_div) => {
+        dive_div.filter(this.filter_invisible_dices).each((i, dice_div) => {
             let sum = 0
             const realm = this.realm(dice_div)
 
@@ -306,7 +310,7 @@ class FocusMagicRow extends SpellRow {
     update_roll_value(dice_div = $()) {
         dice_div = $(dice_div)
         dice_div = (dice_div.length > 0) ? dice_div : this.data.find(".row-roll-trigger")
-        dice_div.each(() => {
+        dice_div.filter(this.filter_invisible_dices).each(() => {
             let sum = 0
 
             const bonus = this.get("details-bonus")
@@ -367,11 +371,9 @@ class SpellRollTable extends TalentRollTable {
         e.preventDefault()
         const spell = row_of(e.target)
         if (e.target.getAttribute("name").includes("-realm")) {
-            spell.data.find("[name*=\"-realm\"]").each((i, elem) => {
-                spell.update_realm($(elem))
-            })
+            spell.update_realm($(e.target))
+            spell.update_roll_value(spell.get("dice", $(e.target)))
         }
-        spell.update_roll_value()
     }
 
     select_changed(e) {

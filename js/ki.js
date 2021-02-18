@@ -54,6 +54,9 @@ class KiRow extends SpellRow {
             this.data.find(".ki-level-specific").addClass("d-none")
         }
 
+        // Update value for visible elements
+        this.update_roll_value()
+
         // Update adventure points
         compute_remaining_ap()
     }
@@ -71,6 +74,11 @@ class KiRow extends SpellRow {
 
 class KiTable extends SpellRollTable {
     static row_class = KiRow
+
+    formula_changed(e) {
+        e.preventDefault()
+        row_of(e.target).update_roll_value()
+    }
 
     update_level(e) {
         row_of(e.target).update_level()
