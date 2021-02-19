@@ -234,13 +234,15 @@ $("[id^=decrement-hp]").on("click", e => {
 /* Update the tooltip */
 $("[id^=details-hp]").on("change", e => {
     const hp_id = e.target.id.split("details-")[1]
-    const hp = $("[data-target=\"#" + hp_id + "-max-update\"")
+    const hp = localized_hp ? $("[data-target=\"#" + hp_id + "-max-update\"") : $("#hp-title")
     const note = $(e.target).val()
     let text = ""
+    const base = hp[0].getAttribute("data-original-title-base")
     if (!note || note.length === 0) {
-        text = hp[0].getAttribute("data-original-title-base")
+        text = base
     } else {
-        text = note + "<br/><br/>" + hp[0].getAttribute("data-original-title-base")
+        text = note
+            + (base && base.length > 0 && !is_v7 ? "<br/>" + hp[0].getAttribute("data-original-title-base") : "")
     }
     hp[0].setAttribute("data-original-title", text)
     hp.tooltip("dispose")

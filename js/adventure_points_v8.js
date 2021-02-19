@@ -52,7 +52,14 @@ function compute_remaining_ap() {
         consumed_points += diff
     let title = $("#hp-title")
     if (title.length > 0 && !intermediate_discovery) {
-        title[0].setAttribute("title", "Coût: " + diff + " PA")
+        let note = $("#details-hp-trunk").val()
+        const base = "Coût: " + diff + " PA"
+        if (note && note.length)
+            note = note + "<br/>" + base
+        else
+            note = base
+        title[0].setAttribute("title", note)
+        title[0].setAttribute("data-original-title-base", base)
         title.tooltip("dispose")
         title.tooltip()
     }
