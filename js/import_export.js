@@ -285,7 +285,7 @@ function import_data(src_html, dst_html, full_sheet) {
                     }
                 }
             }
-            if (new_input.length === 0 && !old_input.id.includes("plugin-") && !old_input.id.includes("note-dialog-") && !old_input.id.includes("ColorPicker")) { // The old input is lost
+            if (!(talent_matching && talent_name.length === 0) && new_input.length === 0 && !old_input.id.includes("plugin-") && !old_input.id.includes("note-dialog-") && !old_input.id.includes("ColorPicker")) { // The old input is lost
                 missing_inputs.push(old_input.id)
             }
         }
