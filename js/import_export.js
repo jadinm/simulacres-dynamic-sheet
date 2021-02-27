@@ -122,7 +122,8 @@ function show_import_warnings(missing_inputs, duplicated_inputs) {
     const list_missing = $("#import-warning-missing")
     list_missing.children().remove()
     $(missing_inputs).each((i, elem) => {
-        list_missing.append($("<li class=\"list-group-item align-items-center py-1 my-0\">" + elem + "</li>"))
+        const value = elem[1] == null ? "" : elem[1]
+        list_missing.append($("<li class=\"list-group-item align-items-center py-1 my-0\">\"" + value + "\" dans un champ avec l'identifiant \"" + elem[0] + "\"</li>"))
     })
     const list_duplicated = $("#import-warning-duplicated")
     $(duplicated_inputs).each((i, elem) => {
@@ -286,7 +287,7 @@ function import_data(src_html, dst_html, full_sheet) {
                 }
             }
             if (!(talent_matching && talent_name.length === 0) && new_input.length === 0 && !old_input.id.includes("plugin-") && !old_input.id.includes("note-dialog-") && !old_input.id.includes("ColorPicker")) { // The old input is lost
-                missing_inputs.push(old_input.id)
+                missing_inputs.push([old_input.id, old_input.value])
             }
         }
     })
@@ -302,7 +303,7 @@ function import_data(src_html, dst_html, full_sheet) {
 
             if (new_input.length === 0) { // The old input is lost
                 if (!old_input.id.includes("plugin-"))
-                    missing_inputs.push(old_input.id)
+                    missing_inputs.push([old_input.id, old_input.value])
             } else if (!new_input[0].id.includes("note-")) {
                 // Update associated summernote (the editors for the notes are initialized lazily)
                 new_input.summernote("code", new_input.val())
