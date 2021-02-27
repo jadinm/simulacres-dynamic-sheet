@@ -101,7 +101,11 @@ function compute_remaining_ap() {
             name = $(elem).find(".spell-name").val().trim()
         }
         let split_spell_realm_modifier = spell_same_realm_discount
-        if (name && name.length > 0) {
+
+        const ap_overwrite = parseInt(spell.get("details-ap-cost").val())
+        if (!isNaN(ap_overwrite)) {
+            diff = ap_overwrite
+        } else if (name && name.length > 0) {
             if (!all_names.includes(name)) {
                 split_spell_realm_modifier = 0
                 all_names.push(name)
@@ -130,8 +134,8 @@ function compute_remaining_ap() {
                     diff += diff_level_2
             })
 
-            consumed_points += diff
         }
+        consumed_points += diff
 
         // Update tooltip
         update_tooltip_cost(spell, diff)

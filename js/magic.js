@@ -417,6 +417,7 @@ class SpellRollTable extends TalentRollTable {
         row.data.find("select.spell-list").uon("changed.bs.select", this.update_list)
         row.data.find(".hermetic-difficulty").uon("change", this.update_value)
         row.data.find(".hermetic-mr-learning").uon("change", this.update_value)
+        row.get("details-ap-cost").uon("change", compute_remaining_ap)
 
         row.data.find("[id*=\"-difficulty-input\"").each((i, elem) => {
             activate_slider(elem, this.show_difficulty_builder, _ => void 0, {},

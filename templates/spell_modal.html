@@ -17,4 +17,11 @@
         <label class="py-0 my-0" for="{{ row_type }}-x-details-resistance"></label>
         <input class="form-control py-0 my-0" type="text" value="" id="{{ row_type }}-x-details-resistance">
     </div>
+    <div class="row col-12 mx-1">
+        Coût en PA forcé (si le champs est vide, c'est la valeur par défaut):
+    </div>
+    <div class="row mx-1 md-form col-12 py-0 my-0">
+        <label class="py-0 my-0" for="{{ row_type }}-x-details-ap-cost"></label>
+        <input class="form-control py-0 my-0" type="number" min="0" value="" id="{{ row_type }}-x-details-ap-cost">
+    </div>
 {% endblock %}
