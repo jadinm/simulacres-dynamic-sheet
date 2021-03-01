@@ -1,4 +1,4 @@
-<li id="plugin-button-export-to-server" class="plugin-button nav-item" data-plugin-version="1.0.0">
+<li id="plugin-button-export-to-server" class="plugin-button nav-item" data-plugin-version="1.0.1">
     <a class="nav-link" data-toggle="tab" href="#plugin-tab-export-to-server" role="tab"
        aria-controls="plugin-tab-export-to-server" aria-selected="false">
         Exporter
@@ -27,6 +27,17 @@
         </div>
     </div>
     <div class="form-row row mt-2 p-0 m-0 pr-2">
+        <button id="plugin-export-to-server-record" type="submit" class="btn btn-danger rounded col-12 pb-2 pt-2">
+            Démarrer l'enregistrement des résultat des tests
+        </button>
+    </div>
+    <div class="form-row row mt-2 p-0 m-0 pr-2 d-none">
+        <button id="plugin-export-to-server-stop-record" type="submit"
+                class="btn btn-light rounded col-12 pb-2 pt-2">
+            Stopper l'enregistrement des résultats des tests
+        </button>
+    </div>
+    <div class="form-row row mt-2 p-0 m-0 pr-2">
         <button id="plugin-export-to-server-export" type="submit" class="btn btn-secondary rounded col-12 pb-2 pt-2">
             Exporter vers le serveur
         </button>
@@ -44,6 +55,17 @@
     // We create a new block to avoid errors in case of redeclaration of global variables
     // This can happen if this plugin is imported twice
     $(_ => {
+        /* Toggle recording of roll stats */
+        $("#plugin-export-to-server-record").on("click", e => {
+            $(e.target).parent().addClass("d-none")
+            $("#plugin-export-to-server-stop-record").parent().removeClass("d-none")
+        })
+        $("#plugin-export-to-server-stop-record").on("click", e => {
+            $(e.target).parent().addClass("d-none")
+            $("#plugin-export-to-server-record").parent().removeClass("d-none")
+        })
+
+        /* Update roll */
         function update_roll(_, roll) {
             const url = $("#plugin-export-to-server-roll-url").val()
             if (!url || url.length === 0)
@@ -58,6 +80,7 @@
             data.append("name", character_name)
             data.append("critical_success", roll.is_critical_success())
             data.append("critical_failure", roll.is_critical_failure())
+            data.append("recording", $("#plugin-export-to-server-record").parent().hasClass("d-none"))
             for (const [key, value] of Object.entries(roll)) {
                 data.append(key, value)
             }
@@ -89,6 +112,8 @@
                 }
             })
         }
+        $(document).off("roll").on("roll", update_roll)
+        $(document).off("update-roll").on("update-roll", update_roll)
 
         // Fix graphical bug with the label overlapping the default value
         $("#plugin-export-to-server-url").trigger("change")
@@ -150,7 +175,5 @@
                 }
             })
         })
-        $(document).off("roll").on("roll", update_roll)
-        $(document).off("update-roll").on("update-roll", update_roll)
     })
 </script>

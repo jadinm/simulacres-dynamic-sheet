@@ -264,7 +264,8 @@ Dans l'exemple suivant, "Albus Haupenroll" lance 2d6 :
   "number": 2, // nombre de dés à lancer
   "type": 6, // type de dés à lancer
   "base_dices": [1, 5], // les dés lancés
-  "timestamp": "Tue Feb 09 2021 10:05:37 GMT+0100 (Central European Standard Time)"
+  "timestamp": "Tue Feb 09 2021 10:05:37 GMT+0100 (Central European Standard Time)",
+  "recording": true // si le joueur a marqué les tests de sa fiche comme devant être enregistré (par exemple pour faire des statistiques en séance)
 }
 ```
 
