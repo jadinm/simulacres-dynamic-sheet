@@ -160,6 +160,60 @@ class WordTable extends RuneTable {
     }
 }
 
+class EquipmentRow extends DataRow {
+
+    unit() {
+        if (this.id.includes("focus-") || this.id.includes("magical-equipment-")) {
+            return "charge"
+        }
+        if (this.id.includes("limitedUse-equipment-")) {
+            return "utilisation"
+        }
+        return "élément"
+    }
+
+    quantity_input() {
+        if (this.id.includes("focus-") || this.id.includes("magical-equipment-")
+            || this.id.includes("limitedUse-equipment-")) {
+            return this.get("charge")
+        }
+        return this.get("quantity")
+    }
+
+    current_charges() {
+        return parseInt(this.quantity_input().val())
+    }
+
+    expend_charges(expended_charges) {
+        const input = this.quantity_input()
+        const current_charges = this.current_charges()
+        if (!isNaN(current_charges)) {
+            input.val(Math.max(0, current_charges - expended_charges))
+            input.trigger("change")
+        }
+    }
+}
+
+class EquipmentTable extends DataTable {
+    static row_class = EquipmentRow
+
+    constructor(table) {
+        super(table)
+        update_equipment_selects()
+    }
+
+    add_custom_listener_to_row(row) {
+        super.add_custom_listener_to_row(row)
+        row.get("name").uon("change", update_equipment_selects)
+    }
+
+    add_row(fixed_idx = null) {
+        const row = super.add_row(fixed_idx)
+        update_equipment_selects()
+        return row
+    }
+}
+
 function toggle_table() {
     const table_selector = this.getAttribute("data-hide-table")
     const row_selector = this.getAttribute("data-hide-row")
@@ -214,10 +268,10 @@ $("#equipment-search").on("change", event => {
 })
 
 $(_ => {
-    new DataTable($("#focus-table"))
-    new DataTable($("#magical-equipment-table"))
-    new DataTable($("#equipment-table"))
-    new DataTable($("#limitedUse-equipment-table"))
+    new EquipmentTable($("#focus-table"))
+    new EquipmentTable($("#magical-equipment-table"))
+    new EquipmentTable($("#equipment-table"))
+    new EquipmentTable($("#limitedUse-equipment-table"))
     new DataTable($("#tomte-mixture-table"))
     new RuneTable($("#rune-table"))
     new WordTable($("#word-table"))

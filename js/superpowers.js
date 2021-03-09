@@ -48,9 +48,13 @@ class SuperpowerRow extends RollRow {
         let power_focus = this.get("time").val()
         let power_duration = this.get("duration").val()
 
+        // Equipment linked to the roll
+        const equipment_id = this.get("equipment").val()
+        const equipment = (equipment_id && equipment_id.length > 0) ? row_of($("#" + this.get("equipment").val())).get("name").val() : ""
+
         // Do the actual roll
         new SuperpowerRoll(this.roll_reason(), nbr_dices, under_value, formula_elements, power_distance, power_focus,
-            power_duration, this.get("effect").val()).trigger_roll()
+            power_duration, this.get("effect").val(), equipment, equipment_id).trigger_roll()
         $('#roll-dialog').modal()
     }
 }

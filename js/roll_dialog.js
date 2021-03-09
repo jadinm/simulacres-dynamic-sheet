@@ -139,6 +139,7 @@ class Roll {
         const roll_magic_divs = $(".roll-dialog-magic-hide")
         roll_effect_divs.addClass("d-none")
         roll_magic_divs.addClass("d-none")
+        $(".roll-dialog-equipment-hide").addClass("d-none")
         $(".roll-dialog-component-hide").addClass("d-none")
         $("#roll-dialog-result-label").html("Résultat du lancer de " + this.number + "d" + this.type + " = ")
         $("#roll-dialog-result").html(this.dice_value())
@@ -227,11 +228,19 @@ class TalentRoll extends Roll {
         "magic-power": "Puissance investie pour augmenter la portée ou la zone d'effet d'une capacité"
     }
 
+    /* Trigger the same roll */
+    reroll() {
+        new this.constructor(this.reason, this.max_value, this.talent_level, this.effect, this.critical_increase,
+            this.formula_elements, this.margin_throttle, this.is_magic, this.is_power, this.distance, this.focus,
+            this.duration, this.base_energy_cost, this.black_magic, this.magic_resistance,
+            this.equipment, this.equipment_id).trigger_roll()
+    }
+
     constructor(reason = "", max_value = NaN, talent_level = 0, effect = "",
                 critical_increase = 0, formula_elements = [], margin_throttle = NaN,
                 is_magic = false, is_power = false, distance = "", focus = "",
                 duration = "", base_energy_cost = 0, black_magic = "",
-                magic_resistance = "") {
+                magic_resistance = "", equipment = "", equipment_id = "") {
         super()
         this.reason = reason
         this.formula_elements = formula_elements
@@ -256,6 +265,11 @@ class TalentRoll extends Roll {
             this.base_energy_cost = 0
         this.black_magic = black_magic ? black_magic : ""
         this.magic_resistance = magic_resistance ? magic_resistance : ""
+
+        // Equipment-dependent roll
+        this.equipment = equipment
+        this.equipment_id = equipment_id
+        this.expended_charge = NaN
 
         this.invested_energies = []
         this.critical_increase = critical_increase
@@ -671,6 +685,42 @@ class TalentRoll extends Roll {
         else
             roll_component_divs.addClass("d-none")
 
+        const equipment_divs = $(".roll-dialog-equipment-hide")
+        let charges = NaN
+        if (this.equipment) {
+            const equipment_elem = $("#" + this.equipment_id)
+            if (equipment_elem.length > 0) {
+                const row = row_of(equipment_elem)
+                charges = row.current_charges()
+                if (!isNaN(charges)) {
+                    const charges_div = $("#roll-dialog-expended-charges")
+                    if (charges === 0 && isNaN(this.expended_charge)) {
+                        charges_div.val(0)
+                    } else if (isNaN(this.expended_charge)) {
+                        charges_div.val(1)
+                    }
+                    charges_div.attr("max", charges)
+                    charges_div.trigger("change")
+
+                    $("#roll-dialog-unit-equipment").text(row.unit())
+                    $("#roll-dialog-expended-equipment").text(this.equipment)
+
+                    equipment_divs.removeClass("d-none")
+                } else {
+                    equipment_divs.addClass("d-none")
+                }
+            } else {
+                equipment_divs.addClass("d-none")
+            }
+        } else {
+            equipment_divs.addClass("d-none")
+        }
+        const equipment_to_disable_div = $("#roll-dialog-expended-charges,#roll-dialog-validate-equipment")
+        if (!isNaN(this.expended_charge) || isNaN(charges) || charges === 0)
+            equipment_to_disable_div.addClass("disabled")
+        else
+            equipment_to_disable_div.removeClass("disabled")
+
         const result = $("#roll-dialog-result")
         const energy_inputs = $(".roll-dialog-energy")
         const component_inputs = $(".roll-dialog-component")
@@ -809,20 +859,21 @@ class TalentRoll extends Roll {
         if (this.energy_investment_validated)
             $(document).trigger("roll", this)
     }
-
-    /* Trigger the same roll */
-    reroll() {
-        new this.constructor(this.reason, this.max_value, this.talent_level, this.effect, this.critical_increase,
-            this.formula_elements, this.margin_throttle, this.is_magic, this.is_power, this.distance, this.focus,
-            this.duration, this.base_energy_cost, this.black_magic, this.magic_resistance).trigger_roll()
-    }
 }
 
 class SuperpowerRoll extends TalentRoll {
 
+    /* Trigger the same roll */
+    reroll() {
+        new this.constructor(this.reason, this.number, this.under_value, this.formula_elements, this.distance,
+            this.focus, this.duration, this.effect, this.equipment, this.equipment_id).trigger_roll()
+    }
+
     constructor(reason = "", nbr_dices = 0, under_value = 0, formula_elements = [],
-                distance = "", focus = "", duration = "", effect = "") {
-        super(reason, NaN, 0, effect, 0, formula_elements, NaN, false, true, distance, focus, duration)
+                distance = "", focus = "", duration = "", effect = "",
+                equipment = "", equipment_id = "") {
+        super(reason, NaN, 0, effect, 0, formula_elements, NaN, false, true, distance, focus, duration, 0, "", "",
+            equipment, equipment_id)
         this.number = nbr_dices
         this.under_value = under_value
         this.superpower_modifier = 0
@@ -979,20 +1030,14 @@ class SuperpowerRoll extends TalentRoll {
             $(".roll-dialog-superpower-slider").removeClass("d-none")
         }
     }
-
-    /* Trigger the same roll */
-    reroll() {
-        new this.constructor(this.reason, this.number, this.under_value, this.formula_elements, this.distance,
-            this.focus, this.duration, this.effect).trigger_roll()
-    }
 }
 
 class FocusMagicRoll extends TalentRoll {
     constructor(reason = "", max_value = NaN, level = 0, effect = "",
                 distance = "", focus = "", duration = "", base_energy_cost = 0,
-                black_magic = "", magic_resistance = "") {
+                black_magic = "", magic_resistance = "", equipment = "", equipment_id = "") {
         super(reason, max_value, level, effect, 0, [], NaN, true, true, distance, focus, duration, base_energy_cost,
-            black_magic, magic_resistance)
+            black_magic, magic_resistance, equipment, equipment_id)
         this.energy_investment_validated = !has_any_base_energy() // Cannot invest in energies when using a focus object
         this.margin_dices = []
     }
@@ -1096,9 +1141,10 @@ class PsiRoll extends TalentRoll {
 
 class GoodNatureEvilMagicRoll extends TalentRoll {
     constructor(reason = "", effect = "", distance = "", focus = "", duration = "",
-                base_energy_cost = 0, black_magic = "", magic_resistance = "") {
+                base_energy_cost = 0, black_magic = "", magic_resistance = "",
+                equipment = "", equipment_id = "") {
         super(reason, NaN, 0, effect, 0, [], NaN, true, true, distance, focus, duration, base_energy_cost,
-            black_magic, magic_resistance)
+            black_magic, magic_resistance, equipment, equipment_id)
         this.energy_investment_validated = !has_any_base_energy() // Cannot invest in energies when using a focus object
         this.margin_dices = []
         this.precision_dices = []
@@ -1361,6 +1407,29 @@ $(".roll-dialog-component").on("click", _ => {
     if (!current_roll || !(current_roll instanceof TalentRoll))
         return
     current_roll.update_components(true)
+    current_roll.show_roll()
+})
+
+$("#roll-dialog-expended-charges").on("change", e => {
+    const current_value = parseInt($(e.target).val())
+    if (isNaN(current_value) || current_value <= 1) {
+        $("#roll-dialog-unit-equipment-plural").text("")
+    } else {
+        $("#roll-dialog-unit-equipment-plural").text("s")
+    }
+})
+
+$("#roll-dialog-validate-equipment").on("click", _ => {
+    if (!current_roll || !(current_roll instanceof TalentRoll))
+        return
+    current_roll.expended_charge = parseInt($("#roll-dialog-expended-charges").val())
+
+    // Update count
+    const equipment = $("#" + current_roll.equipment_id)
+    if (equipment.length > 0 && !isNaN(current_roll.expended_charge)) {
+        row_of(equipment).expend_charges(current_roll.expended_charge)
+    }
+
     current_roll.show_roll()
 })
 

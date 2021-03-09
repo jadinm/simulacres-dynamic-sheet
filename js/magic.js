@@ -145,12 +145,16 @@ class SpellRow extends RollRow {
         let spell_level = this.level(button)
         difficulty = isNaN(difficulty) ? 0 : difficulty
 
+        // Equipment linked to the roll
+        const equipment_id = this.get("equipment").val()
+        const equipment = (equipment_id && equipment_id.length > 0) ? row_of($("#" + this.get("equipment").val())).get("name").val() : ""
+
         // Do the actual roll
         if (this.is_evil_nature_good()) {
             new GoodNatureEvilMagicRoll(this.roll_reason(), this.get("effect", button).val(),
                 spell_distance, spell_focus, spell_duration, spell_level,
                 this.get("details-black-magic", button).val(),
-                this.get("details-resistance", button).val()).trigger_roll()
+                this.get("details-resistance", button).val(), equipment, equipment_id).trigger_roll()
         } else {
             const value = parseInt(this.get("value", button).text())
             const type = this.data[0].id.includes("psi-") ? PsiRoll : TalentRoll
@@ -158,7 +162,7 @@ class SpellRow extends RollRow {
                 critical_increase, formula_elements, margin_throttle, this.data.hasClass("spell"),
                 true, spell_distance, spell_focus, spell_duration, spell_level,
                 this.get("details-black-magic", button).val(),
-                this.get("details-resistance", button).val()).trigger_roll()
+                this.get("details-resistance", button).val(), equipment, equipment_id).trigger_roll()
         }
         $('#roll-dialog').modal()
     }
@@ -353,13 +357,17 @@ class FocusMagicRow extends SpellRow {
         let spell_duration = this.get("duration").val()
         let spell_level = this.get("level").val()
 
+        // Equipment linked to the roll
+        const equipment_id = this.get("equipment").val()
+        const equipment = (equipment_id && equipment_id.length > 0) ? row_of($("#" + this.get("equipment").val())).get("name").val() : ""
+
         // Do the actual roll
         const value = parseInt(this.get("value").text())
         let level = this.constructor.magic_talent_level()
         level = !isNaN(level) ? level : 0
         new FocusMagicRoll(this.roll_reason(), value, level, this.get("effect").val(), spell_distance,
             spell_focus, spell_duration, spell_level, this.get("details-black-magic", button).val(),
-            this.get("details-resistance", button).val()).trigger_roll()
+            this.get("details-resistance", button).val(), equipment, equipment_id).trigger_roll()
         $('#roll-dialog').modal()
     }
 }

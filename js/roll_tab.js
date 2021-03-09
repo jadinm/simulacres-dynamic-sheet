@@ -148,11 +148,16 @@ class RollRow extends DataRow {
         }
         difficulty = isNaN(difficulty) ? 0 : difficulty
 
+        // Equipment linked to the roll
+        const equipment_id = this.get("equipment").val()
+        const equipment = (equipment_id && equipment_id.length > 0) ? row_of($("#" + this.get("equipment").val())).get("name").val() : ""
+
         // Do the actual roll
         const value = parseInt(this.get("value", button).text())
         new TalentRoll(this.roll_reason(), value, difficulty, this.get("effect", button).val(),
             critical_increase, formula_elements, margin_throttle, false, false,
-            "", "").trigger_roll()
+            "", "", "", 0, "", "",
+            equipment, equipment_id).trigger_roll()
         $('#roll-dialog').modal()
     }
 
@@ -324,7 +329,7 @@ class TalentRollTable extends DataTable {
         row.data.find(".row-roll-trigger").uon("click", this.trigger_roll)
         row.data.find(".formula-elem").uon("change", this.formula_changed)
         row.data.find("select").uon("changed.bs.select", this.select_changed)
-        row.data.find("select.talent-select").each((i, elem) => {
+        row.data.find("select.talent-select,select.equipment-select").each((i, elem) => {
             $(elem).selectpicker()
         })
         row.get("show-details").uon("click", this.view_details).tooltip()
