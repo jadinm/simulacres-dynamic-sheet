@@ -686,6 +686,7 @@ class TalentRoll extends Roll {
             roll_component_divs.addClass("d-none")
 
         const equipment_divs = $(".roll-dialog-equipment-hide")
+        const equipment_remaining = $("#roll-dialog-remaining-equipment")
         let charges = NaN
         if (this.equipment) {
             const equipment_elem = $("#" + this.equipment_id)
@@ -693,6 +694,13 @@ class TalentRoll extends Roll {
                 const row = row_of(equipment_elem)
                 charges = row.current_charges()
                 if (!isNaN(charges)) {
+                    equipment_remaining.text("il en reste " + charges)
+                    if (charges === 0) {
+                        equipment_remaining.addClass("text-warning")
+                    } else {
+                        equipment_remaining.removeClass("text-warning")
+                    }
+
                     const charges_div = $("#roll-dialog-expended-charges")
                     if (charges === 0 && isNaN(this.expended_charge)) {
                         charges_div.val(0)

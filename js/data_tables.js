@@ -169,7 +169,7 @@ class EquipmentRow extends DataRow {
         if (this.id.includes("limitedUse-equipment-")) {
             return "utilisation"
         }
-        return "élément"
+        return "unité"
     }
 
     quantity_input() {
