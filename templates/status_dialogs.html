@@ -1,3 +1,23 @@
+<!-- Unease Note -->
+<div class="container">
+    <div class="modal fade bd-modal-lg" id="unease-details" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header justify-content-center">
+                    <h4>Malaise</h4>
+                </div>
+                <div class="modal-body align-middle">
+                    <div class="row mx-1 md-form col-12 py-0 my-0 mb-2">
+                        <label class="py-0 my-0" for="details-unease"></label>
+                        <input class="form-control py-0 my-0" type="text" value="" id="details-unease"
+                               placeholder="Note">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Increase Breath -->
 <div class="container">
     <div class="modal fade bd-modal-lg" id="breath-max-update" tabindex="-1" role="dialog" aria-hidden="true">
@@ -7,6 +27,12 @@
                     <h4>Points de souffle</h4>
                 </div>
                 <div class="modal-body align-middle">
+                    <div class="row mx-1 md-form col-12 py-0 my-0 mb-2">
+                        <label class="py-0 my-0" for="details-breath"></label>
+                        <input class="form-control py-0 my-0" type="text" value="" id="details-breath"
+                               placeholder="Note">
+                    </div>
+                    <hr/>
                     <div class="row">
                         <button id="increment-breath" class="btn btn-success col-6 mx-0 px-0">
                             Augmenter de 1 le maximum des PS
@@ -30,6 +56,12 @@
                     <h4>Points d'équilibre psychique</h4>
                 </div>
                 <div class="modal-body align-middle">
+                    <div class="row mx-1 md-form col-12 py-0 my-0 mb-2">
+                        <label class="py-0 my-0" for="details-psychic"></label>
+                        <input class="form-control py-0 my-0" type="text" value="" id="details-psychic"
+                               placeholder="Note">
+                    </div>
+                    <hr/>
                     <div class="row">
                         <button id="increment-psychic" class="btn btn-success col-6 mx-0 px-0">
                             Augmenter de 1 le maximum des EP
@@ -54,7 +86,8 @@
 {% endif %}
 {% for zone in health_zones %}
     <div class="container">
-        <div class="modal fade bd-modal-lg" id="hp-{{ zone }}-max-update" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal fade bd-modal-lg" id="hp-{{ zone }}-max-update" tabindex="-1" role="dialog"
+             aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header justify-content-center">
