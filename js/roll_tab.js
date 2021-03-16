@@ -328,6 +328,11 @@ class TalentRollTable extends DataTable {
         add_save_to_dom_listeners(row.data)
         row.data.find(".row-roll-trigger").uon("click", this.trigger_roll)
         row.data.find(".formula-elem").uon("change", this.formula_changed)
+        if (row.id !== this.template_row)
+            row.data.find(".formula-elem").next().each((i, elem) => {
+                if (!$(elem).hasClass("invisible"))
+                    $(elem).tooltip()
+            })
         row.data.find("select").uon("changed.bs.select", this.select_changed)
         row.data.find("select.talent-select,select.equipment-select").each((i, elem) => {
             $(elem).selectpicker()

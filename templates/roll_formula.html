@@ -8,7 +8,8 @@
     <div class="custom-control custom-radio custom-control-inline">
         <input type="checkbox" class="custom-control-input formula-elem"
                id="{{ row_type }}-x-body" name="{{ row_type }}-x-component">
-        <label class="custom-control-label" for="{{ row_type }}-x-body">
+        <label class="custom-control-label" for="{{ row_type }}-x-body"
+               data-toggle="tooltip" data-placement="top" title="Corps">
             <svg height="1em" width="1em" class="input-prefix">
                 <use xlink:href="#svg-body"></use>
             </svg>
@@ -17,7 +18,8 @@
     <div class="custom-control custom-radio custom-control-inline">
         <input type="checkbox" class="custom-control-input formula-elem"
                id="{{ row_type }}-x-perception" name="{{ row_type }}-x-means">
-        <label class="custom-control-label" for="{{ row_type }}-x-perception">
+        <label class="custom-control-label" for="{{ row_type }}-x-perception"
+               data-toggle="tooltip" data-placement="top" title="Perception">
             <svg height="1em" width="1em" class="input-prefix">
                 <use xlink:href="#svg-perception"></use>
             </svg>
@@ -27,7 +29,8 @@
         <div class="custom-control {{ realm_class }} custom-control-inline">
             <input type="checkbox" class="custom-control-input formula-elem"
                    id="{{ row_type }}-x-mineral" name="{{ row_type }}-x-realm">
-            <label class="custom-control-label" for="{{ row_type }}-x-mineral">
+            <label class="custom-control-label" for="{{ row_type }}-x-mineral"
+                   data-toggle="tooltip" data-placement="top" title="Minéral">
                 <svg height="1em" width="1em" class="input-prefix">
                     <use xlink:href="#svg-mineral"></use>
                 </svg>
@@ -36,7 +39,13 @@
         <div class="custom-control {{ realm_class }} custom-control-inline">
             <input type="checkbox" class="custom-control-input formula-elem"
                    id="{{ row_type }}-x-humanoid" name="{{ row_type }}-x-realm">
-            <label class="custom-control-label" for="{{ row_type }}-x-humanoid">
+            <label class="custom-control-label" for="{{ row_type }}-x-humanoid"
+                   data-toggle="tooltip" data-placement="top"
+                    {% if universe == med_fantasy %}
+                   title="Humanoïde"
+                    {% else %}
+                   title="Humain"
+                    {% endif %}>
                 <svg height="1em" width="1em" class="input-prefix">
                     <use xlink:href="#svg-humanoid"></use>
                 </svg>
@@ -46,7 +55,8 @@
         <div class="custom-control custom-radio custom-control-inline">
             <input type="checkbox" class="custom-control-input formula-elem"
                    id="{{ row_type }}-x-nature" name="{{ row_type }}-x-realm">
-            <label class="custom-control-label" for="{{ row_type }}-x-nature">
+            <label class="custom-control-label" for="{{ row_type }}-x-nature"
+                   data-toggle="tooltip" data-placement="top" title="Nature">
                 <svg height="1em" width="1em" class="input-prefix">
                     <use xlink:href="#svg-vegetal"></use>
                 </svg>
@@ -59,7 +69,8 @@
         <div class="custom-control custom-radio custom-control-inline">
             <input type="checkbox" class="custom-control-input formula-elem"
                    id="{{ row_type }}-x-instincts" name="{{ row_type }}-x-component">
-            <label class="custom-control-label" for="{{ row_type }}-x-instincts">
+            <label class="custom-control-label" for="{{ row_type }}-x-instincts"
+                   data-toggle="tooltip" data-placement="top" title="Instincts">
                 <svg height="1em" width="1em" class="input-prefix">
                     <use xlink:href="#svg-instincts"></use>
                 </svg>
@@ -69,7 +80,8 @@
         <div class="custom-control custom-radio custom-control-inline">
             <input type="checkbox" class="custom-control-input formula-elem"
                    id="{{ row_type }}-x-heart" name="{{ row_type }}-x-component">
-            <label class="custom-control-label" for="{{ row_type }}-x-heart">
+            <label class="custom-control-label" for="{{ row_type }}-x-heart"
+                   data-toggle="tooltip" data-placement="top" title="Cœur">
                 <svg height="1em" width="1em" class="input-prefix">
                     <use xlink:href="#svg-heart"></use>
                 </svg>
@@ -79,7 +91,8 @@
     <div class="custom-control custom-radio custom-control-inline">
         <input type="checkbox" class="custom-control-input formula-elem"
                id="{{ row_type }}-x-action" name="{{ row_type }}-x-means">
-        <label class="custom-control-label" for="{{ row_type }}-x-action">
+        <label class="custom-control-label" for="{{ row_type }}-x-action"
+               data-toggle="tooltip" data-placement="top" title="Action">
             <svg height="1em" width="1em" class="input-prefix">
                 <use xlink:href="#svg-action"></use>
             </svg>
@@ -89,7 +102,8 @@
         <div class="custom-control {{ realm_class }} custom-control-inline">
             <input type="checkbox" class="custom-control-input formula-elem"
                    id="{{ row_type }}-x-vegetal" name="{{ row_type }}-x-realm">
-            <label class="custom-control-label" for="{{ row_type }}-x-vegetal">
+            <label class="custom-control-label" for="{{ row_type }}-x-vegetal"
+                   data-toggle="tooltip" data-placement="top" title="Végétal">
                 <svg height="1em" width="1em" class="input-prefix">
                     <use xlink:href="#svg-vegetal"></use>
                 </svg>
@@ -98,7 +112,8 @@
         <div class="custom-control {{ realm_class }} custom-control-inline">
             <input type="checkbox" class="custom-control-input formula-elem"
                    id="{{ row_type }}-x-mechanical" name="{{ row_type }}-x-realm">
-            <label class="custom-control-label" for="{{ row_type }}-x-mechanical">
+            <label class="custom-control-label" for="{{ row_type }}-x-mechanical"
+                   data-toggle="tooltip" data-placement="top" title="Mécanique">
                 <svg height="1em" width="1em" class="input-prefix">
                     <use xlink:href="#svg-mechanical"></use>
                 </svg>
@@ -108,7 +123,13 @@
         <div class="custom-control custom-radio custom-control-inline">
             <input type="checkbox" class="custom-control-input formula-elem"
                    id="{{ row_type }}-x-humanoid" name="{{ row_type }}-x-realm">
-            <label class="custom-control-label" for="{{ row_type }}-x-humanoid">
+            <label class="custom-control-label" for="{{ row_type }}-x-humanoid"
+                   data-toggle="tooltip" data-placement="top"
+                    {% if universe == med_fantasy %}
+                   title="Humanoïde"
+                    {% else %}
+                   title="Humain"
+                    {% endif %}>
                 <svg height="1em" width="1em" class="input-prefix">
                     <use xlink:href="#svg-humanoid"></use>
                 </svg>
@@ -121,7 +142,8 @@
         <div class="custom-control custom-radio custom-control-inline">
             <input type="checkbox" class="custom-control-input formula-elem"
                    id="{{ row_type }}-x-heart" name="{{ row_type }}-x-component">
-            <label class="custom-control-label" for="{{ row_type }}-x-heart">
+            <label class="custom-control-label" for="{{ row_type }}-x-heart"
+                   data-toggle="tooltip" data-placement="top" title="Cœur">
                 <svg height="1em" width="1em" class="input-prefix">
                     <use xlink:href="#svg-heart"></use>
                 </svg>
@@ -130,7 +152,8 @@
         <div class="custom-control custom-radio custom-control-inline">
             <input type="checkbox" class="custom-control-input formula-elem"
                    id="{{ row_type }}-x-desire" name="{{ row_type }}-x-means">
-            <label class="custom-control-label" for="{{ row_type }}-x-desire">
+            <label class="custom-control-label" for="{{ row_type }}-x-desire"
+                   data-toggle="tooltip" data-placement="top" title="Désir">
                 <svg height="1em" width="1em" class="input-prefix">
                     <use xlink:href="#svg-desire"></use>
                 </svg>
@@ -140,7 +163,8 @@
         <div class="custom-control custom-radio custom-control-inline">
             <input type="checkbox" class="custom-control-input formula-elem"
                    id="{{ row_type }}-x-mind" name="{{ row_type }}-x-component">
-            <label class="custom-control-label" for="{{ row_type }}-x-mind">
+            <label class="custom-control-label" for="{{ row_type }}-x-mind"
+                   data-toggle="tooltip" data-placement="top" title="Esprit">
                 <svg height="1em" width="1em" class="input-prefix">
                     <use xlink:href="#svg-mind"></use>
                 </svg>
@@ -149,7 +173,8 @@
         <div class="custom-control custom-radio custom-control-inline">
             <input type="checkbox" class="custom-control-input formula-elem"
                    id="{{ row_type }}-x-resistance" name="{{ row_type }}-x-means">
-            <label class="custom-control-label" for="{{ row_type }}-x-resistance">
+            <label class="custom-control-label" for="{{ row_type }}-x-resistance"
+                   data-toggle="tooltip" data-placement="top" title="Résistance">
                 <svg height="1em" width="1em" class="input-prefix">
                     <use xlink:href="#svg-resistance"></use>
                 </svg>
@@ -160,7 +185,8 @@
         <div class="custom-control {{ realm_class }} custom-control-inline">
             <input type="checkbox" class="custom-control-input formula-elem"
                    id="{{ row_type }}-x-animal" name="{{ row_type }}-x-realm">
-            <label class="custom-control-label" for="{{ row_type }}-x-animal">
+            <label class="custom-control-label" for="{{ row_type }}-x-animal"
+                   data-toggle="tooltip" data-placement="top" title="Animal">
                 <svg height="1em" width="1em" class="input-prefix">
                     <use xlink:href="#svg-animal"></use>
                 </svg>
@@ -169,7 +195,8 @@
         <div class="custom-control {{ realm_class }} custom-control-inline">
             <input type="checkbox" class="custom-control-input formula-elem"
                    id="{{ row_type }}-x-void" name="{{ row_type }}-x-realm">
-            <label class="custom-control-label" for="{{ row_type }}-x-void">
+            <label class="custom-control-label" for="{{ row_type }}-x-void"
+                   data-toggle="tooltip" data-placement="top" title="Néant">
                 <svg height="1em" width="1em" class="input-prefix">
                     <use xlink:href="#svg-void"></use>
                 </svg>
@@ -179,7 +206,8 @@
         <div class="custom-control custom-radio custom-control-inline">
             <input type="checkbox" class="custom-control-input formula-elem"
                    id="{{ row_type }}-x-artificial" name="{{ row_type }}-x-realm">
-            <label class="custom-control-label" for="{{ row_type }}-x-artificial">
+            <label class="custom-control-label" for="{{ row_type }}-x-artificial"
+                   data-toggle="tooltip" data-placement="top" title="Artificiel">
                 <svg height="1em" width="1em" class="input-prefix">
                     <use xlink:href="#svg-mechanical"></use>
                 </svg>
@@ -192,7 +220,8 @@
         <div class="custom-control custom-radio custom-control-inline">
             <input type="checkbox" class="custom-control-input formula-elem"
                    id="{{ row_type }}-x-mind" name="{{ row_type }}-x-component">
-            <label class="custom-control-label" for="{{ row_type }}-x-mind">
+            <label class="custom-control-label" for="{{ row_type }}-x-mind"
+                   data-toggle="tooltip" data-placement="top" title="Esprit">
                 <svg height="1em" width="1em" class="input-prefix">
                     <use xlink:href="#svg-mind"></use>
                 </svg>
@@ -201,7 +230,8 @@
         <div class="custom-control custom-radio custom-control-inline">
             <input type="checkbox" class="custom-control-input formula-elem"
                    id="{{ row_type }}-x-resistance" name="{{ row_type }}-x-means">
-            <label class="custom-control-label" for="{{ row_type }}-x-resistance">
+            <label class="custom-control-label" for="{{ row_type }}-x-resistance"
+                   data-toggle="tooltip" data-placement="top" title="Résistance">
                 <svg height="1em" width="1em" class="input-prefix">
                     <use xlink:href="#svg-resistance"></use>
                 </svg>
@@ -229,7 +259,8 @@
         <div class="custom-control custom-radio custom-control-inline">
             <input type="checkbox" class="custom-control-input formula-elem"
                    id="{{ row_type }}-x-supernatural" name="{{ row_type }}-x-realm">
-            <label class="custom-control-label" for="{{ row_type }}-x-supernatural">
+            <label class="custom-control-label" for="{{ row_type }}-x-supernatural"
+                   data-toggle="tooltip" data-placement="top" title="Surnaturel">
                 <svg height="1em" width="1em" class="input-prefix">
                     <use xlink:href="#svg-supernatural"></use>
                 </svg>
