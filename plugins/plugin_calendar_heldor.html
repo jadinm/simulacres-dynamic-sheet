@@ -1,0 +1,184 @@
+<li id="plugin-button-calendar-heldor" class="plugin-button nav-item" data-plugin-version="1.0.0">
+    <a class="nav-link" data-toggle="tab" href="#plugin-tab-calendar-heldor" role="tab"
+       aria-controls="plugin-tab-calendar-heldor" aria-selected="false">
+        Calendrier
+    </a>
+</li>
+
+<div id="plugin-tab-calendar-heldor" class="plugin-tab tab-pane fade row  my-1 container-fluid m-0">
+    <!-- Paramètres -->
+    <div class="row col-12 mt-2"><b>Date courante</b></div>
+    <div id="plugin-calendar-heldor-date" class="row col-12 form-row md-form mt-2 p-0 m-0">
+        <div id="plugin-calendar-heldor-weekday"
+             class="col-lg-1 col-3 align-middle text-center justify-content-center pt-3 mx-1 py-1">
+            Rüny
+        </div>
+
+        <div class="col-lg-1 col-3 py-1">
+            <label for="plugin-calendar-heldor-day">Jour</label>
+            <input class="form-control" id="plugin-calendar-heldor-day" type="number" value="1" min="1" max="36">
+        </div>
+
+        <select class="show-tick form-control selectpicker col-lg-1 col-3 py-1" data-live-search="true"
+                id="calendar-heldor-month" data-style="col-10 align-middle px-3" data-container="body">
+            <option value="1">1 - Sambhar</option>
+            <option value="2">2 - Oldowan</option>
+            <option value="3">3 - Sivar</option>
+            <option value="4">4 - Marmar</option>
+            <option value="5">5 - Arcthar</option>
+            <option value="6">6 - Azargar</option>
+            <option value="7">7 - Sparass</option>
+            <option value="8">8 - Sayanar</option>
+            <option value="9">9 - Nisan</option>
+            <option value="10">10 - Khord</option>
+        </select>
+
+        <div class="col-lg-1 col-3 py-1">
+            <label for="plugin-calendar-heldor-year">Année</label>
+            <input class="form-control" id="plugin-calendar-heldor-year" type="number" value="129">
+        </div>
+
+        <div class="offset-lg-1 col-lg-1 col-3 py-1">
+            <label for="plugin-calendar-heldor-hour">Heure</label>
+            <input class="form-control" id="plugin-calendar-heldor-hour" type="number" value="0" min="0" max="23">
+        </div>
+
+        <div class="col-lg-1 col-3 py-1">
+            <label for="plugin-calendar-heldor-minute">Minutes</label>
+            <input class="form-control" id="plugin-calendar-heldor-minute" type="number" min="0" max="59" value="0">
+        </div>
+    </div>
+    <hr/>
+    <div class="row col-12 mt-2">
+        Si le titre d'une note contient "[Rappel JJ/MM/AAA]" ou "[Rappel JJ/MM/AAA HH:MM]"
+        (sans les guillemets), la note sera mise en jaune 48 heures avant et en rouge 24 heures avant ou après
+        au moment du changement de date.
+    </div>
+    <hr/>
+    <div class="row mx-1 align-middle">
+        <h5 class="pt-2">Liste des rappels par proximité</h5>
+        <div id="plugin-calendar-heldor-actualize" class="btn btn-info rounded-lg py-2 px-4">
+            <i class="fas fa-sync-alt"></i>
+        </div>
+    </div>
+    <!-- List of plugins -->
+    <div class="row mx-1 d-none">
+        <ul id="plugin-calendar-heldor-note-list" class="list-group-flush col-12">
+        </ul>
+    </div>
+</div>
+
+<style id="plugin-css-calendar-heldor" class="plugin-css">
+</style>
+
+<script id="plugin-js-calendar-heldor" class="plugin-js">
+    {
+        // Calendar source: https://s-ingi-mulacres.fandom.com/fr/wiki/Calendrier_des_2_Lunes
+        const weekdays = ["Rüny", "Ykhoshar", "Tärny", "Lobory", "Ysharna", "Shãrny"]
+
+        const day_input = $("#plugin-calendar-heldor-day")
+        const month_input = $("select#calendar-heldor-month")
+        const year_input = $("#plugin-calendar-heldor-year")
+        const hour_input = $("#plugin-calendar-heldor-hour")
+        const minute_input = $("#plugin-calendar-heldor-minute")
+        const note_list = $("#plugin-calendar-heldor-note-list")
+
+        day_input.on("change", e => {
+            const day = (parseInt($(e.target).val()) - 1) % 6
+            if (!isNaN(day) && day >= 0 && day < 6) {
+                /* Change the weekday */
+                $("#plugin-calendar-heldor-weekday").text(weekdays[day])
+                /* Handle reminders */
+                lookup_reminders()
+            }
+        })
+        month_input.uon("changed.bs.select", lookup_reminders)
+        year_input.uon("change", lookup_reminders)
+        hour_input.uon("change", lookup_reminders)
+        minute_input.uon("change", lookup_reminders)
+        $("#plugin-calendar-heldor-actualize").uon("click", lookup_reminders)
+
+        reminder_regex = /\[Rappel ([0-9]{1,2})\/([0-9]{1,2})\/([0-9]+)(?: ([0-9]{1,2}):([0-9]{1,2}))?]/i
+        warning_delta_minutes = 48 * 60
+        danger_delta_minutes = 24 * 60
+
+        function minutes_since_zero(day, month, year, hour = 0, minutes = 0) {
+            if (isNaN(hour))
+                hour = 0
+            if (isNaN(minutes))
+                minutes = 0
+            return day * 24 * 60 + month * 36 * 24 * 60 + year * 10 * 36 * 24 * 60 + hour * 60 + minutes
+        }
+
+        function lookup_reminders() {
+            const current_minutes_since_start = minutes_since_zero(parseInt(day_input.val()),
+                parseInt(month_input.val()), parseInt(year_input.val()), parseInt(hour_input.val()),
+                parseInt(minute_input.val()))
+
+            const reminders = []
+
+            $("input.note-name").each((i, elem) => {
+                const match = $(elem).val().match(reminder_regex)
+                if (match != null) {
+                    const minutes_since_start = minutes_since_zero(...match.slice(1).map(x => parseInt(x)))
+
+                    const reminder = {
+                        delta: current_minutes_since_start - minutes_since_start,
+                        title: $(elem).val(),
+                        match: match,
+                        is_warning: false,
+                        is_danger: false
+                    }
+                    const header = $(elem).parents(".card-header").first()
+                    if (-danger_delta_minutes <= reminder.delta && reminder.delta <= danger_delta_minutes) {
+                        // Danger
+                        header.removeClass("bg-warning").addClass("bg-danger")
+                        reminder.is_danger = true
+                    } else if (0 <= reminder.delta && reminder.delta <= warning_delta_minutes) {
+                        // Warning
+                        header.removeClass("bg-danger").addClass("bg-warning")
+                        reminder.is_warning = true
+                    } else {
+                        header.removeClass("bg-danger").removeClass("bg-warning")
+                    }
+                    reminders.push(reminder)
+                }
+            })
+
+            // Add ordered list of notes
+            reminders.sort((a, b) => b.delta - a.delta)
+            note_list.children().remove()
+            if (reminders.length > 0) {
+                note_list.parent().removeClass("d-none")
+            } else {
+                note_list.parent().addClass("d-none")
+            }
+            for (let i = 0; i < reminders.length; i ++) {
+                note_list.append($(
+                    "<li class=\"list-group-item align-items-center py-1 my-0\">" +
+                    "<div class=\"d-flex align-items-center my-0 py-0" +
+                    (reminders[i].is_warning ? " bg-warning" : "") +
+                    (reminders[i].is_danger ? " bg-danger" : "") +
+                    "\">" +
+                    reminders[i].title +
+                    "</div>" +
+                    "</li>"))
+            }
+        }
+
+        lookup_reminders()
+
+        /* To remove this plugin, it is not sufficient to remove every block
+         * We need to remove current warning on due notes
+         */
+        function dispose_plugin_calendar() {
+            // Remove note color
+            $("input.note-name").each((i, elem) => {
+                $(elem).parents(".card-header").first().removeClass("bg-danger").removeClass("bg-warning")
+            })
+        }
+
+        // Register the function (avoid typos here or the method won't be called)
+        plugin_dispose_methods["calendar-heldor"] = dispose_plugin_calendar
+    }
+</script>
