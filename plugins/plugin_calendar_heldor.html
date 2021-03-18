@@ -59,7 +59,7 @@
         la note sera mise en jaune 48 heures avant et en rouge 24 heures avant ou passé.
         <br/>
         Pour les évènements se produisant en combat et se comptent en passes d'arme, le titre peut contenir
-        "[Rappel Passe d'arme PP]" ou "[Rappel PA PP]" (sans les guillemets).
+        "[Rappel Passe d'arme PP]", "[Rappel Passe PP]" ou "[Rappel PA PP]" (sans les guillemets).
         Dans ce cas, la note sera mise en rouge à la passe d'arme exacte et en orange à la passe d'arme précédente.
     </div>
     <hr/>
@@ -109,7 +109,7 @@
         $("#plugin-calendar-heldor-actualize").uon("click", lookup_reminders)
 
         const reminder_regex = /\[Rappel ([0-9]{1,2})\/([0-9]{1,2})\/([0-9]+)(?: ([0-9]{1,2}):([0-9]{1,2}))?]/i
-        const combat_reminder_regex = /\[Rappel (?:Passe d'arme|PA) ([0-9]+)]/i
+        const combat_reminder_regex = /\[Rappel (?:Passe d'arme|Passe|PA|Round|Tour) ([0-9]+)]/i
         const warning_delta = 48 * 60 * 60
         const danger_delta = 24 * 60 * 60
 
