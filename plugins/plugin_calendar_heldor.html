@@ -1,4 +1,4 @@
-<li id="plugin-button-calendar-heldor" class="plugin-button nav-item" data-plugin-version="1.0.0">
+<li id="plugin-button-calendar-heldor" class="plugin-button nav-item" data-plugin-version="1.0.1">
     <a class="nav-link" data-toggle="tab" href="#plugin-tab-calendar-heldor" role="tab"
        aria-controls="plugin-tab-calendar-heldor" aria-selected="false">
         Calendrier
@@ -47,12 +47,20 @@
             <label for="plugin-calendar-heldor-minute">Minutes</label>
             <input class="form-control" id="plugin-calendar-heldor-minute" type="number" min="0" max="59" value="0">
         </div>
+
+        <div class="offset-lg-1 col-lg-1 col-3 py-1">
+            <label for="plugin-calendar-heldor-pa">Passe d'arme</label>
+            <input class="form-control" id="plugin-calendar-heldor-pa" type="number" value="1" min="1">
+        </div>
     </div>
     <hr/>
     <div class="row col-12 mt-2">
-        Si le titre d'une note contient "[Rappel JJ/MM/AAA]" ou "[Rappel JJ/MM/AAA HH:MM]"
-        (sans les guillemets), la note sera mise en jaune 48 heures avant et en rouge 24 heures avant ou après
-        au moment du changement de date.
+        Si le titre d'une note contient "[Rappel JJ/MM/AAA]" ou "[Rappel JJ/MM/AAA HH:MM]" (sans les guillemets),
+        la note sera mise en jaune 48 heures avant et en rouge 24 heures avant ou passé.
+        <br/>
+        Pour les évènements se produisant en combat et se comptent en passes d'arme, le titre peut contenir
+        "[Rappel Passe d'arme PP]" ou "[Rappel PA PP]" (sans les guillemets).
+        Dans ce cas, la note sera mise en rouge à la passe d'arme exacte et en orange à la passe d'arme précédente.
     </div>
     <hr/>
     <div class="row mx-1 align-middle">
@@ -81,6 +89,7 @@
         const year_input = $("#plugin-calendar-heldor-year")
         const hour_input = $("#plugin-calendar-heldor-hour")
         const minute_input = $("#plugin-calendar-heldor-minute")
+        const combat_input = $("#plugin-calendar-heldor-pa")
         const note_list = $("#plugin-calendar-heldor-note-list")
 
         day_input.on("change", e => {
@@ -96,45 +105,63 @@
         year_input.uon("change", lookup_reminders)
         hour_input.uon("change", lookup_reminders)
         minute_input.uon("change", lookup_reminders)
+        combat_input.uon("change", lookup_reminders)
         $("#plugin-calendar-heldor-actualize").uon("click", lookup_reminders)
 
-        reminder_regex = /\[Rappel ([0-9]{1,2})\/([0-9]{1,2})\/([0-9]+)(?: ([0-9]{1,2}):([0-9]{1,2}))?]/i
-        warning_delta_minutes = 48 * 60
-        danger_delta_minutes = 24 * 60
+        const reminder_regex = /\[Rappel ([0-9]{1,2})\/([0-9]{1,2})\/([0-9]+)(?: ([0-9]{1,2}):([0-9]{1,2}))?]/i
+        const combat_reminder_regex = /\[Rappel (?:Passe d'arme|PA) ([0-9]+)]/i
+        const warning_delta = 48 * 60 * 60
+        const danger_delta = 24 * 60 * 60
 
-        function minutes_since_zero(day, month, year, hour = 0, minutes = 0) {
+        function seconds_since_zero(day, month, year, hour = 0, minutes = 0, pa = 0) {
             if (isNaN(hour))
                 hour = 0
             if (isNaN(minutes))
                 minutes = 0
-            return day * 24 * 60 + month * 36 * 24 * 60 + year * 10 * 36 * 24 * 60 + hour * 60 + minutes
+            if (isNaN(pa))
+                pa = 1
+            return day * 24 * 60 * 60 + month * 36 * 24 * 60 * 60 + year * 10 * 36 * 24 * 60 * 60 + hour * 60 * 60
+                + minutes * 60 + (pa - 1) * 8
         }
 
         function lookup_reminders() {
-            const current_minutes_since_start = minutes_since_zero(parseInt(day_input.val()),
-                parseInt(month_input.val()), parseInt(year_input.val()), parseInt(hour_input.val()),
-                parseInt(minute_input.val()))
+            const current_time = [parseInt(day_input.val()), parseInt(month_input.val()), parseInt(year_input.val()),
+                parseInt(hour_input.val()), parseInt(minute_input.val()), parseInt(combat_input.val())]
+            const current_seconds_since_start = seconds_since_zero(...current_time)
 
             const reminders = []
 
             $("input.note-name").each((i, elem) => {
-                const match = $(elem).val().match(reminder_regex)
+                let current_danger_delta = danger_delta
+                let current_warning_delta = warning_delta
+                let match = $(elem).val().match(reminder_regex)
+                if (match == null) {
+                    match = $(elem).val().match(combat_reminder_regex)
+                    if (match != null) {
+                        current_danger_delta = 0
+                        current_warning_delta = 8
+                        const ap = parseInt(match[1])
+                        match = [...current_time]
+                        match[match.length - 1] = ap
+                        match.unshift($(elem).val())
+                    }
+                }
                 if (match != null) {
-                    const minutes_since_start = minutes_since_zero(...match.slice(1).map(x => parseInt(x)))
+                    const seconds_since_start = seconds_since_zero(...match.slice(1).map(x => parseInt(x)))
 
                     const reminder = {
-                        delta: current_minutes_since_start - minutes_since_start,
+                        delta: seconds_since_start - current_seconds_since_start,
                         title: $(elem).val(),
                         match: match,
                         is_warning: false,
                         is_danger: false
                     }
                     const header = $(elem).parents(".card-header").first()
-                    if (-danger_delta_minutes <= reminder.delta && reminder.delta <= danger_delta_minutes) {
+                    if (reminder.delta <= current_danger_delta) {
                         // Danger
                         header.removeClass("bg-warning").addClass("bg-danger")
                         reminder.is_danger = true
-                    } else if (0 <= reminder.delta && reminder.delta <= warning_delta_minutes) {
+                    } else if (0 <= reminder.delta && reminder.delta <= current_warning_delta) {
                         // Warning
                         header.removeClass("bg-danger").addClass("bg-warning")
                         reminder.is_warning = true
