@@ -1,4 +1,4 @@
-<li id="plugin-button-calendar-heldor" class="plugin-button nav-item" data-plugin-version="1.0.1">
+<li id="plugin-button-calendar-heldor" class="plugin-button nav-item" data-plugin-version="1.0.2">
     <a class="nav-link" data-toggle="tab" href="#plugin-tab-calendar-heldor" role="tab"
        aria-controls="plugin-tab-calendar-heldor" aria-selected="false">
         Calendrier
@@ -91,6 +91,16 @@
         const minute_input = $("#plugin-calendar-heldor-minute")
         const combat_input = $("#plugin-calendar-heldor-pa")
         const note_list = $("#plugin-calendar-heldor-note-list")
+
+        if (!month_input.parent().hasClass("dropdown")) { // Initialize select if needed
+            month_input.selectpicker("refresh")
+        }
+        // Prevent mdbootstrap label to overlap with text non typed by a user
+        day_input.trigger("change")
+        year_input.trigger("change")
+        hour_input.trigger("change")
+        minute_input.trigger("change")
+        combat_input.trigger("change")
 
         day_input.on("change", e => {
             const day = (parseInt($(e.target).val()) - 1) % 6
