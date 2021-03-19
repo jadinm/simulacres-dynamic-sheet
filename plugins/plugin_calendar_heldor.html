@@ -183,7 +183,7 @@
             })
 
             // Add ordered list of notes
-            reminders.sort((a, b) => b.delta - a.delta)
+            reminders.sort((a, b) => a.delta - b.delta)
             note_list.children().remove()
             if (reminders.length > 0) {
                 note_list.parent().removeClass("d-none")
