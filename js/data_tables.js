@@ -60,6 +60,7 @@ class DataTable {
         })
         this.add_button.on("click", (event, idx = null) => { // Add parameter for forced index
             this.add_row(idx)
+            changed_page = true
         })
         this.remove_button.sortable({
             group: this.id, // So that it can delete the appropriate table items

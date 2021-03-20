@@ -506,4 +506,9 @@
     {{ js_block | safe }}
 {% endfor %}
 
+<script>
+    $(_ => {
+        changed_page = false // Because this was not changed by the user
+    })
+</script>
 </html>

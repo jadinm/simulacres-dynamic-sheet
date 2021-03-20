@@ -256,7 +256,6 @@ $('.talent-list').each((i, elem) => {
 
 $("select.talent-select").each((i, elem) => {
     update_talent_select($(elem))
-    changed_page = false // Because this is not changed by the user
 })
 
 $('.remove-talent').sortable({
