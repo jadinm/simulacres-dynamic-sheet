@@ -44,6 +44,8 @@ parser.add_argument("--intermediate-discovery",
 parser.add_argument("--discovery", help="Discovery mode of SimulacreS (only supported for version 8)",
                     action='store_true')
 parser.add_argument("--plugin", help="Add the plugin at the following path", action='extend', nargs="*", default=[])
+parser.add_argument("--base-template", help="Path of to the html template inside the template folder",
+                    default="base.html")
 parser.add_argument("-v", "--verbose", help="Increase output verbosity", action="store_true")
 args = parser.parse_args()
 if args.verbose:
@@ -176,7 +178,7 @@ else:  # V8
         else:
             params["base_sheet_name"] = "simulacres_v8_fiche_perso_minimale{}.html".format(matrix_text)
 
-template = env.get_template('base.html')
+template = env.get_template(args.base_template)
 compiled_html = template.render(params)
 
 # Replacing external file content
