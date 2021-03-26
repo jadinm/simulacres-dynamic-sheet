@@ -73,14 +73,18 @@ class Roll {
         last_rolls.push(this)
     }
 
-    roll_dices(number, type, dices) {
+    roll_dices(number, type, dices, reason = "") {
         return roll_dices(number, type, dices)
+    }
+
+    dice_value_text() {
+        return this.number + "d" + this.type
     }
 
     dice_value() {
         if (this.base_dices.length === 0) {
             // Roll needed
-            this.roll_dices(this.number, this.type, this.base_dices)
+            this.roll_dices(this.number, this.type, this.base_dices, this.dice_value_text())
         }
         return this.base_dices.reduce((a, b) => {
             return a + b;
@@ -152,19 +156,19 @@ class Roll {
 
     make_dices_clickable() {
         const roll_fn = this.roll_dices
+        const roll = this
         $(".roll-link").on("click", e => {
             let target = $(e.target)
             if (!target.hasClass("roll-link"))
                 target = target.parents(".roll-link")
 
-            const type = target.attr("data-dice-type")
-            const new_value = roll_fn(1, type ? type : 6)
+            const type = parseInt(target.attr("data-dice-type"))
+            const new_value = roll_fn.call(roll, 1, type ? type : 6)
             const dice_group = target.get(0).getAttribute("data-dice-group")
             const dice_idx = target.get(0).getAttribute("data-dice-idx")
             current_roll[dice_group][dice_idx] = new_value
             target.tooltip("dispose")
-            current_roll.show_roll()
-            $(document).trigger("update-roll", current_roll)
+            current_roll.trigger_roll()
         }).tooltip({disabled: false})
     }
 
@@ -196,14 +200,20 @@ class Roll {
         $(".roll-dialog-energy").parent().tooltip({disabled: false})
     }
 
-    trigger_roll() {
+    show_modal() {
+        $('#roll-dialog').modal()
+    }
+
+    trigger_roll(show_modal = true) {
         this.show_roll()
         $(document).trigger("roll", this)
+        if (show_modal)
+            this.show_modal()
     }
 
     /* Trigger the same roll */
     reroll() {
-        new this.constructor(this.number, this.type).trigger_roll()
+        new this.constructor(this.number, this.type).trigger_roll(false)
     }
 }
 
@@ -233,7 +243,7 @@ class TalentRoll extends Roll {
         new this.constructor(this.reason, this.max_value, this.talent_level, this.effect, this.critical_increase,
             this.formula_elements, this.margin_throttle, this.is_magic, this.is_power, this.distance, this.focus,
             this.duration, this.base_energy_cost, this.black_magic, this.magic_resistance,
-            this.equipment, this.equipment_id).trigger_roll()
+            this.equipment, this.equipment_id).trigger_roll(false)
     }
 
     constructor(reason = "", max_value = NaN, talent_level = 0, effect = "",
@@ -253,7 +263,7 @@ class TalentRoll extends Roll {
         this.effect_dices = []
         this.localisation_dices = []
         if (localized_target_hp)
-            this.roll_dices(2, 6, this.localisation_dices)
+            this.roll_dices(2, 6, this.localisation_dices, "Dés de localisation")
 
         this.is_magic = is_magic
         this.is_power = is_power || is_magic
@@ -297,6 +307,10 @@ class TalentRoll extends Roll {
 
         // Need to give energy investment or its magical components
         this.energy_investment_validated = !has_any_base_energy() && !is_magic
+    }
+
+    dice_value_text() {
+        return this.number + "d" + this.type + " à la base du test"
     }
 
     energy_cost() {
@@ -466,7 +480,7 @@ class TalentRoll extends Roll {
     effect_value() {
         if (is_v7 && this.effect_dices.length === 0) {
             // Roll needed
-            this.roll_dices(2, 6, this.effect_dices)
+            this.roll_dices(2, 6, this.effect_dices, "Dés d'effet du test")
         }
         return this.effect_dices.reduce((a, b) => {
             return a + b;
@@ -479,7 +493,8 @@ class TalentRoll extends Roll {
         }
         if (this.critical_dices.length === 0) {
             const additional_dices = this.talent_level >= 0 ? this.talent_level : 0
-            this.roll_dices(1 + additional_dices, 6, this.critical_dices)
+            this.roll_dices(1 + additional_dices, 6, this.critical_dices,
+                "Dés en plus grâce au succès critique")
         }
         return this.critical_dices.reduce((a, b) => {
             return a + b;
@@ -495,7 +510,7 @@ class TalentRoll extends Roll {
             return 0
         if (this.power_dices.length === 0) {
             // Power can only be increased up to 3 => roll all the dices directly
-            this.roll_dices(3, this.type, this.power_dices)
+            this.roll_dices(3, this.type, this.power_dices, "Dés en plus grâce à la puissance investie")
         }
         return this.power_dices_activated().reduce((a, b) => {
             return a + b;
@@ -583,7 +598,7 @@ class TalentRoll extends Roll {
                 if (this.localisation_dices.length > 0) {
                     effect_text += "<div class='row mx-1 align-middle'>"
                     const localisation_six = this.localisation_dices[0] === 6
-                    effect_text += "Dé" + (localisation_six ? "s" : "") +  " de localisation ="
+                    effect_text += "Dé" + (localisation_six ? "s" : "") + " de localisation ="
                         + this.dice_buttons("localisation_dices",
                             this.localisation_dices.slice(0, (localisation_six ? 2 : 1)))
                     if (localisation_six) {
@@ -862,10 +877,12 @@ class TalentRoll extends Roll {
         }
     }
 
-    trigger_roll() {
+    trigger_roll(show_modal = true) {
         this.show_roll()
         if (this.energy_investment_validated)
             $(document).trigger("roll", this)
+        if (show_modal)
+            this.show_modal()
     }
 }
 
@@ -874,7 +891,7 @@ class SuperpowerRoll extends TalentRoll {
     /* Trigger the same roll */
     reroll() {
         new this.constructor(this.reason, this.number, this.under_value, this.formula_elements, this.distance,
-            this.focus, this.duration, this.effect, this.equipment, this.equipment_id).trigger_roll()
+            this.focus, this.duration, this.effect, this.equipment, this.equipment_id).trigger_roll(false)
     }
 
     constructor(reason = "", nbr_dices = 0, under_value = 0, formula_elements = [],
@@ -915,7 +932,7 @@ class SuperpowerRoll extends TalentRoll {
     dice_value() {
         if (this.base_dices.length === 0) {
             // Roll needed
-            this.roll_dices(this.number, this.type, this.base_dices)
+            this.roll_dices(this.number, this.type, this.base_dices, this.dice_value_text())
         }
         return this.base_dices.map((elem) => {
             return (elem <= this.max_threshold()) ? 1 : 0
@@ -927,7 +944,7 @@ class SuperpowerRoll extends TalentRoll {
     power_value() {
         if (this.power_dices.length === 0) {
             // Power can only be increased up to 3 => roll all the dices directly
-            this.roll_dices(3, 6, this.power_dices)
+            this.roll_dices(3, 6, this.power_dices, "Dés en plus grâce à la puissance investie")
         }
         return this.power_dices_activated().map((elem) => {
             return (elem <= this.max_threshold()) ? 1 : 0
@@ -941,7 +958,7 @@ class SuperpowerRoll extends TalentRoll {
             return 0
         }
         if (this.critical_dices.length === 0) {
-            this.roll_dices(1, 6, this.critical_dices)
+            this.roll_dices(1, 6, this.critical_dices, "Dés en plus grâce au succès critique")
         }
         return this.critical_dices[0] <= this.max_threshold() ? 1 : 0
     }
@@ -1057,7 +1074,7 @@ class FocusMagicRoll extends TalentRoll {
     margin() {
         if (this.margin_dices.length === 0) {
             // Roll needed
-            this.roll_dices(1, 3, this.margin_dices)
+            this.roll_dices(1, 3, this.margin_dices, "Marge du test")
         }
         return this.margin_dices.reduce((a, b) => {
             return a + b;
@@ -1171,7 +1188,7 @@ class GoodNatureEvilMagicRoll extends TalentRoll {
     margin() {
         if (this.margin_dices.length === 0) {
             // Roll needed
-            this.roll_dices(1, 3, this.margin_dices)
+            this.roll_dices(1, 3, this.margin_dices, "Marge de base du test")
         }
         return this.margin_dices.reduce((a, b) => {
             return a + b;
@@ -1189,7 +1206,8 @@ class GoodNatureEvilMagicRoll extends TalentRoll {
     precision_value() {
         if (this.precision_dices.length === 0) {
             // Precision can only be increased up to 3 => roll all the dices directly
-            this.roll_dices(3, this.type, this.precision_dices)
+            this.roll_dices(3, this.type, this.precision_dices,
+                "Dés en plus grâce à la précision investie")
         }
         return this.precision_dices_activated().reduce((a, b) => {
             return a + b;
@@ -1312,7 +1330,6 @@ $("#roll-1d6").on("click", _ => {
     $(".roll-dialog-component").each((i, elem) => uncheck_checkbox(elem))
     // Trigger roll
     new Roll(1).trigger_roll()
-    $('#roll-dialog').modal()
 })
 
 $("#roll-2d6").on("click", _ => {
@@ -1321,7 +1338,6 @@ $("#roll-2d6").on("click", _ => {
     $(".roll-dialog-component").each((i, elem) => uncheck_checkbox(elem))
     // Trigger roll
     new Roll().trigger_roll()
-    $('#roll-dialog').modal()
 })
 
 $("#roll-free").on("click", _ => {
@@ -1332,7 +1348,6 @@ $("#roll-free").on("click", _ => {
     const number = parseInt($("#roll-free-number").val())
     if (!isNaN(number)) {
         new Roll(number).trigger_roll()
-        $('#roll-dialog').modal()
     }
 })
 

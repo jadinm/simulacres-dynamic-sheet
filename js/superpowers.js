@@ -55,7 +55,6 @@ class SuperpowerRow extends RollRow {
         // Do the actual roll
         new SuperpowerRoll(this.roll_reason(), nbr_dices, under_value, formula_elements, power_distance, power_focus,
             power_duration, this.get("effect").val(), equipment, equipment_id).trigger_roll()
-        $('#roll-dialog').modal()
     }
 }
 
