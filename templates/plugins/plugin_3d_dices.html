@@ -17,17 +17,87 @@
     {{ include_static("../node_modules/threejs-dice/lib/dice.js") }}
 </script>
 
-<script id="plugin-js-3d-dices" class="plugin-js">
+<script id="plugin-js-3d-dices" class="plugin-js" data-plugin-version="1.0.0">
+    // TODO Compatibility with true random ! -> check true random function first
     {
-        // Example adapted from https://github.com/byWulf/threejs-dice/blob/master/examples/rolling.html
+        // When we do not upgrade the plugin, fetch the old functions
+        if (!window.hasOwnProperty('plugin_3d_dices_old_roll_dices')) {
+            window.plugin_3d_dices_old_roll_dices = Roll.prototype.roll_dices
+        }
+        if (!window.hasOwnProperty('plugin_3d_dices_old_show_modal')) {
+            window.plugin_3d_dices_old_show_modal = Roll.prototype.show_modal
+        }
+        if (!window.hasOwnProperty('plugin_3d_dices_old_reroll')) {
+            window.plugin_3d_dices_old_reroll = Roll.prototype.reroll
+        }
 
         // standard global variables
-        let container, scene, camera, renderer, debug = false, world, dice = []
+        let commands = [], showing = false
         const main_container = $('#main-container')
+        let dice_types = {
+            4: DiceD4,
+            6: DiceD6,
+            8: DiceD8,
+            10: DiceD10,
+            12: DiceD12,
+            20: DiceD20
+        }
+        let half_types = [2, 3, 5] // by using a type above
 
-        init()
+        function roll_3d_dices(number, type, dices = [], reason = null) {
+            if (type !== 6) { // Fallback
+                return window.plugin_3d_dices_old_roll_dices.call(this, number, type, dices, reason)
+            }
 
-        function init(nbr_dices = 2) {
+            let existing = commands.length !== 0
+            if (reason) { // Check if it already exists
+                commands.forEach((elem) => {
+                    if (elem[3] === reason)
+                        existing = true
+                })
+            }
+
+            let sum = 0
+            if (!reason || !existing) {
+                sum = window.plugin_3d_dices_old_roll_dices.call(this, number, type, dices, reason)
+                commands.push([number, type, dices, sum, reason])
+
+                if (!showing) {
+                    show_3d_roll()
+                }
+            }
+            return sum
+        }
+
+        function show_3d_roll() {
+            let scene, camera, renderer, debug = false, world, dice_3d = []
+            let [number, type, dices, result, reason] = commands.pop()
+            showing = true
+
+            if (half_types.includes(type)) {
+                // This type of dice does not exists so we show twice the result
+                type = type * 2
+                dices = Array.map(dices, (elem) => 2 * elem)
+            }
+
+            // Example adapted from https://github.com/byWulf/threejs-dice/blob/master/examples/rolling.html
+
+            // Helpers
+            function animate() {
+                updatePhysics()
+                renderer.render(scene, camera)
+
+                requestAnimationFrame(animate)
+            }
+
+            function updatePhysics() {
+                world.step(1.0 / 60.0)
+
+                for (let i in dice_3d) {
+                    dice_3d[i].updateMeshFromBody()
+                }
+            }
+
             // Scene
             scene = new THREE.Scene()
             scene.background = null
@@ -47,7 +117,7 @@
             renderer.setClearColor(0xFFFFFFFF, 0)
 
             // Canvas positioning
-            container = $("<div style='position: absolute; left: 0; top: 0'></div>")
+            let container = $("<div style='position: fixed; left: 0; top: 0; z-index: 10'></div>")
             main_container.append(container)
             container = main_container.children().last()
             container.append(renderer.domElement)
@@ -136,28 +206,28 @@
 
             // Dices
             let colors = ['#ff0000', '#ffff00', '#00ff00', '#0000ff', '#ff00ff']
-            for (let i = 0; i < nbr_dices; i++) {
-                let die = new DiceD6({size: 1.5, backColor: colors[i]})
+            for (let i = 0; i < number; i++) {
+                let die = new dice_types[type]({size: 1.5, backColor: colors[i]})
                 scene.add(die.getObject())
-                dice.push(die)
+                dice_3d.push(die)
             }
 
             function randomDiceThrow() {
                 let diceValues = []
 
-                for (let i = 0; i < dice.length; i++) {
+                for (let i = 0; i < dice_3d.length; i++) {
                     let yRand = Math.random() * 20
-                    dice[i].getObject().position.x = -15 - (i % 3) * 1.5
-                    dice[i].getObject().position.y = 2 + Math.floor(i / 3) * 1.5
-                    dice[i].getObject().position.z = -15 + (i % 3) * 1.5
-                    dice[i].getObject().quaternion.x = (Math.random() * 90 - 45) * Math.PI / 180
-                    dice[i].getObject().quaternion.z = (Math.random() * 90 - 45) * Math.PI / 180
-                    dice[i].updateBodyFromMesh()
+                    dice_3d[i].getObject().position.x = -15 - (i % 3) * 1.5
+                    dice_3d[i].getObject().position.y = 2 + Math.floor(i / 3) * 1.5
+                    dice_3d[i].getObject().position.z = -15 + (i % 3) * 1.5
+                    dice_3d[i].getObject().quaternion.x = (Math.random() * 90 - 45) * Math.PI / 180
+                    dice_3d[i].getObject().quaternion.z = (Math.random() * 90 - 45) * Math.PI / 180
+                    dice_3d[i].updateBodyFromMesh()
                     let rand = Math.random() * 5
-                    dice[i].getObject().body.velocity.set(25 + rand, 40 + yRand, 15 + rand)
-                    dice[i].getObject().body.angularVelocity.set(20 * Math.random() - 10, 20 * Math.random() - 10, 20 * Math.random() - 10)
+                    dice_3d[i].getObject().body.velocity.set(25 + rand, 40 + yRand, 15 + rand)
+                    dice_3d[i].getObject().body.angularVelocity.set(20 * Math.random() - 10, 20 * Math.random() - 10, 20 * Math.random() - 10)
 
-                    diceValues.push({dice: dice[i], value: i + 1})
+                    diceValues.push({dice: dice_3d[i], value: dices[i]})
                 }
 
                 DiceManager.prepareValues(diceValues)
@@ -166,28 +236,49 @@
             randomDiceThrow()
 
             requestAnimationFrame(animate)
+
+            // Remove on click
+            container.on("click", _ => {
+                container.remove()
+                if (commands.length === 0) {
+                    // Show the summary of the roll
+                    showing = false
+                    current_roll.show_roll()
+                    $('#roll-dialog').modal()
+                } else {
+                    // Go to next 3D roll
+                    show_3d_roll()
+                }
+            })
+
+            return result
         }
 
-        function animate() {
-            updatePhysics()
-            renderer.render(scene, camera)
-
-            requestAnimationFrame(animate)
+        function reroll_3d_dices() {
+            const roll = this
+            $('#roll-dialog').one("hidden.bs.modal", _ => {
+                // Execute the actual reroll after closing the modal
+                window.plugin_3d_dices_old_reroll.call(roll)
+            }).modal("hide")
         }
 
-        function updatePhysics() {
-            world.step(1.0 / 60.0)
-
-            for (let i in dice) {
-                dice[i].updateMeshFromBody()
-            }
+        Roll.prototype.roll_dices = roll_3d_dices // Trigger 3D roll
+        Roll.prototype.show_modal = () => {
+            // Do not show modal until all rolls are resolved
+            $('#roll-dialog').modal("hide")
         }
+        Roll.prototype.reroll = reroll_3d_dices // Hide visible modal to see the new 3D roll
     }
 
     function dispose_plugin_3d_dices() {
-        // TODO
+        Roll.prototype.roll_dices = window.plugin_3d_dices_old_roll_dices
+        delete window.plugin_3d_dices_old_roll_dices
+        Roll.prototype.show_modal = window.plugin_3d_dices_old_show_modal
+        delete window.plugin_3d_dices_old_show_modal
+        Roll.prototype.reroll = window.plugin_3d_dices_old_reroll
+        delete window.plugin_3d_dices_old_reroll
     }
 
-    // Register the function (avoid typos here or the method won't be called)
+    // Register the function
     plugin_dispose_methods["3d-dices"] = dispose_plugin_3d_dices
 </script>

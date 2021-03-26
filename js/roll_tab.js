@@ -158,7 +158,6 @@ class RollRow extends DataRow {
             critical_increase, formula_elements, margin_throttle, false, false,
             "", "", "", 0, "", "",
             equipment, equipment_id).trigger_roll()
-        $('#roll-dialog').modal()
     }
 
     update_title() {
