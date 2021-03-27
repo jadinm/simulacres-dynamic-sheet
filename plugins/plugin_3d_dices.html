@@ -61326,6 +61326,12 @@ if (typeof define === 'function' && define.amd) {
         }
         let half_types = [2, 3, 5] // by using a type above
 
+        function is_current_roll_validated() {
+            return !(current_roll
+                && typeof current_roll.energy_investment_validated !== "undefined"
+                && !current_roll.energy_investment_validated)
+        }
+
         function roll_3d_dices(number, type, dices = [], reason = null) {
             if (type !== 6) { // Fallback
                 return window.plugin_3d_dices_old_roll_dices.call(this, number, type, dices, reason)
@@ -61542,12 +61548,22 @@ if (typeof define === 'function' && define.amd) {
         Roll.prototype.roll_dices = roll_3d_dices // Trigger 3D roll
         Roll.prototype.show_modal = () => {
             // Do not show modal until all rolls are resolved
-            $('#roll-dialog').modal("hide")
+            if (!is_current_roll_validated())
+                $('#roll-dialog').modal()
+            else
+                $('#roll-dialog').modal("hide")
         }
         $("#roll-dialog-redo").off("click").on("click", _ => {
             // Close modal before rerolling
-            $('#roll-dialog').one("hidden.bs.modal", roll_dialog_reroll)
-            $('#roll-dialog').modal("hide")
+            $('#roll-dialog').one("hidden.bs.modal", _ => {
+                roll_dialog_reroll()
+                if (!is_current_roll_validated())
+                    $('#roll-dialog').modal() // Show modal to validate the energy investment
+            }).modal("hide")
+        })
+        $("#roll-dialog-validate").off("click").on("click", _ => {
+            // Close modal before validating because new rolls will be triggered
+            $('#roll-dialog').one("hidden.bs.modal", roll_dialog_validate).modal("hide")
         })
     }
 
@@ -61557,6 +61573,7 @@ if (typeof define === 'function' && define.amd) {
         Roll.prototype.show_modal = window.plugin_3d_dices_old_show_modal
         delete window.plugin_3d_dices_old_show_modal
         $("#roll-dialog-redo").off("click").on("click", roll_dialog_reroll)
+        $("#roll-dialog-validate").off("click").on("click", roll_dialog_validate)
     }
 
     // Register the function
