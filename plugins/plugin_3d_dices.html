@@ -1561,7 +1561,6 @@ if (typeof define === 'function' && define.amd) {
 </script>
 
 <script id="plugin-js-3d-dices" class="plugin-js" data-plugin-version="1.0.0" data-plugin-id="3d-dices">
-    // TODO Compatibility with true random ! -> check true random function first
     {
         // When we do not upgrade the plugin, fetch the old functions
         if (!window.hasOwnProperty('plugin_3d_dices_old_roll_dices')) {
@@ -1605,6 +1604,11 @@ if (typeof define === 'function' && define.amd) {
 
             let sum = 0
             if (!reason || !existing) {
+                // Hide without fading effect (because of spoilers)
+                // Modal may need to be hidden when we move the slider, making the test successful
+                // and triggering the roll of power dices
+                $('#roll-dialog').removeClass("fade").modal("hide").addClass("fade")
+
                 sum = window.plugin_3d_dices_old_roll_dices.call(this, number, type, dices, reason)
                 commands.push([number, type, dices, sum, reason])
 
@@ -1808,8 +1812,8 @@ if (typeof define === 'function' && define.amd) {
             // Do not show modal until all rolls are resolved
             if (!is_current_roll_validated())
                 $('#roll-dialog').modal()
-            else
-                $('#roll-dialog').modal("hide")
+            else // Hide without fading effect (because of spoilers)
+                $('#roll-dialog').removeClass("fade").modal("hide").addClass("fade")
         }
         $("#roll-dialog-redo").off("click").on("click", _ => {
             // Close modal before rerolling
@@ -1832,6 +1836,7 @@ if (typeof define === 'function' && define.amd) {
         delete window.plugin_3d_dices_old_show_modal
         $("#roll-dialog-redo").off("click").on("click", roll_dialog_reroll)
         $("#roll-dialog-validate").off("click").on("click", roll_dialog_validate)
+        $('#roll-dialog').addClass("fade")
     }
 
     // Register the function
