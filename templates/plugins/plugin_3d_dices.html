@@ -242,13 +242,16 @@
                 container.remove()
                 if (commands.length === 0) {
                     // Show the summary of the roll
-                    showing = false
                     current_roll.show_roll()
-                    $('#roll-dialog').modal()
-                } else {
-                    // Go to next 3D roll
-                    show_3d_roll()
+                    if (commands.length === 0) {
+                        // No new roll was triggered, stop recursion
+                        showing = false
+                        $('#roll-dialog').modal()
+                        return
+                    }
                 }
+                // Go to next 3D roll
+                show_3d_roll()
             })
 
             return result

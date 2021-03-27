@@ -61357,6 +61357,11 @@ if (typeof define === 'function' && define.amd) {
         function show_3d_roll() {
             let scene, camera, renderer, debug = false, world, dice_3d = []
             let [number, type, dices, result, reason] = commands.pop()
+            console.log("ON POP Current command", number, type, dices, result, reason)
+            console.log("ON POP Remaining commands")
+            commands.forEach((elem) => {
+                console.log(elem)
+            })
             showing = true
 
             if (half_types.includes(type)) {
@@ -61525,15 +61530,27 @@ if (typeof define === 'function' && define.amd) {
             // Remove on click
             container.on("click", _ => {
                 container.remove()
+                console.log("ON CLICK Current command", number, type, dices, result, reason)
+                console.log("ON CLICK Remaining commands")
+                commands.forEach((elem) => {
+                    console.log(elem)
+                })
                 if (commands.length === 0) {
                     // Show the summary of the roll
-                    showing = false
                     current_roll.show_roll()
-                    $('#roll-dialog').modal()
-                } else {
-                    // Go to next 3D roll
-                    show_3d_roll()
+                    console.log("ON CLICK - AFTER SHOW - Remaining commands")
+                    commands.forEach((elem) => {
+                        console.log(elem)
+                    })
+                    if (commands.length === 0) {
+                        // No new command was stacked, stop iteration
+                        showing = false
+                        $('#roll-dialog').modal()
+                        return
+                    }
                 }
+                // Go to next 3D roll
+                show_3d_roll()
             })
 
             return result
