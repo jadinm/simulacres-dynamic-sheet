@@ -506,9 +506,10 @@ class TalentRoll extends Roll {
     power_value() {
         if (!this.is_success())
             return 0
-        if (this.power_dices.length === 0) {
-            // Power can only be increased up to 3 => roll all the dices directly
-            this.roll_dices(3, this.type, this.power_dices, "Dés en plus grâce à la puissance investie")
+        if (this.power_dices.length < this.optional_power) {
+            // Power can only be increased up to 3 => roll incrementally if heroism is used afterward
+            this.roll_dices(this.optional_power - this.power_dices.length, this.type, this.power_dices,
+                "Dés en plus grâce à la puissance investie")
         }
         return this.power_dices_activated().reduce((a, b) => {
             return a + b;
@@ -941,9 +942,10 @@ class SuperpowerRoll extends TalentRoll {
     }
 
     power_value() {
-        if (this.power_dices.length === 0) {
-            // Power can only be increased up to 3 => roll all the dices directly
-            this.roll_dices(3, 6, this.power_dices, "Dés en plus grâce à la puissance investie")
+        if (this.power_dices.length < this.optional_power) {
+            // Power can only be increased up to 3 => roll only remaining dices
+            this.roll_dices(this.optional_power - this.power_dices.length, 6, this.power_dices,
+                "Dés en plus grâce à la puissance investie")
         }
         return this.power_dices_activated().map((elem) => {
             return (elem <= this.max_threshold()) ? 1 : 0
@@ -1203,10 +1205,10 @@ class GoodNatureEvilMagicRoll extends TalentRoll {
     }
 
     precision_value() {
-        if (this.precision_dices.length === 0) {
-            // Precision can only be increased up to 3 => roll all the dices directly
-            this.roll_dices(3, this.type, this.precision_dices,
-                "Dés en plus grâce à la précision investie")
+        if (this.precision_dices.length < this.optional_precision) {
+            // Precision can only be increased up to 3 => roll only needed dices
+            this.roll_dices(this.optional_precision - this.precision_dices.length, this.type,
+                this.precision_dices, "Dés en plus grâce à la précision investie")
         }
         return this.precision_dices_activated().reduce((a, b) => {
             return a + b;
