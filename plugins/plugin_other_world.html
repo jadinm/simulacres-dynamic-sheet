@@ -1,11 +1,13 @@
-<li id="plugin-button-other-world" class="plugin-button nav-item" data-plugin-version="1.0.0">
+<li id="plugin-button-other-world" class="plugin-button nav-item" data-plugin-version="1.0.1"
+    data-plugin-id="other-world">
     <a class="nav-link" data-toggle="tab" href="#plugin-tab-other-world" role="tab"
        aria-controls="plugin-tab-other-world" aria-selected="false">
         Énergies magiques du monde
     </a>
 </li>
 
-<div id="plugin-tab-other-world" class="plugin-tab tab-pane fade row my-1 container-fluid m-0">
+<div id="plugin-tab-other-world" class="plugin-tab tab-pane fade row my-1 container-fluid m-0"
+     data-plugin-id="other-world">
     <div class="row col-12 form-row mt-2 md-form p-0 m-0">
         <div class="col-md-2 input-with-pre-icon">
             <svg height="3em" width="2em" class="input-prefix">
@@ -22,7 +24,7 @@
     </div>
 </div>
 
-<script id="plugin-js-other-world" class="plugin-js">
+<script id="plugin-js-other-world" class="plugin-js" data-plugin-id="other-world">
     /* Trigger Adventure Point computation on change of your magic energy level */
     $("#plugin-other-world-magic").on("change", _ => {
         $("select.special-energy-select").each((i, elem) => { // Update lists of special energies

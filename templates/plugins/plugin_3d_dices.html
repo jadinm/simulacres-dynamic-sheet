@@ -1,23 +1,17 @@
-<style id="plugin-css-3d-dices" class="plugin-css">
+<style id="plugin-css-3d-dices" class="plugin-css" data-plugin-id="3d-dices">
 </style>
 
-<script id="plugin-js-3d-dices-dep-1" class="plugin-js">
-    {{ include_static("../node_modules/three/build/three.js") }}
+<script id="plugin-js-3d-dices-dep-1" class="plugin-js" data-plugin-id="3d-dices">
+    {{ include_static("../node_modules/three/build/three.min.js") }}
 </script>
-<script id="plugin-js-3d-dices-dep-2" class="plugin-js">
-    {{ include_static("../node_modules/cannon/build/cannon.js") }}
+<script id="plugin-js-3d-dices-dep-2" class="plugin-js" data-plugin-id="3d-dices">
+    {{ include_static("../node_modules/cannon/build/cannon.min.js") }}
 </script>
-<script id="plugin-js-3d-dices-dep-3" class="plugin-js">
-    {{ include_static("../node_modules/three/examples/js/controls/OrbitControls.js") }}
-</script>
-<script id="plugin-js-3d-dices-dep-4" class="plugin-js">
-    {{ include_static("../node_modules/three/examples/js/libs/stats.min.js") }}
-</script>
-<script id="plugin-js-3d-dices-dep-5" class="plugin-js">
+<script id="plugin-js-3d-dices-dep-3" class="plugin-js" data-plugin-id="3d-dices">
     {{ include_static("../node_modules/threejs-dice/lib/dice.js") }}
 </script>
 
-<script id="plugin-js-3d-dices" class="plugin-js" data-plugin-version="1.0.0">
+<script id="plugin-js-3d-dices" class="plugin-js" data-plugin-version="1.0.0" data-plugin-id="3d-dices">
     // TODO Compatibility with true random ! -> check true random function first
     {
         // When we do not upgrade the plugin, fetch the old functions

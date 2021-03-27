@@ -1,11 +1,12 @@
-<li id="plugin-button-example" class="plugin-button nav-item" data-plugin-version="1.0.0">
+<li id="plugin-button-example" class="plugin-button nav-item" data-plugin-version="1.0.1" data-plugin-id="example">
     <a class="nav-link" data-toggle="tab" href="#plugin-tab-example" role="tab"
        aria-controls="plugin-tab-example" aria-selected="false">
         Plugin exemple
     </a>
 </li>
 
-<div id="plugin-tab-example" class="plugin-tab tab-pane fade row my-1 container-fluid m-0 pr-0">
+<div id="plugin-tab-example" class="plugin-tab tab-pane fade row my-1 container-fluid m-0 pr-0"
+     data-plugin-id="example">
     <div class="row col-12 form-row mt-2 md-form p-0 m-0">
         <div class="col-12">
             <label for="plugin-example-field">Champ exemple</label>
@@ -16,14 +17,14 @@
     </div>
 </div>
 
-<style id="plugin-css-example" class="plugin-css">
+<style id="plugin-css-example" class="plugin-css" data-plugin-id="example">
     /* Set the font color to red in the labels of the tab */
     #plugin-tab-example label {
         color: red;
     }
 </style>
 
-<script id="plugin-js-example" class="plugin-js">
+<script id="plugin-js-example" class="plugin-js" data-plugin-id="example">
     $("#plugin-example-field").on("change", _ => {
         alert("Vous avez changé le texte de l'exemple")
     })

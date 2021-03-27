@@ -210,6 +210,10 @@ Pour garantir l'unicité de vos ids, préfixez les par
 par le nom de votre plugin
 et ``<block-class>`` par la classe appropriée choisie dans la liste ci-dessus.
 
+Chaque block doit avoir un attribut ``data-plugin-id`` qui reprendra le nom du plugin.
+Sa valeur doit être le nom du fichier sans le préfixe ``plugin-`` et
+où les ``_`` sont remplacés par des ``-``.
+
 Il est également possible d'écraser des parties de la fiche dynamique avec cette
 méthode en utilisant le même id que le block à écraser
 mais utilisez ça avec prudence car cela peut introduire des bugs.

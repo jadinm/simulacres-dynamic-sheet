@@ -1,11 +1,13 @@
-<li id="plugin-button-export-to-server" class="plugin-button nav-item" data-plugin-version="1.0.1">
+<li id="plugin-button-export-to-server" class="plugin-button nav-item" data-plugin-version="1.0.2"
+    data-plugin-id="export-to-server">
     <a class="nav-link" data-toggle="tab" href="#plugin-tab-export-to-server" role="tab"
        aria-controls="plugin-tab-export-to-server" aria-selected="false">
         Exporter
     </a>
 </li>
 
-<div id="plugin-tab-export-to-server" class="plugin-tab tab-pane fade row my-1 container-fluid m-0">
+<div id="plugin-tab-export-to-server" class="plugin-tab tab-pane fade row my-1 container-fluid m-0"
+     data-plugin-id="export-to-server">
     <div id="plugin-export-to-server-alert" class="alert alert-danger alert-dismissible mt-2 d-none" role="alert">
         <p id="plugin-export-to-server-alert-message"></p>
         <button id="plugin-export-to-server-alert-button" type="button" class="close" aria-label="Close">
@@ -44,14 +46,14 @@
     </div>
 </div>
 
-<style id="plugin-css-export-to-server" class="plugin-css">
+<style id="plugin-css-export-to-server" class="plugin-css" data-plugin-id="export-to-server">
     /* Set font of url to a more readable font than Augusta */
     #plugin-export-to-server-url, #plugin-export-to-server-roll-url {
         font-family: "Linux Libertine", serif;
     }
 </style>
 
-<script id="plugin-js-export-to-server" class="plugin-js">
+<script id="plugin-js-export-to-server" class="plugin-js" data-plugin-id="export-to-server">
     // We create a new block to avoid errors in case of redeclaration of global variables
     // This can happen if this plugin is imported twice
     $(_ => {
