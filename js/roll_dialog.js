@@ -1481,11 +1481,12 @@ $("#roll-dialog-history-forward").on("click", _ => {
     }
 })
 
-$("#roll-dialog-redo").on("click", _ => {
+function roll_dialog_reroll() {
     if (!current_roll)
         return
     current_roll.reroll()
-})
+}
+$("#roll-dialog-redo").on("click", roll_dialog_reroll)
 
 $("#roll-dialog-validate").on("click", _ => {
     if (!current_roll)

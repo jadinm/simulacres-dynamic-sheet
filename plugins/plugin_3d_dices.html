@@ -61312,9 +61312,6 @@ if (typeof define === 'function' && define.amd) {
         if (!window.hasOwnProperty('plugin_3d_dices_old_show_modal')) {
             window.plugin_3d_dices_old_show_modal = Roll.prototype.show_modal
         }
-        if (!window.hasOwnProperty('plugin_3d_dices_old_reroll')) {
-            window.plugin_3d_dices_old_reroll = Roll.prototype.reroll
-        }
 
         // standard global variables
         let commands = [], showing = false
@@ -61357,11 +61354,6 @@ if (typeof define === 'function' && define.amd) {
         function show_3d_roll() {
             let scene, camera, renderer, debug = false, world, dice_3d = []
             let [number, type, dices, result, reason] = commands.pop()
-            console.log("ON POP Current command", number, type, dices, result, reason)
-            console.log("ON POP Remaining commands")
-            commands.forEach((elem) => {
-                console.log(elem)
-            })
             showing = true
 
             if (half_types.includes(type)) {
@@ -61530,20 +61522,11 @@ if (typeof define === 'function' && define.amd) {
             // Remove on click
             container.on("click", _ => {
                 container.remove()
-                console.log("ON CLICK Current command", number, type, dices, result, reason)
-                console.log("ON CLICK Remaining commands")
-                commands.forEach((elem) => {
-                    console.log(elem)
-                })
                 if (commands.length === 0) {
                     // Show the summary of the roll
                     current_roll.show_roll()
-                    console.log("ON CLICK - AFTER SHOW - Remaining commands")
-                    commands.forEach((elem) => {
-                        console.log(elem)
-                    })
                     if (commands.length === 0) {
-                        // No new command was stacked, stop iteration
+                        // No new roll was triggered, stop recursion
                         showing = false
                         $('#roll-dialog').modal()
                         return
@@ -61556,20 +61539,16 @@ if (typeof define === 'function' && define.amd) {
             return result
         }
 
-        function reroll_3d_dices() {
-            const roll = this
-            $('#roll-dialog').one("hidden.bs.modal", _ => {
-                // Execute the actual reroll after closing the modal
-                window.plugin_3d_dices_old_reroll.call(roll)
-            }).modal("hide")
-        }
-
         Roll.prototype.roll_dices = roll_3d_dices // Trigger 3D roll
         Roll.prototype.show_modal = () => {
             // Do not show modal until all rolls are resolved
             $('#roll-dialog').modal("hide")
         }
-        Roll.prototype.reroll = reroll_3d_dices // Hide visible modal to see the new 3D roll
+        $("#roll-dialog-redo").off("click").on("click", _ => {
+            // Close modal before rerolling
+            $('#roll-dialog').one("hidden.bs.modal", roll_dialog_reroll)
+            $('#roll-dialog').modal("hide")
+        })
     }
 
     function dispose_plugin_3d_dices() {
@@ -61577,8 +61556,7 @@ if (typeof define === 'function' && define.amd) {
         delete window.plugin_3d_dices_old_roll_dices
         Roll.prototype.show_modal = window.plugin_3d_dices_old_show_modal
         delete window.plugin_3d_dices_old_show_modal
-        Roll.prototype.reroll = window.plugin_3d_dices_old_reroll
-        delete window.plugin_3d_dices_old_reroll
+        $("#roll-dialog-redo").off("click").on("click", roll_dialog_reroll)
     }
 
     // Register the function
