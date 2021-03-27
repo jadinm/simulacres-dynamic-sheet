@@ -1609,6 +1609,9 @@ if (typeof define === 'function' && define.amd) {
                 // and triggering the roll of power dices
                 $('#roll-dialog').removeClass("fade").modal("hide").addClass("fade")
 
+                // Do not send anything to a server because it would spoil the player
+                $(document).trigger("stop-roll-broadcast")
+
                 sum = window.plugin_3d_dices_old_roll_dices.call(this, number, type, dices, reason)
                 commands.push([number, type, dices, sum, reason])
 
@@ -1797,6 +1800,8 @@ if (typeof define === 'function' && define.amd) {
                         // No new roll was triggered, stop recursion
                         showing = false
                         $('#roll-dialog').modal()
+                        // Resume the communication to the server because it the player knows the result
+                        $(document).trigger("resume-roll-broadcast")
                         return
                     }
                 }

@@ -1,4 +1,4 @@
-<li id="plugin-button-export-to-server" class="plugin-button nav-item" data-plugin-version="1.0.2"
+<li id="plugin-button-export-to-server" class="plugin-button nav-item" data-plugin-version="1.1.0"
     data-plugin-id="export-to-server">
     <a class="nav-link" data-toggle="tab" href="#plugin-tab-export-to-server" role="tab"
        aria-controls="plugin-tab-export-to-server" aria-selected="false">
@@ -68,9 +68,10 @@
         })
 
         /* Update roll */
+        let hold_rolls = false
         function update_roll(_, roll) {
             const url = $("#plugin-export-to-server-roll-url").val()
-            if (!url || url.length === 0)
+            if (hold_rolls || !url || url.length === 0)
                 return
 
             // Retrieve the name of the character
@@ -116,6 +117,13 @@
         }
         $(document).off("roll").on("roll", update_roll)
         $(document).off("update-roll").on("update-roll", update_roll)
+        $(document).off("stop-roll-broadcast").on("stop-roll-broadcast", _ => {
+            hold_rolls = true
+        })
+        $(document).off("resume-roll-broadcast").on("resume-roll-broadcast", _ => {
+            hold_rolls = false
+            update_roll(null, current_roll)
+        })
 
         // Fix graphical bug with the label overlapping the default value
         $("#plugin-export-to-server-url").trigger("change")
