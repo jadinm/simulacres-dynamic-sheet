@@ -1633,6 +1633,14 @@ if (typeof define === 'function' && define.amd) {
                 dices = Array.map(dices, (elem) => 2 * elem)
             }
 
+            let toast = $("<div id=\"plugin-3d-dices-toast\" class=\"toast\" data-autohide=\"false\"" +
+                " style='position: fixed; left: 50%; transform: translateX(-50%); top: 0; z-index: 9; background-color: white;'>" +
+                "<div class=\"toast-header\"><h2>" + reason + "</h2></div>" +
+                "<div class=\"toast-body\"><h6>Cliquez n'importe où sur l'écran pour continuer</h6></div></div>")
+            main_container.append(toast)
+            toast = main_container.children().last()
+            toast.toast("show")
+
             // Example adapted from https://github.com/byWulf/threejs-dice/blob/master/examples/rolling.html
 
             // Helpers
@@ -1793,6 +1801,7 @@ if (typeof define === 'function' && define.amd) {
             // Remove on click
             container.on("click", _ => {
                 container.remove()
+                toast.remove()
                 if (commands.length === 0) {
                     // Show the summary of the roll
                     current_roll.show_roll()
