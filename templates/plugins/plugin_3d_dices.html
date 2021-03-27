@@ -27,9 +27,6 @@
         if (!window.hasOwnProperty('plugin_3d_dices_old_show_modal')) {
             window.plugin_3d_dices_old_show_modal = Roll.prototype.show_modal
         }
-        if (!window.hasOwnProperty('plugin_3d_dices_old_reroll')) {
-            window.plugin_3d_dices_old_reroll = Roll.prototype.reroll
-        }
 
         // standard global variables
         let commands = [], showing = false
@@ -257,20 +254,16 @@
             return result
         }
 
-        function reroll_3d_dices() {
-            const roll = this
-            $('#roll-dialog').one("hidden.bs.modal", _ => {
-                // Execute the actual reroll after closing the modal
-                window.plugin_3d_dices_old_reroll.call(roll)
-            }).modal("hide")
-        }
-
         Roll.prototype.roll_dices = roll_3d_dices // Trigger 3D roll
         Roll.prototype.show_modal = () => {
             // Do not show modal until all rolls are resolved
             $('#roll-dialog').modal("hide")
         }
-        Roll.prototype.reroll = reroll_3d_dices // Hide visible modal to see the new 3D roll
+        $("#roll-dialog-redo").off("click").on("click", _ => {
+            // Close modal before rerolling
+            $('#roll-dialog').one("hidden.bs.modal", roll_dialog_reroll)
+            $('#roll-dialog').modal("hide")
+        })
     }
 
     function dispose_plugin_3d_dices() {
@@ -278,8 +271,7 @@
         delete window.plugin_3d_dices_old_roll_dices
         Roll.prototype.show_modal = window.plugin_3d_dices_old_show_modal
         delete window.plugin_3d_dices_old_show_modal
-        Roll.prototype.reroll = window.plugin_3d_dices_old_reroll
-        delete window.plugin_3d_dices_old_reroll
+        $("#roll-dialog-redo").off("click").on("click", roll_dialog_reroll)
     }
 
     // Register the function
