@@ -1488,7 +1488,7 @@ function roll_dialog_reroll() {
 }
 $("#roll-dialog-redo").on("click", roll_dialog_reroll)
 
-$("#roll-dialog-validate").on("click", _ => {
+function roll_dialog_validate() {
     if (!current_roll)
         return
     current_roll.energy_investment_validated = true
@@ -1499,4 +1499,5 @@ $("#roll-dialog-validate").on("click", _ => {
     current_roll.invested_energies = invested_energies
     current_roll.show_roll()
     $(document).trigger("roll", current_roll)
-})
+}
+$("#roll-dialog-validate").on("click", roll_dialog_validate)
