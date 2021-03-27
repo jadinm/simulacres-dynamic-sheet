@@ -464,9 +464,13 @@ function build_plugin_list() {
     let plugins = []
     let plugin_versions = {}
     $(plugin_selectors.join(", ")).each((i, elem) => {
-        let plugin_id = elem.id.match(/plugin-(?:tab|button|css|js)-(.+)/)
+        let plugin_id = elem.getAttribute("data-plugin-id")
+        if (!plugin_id || plugin_id.length === 0) {
+            plugin_id = elem.id.match(/plugin-(?:tab|button|css|js)-(.+)/)
+            if (plugin_id && plugin_id.length >= 1)
+                plugin_id = plugin_id[1]
+        }
         if (plugin_id && plugin_id.length >= 1) {
-            plugin_id = plugin_id[1]
             if (!plugins.includes(plugin_id))
                 plugins.push(plugin_id)
             const version = elem.getAttribute("data-plugin-version")
@@ -580,6 +584,7 @@ function remove_plugin(plugin_id) {
     // Remove blocks related to this plugin
     for (let i = 0; i < plugin_selectors.length; i++) {
         $("[id*=\"" + plugin_selectors[i].slice(1) + "-" + plugin_id + "\"]").remove()
+        $("[data-plugin-id*=\"" + plugin_id + "\"]").remove()
     }
     // Call the dispose method of the plugin if any
     if (plugin_id in plugin_dispose_methods) {
