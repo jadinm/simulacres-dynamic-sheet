@@ -168,6 +168,8 @@ Le bouton pour importer un plugin se trouve en bas de la fiche.
 Pour le moment nous avons les plugins suivants :
 
 - Un [plugin exemple](plugins/plugin_example.html) pour le test et la documentation.
+- Un [plugin pour lancer des dés 3D](plugins/plugin_3d_dices.html) pour lancer des dés en 3D
+  dans la fiche directement.
 - Un [plugin utilisant un véritable générateur aléatoire](plugins/plugin_true_random.html).
   Le générateur d'aléatoire d'un PC dépend des calculs qu'il fait et n'est donc pas entièrement
   aléatoire (voir
