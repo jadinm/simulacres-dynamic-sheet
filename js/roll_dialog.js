@@ -262,8 +262,6 @@ class TalentRoll extends Roll {
         this.critical_dices = []
         this.effect_dices = []
         this.localisation_dices = []
-        if (localized_target_hp)
-            this.roll_dices(2, 6, this.localisation_dices, "Dés de localisation")
 
         this.is_magic = is_magic
         this.is_power = is_power || is_magic
@@ -595,6 +593,8 @@ class TalentRoll extends Roll {
                 effect_dices_sum = this.effect_value()
                 effect_text += "<div class='row mx-1 align-middle'>Dés d'effet = " + effect_dices_sum
                     + this.dice_buttons("effect_dices", this.effect_dices) + "</div>"
+                if (localized_target_hp && this.localisation_dices.length === 0)
+                    this.roll_dices(2, 6, this.localisation_dices, "Dés de localisation")
                 if (this.localisation_dices.length > 0) {
                     effect_text += "<div class='row mx-1 align-middle'>"
                     const localisation_six = this.localisation_dices[0] === 6
@@ -776,8 +776,6 @@ class TalentRoll extends Roll {
             result.html(this.post_test_margin())
 
             set_result_label(this.post_test_margin())
-
-            $("#localisation-row-" + this.localisation_dices[0]).addClass("success-color-dark")
         } else {
             result.html("")
             energy_inputs.removeAttr("disabled", "disabled")
@@ -792,6 +790,7 @@ class TalentRoll extends Roll {
         const details_texts = this.details_text()
         if (this.energy_investment_validated) {
             $("#roll-dialog-result-label").removeClass("d-none")
+            $("#localisation-row-" + this.localisation_dices[0]).addClass("success-color-dark")
         } else {
             $("#roll-dialog-result-label").addClass("d-none")
         }
