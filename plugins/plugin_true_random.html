@@ -1,7 +1,11 @@
-<script id="plugin-js-true-random" class="plugin-js" data-plugin-version="1.0.2" data-plugin-id="roll-probability">
+<script id="plugin-js-true-random" class="plugin-js" data-plugin-version="1.0.3" data-plugin-id="true-random">
     if (!window.hasOwnProperty('plugin_true_random_old_roll_dices')) {
         // When we do not upgrade the plugin, fetch the roll function
-        window.plugin_true_random_old_roll_dices = Roll.prototype.roll_dices
+        if (!window.hasOwnProperty('plugin_3d_dices_old_roll_dices')) {
+            window.plugin_true_random_old_roll_dices = Roll.prototype.roll_dices
+        } else { // 3D roll was inserted first
+            window.plugin_true_random_old_roll_dices = window.plugin_3d_dices_old_roll_dices
+        }
     }
     $(_ => {
         let true_random_d6s = []
@@ -52,7 +56,11 @@
             }
             return roll_dices(number, type, dices)
         }
-        Roll.prototype.roll_dices = roll_true_random
+        if (Roll.prototype.roll_dices === window.plugin_true_random_old_roll_dices) { // No other plugin present
+            Roll.prototype.roll_dices = roll_true_random
+        } else { // Hook after other plugins
+            window.plugin_3d_dices_old_roll_dices = roll_true_random
+        }
 
         $("#roll-dialog-1d6").off().on("click", _ => {
             const dice_value = roll_true_random(1, 6, null)
@@ -67,7 +75,10 @@
          */
         function dispose_plugin_true_random() {
             // Reset correct function
-            Roll.prototype.roll_dices = window.plugin_true_random_old_roll_dices
+            if (Roll.prototype.roll_dices === roll_true_random) // No other plugin
+                Roll.prototype.roll_dices = window.plugin_true_random_old_roll_dices
+            else // Remove the hook
+                window.plugin_3d_dices_old_roll_dices = window.plugin_true_random_old_roll_dices
             delete window.plugin_true_random_old_roll_dices
         }
         // Register the function (avoid typos here or the method won't be called)
