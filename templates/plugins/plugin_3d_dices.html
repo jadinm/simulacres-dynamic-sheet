@@ -84,6 +84,9 @@
                 dices = dices.map((elem) => 2 * elem - Math.floor(Math.random() * 2))
             }
 
+            if (!reason)
+                reason = "Lancer"
+
             let toast = $("<div id=\"plugin-3d-dices-toast\" class=\"toast\" data-autohide=\"false\"" +
                 " style='position: fixed; left: 50%; transform: translateX(-50%); top: 0; z-index: 9; background-color: white;'>" +
                 "<div class=\"toast-header\"><h2>" + reason + "</h2></div>" +
