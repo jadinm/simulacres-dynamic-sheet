@@ -155,8 +155,10 @@
             scene.add(light)
 
             // Floor
+            let floor_height = 30
+            let floor_width = 30 / SCREEN_HEIGHT * SCREEN_WIDTH
             let floorMaterial = new THREE.MeshPhongMaterial({color: '#00aa00', side: THREE.DoubleSide})
-            let floorGeometry = new THREE.PlaneGeometry(30, 30, 10, 10)
+            let floorGeometry = new THREE.PlaneGeometry(floor_width, floor_height, 10, 10)
             let floor = new THREE.Mesh(floorGeometry, floorMaterial)
             floor.receiveShadow = true
             floor.rotation.x = Math.PI / 2
@@ -166,18 +168,18 @@
 
             // walls
             let wallMaterial = new THREE.MeshPhongMaterial({color: '#0000aa', side: THREE.DoubleSide})
-            let wallGeometry = new THREE.PlaneGeometry(30, 30, 10, 10)
+            let wallGeometry = new THREE.PlaneGeometry(floor_width, floor_height, 10, 10)
             let wall = new THREE.Mesh(wallGeometry, wallMaterial)
             wall.rotation.y = Math.PI / 2
-            wall.position.x = 15
+            wall.position.x = floor_width / 2
             if (debug)
                 scene.add(wall)
 
             let wallMaterial2 = new THREE.MeshPhongMaterial({color: '#aa00aa', side: THREE.DoubleSide})
-            let wallGeometry2 = new THREE.PlaneGeometry(30, 30, 10, 10)
+            let wallGeometry2 = new THREE.PlaneGeometry(floor_width, floor_height, 10, 10)
             let wall2 = new THREE.Mesh(wallGeometry2, wallMaterial2)
             wall2.rotation.z = Math.PI
-            wall2.position.z = 15
+            wall2.position.z = floor_height / 2
             if (debug)
                 scene.add(wall2)
 
@@ -229,9 +231,9 @@
 
                 for (let i = 0; i < dice_3d.length; i++) {
                     let yRand = Math.random() * 20
-                    dice_3d[i].getObject().position.x = -15 - (i % 3) * 1.5
+                    dice_3d[i].getObject().position.x = -floor_width / 2 - (i % 3) * 1.5
                     dice_3d[i].getObject().position.y = 2 + Math.floor(i / 3) * 1.5
-                    dice_3d[i].getObject().position.z = -15 + (i % 3) * 1.5
+                    dice_3d[i].getObject().position.z = -floor_height / 2 + (i % 3) * 1.5
                     dice_3d[i].getObject().quaternion.x = (Math.random() * 90 - 45) * Math.PI / 180
                     dice_3d[i].getObject().quaternion.z = (Math.random() * 90 - 45) * Math.PI / 180
                     dice_3d[i].updateBodyFromMesh()
