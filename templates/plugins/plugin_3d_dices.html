@@ -41,7 +41,7 @@
         }
 
         function roll_3d_dices(number, type, dices = [], reason = null) {
-            if (type !== 6) { // Fallback
+            if (!dice_types[type] && !half_types.includes(type)) { // Fallback
                 return window.plugin_3d_dices_old_roll_dices.call(this, number, type, dices, reason)
             }
 
@@ -81,7 +81,7 @@
             if (half_types.includes(type)) {
                 // This type of dice does not exists so we show twice the result
                 type = type * 2
-                dices = Array.map(dices, (elem) => 2 * elem)
+                dices = dices.map((elem) => 2 * elem - Math.floor(Math.random() * 2))
             }
 
             let toast = $("<div id=\"plugin-3d-dices-toast\" class=\"toast\" data-autohide=\"false\"" +
