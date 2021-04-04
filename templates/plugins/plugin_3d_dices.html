@@ -1,4 +1,5 @@
 <style id="plugin-css-3d-dices" class="plugin-css" data-plugin-id="3d-dices">
+    {{ include_static("../node_modules/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css") }}
 </style>
 
 <script id="plugin-js-3d-dices-dep-1" class="plugin-js" data-plugin-id="3d-dices">
@@ -10,9 +11,50 @@
 <script id="plugin-js-3d-dices-dep-3" class="plugin-js" data-plugin-id="3d-dices">
     {{ include_static("../node_modules/threejs-dice/lib/dice.js") }}
 </script>
+<script id="plugin-js-3d-dices-dep-4" class="plugin-js" data-plugin-id="3d-dices">
+    {{ include_static("../node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js") }}
+</script>
 
 <script id="plugin-js-3d-dices" class="plugin-js" data-plugin-version="1.0.0" data-plugin-id="3d-dices">
-    {
+    $(_ => {
+        let shininess = 40
+        class PluginD4 extends DiceD4 {
+            create() {
+                this.materialOptions.shininess = shininess
+                return super.create();
+            }
+        }
+        class PluginD6 extends DiceD6 {
+            create() {
+                this.materialOptions.shininess = shininess
+                return super.create();
+            }
+        }
+        class PluginD8 extends DiceD8 {
+            create() {
+                this.materialOptions.shininess = shininess
+                return super.create();
+            }
+        }
+        class PluginD10 extends DiceD10 {
+            create() {
+                this.materialOptions.shininess = shininess
+                return super.create();
+            }
+        }
+        class PluginD12 extends DiceD12 {
+            create() {
+                this.materialOptions.shininess = shininess
+                return super.create();
+            }
+        }
+        class PluginD20 extends DiceD20 {
+            create() {
+                this.materialOptions.shininess = shininess
+                return super.create();
+            }
+        }
+
         // When we do not upgrade the plugin, fetch the old functions
         if (!window.hasOwnProperty('plugin_3d_dices_old_roll_dices')) {
             window.plugin_3d_dices_old_roll_dices = Roll.prototype.roll_dices
@@ -25,12 +67,12 @@
         let commands = [], showing = false
         const main_container = $('#main-container')
         let dice_types = {
-            4: DiceD4,
-            6: DiceD6,
-            8: DiceD8,
-            10: DiceD10,
-            12: DiceD12,
-            20: DiceD20
+            4: PluginD4,
+            6: PluginD6,
+            8: PluginD8,
+            10: PluginD10,
+            12: PluginD12,
+            20: PluginD20
         }
         let half_types = [2, 3, 5] // by using a type above
 
@@ -223,7 +265,12 @@
 
             // Dices
             for (let i = 0; i < number; i++) {
-                let die = new dice_types[type]({size: 2, backColor: "#141414", fontColor: "#ffffff"})
+                let die = new dice_types[type]({
+                    size: 2,
+                    backColor: color_values["plugin-3d-dices-background-color"],
+                    fontColor: color_values["plugin-3d-dices-text-color"]
+                })
+                die.materialOptions.shininess = 200.0
                 scene.add(die.getObject())
                 dice_3d.push(die)
             }
@@ -296,7 +343,37 @@
             // Close modal before validating because new rolls will be triggered
             $('#roll-dialog').one("hidden.bs.modal", roll_dialog_validate).modal("hide")
         })
-    }
+
+        /* Color pickers */
+
+        const default_color = {
+            "plugin-3d-dices-text-color": "#ffffff",
+            "plugin-3d-dices-background-color": "#141414"
+        }
+        const color_values = {...default_color}
+
+        $("#plugin-3d-dices-text-color,#plugin-3d-dices-background-color").each((_, elem) => {
+            const fallbackColor = default_color[elem.id]
+            $(elem).colorpicker({
+                useAlpha: true,
+                autoInputFallback: false,
+                fallbackColor: fallbackColor,
+                format: "hex"
+            }).on("colorpickerCreate", e => {
+                $(e.target).val(color_values[e.target.id]).trigger("change")
+            }).on("change", e => {
+                if (!e.color || !e.color.isValid()) {
+                    $(e.target).val(default_color[e.target.id])
+                }
+                color_values[e.target.id] = $(e.target).val()
+            })
+        })
+        $("#plugin-3d-dices-shininess").on("change", e => {
+            const val = parseInt($(e.target).val())
+            if (!isNaN(val))
+                shininess = val
+        })
+    })
 
     function dispose_plugin_3d_dices() {
         Roll.prototype.roll_dices = window.plugin_3d_dices_old_roll_dices
@@ -311,3 +388,25 @@
     // Register the function
     plugin_dispose_methods["3d-dices"] = dispose_plugin_3d_dices
 </script>
+
+<li id="plugin-button-3d-dices" class="plugin-button nav-item" data-plugin-version="1.1.0" data-plugin-id="3d-dices">
+    <a class="nav-link" data-toggle="tab" href="#plugin-tab-3d-dices" role="tab"
+       aria-controls="plugin-tab-3d-dices" aria-selected="false">
+        Dés 3D
+    </a>
+</li>
+
+<div id="plugin-tab-3d-dices" class="plugin-tab tab-pane fade row my-1 container-fluid m-0" data-plugin-id="3d-dices">
+    <div class="row form-row mt-2 md-form p-0 m-0">
+        <label class="active" for="plugin-3d-dices-background-color">Couleur de fond</label>
+        <input id="plugin-3d-dices-background-color" type="text" class="form-control input-lg"/>
+    </div>
+    <div class="row form-row mt-2 md-form p-0 m-0">
+        <label class="active" for="plugin-3d-dices-text-color">Couleur du texte</label>
+        <input id="plugin-3d-dices-text-color" type="text" class="form-control input-lg"/>
+    </div>
+    <div class="row form-row mt-2 md-form p-0 m-0">
+        <label class="active" for="plugin-3d-dices-shininess">Brillance</label>
+        <input id="plugin-3d-dices-shininess" type="number" min="0" value="40" class="form-control input-lg"/>
+    </div>
+</div>
