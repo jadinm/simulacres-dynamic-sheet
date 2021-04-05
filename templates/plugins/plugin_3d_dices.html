@@ -345,25 +345,16 @@
         })
 
         /* Color pickers */
-
-        const default_color = {
-            "plugin-3d-dices-text-color": "#ffffff",
-            "plugin-3d-dices-background-color": "#141414"
-        }
-        const color_values = {...default_color}
-
+        const color_values = {}
         $("#plugin-3d-dices-text-color,#plugin-3d-dices-background-color").each((_, elem) => {
-            const fallbackColor = default_color[elem.id]
             $(elem).colorpicker({
                 useAlpha: true,
-                autoInputFallback: false,
-                fallbackColor: fallbackColor,
                 format: "hex"
             }).on("colorpickerCreate", e => {
-                $(e.target).val(color_values[e.target.id]).trigger("change")
+                color_values[e.target.id] = $(e.target).val()
             }).on("change", e => {
-                if (!e.color || !e.color.isValid()) {
-                    $(e.target).val(default_color[e.target.id])
+                if (e.color && !e.color.isValid()) {
+                    return
                 }
                 color_values[e.target.id] = $(e.target).val()
             })
@@ -399,11 +390,11 @@
 <div id="plugin-tab-3d-dices" class="plugin-tab tab-pane fade row my-1 container-fluid m-0" data-plugin-id="3d-dices">
     <div class="row form-row mt-2 md-form p-0 m-0">
         <label class="active" for="plugin-3d-dices-background-color">Couleur de fond</label>
-        <input id="plugin-3d-dices-background-color" type="text" class="form-control input-lg"/>
+        <input id="plugin-3d-dices-background-color" type="text" class="form-control input-lg" value="#141414"/>
     </div>
     <div class="row form-row mt-2 md-form p-0 m-0">
         <label class="active" for="plugin-3d-dices-text-color">Couleur du texte</label>
-        <input id="plugin-3d-dices-text-color" type="text" class="form-control input-lg"/>
+        <input id="plugin-3d-dices-text-color" type="text" class="form-control input-lg" value="#ffffff"/>
     </div>
     <div class="row form-row mt-2 md-form p-0 m-0">
         <label class="active" for="plugin-3d-dices-shininess">Brillance</label>
