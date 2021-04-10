@@ -1341,6 +1341,16 @@ $("#roll-2d6").on("click", _ => {
     new Roll().trigger_roll()
 })
 
+$("#roll-free-number").on("click", e => {
+    const number = parseInt($(e.target).val())
+    const threshold_row = $(e.target).parent().next()
+    if (number === 2) { // Allow threshold
+        threshold_row.removeClass("d-none")
+    } else {
+        threshold_row.addClass("d-none")
+    }
+})
+
 $("#roll-free").on("click", _ => {
     // Reset invested energies
     $(".roll-dialog-energy").val(0)
@@ -1348,7 +1358,12 @@ $("#roll-free").on("click", _ => {
     // Trigger roll
     const number = parseInt($("#roll-free-number").val())
     if (!isNaN(number)) {
-        new Roll(number).trigger_roll()
+        const threshold = parseInt($("#roll-threshold").val())
+        if (isNaN(threshold)) {
+            new Roll(number).trigger_roll()
+        } else {
+            new TalentRoll("", threshold).trigger_roll()
+        }
     }
 })
 
