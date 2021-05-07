@@ -77,37 +77,31 @@
                     {% for level in range(1, 4) %}
                         {% if level == 1 %}
                             {% set classes = "" %}
+                            {% set dice_classes = "" %}
                         {% else %}
-                            {% set classes = "mt-4 pt-1 d-none" %}
+                            {% set classes = "mt-4 pt-1" %}
+                            {% set dice_classes = "invisible" %}
                         {% endif %}
                         <div class="m-0 {{ classes }} p-0 ki-roll-row">
-                            <span class="ki-level-specific d-none">Niv. {{ level }}</span>
-                            <span id="ki-x-dice-{{ level }}" class="clickable row-roll-trigger" hidden>
-                                <i class="fas fa-dice"></i>
+                            <span class="ki-level-specific">Niv. {{ level }}</span>
+                            <span class="{{ dice_classes }} m-0 p-0">
+                                <span id="ki-x-dice-{{ level }}" class="clickable row-roll-trigger" hidden>
+                                    <i class="fas fa-dice"></i>
+                                </span>
                             </span>
                         </div>
                     {% endfor %}
                 </td>
                 <td class="md-form my-0 py-0 align-middle">
                     {% for level in range(1, 4) %}
-                        {% if level == 1 %}
-                            {% set classes = "" %}
-                        {% else %}
-                            {% set classes = "d-none" %}
-                        {% endif %}
                         <input id="ki-x-duration-{{ level }}"
-                               class="spell-duration form-control text-center {{ classes }}" type="text">
+                               class="spell-duration form-control text-center" type="text">
                         <label for="ki-x-duration-{{ level }}"></label>
                     {% endfor %}
                 </td>
                 <td class="md-form my-0 py-0 align-middle">
                     {% for level in range(1, 4) %}
-                        {% if level == 1 %}
-                            {% set classes = "" %}
-                        {% else %}
-                            {% set classes = "d-none" %}
-                        {% endif %}
-                        <input id="ki-x-effect-{{ level }}" class="spell-effect form-control {{ classes }}" type="text">
+                        <input id="ki-x-effect-{{ level }}" class="spell-effect form-control" type="text">
                         <label for="ki-x-effect-{{ level }}"></label>
                     {% endfor %}
                 </td>

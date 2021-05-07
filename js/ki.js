@@ -38,20 +38,11 @@ class KiRow extends SpellRow {
             power_level = 1
         for (let i = 2; i <= power_level; i++) {
             const dice = this.get("dice-" + i)
-            dice.parent().removeClass("d-none")
-            this.get("duration", dice).removeClass("d-none")
-            this.get("effect", dice).removeClass("d-none")
+            dice.parent().removeClass("invisible")
         }
         for (let i = power_level + 1; i <= 3; i++) {
             const dice = this.get("dice-" + i)
-            dice.parent().addClass("d-none")
-            this.get("duration", dice).addClass("d-none")
-            this.get("effect", dice).addClass("d-none")
-        }
-        if (power_level > 1) {
-            this.data.find(".ki-level-specific").removeClass("d-none")
-        } else {
-            this.data.find(".ki-level-specific").addClass("d-none")
+            dice.parent().addClass("invisible")
         }
 
         // Update value for visible elements
