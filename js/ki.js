@@ -77,6 +77,22 @@ class KiTable extends SpellRollTable {
     }
 }
 
+$("#ki").on("change", event => {
+    let max_value = $(event.target).val()
+    if (max_value <= 0)
+        max_value = 1
+    else if (max_value > 3)
+        max_value = 3
+
+    $("#ki-table [id*=-level]").each((i, elem) => {
+        elem.setAttribute("max", max_value)
+        const current_value = $(elem).val()
+        if (current_value > max_value) {
+            $(elem).val(max_value).trigger("change")
+        }
+    })
+})
+
 $("#ki-search").on("change", event => {
     let value = $(event.target).val().toLowerCase()
     search_tables(value, $("#ki-table tr"))
