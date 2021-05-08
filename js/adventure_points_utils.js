@@ -55,6 +55,9 @@ function compute_status_cost() {
     if ($("#instincts").hasClass("bonus-applied")) { // +1 due to instincts value
         max_breath -= 1
     }
+    const temporary_ps = parseInt($("#temporary-breath").val())
+    if (!isNaN(temporary_ps))
+        max_breath -= temporary_ps
     let diff = (max_breath - start_breath) * breath_ap_cost
     consumed_points += diff
     let title = $("#breath-title")

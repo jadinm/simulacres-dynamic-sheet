@@ -32,6 +32,25 @@
                         <input class="form-control py-0 my-0" type="text" value="" id="details-breath"
                                placeholder="Note">
                     </div>
+                    {% if version == V7 %}
+                        <hr/>
+                        <div class="row col-12 mx-1">
+                            PS temporaires en plus du maximum
+                        </div>
+                        <div class="row col-12 mx-1">
+                            <small>
+                                <em>
+                                    Par exemple, avec la Concentration Psychique des moines, on peut monter
+                                    au-dessus de son maximum de PS.
+                                    Quand ceux-ci sont au-dessus du maximum, 1 PS est perdu toutes les heures.
+                                </em>
+                            </small>
+                        </div>
+                        <div class="row mx-1 md-form col-12 py-0 my-0 mb-2">
+                            <input id="temporary-breath" class="form-control py-0 my-0" type="number" value="0" min="0"
+                                   aria-label="">
+                        </div>
+                    {% endif %}
                     <hr/>
                     <div class="row">
                         <button id="increment-breath" class="btn btn-success col-6 mx-0 px-0">

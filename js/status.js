@@ -280,6 +280,22 @@ function unease_value_changed_event() {
 }
 
 $(_ => {
+    const temporary_breath_div = $("#temporary-breath")
+    let current_temporary_breath = parseInt(temporary_breath_div.val())
+    if (isNaN(current_temporary_breath))
+        current_temporary_breath = 0
+
+    temporary_breath_div.on("change", _ => {
+        const breath = $("#breath")
+        const current_max = slider_max(breath[0])
+
+        let new_value = parseInt(temporary_breath_div.val())
+        if (isNaN(new_value))
+            new_value = 0
+
+        set_slider_max(breath, current_max - current_temporary_breath + new_value)
+        current_temporary_breath = new_value
+    })
 
     /**
      * Warning: Do not exchange unease and hp slider initializations
