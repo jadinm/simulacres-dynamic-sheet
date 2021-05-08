@@ -45,6 +45,14 @@ class Note extends DataRow {
                 + "let summernote_cfg = " + JSON.stringify(summernote_cfg) + ";"
                 + "<" + "/script>")
 
+            // Set dark mode
+            if (is_dark_mode()) {
+                new_window.document.write("<" + "script>"
+                    + "let dark_theme = " + JSON.stringify(dark_theme) + ";"
+                    + "let dark_fixes = " + JSON.stringify(dark_fixes) + ";"
+                    + "<" + "/script>")
+            }
+
             // Copy js for the dialog
             new_window.document.write($("#script-note-dialog").get(0).outerHTML)
         }

@@ -1,6 +1,6 @@
 /* Allow on and off */
-(function($) {
-    $.fn.uon = function(events, handler) {
+(function ($) {
+    $.fn.uon = function (events, handler) {
         // Prevent duplication of listener handlers
         return this.off(events, handler).on(events, handler)
     }
@@ -92,57 +92,60 @@ function is_dark_mode(page = $(document)) {
     return page.find("#dark-mode").hasClass("d-none")
 }
 
+const dark_fixes = {
+    invert: [],
+    css: "#svg-simulacres path {\n" +
+        "    fill: ${black} !important;\n" +
+        "}\n" +
+        ".bs-tooltip-auto[x-placement^=bottom] .arrow::before, .bs-tooltip-bottom .arrow::before {\n" +
+        "    border-bottom-color: ${white} !important;\n" +
+        "}\n" +
+        ".bs-tooltip-auto[x-placement^=top] .arrow::before, .bs-tooltip-top .arrow::before {\n" +
+        "    border-top-color: ${white} !important;\n" +
+        "}\n" +
+        ".bs-tooltip-auto[x-placement^=left] .arrow::before, .bs-tooltip-left .arrow::before {\n" +
+        "    border-left-color: ${white} !important;\n" +
+        "}\n" +
+        ".bs-tooltip-auto[x-placement^=right] .arrow::before, .bs-tooltip-right .arrow::before {\n" +
+        "    border-right-color: ${white} !important;\n" +
+        "}\n" +
+        ".spell-difficulty .slider-selection {\n" +
+        "    background: white;\n" +
+        "    z-index: 1; /* Prevent checkboxes to overlap with it */\n" +
+        "}\n" +
+        ".spell-difficulty .slider-handle {\n" +
+        "    background: white;\n" +
+        "    z-index: 1; /* Prevent checkboxes to overlap with it */\n" +
+        "}\n" +
+        "#roll-dialog-modifier-slider .slider-selection {\n" +
+        "    background: white;\n" +
+        "}\n" +
+        "#roll-dialog-modifier-slider .slider-handle {\n" +
+        "    background: white;\n" +
+        "}\n" +
+        "#roll-dialog-effect-modifier-slider .slider-selection {\n" +
+        "    background: white;\n" +
+        "}\n" +
+        "#roll-dialog-effect-modifier-slider .slider-handle {\n" +
+        "    background: white;\n" +
+        "}\n" +
+        "#roll-dialog-superpower-modifier-slider .slider-selection {\n" +
+        "    background: white;\n" +
+        "}\n" +
+        "#roll-dialog-superpower-modifier-slider .slider-handle {\n" +
+        "    background: white;\n" +
+        "}\n" +
+        ".card.border-heavy {\n" +
+        "    border-image: var(--darkModeBorder) 15% fill / 65px 65px / 0.05rem round !important;\n" +
+        "}",
+    ignoreInlineStyle: [],
+    ignoreImageAnalysis: []
+}
+
+const dark_theme = {brightness: 100, contrast: 100, sepia: 0}
+
 function enable_dark_mode() {
-    const fixes = {
-        invert: [],
-        css: "#svg-simulacres path {\n" +
-            "    fill: ${black} !important;\n" +
-            "}\n" +
-            ".bs-tooltip-auto[x-placement^=bottom] .arrow::before, .bs-tooltip-bottom .arrow::before {\n" +
-            "    border-bottom-color: ${white} !important;\n" +
-            "}\n" +
-            ".bs-tooltip-auto[x-placement^=top] .arrow::before, .bs-tooltip-top .arrow::before {\n" +
-            "    border-top-color: ${white} !important;\n" +
-            "}\n" +
-            ".bs-tooltip-auto[x-placement^=left] .arrow::before, .bs-tooltip-left .arrow::before {\n" +
-            "    border-left-color: ${white} !important;\n" +
-            "}\n" +
-            ".bs-tooltip-auto[x-placement^=right] .arrow::before, .bs-tooltip-right .arrow::before {\n" +
-            "    border-right-color: ${white} !important;\n" +
-            "}\n" +
-            ".spell-difficulty .slider-selection {\n" +
-            "    background: white;\n" +
-            "    z-index: 1; /* Prevent checkboxes to overlap with it */\n" +
-            "}\n" +
-            ".spell-difficulty .slider-handle {\n" +
-            "    background: white;\n" +
-            "    z-index: 1; /* Prevent checkboxes to overlap with it */\n" +
-            "}\n" +
-            "#roll-dialog-modifier-slider .slider-selection {\n" +
-            "    background: white;\n" +
-            "}\n" +
-            "#roll-dialog-modifier-slider .slider-handle {\n" +
-            "    background: white;\n" +
-            "}\n" +
-            "#roll-dialog-effect-modifier-slider .slider-selection {\n" +
-            "    background: white;\n" +
-            "}\n" +
-            "#roll-dialog-effect-modifier-slider .slider-handle {\n" +
-            "    background: white;\n" +
-            "}\n" +
-            "#roll-dialog-superpower-modifier-slider .slider-selection {\n" +
-            "    background: white;\n" +
-            "}\n" +
-            "#roll-dialog-superpower-modifier-slider .slider-handle {\n" +
-            "    background: white;\n" +
-            "}\n" +
-            ".card.border-heavy {\n" +
-            "    border-image: var(--darkModeBorder) 15% fill / 65px 65px / 0.05rem round !important;\n" +
-            "}",
-        ignoreInlineStyle: [],
-        ignoreImageAnalysis: []
-    }
-    DarkReader.enable({brightness: 100, contrast: 100, sepia: 0}, fixes)
+    DarkReader.enable(dark_theme, dark_fixes)
     $("#dark-mode").addClass("d-none").tooltip("dispose")
     $("#light-mode").removeClass("d-none").tooltip()
 }
