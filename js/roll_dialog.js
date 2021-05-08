@@ -47,10 +47,10 @@ function has_any_base_energy() {
     }).length > 0
 }
 
-const effect_column_regex = /(^|\W?)\[ *([ABCDEFGHIJK]) *([+-] *\d+)? *](\W?|$)/gi
-const effect_margin_regex = /(^|\W?)(MR)(\W?|$)/g
-const effect_dss_regex = /(^|\W?)(DSS)(\W?|$)/g
-const effect_des_regex = /(^|\W?)(DES)(\W?|$)/g
+const effect_column_regex = /(^|[^\w"]?)(")?\[ *([ABCDEFGHIJK]) *([+-] *\d+)? *](")?([^\w"]?|$)/gi
+const effect_margin_regex = /(^|[^\w"]?)(MR)([^\w"]?|$)/g
+const effect_dss_regex = /(^|[^\w"]?)(DSS)([^\w"]?|$)/g
+const effect_des_regex = /(^|[^\w"]?)(DES)([^\w"]?|$)/g
 
 let critical_failure = false
 let critical_success = false
@@ -819,10 +819,17 @@ class TalentRoll extends Roll {
         if (this.energy_investment_validated) {
             if (is_v7) {
                 // Show the actual effect instead of [A] or [B+2]
-                effect = effect.replaceAll(effect_column_regex, (match, prefix, column, modifier, suffix) => {
+                effect = effect.replaceAll(effect_column_regex, (match, prefix, escape, column, modifier, escape2, suffix) => {
+                    console.log(match, prefix, escape, column, modifier, suffix)
                     modifier = typeof modifier === "undefined" ? 0 : parseInt(modifier.replaceAll(" ", ""))
+                    if (escape && escape2) {
+                        return match.replace(" ", "&nbsp;")
+                    }
+                    escape = typeof escape === "undefined" ? "" : escape
+                    escape2 = typeof escape2 === "undefined" ? "" : escape2
                     const effect_value = this.is_success() ? this.column_effect(column, modifier) : 0
-                    return prefix.replace(" ", "&nbsp;") + effect_value + suffix.replace(" ", "&nbsp;")
+                    return prefix.replace(" ", "&nbsp;") + escape + effect_value + escape2
+                        + suffix.replace(" ", "&nbsp;")
                 })
             } else {
                 // Update with the DSS if "DSS" is in the text
@@ -1503,6 +1510,7 @@ function roll_dialog_reroll() {
         return
     current_roll.reroll()
 }
+
 $("#roll-dialog-redo").on("click", roll_dialog_reroll)
 
 function roll_dialog_validate() {
@@ -1517,4 +1525,5 @@ function roll_dialog_validate() {
     current_roll.show_roll()
     $(document).trigger("roll", current_roll)
 }
+
 $("#roll-dialog-validate").on("click", roll_dialog_validate)
