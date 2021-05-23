@@ -246,11 +246,13 @@ class RangeRow extends RollRow {
                 $(elem).html("&nbsp;")
             } else {
                 const range = this.range(elem)
-                const text = base_effect.replaceAll(effect_column_regex, (match, prefix, column, modifier, suffix) => {
+                const text = base_effect.replaceAll(effect_column_regex, (match, prefix, escape, column, modifier, escape2, suffix) => {
                     modifier = typeof modifier === "undefined" ? 0 : parseInt(modifier.replaceAll(" ", ""))
+                    escape = typeof escape === "undefined" ? "" : escape
+                    escape2 = typeof escape2 === "undefined" ? "" : escape2
                     const new_effect = this.column_shift(column, modifier,
                         this.constructor.column_shift_by_range[range])
-                    return prefix + "[" + new_effect + "]" + suffix
+                    return prefix + "["  + escape + new_effect + escape2 + "]" + suffix
                 })
                 $(elem).text(text)
                 $(elem).prev().val(text)

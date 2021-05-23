@@ -820,7 +820,6 @@ class TalentRoll extends Roll {
             if (is_v7) {
                 // Show the actual effect instead of [A] or [B+2]
                 effect = effect.replaceAll(effect_column_regex, (match, prefix, escape, column, modifier, escape2, suffix) => {
-                    console.log(match, prefix, escape, column, modifier, suffix)
                     modifier = typeof modifier === "undefined" ? 0 : parseInt(modifier.replaceAll(" ", ""))
                     if (escape && escape2) {
                         return match.replace(" ", "&nbsp;")
