@@ -52,13 +52,27 @@ function talent_cost(talent, list = null) {
     return cost
 }
 
-function update_select(select, elements) {
+function get_selected_options(select, new_value, old_value) {
     const is_template = select[0].id.includes("-x-")
 
     // Find the selected option
     let selected_options = !is_template ? select.selectpicker('val') : []
     if (!Array.isArray(selected_options))
         selected_options = [selected_options]
+    selected_options = $(selected_options).map((i, elem) => {
+        if (elem === old_value) { // Update selection based on the changed value
+            elem = new_value
+        }
+        return elem
+    }).toArray().flat()
+    return selected_options
+}
+
+function update_select(select, elements, new_value, old_value) {
+    const is_template = select[0].id.includes("-x-")
+
+    // Find the selected option
+    let selected_options = get_selected_options(select, new_value, old_value)
     select.empty()
 
     // Sort it
@@ -85,7 +99,7 @@ function update_select(select, elements) {
 /**
  * Update the select options based on a talent list
  */
-function update_talent_select(select) {
+function update_talent_select(select, new_value, old_value) {
     // Recover talent list, potentially filtered
     const only_from = select[0].getAttribute("data-talent-filter-origin-level")
     let only_at_levels = select[0].getAttribute("data-talent-filter-current-level")
@@ -100,7 +114,7 @@ function update_talent_select(select) {
         return {name: e.value, content: null}
     })
     talent_list.push({name: "", content: null})
-    update_select(select, talent_list)
+    update_select(select, talent_list, new_value, old_value)
 }
 
 function add_talent(list, fixed_id = null, bulk = false) {
@@ -231,11 +245,14 @@ function update_talent(event) {
     changed_page = true
 }
 
-$(".talent input[id*='-name']").on("change", _ => {
-    // Update all list selections of talents
+$(".talent input[id*='-name']").on("change", e => {
+    // Update all list selections of talents while changing the selection value if the changed talent was selected
     $("select.talent-select").each((i, elem) => {
-        update_talent_select($(elem))
+        update_talent_select($(elem), e.target.value, e.target.oldvalue)
     })
+    e.target.oldvalue = null
+}).on("focus", e => {
+    e.target.oldvalue = e.target.value
 })
 
 $('.talent-list').each((i, elem) => {
