@@ -10,7 +10,7 @@ import sys
 from typing import List, Dict
 
 from bs4 import BeautifulSoup
-from jinja2 import Environment, PackageLoader, select_autoescape, Markup
+from jinja2 import Environment, FileSystemLoader, select_autoescape, Markup
 
 SRC_DIR = os.path.dirname(os.path.abspath(__file__))
 TEMPLATE_DIR = os.path.join(SRC_DIR, "templates")
@@ -111,7 +111,7 @@ def process_plugins(plugins: List[str]) -> Dict[str, List[str]]:
 # Jinja settings
 
 html_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "templates")
-loader = PackageLoader(__name__, 'templates')
+loader = FileSystemLoader(html_dir)
 env = Environment(loader=loader, autoescape=select_autoescape(['html', 'xml']))
 # This add an include option that do not treat the content of the file as a jinja template
 env.globals['include_static'] = include_static
