@@ -181,7 +181,9 @@ function build_tab_hide_list() {
             list_item.find(".hide-tab").addClass("d-none")
             list_item.find(".show-tab").removeClass("d-none")
         })
-        list_item.children().first().text($(elem).text().trim())
+        list_item.children().first().children().first().val($(elem).text().trim()).on("change", e => {
+            $(elem).text($(e.target).val().trim())
+        })
 
         if ($(elem).hasClass("d-none")) {
             list_item.find(".show-tab").removeClass("d-none")

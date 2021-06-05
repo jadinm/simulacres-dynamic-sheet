@@ -402,6 +402,11 @@ function import_data(src_html, dst_html, full_sheet) {
         dst_html.find("#nav-tabs a[role=\"tab\"][href=\"" + old_tab.getAttribute("href") + "\"]").addClass("d-none")
     })
 
+    // Have the same name for all of the tabs
+    src_html.find("#nav-tabs a[role=\"tab\"]").each((i, old_tab) => {
+        dst_html.find("#nav-tabs a[role=\"tab\"][href=\"" + old_tab.getAttribute("href") + "\"]").text($(old_tab).text().trim())
+    })
+
     if (full_sheet && (missing_inputs.length > 0 || duplicated_inputs.length > 0)) {
         show_import_warnings(missing_inputs, duplicated_inputs)
     }
