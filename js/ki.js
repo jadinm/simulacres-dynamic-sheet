@@ -52,6 +52,19 @@ class KiRow extends SpellRow {
         compute_remaining_ap()
     }
 
+    update_roll_value() {
+        super.update_roll_value()
+
+        // Don't activate powers if the talent level is at X
+        let level = parseInt(talent_level(talent_from_name(this.get("talent").val())))
+
+        if (isNaN(level)) {
+            this.data.find(".row-roll-trigger").filter(this.filter_invisible_dices).each((i, dice_div) => {
+                dice_div.setAttribute("hidden", "hidden")
+            })
+        }
+    }
+
     roll_reason() {
         const talent = this.get("talent").find("option:selected").val()
         const name = this.get("name").text()
