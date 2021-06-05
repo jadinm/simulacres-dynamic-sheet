@@ -431,6 +431,9 @@ class SpellRollTable extends TalentRollTable {
         })
         row.get("talent").selectpicker()
         row.get("list").selectpicker({sanitize: false})
+
+        // Recompute difficulty and value based on list
+        row.update_list()
     }
 
     remove_row(event) {
