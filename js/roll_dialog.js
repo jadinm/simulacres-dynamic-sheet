@@ -137,6 +137,17 @@ class Roll {
         if (localized_target_hp && this.type === 6 && this.number === 1) {
             $("#localisation-row-" + this.base_dices[0]).addClass("success-color-dark")
         }
+        if (is_v7 && this.type === 6) {
+            // Highlight the appropriate row for effect table
+            if (this.dice_value() > 26) {
+                $("#damage-tab tbody tr").last().addClass("success-color-dark")
+            } else {
+                $("#damage-tab tbody tr").filter((i, elem) => {
+                    // Find the row matching the value
+                    return $(elem).find("th").text().match(new RegExp("^(\\d+ )*" + this.dice_value() + "( \\d+)*$"))
+                }).addClass("success-color-dark")
+            }
+        }
 
         // Hide everything and show it afterwards if needed
         const roll_effect_divs = $(".roll-dialog-effect-hide")
@@ -190,6 +201,7 @@ class Roll {
 
         // Hide tab highlights
         $(".localisation-row").removeClass("success-color-dark")
+        $("#damage-tab tr").removeClass("success-color-dark")
         $("#damage-tab td").removeClass("success-color-dark")
 
         this.modify_dialog(ignore_sliders)
