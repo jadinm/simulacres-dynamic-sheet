@@ -287,6 +287,17 @@
         </div>
         {% if version == V7 %}
             <div class="row col-12 mt-2 px-0 mx-0">
+                Chaque personnage a droit à un jet de survie en début de campagne mais vous pouvez en "acheter"
+                un nouveau pour 25PA.
+            </div>
+            <div class="row col-12 form-row mt-2 md-form p-0 m-0">
+                <div class="col-12">
+                    <label for="adventure-points-survive-paid">Nombre de jets de miracles payés en PA</label>
+                    <input class="form-control adventure-points-setting" id="adventure-points-survive-paid"
+                           type="number" value="0" min="0">
+                </div>
+            </div>
+            <div class="row col-12 mt-2 px-0 mx-0">
                 Les talents originellement de niveau X nécessitent 6 PA au lieu de 5 pour passer au niveau 0
                 s'ils ne sont pas monté en une fois à ce niveau 0.
                 Par défaut, on considère que tous les talents originellement de niveau X et à présent de niveau 0 à 3

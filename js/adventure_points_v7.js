@@ -38,6 +38,8 @@ let name_magic_cost = {
 
 let power_level_ap_cost = 5 // From 1 to 2 and from 2 to 3
 
+let survival_check_cost = 25
+
 function update_tooltip_cost(row, diff) {
     const title = row.data.children().first()
     if (title.length > 0 && !row.id.includes("-x") && !intermediate_discovery) {
@@ -170,6 +172,9 @@ function compute_remaining_ap() {
 
     // Monk powers
     consumed_points += monk_power_cost()
+
+    // Survival checks
+    consumed_points += $("#adventure-points-survive-paid").val() * survival_check_cost
 
     // Show difference with total points
     const total_points = (parseInt($("#adventure-points").val()) || 0) + (parseInt($("#adventure-points-discount").val()) || 0)
