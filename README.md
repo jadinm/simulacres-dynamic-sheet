@@ -318,7 +318,10 @@ Dans l'exemple suivant, "Albus Haupenroll" lance 2d6 :
   "armor_penalty": "", // la pénalité d'armure (sous forme de string car c'est une description)
   "margin_modifier": 0, // valeur du modificateur circonstanciel
   "effect_modifier": 0, // valeur du modificateur d'effet
-  "energy_investment_validated": true // si l'investissement en énergie est validé
+  "energy_investment_validated": true, // si l'investissement en énergie est validé
+  "equipment": "", // le nom de l'équipement lié au test
+  "expended_charge": 0, // le nombre de charges consommées de l'équipement
+  "margin_dices": "1" // les dés pour calculer la marge pour les tests liés à des focus ou à la magie du Bien, du Mal de et la Nature
 }
 ```
 

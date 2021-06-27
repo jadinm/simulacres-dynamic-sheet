@@ -1189,7 +1189,7 @@ class GoodNatureEvilMagicRoll extends TalentRoll {
                 equipment = "", equipment_id = "") {
         super(reason, NaN, 0, effect, 0, [], NaN, true, true, distance, focus, duration, base_energy_cost,
             black_magic, magic_resistance, equipment, equipment_id)
-        this.energy_investment_validated = !has_any_base_energy() // Cannot invest in energies when using a focus object
+        this.energy_investment_validated = !has_any_base_energy()
         this.margin_dices = []
         this.precision_dices = []
         this.type = 3
