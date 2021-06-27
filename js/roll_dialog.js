@@ -1082,7 +1082,7 @@ class FocusMagicRoll extends TalentRoll {
                 black_magic = "", magic_resistance = "", equipment = "", equipment_id = "") {
         super(reason, max_value, level, effect, 0, [], NaN, true, true, distance, focus, duration, base_energy_cost,
             black_magic, magic_resistance, equipment, equipment_id)
-        this.energy_investment_validated = !has_any_base_energy() // Cannot invest in energies when using a focus object
+        this.energy_investment_validated = true // Cannot invest in energies when using a focus object
         this.margin_dices = []
     }
 
