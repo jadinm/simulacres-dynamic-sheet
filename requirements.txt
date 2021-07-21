@@ -1,4 +1,5 @@
 Jinja2>=2.11.2
+markupsafe
 bs4
 html5lib
 rst2pdf

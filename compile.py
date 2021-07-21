@@ -10,7 +10,8 @@ import sys
 from typing import List, Dict
 
 from bs4 import BeautifulSoup
-from jinja2 import Environment, FileSystemLoader, select_autoescape, Markup
+from jinja2 import Environment, FileSystemLoader, select_autoescape
+from markupsafe import Markup
 
 SRC_DIR = os.path.dirname(os.path.abspath(__file__))
 TEMPLATE_DIR = os.path.join(SRC_DIR, "templates")
