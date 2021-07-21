@@ -10,7 +10,7 @@ function hp_update(event) {
     if (value === 0) {
         handle.removeClass('full').removeClass('unease').addClass('dead')
         selection.removeClass('full').removeClass('unease')
-    } else if (max_value - value >= 2 || max_value <= 1) {
+    } else if (max_value - value >= 2) {
         handle.removeClass('full').addClass('unease').removeClass('dead')
         selection.removeClass('full').addClass('unease')
     } else {
@@ -23,7 +23,8 @@ function hp_update(event) {
     const hp_sliders = $(".hp.input-slider")
     for (let i = 0; i < hp_sliders.length; i++) {
         const max_value = parseInt(hp_sliders[i].getAttribute("data-slider-max"))
-        if (max_value - parseInt(hp_sliders[i].value) >= 2 || max_value <= 1)
+        const current_value = parseInt(hp_sliders[i].value)
+        if (max_value - current_value >= 2 || current_value === 0) // The second part is needed if the maximum HP is 1
             unease_sum += 1
     }
     set_slider_min($("#unease"), unease_sum)
