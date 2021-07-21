@@ -188,6 +188,9 @@ $("#decrement-breath").on("click", _ => {
     // Adventure points
     compute_remaining_ap()
 })
+$("#lost-breath").on("change", _ => {
+    compute_remaining_ap()
+})
 $("#increment-psychic").on("click", _ => {
     const psychic = $("#psychic")
     const current_max = slider_max(psychic[0])
@@ -204,6 +207,9 @@ $("#decrement-psychic").on("click", _ => {
         set_slider_max(psychic, current_max - 1)
 
     // Adventure points
+    compute_remaining_ap()
+})
+$("#lost-psychic").on("change", _ => {
     compute_remaining_ap()
 })
 $("[id^=increment-hp]").on("click", e => {

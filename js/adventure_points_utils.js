@@ -58,6 +58,9 @@ function compute_status_cost() {
     const temporary_ps = parseInt($("#temporary-breath").val())
     if (!isNaN(temporary_ps))
         max_breath -= temporary_ps
+    const lost_breath = parseInt($("#lost-breath").val())
+    if (!isNaN(lost_breath))
+        max_breath += lost_breath
     let diff = (max_breath - start_breath) * breath_ap_cost
     consumed_points += diff
     let title = $("#breath-title")
@@ -73,6 +76,9 @@ function compute_status_cost() {
     if ($("#mind").hasClass("bonus-applied")) { // +1 due to mind value
         max_psychic -= 1
     }
+    const lost_psychic = parseInt($("#lost-psychic").val())
+    if (!isNaN(lost_psychic))
+        max_psychic += lost_psychic
     diff = (max_psychic - start_psychic_balance) * psychic_balance_ap_cost
     consumed_points += diff
     title = $("#psychic-title")
