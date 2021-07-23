@@ -497,6 +497,7 @@
     <script id="default-talents">default_talents = {x: [], "-4": [], "-2": [], "0": []}</script>
 {% endif %}
 <script>{{ include_static("../js/talent.js") }}</script>
+<script id="script-summernote">{{ include_static("../js/summernote.js") }}</script>
 <script>{{ include_static("../js/background.js") }}</script>
 <script>{{ include_static("../js/notes.js") }}</script>
 <script id="script-note-dialog">{{ include_static("../js/notes_dialog.js") }}</script>
@@ -514,4 +515,7 @@
         changed_page = false // Because this was not changed by the user
     })
 </script>
+
+<!-- JS modules cannot be directly included in the HTML -->
+<script id="script-emoji" type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
 </html>

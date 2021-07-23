@@ -12,6 +12,7 @@
         "cannon": "^0.6.2",
         "clipboard": "^2.0.6",
         "darkreader": "^4.9.26",
+        "emoji-picker-element": "^1.6.4",
         "file-saver": "^2.0.2",
         "jquery": "^3.5.1",
         "jquery-sortablejs": "^1.0.1",

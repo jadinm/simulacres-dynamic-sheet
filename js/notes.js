@@ -42,8 +42,8 @@ class Note extends DataRow {
             textarea.find(".note-editor").remove()
             new_window.document.write(textarea.get(0).innerHTML)
             new_window.document.write("<" + "script>" + "const note_dialog_channel = " + "\"note_channel_" + this.id + "\";"
-                + "let summernote_cfg = " + JSON.stringify(summernote_cfg) + ";"
                 + "<" + "/script>")
+            new_window.document.write($("#script-summernote").get(0).outerHTML)
 
             // Set dark mode
             if (is_dark_mode()) {
