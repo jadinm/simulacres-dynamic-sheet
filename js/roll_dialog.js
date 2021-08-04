@@ -1082,7 +1082,7 @@ class FocusMagicRoll extends TalentRoll {
                 black_magic = "", magic_resistance = "", equipment = "", equipment_id = "") {
         super(reason, max_value, level, effect, 0, [], NaN, true, true, distance, focus, duration, base_energy_cost,
             black_magic, magic_resistance, equipment, equipment_id)
-        this.energy_investment_validated = true // Cannot invest in energies when using a focus object
+        this.energy_investment_validated = !has_any_base_energy() // Cannot invest in energies when using a focus object
         this.margin_dices = []
     }
 
@@ -1160,6 +1160,29 @@ class FocusMagicRoll extends TalentRoll {
         if (this.energy_investment_validated && this.is_success()) {
             result.html(this.post_test_margin() + this.dice_buttons("margin_dices", this.margin_dices, 3))
         }
+    }
+
+    energy_cost_text() {
+        if (this.energy_cost() === 0)
+            return ""
+        let text = ""
+        const regular_energy_cost = this.power + this.speed + this.precision
+        const magic_energy_cost = this.energy_cost() - regular_energy_cost
+        if (this.energy_investment_validated && regular_energy_cost > 0) {
+            text += "</div><div class='row mx-1 align-middle'>Coût en énergies (EP/PS): " + regular_energy_cost
+        }
+        text += "</div><div class='row mx-1 align-middle'>Coût en Points de Magie: "
+        if (this.energy_investment_validated && this.is_critical_success() && this.energy_cost() > 1) {
+            text += "Entre 1 et " + (this.energy_cost() - regular_energy_cost) + " (les points dépensés par un focus sont quand-même dépensés)"
+        } else if (this.energy_investment_validated && this.is_critical_failure()) {
+            text += (2 * magic_energy_cost)
+                + "</div><div class='row mx-1 align-middle'>Le coût est doublé à cause de l'échec critique"
+                + "</div><div class='row mx-1 align-middle'>La perte en plus est à retirer d'abord du focus" +
+                " (si un a été utilisé), puis des PS, après des EP et enfin en PV."
+        } else {
+            text += magic_energy_cost
+        }
+        return text
     }
 }
 
