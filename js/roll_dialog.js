@@ -1077,6 +1077,13 @@ class SuperpowerRoll extends TalentRoll {
 }
 
 class FocusMagicRoll extends TalentRoll {
+
+    reroll() {
+        new this.constructor(this.reason, this.max_value, this.level, this.effect, this.distance,
+            this.focus, this.duration, this.base_energy_cost, this.black_magic, this.magic_resistance, this.equipment,
+            this.equipment_id).trigger_roll(false);
+    }
+
     constructor(reason = "", max_value = NaN, level = 0, effect = "",
                 distance = "", focus = "", duration = "", base_energy_cost = 0,
                 black_magic = "", magic_resistance = "", equipment = "", equipment_id = "") {
@@ -1207,6 +1214,12 @@ class PsiRoll extends TalentRoll {
 }
 
 class GoodNatureEvilMagicRoll extends TalentRoll {
+
+    reroll() {
+        new this.constructor(this.reason, this.effect, this.distance, this.focus, this.duration, this.base_energy_cost,
+            this.black_magic, this.magic_resistance, this.equipment, this.equipment_id).trigger_roll(false);
+    }
+
     constructor(reason = "", effect = "", distance = "", focus = "", duration = "",
                 base_energy_cost = 0, black_magic = "", magic_resistance = "",
                 equipment = "", equipment_id = "") {
