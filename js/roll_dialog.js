@@ -316,7 +316,7 @@ class TalentRoll extends Roll {
         this.effect_modifier = 0
 
         // Need to give energy investment or its magical components
-        this.energy_investment_validated = !has_any_base_energy() && !is_magic
+        this.energy_investment_validated = false
     }
 
     dice_value_text() {
@@ -816,10 +816,11 @@ class TalentRoll extends Roll {
             select_modifier.slider("refresh", {useCurrentValue: true})
             select_effect_modifier.slider("refresh", {useCurrentValue: true})
         }
+        $(".roll-dialog-slider").removeClass("d-none")
         if (this.energy_investment_validated) {
-            $(".roll-dialog-slider").removeClass("d-none")
+            $(".roll-dialog-slider-effect").removeClass("d-none")
         } else {
-            $(".roll-dialog-slider").addClass("d-none")
+            $(".roll-dialog-slider-effect").addClass("d-none")
         }
 
         let effect = ""
@@ -1089,7 +1090,6 @@ class FocusMagicRoll extends TalentRoll {
                 black_magic = "", magic_resistance = "", equipment = "", equipment_id = "") {
         super(reason, max_value, level, effect, 0, [], NaN, true, true, distance, focus, duration, base_energy_cost,
             black_magic, magic_resistance, equipment, equipment_id)
-        this.energy_investment_validated = !has_any_base_energy() // Cannot invest in energies when using a focus object
         this.margin_dices = []
     }
 
@@ -1225,7 +1225,6 @@ class GoodNatureEvilMagicRoll extends TalentRoll {
                 equipment = "", equipment_id = "") {
         super(reason, NaN, 0, effect, 0, [], NaN, true, true, distance, focus, duration, base_energy_cost,
             black_magic, magic_resistance, equipment, equipment_id)
-        this.energy_investment_validated = !has_any_base_energy()
         this.margin_dices = []
         this.precision_dices = []
         this.type = 3
@@ -1328,7 +1327,7 @@ class GoodNatureEvilMagicRoll extends TalentRoll {
 
 function slider_value_changed(input) {
     return modifier => {
-        return modifier
+        return (modifier <= 0 ? "" : "+") + modifier
     }
 }
 
