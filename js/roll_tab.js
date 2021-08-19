@@ -159,7 +159,7 @@ class RollRow extends DataRow {
         new TalentRoll(this.roll_reason(), value, difficulty, this.get("effect", button).val(),
             critical_increase, formula_elements, margin_throttle, false, false,
             "", "", "", 0, "", "",
-            equipment, equipment_id, exploding_effect).trigger_roll()
+            equipment, equipment_id, exploding_effect, "").trigger_roll()
     }
 
     update_title() {

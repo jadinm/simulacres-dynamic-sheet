@@ -161,7 +161,7 @@ class SpellRow extends RollRow {
                 spell_distance, spell_focus, spell_duration, spell_level,
                 this.get("details-black-magic", button).val(),
                 this.get("details-resistance", button).val(), equipment, equipment_id,
-                exploding_effect).trigger_roll()
+                exploding_effect, this.energy()).trigger_roll()
         } else {
             const value = parseInt(this.get("value", button).text())
             const type = this.data[0].id.includes("psi-") ? PsiRoll
@@ -378,7 +378,7 @@ class FocusMagicRow extends SpellRow {
         new FocusMagicRoll(this.roll_reason(), value, level, this.get("effect").val(), spell_distance,
             spell_focus, spell_duration, spell_level, this.get("details-black-magic", button).val(),
             this.get("details-resistance", button).val(), equipment, equipment_id,
-            exploding_effect).trigger_roll()
+            exploding_effect, "").trigger_roll()
     }
 }
 
