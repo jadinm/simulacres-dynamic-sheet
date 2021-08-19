@@ -386,6 +386,8 @@ class SpellRollTable extends TalentRollTable {
         if (e.target.getAttribute("name").includes("-realm")) {
             spell.update_realm($(e.target))
             spell.update_roll_value(spell.get("dice", $(e.target)))
+        } else {
+            spell.update_roll_value()
         }
     }
 
