@@ -59,31 +59,24 @@
                     {% endwith %}
                 </td>
                 <td class="spell-difficulty my-0 py-0 align-middle">
-                    {% for realm in ["mineral", "vegetal", "animal", "humanoid", "mechanical", "void"] %}
-                        <div class="row py-0 my-0 d-none">
-                            <div class="text-center col-12 py-0 my-0">
-                                <label class="py-0 my-0 spell-difficulty-value"
-                                       for="psi-x-difficulty-input-{{ realm }}"
-                                       id="psi-x-difficulty-{{ realm }}">
-                                    0
-                                </label>
-                                <span class="spell-realm">
-                                    [<svg height="1em" width="1em">
-                                        <use xlink:href="#svg-{{ realm }}"></use>
-                                    </svg>]
-                                </span>
-                            </div>
+                    <div class="row py-0 my-0 d-none">
+                        <div class="text-center col-12 py-0 my-0">
+                            <label class="py-0 my-0 spell-difficulty-value"
+                                   for="psi-x-difficulty-input"
+                                   id="psi-x-difficulty">
+                                0
+                            </label>
                         </div>
-                        <div class="row py-0 my-0 spell-difficulty-row d-none">
-                            <div class="text-center col-12 py-0 my-0">
-                                <input id="psi-x-difficulty-input-{{ realm }}"
-                                       data-slider-id="psi-x-difficulty-slider-{{ realm }}"
-                                       type="text" data-slider-min="-4" data-slider-max="3" data-slider-step="1"
-                                       data-slider-value="-4" class="input-slider spell-difficulty-input"
-                                       data-slider-tooltip="hide"/>
-                            </div>
+                    </div>
+                    <div class="row py-0 my-0 spell-difficulty-row d-none">
+                        <div class="text-center col-12 py-0 my-0">
+                            <input id="psi-x-difficulty-input"
+                                   data-slider-id="psi-x-difficulty-slider"
+                                   type="text" data-slider-min="-4" data-slider-max="3" data-slider-step="1"
+                                   data-slider-value="-4" class="input-slider spell-difficulty-input"
+                                   data-slider-tooltip="hide"/>
                         </div>
-                    {% endfor %}
+                    </div>
                 </td>
                 <td class="my-0 py-0 text-center align-middle">
                     {% for realm in ["mineral", "vegetal", "animal", "humanoid", "mechanical", "void"] %}
