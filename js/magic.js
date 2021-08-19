@@ -123,6 +123,10 @@ class SpellRow extends RollRow {
         return talent_select.find("option:selected").val()
     }
 
+    energy() {
+        return this.get("list").val()
+    }
+
     roll(button) {
         // Find either spell difficulty or talent level to detect critical rolls
         let difficulty
@@ -160,13 +164,14 @@ class SpellRow extends RollRow {
                 exploding_effect).trigger_roll()
         } else {
             const value = parseInt(this.get("value", button).text())
-            const type = this.data[0].id.includes("psi-") ? PsiRoll : TalentRoll
+            const type = this.data[0].id.includes("psi-") ? PsiRoll
+                : (this.data[0].id.includes("warrior-") ? WarriorRoll : TalentRoll)
             new type(this.roll_reason(), value, difficulty, this.get("effect", button).val(),
                 critical_increase, formula_elements, margin_throttle, this.data.hasClass("spell"),
                 true, spell_distance, spell_focus, spell_duration, spell_level,
                 this.get("details-black-magic", button).val(),
                 this.get("details-resistance", button).val(), equipment, equipment_id,
-                exploding_effect).trigger_roll()
+                exploding_effect, this.energy()).trigger_roll()
         }
     }
 

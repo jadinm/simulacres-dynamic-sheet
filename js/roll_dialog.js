@@ -260,7 +260,7 @@ class TalentRoll extends Roll {
         new this.constructor(this.reason, this.max_value, this.talent_level, this.effect, this.critical_increase,
             this.formula_elements, this.margin_throttle, this.is_magic, this.is_power, this.distance, this.focus,
             this.duration, this.base_energy_cost, this.black_magic, this.magic_resistance,
-            this.equipment, this.equipment_id, this.exploding_effect).trigger_roll(false)
+            this.equipment, this.equipment_id, this.exploding_effect, this.power_energy).trigger_roll(false)
     }
 
     constructor(reason = "", max_value = NaN, talent_level = 0, effect = "",
@@ -268,7 +268,7 @@ class TalentRoll extends Roll {
                 is_magic = false, is_power = false, distance = "", focus = "",
                 duration = "", base_energy_cost = 0, black_magic = "",
                 magic_resistance = "", equipment = "", equipment_id = "",
-                exploding_effect = false) {
+                exploding_effect = false, power_energy = "") {
         super()
         this.reason = reason
         this.formula_elements = formula_elements
@@ -307,6 +307,7 @@ class TalentRoll extends Roll {
         this.magic_power = NaN
         this.speed = NaN
         this.optional_speed = NaN
+        this.power_energy = power_energy
         this.update_energies()
 
         this.incantation = false
@@ -928,7 +929,7 @@ class SuperpowerRoll extends TalentRoll {
                 distance = "", focus = "", duration = "", effect = "",
                 equipment = "", equipment_id = "", exploding_effect = false) {
         super(reason, NaN, 0, effect, 0, formula_elements, NaN, false, true, distance, focus, duration, 0, "", "",
-            equipment, equipment_id, exploding_effect)
+            equipment, equipment_id, exploding_effect, "")
         this.number = nbr_dices
         this.under_value = under_value
         this.superpower_modifier = 0
@@ -1093,7 +1094,7 @@ class FocusMagicRoll extends TalentRoll {
     reroll() {
         new this.constructor(this.reason, this.max_value, this.level, this.effect, this.distance,
             this.focus, this.duration, this.base_energy_cost, this.black_magic, this.magic_resistance, this.equipment,
-            this.equipment_id, this.exploding_effect).trigger_roll(false);
+            this.equipment_id, this.exploding_effect).trigger_roll(false)
     }
 
     constructor(reason = "", max_value = NaN, level = 0, effect = "",
@@ -1101,7 +1102,7 @@ class FocusMagicRoll extends TalentRoll {
                 black_magic = "", magic_resistance = "", equipment = "", equipment_id = "",
                 exploding_effect = false) {
         super(reason, max_value, level, effect, 0, [], NaN, true, true, distance, focus, duration, base_energy_cost,
-            black_magic, magic_resistance, equipment, equipment_id, exploding_effect)
+            black_magic, magic_resistance, equipment, equipment_id, exploding_effect, "")
         this.margin_dices = []
     }
 
@@ -1227,19 +1228,47 @@ class PsiRoll extends TalentRoll {
     }
 }
 
+class WarriorRoll extends TalentRoll {
+
+    modify_dialog(ignore_sliders) {
+        super.modify_dialog(ignore_sliders)
+        // Cannot invest to raise the threshold
+        $(".roll-dialog-base-energy-hide").addClass("d-none")
+    }
+
+    energy_cost_text() {
+        let text = "</div><div class='row mx-1 align-middle'>Coût du pouvoir (en EP): "
+        if (this.energy_investment_validated && this.is_critical_failure()) {
+            text += (this.base_energy_cost + this.energy_cost())
+                + "</div><div class='row mx-1 align-middle'>Le coût est doublé à cause de l'échec critique"
+                + "</div><div class='row mx-1 align-middle'>La perte en plus est à retirer d'abord des PS,"
+                + " après des EP et enfin des PVs"
+                + (localized_hp ? " localisés au torse." : ".")
+        } else {
+            text += this.base_energy_cost
+        }
+        if (this.energy_cost() > this.base_energy_cost) {
+            text += "</div><div class='row mx-1 align-middle'>Coût en énergies: "
+                + (this.energy_cost() - this.base_energy_cost)
+        }
+        return text
+    }
+}
+
 class GoodNatureEvilMagicRoll extends TalentRoll {
 
     reroll() {
         new this.constructor(this.reason, this.effect, this.distance, this.focus, this.duration, this.base_energy_cost,
             this.black_magic, this.magic_resistance, this.equipment, this.equipment_id,
-            this.exploding_effect).trigger_roll(false);
+            this.exploding_effect, this.power_energy).trigger_roll(false)
     }
 
     constructor(reason = "", effect = "", distance = "", focus = "", duration = "",
                 base_energy_cost = 0, black_magic = "", magic_resistance = "",
-                equipment = "", equipment_id = "", exploding_effect = false) {
+                equipment = "", equipment_id = "", exploding_effect = false,
+                power_energy = "") {
         super(reason, NaN, 0, effect, 0, [], NaN, true, true, distance, focus, duration, base_energy_cost,
-            black_magic, magic_resistance, equipment, equipment_id, exploding_effect)
+            black_magic, magic_resistance, equipment, equipment_id, exploding_effect, power_energy)
         this.margin_dices = []
         this.precision_dices = []
         this.type = 3
@@ -1465,8 +1494,13 @@ function update_max_invested_energies(energy_input) {
         let current_value = parseInt(invested.value)
         if (isNaN(current_value))
             current_value = 0
+        let energy_invested = 0
+        if (current_roll && current_roll instanceof TalentRoll && current_roll.power_energy
+            && invested.id.includes(current_roll.power_energy)) {
+            energy_invested = current_roll.base_energy_cost
+        }
         // Update max investment value
-        invested.setAttribute("max", current_value + Math.max(0, remaining))
+        invested.setAttribute("max", current_value + Math.max(0, remaining) - energy_invested)
     })
 }
 

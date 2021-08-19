@@ -153,6 +153,15 @@
                             Psi
                         </a>
                     </li>
+                    <!-- Warrior board -->
+                    {% if warrior_powers %}
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#warrior-tab" role="tab"
+                               aria-controls="warrior-tab" aria-selected="false">
+                                Voies du Guerrier
+                            </a>
+                        </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" data-toggle="tab" href="#superpower-tab" role="tab"
                            aria-controls="superpower-tab" aria-selected="false">
@@ -232,6 +241,11 @@
 
                     <!-- Psi board -->
                     {% include "psi_tab.html" %}
+
+                    <!-- Warrior board -->
+                    {% if warrior_powers %}
+                        {% include "warrior_tab.html" %}
+                    {% endif %}
 
                     <!-- Superpower board -->
                     {% include "superpower_tab.html" %}
@@ -486,6 +500,7 @@
 <script>{{ include_static("../js/roll_tab.js") }}</script>
 <script>{{ include_static("../js/magic.js") }}</script>
 <script>{{ include_static("../js/psi.js") }}</script>
+<script>{{ include_static("../js/warrior.js") }}</script>
 <script>{{ include_static("../js/ki.js") }}</script>
 <script>{{ include_static("../js/superpowers.js") }}</script>
 <script>{{ include_static("../js/setup_roll_tables.js") }}</script>

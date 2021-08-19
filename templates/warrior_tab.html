@@ -1,72 +1,61 @@
-<div id="psi-tab" class="tab-pane fade row container-fluid m-0 pt-2">
+<div id="warrior-tab" class="tab-pane fade row container-fluid m-0 pt-2">
     <div class="row form-inline md-form col-12 justify-content-center m-0 p-0">
         <i class="fas fa-search" aria-hidden="true"></i>
-        <input id="psi-search" class="form-control ml-3 w-75" type="text"
-               placeholder="Rechercher les pouvoirs, leurs concentrations, leurs portées, leurs durées ou leurs effets"
+        <input id="warrior-search" class="form-control ml-3 w-75" type="text"
+               placeholder="Rechercher les pouvoirs, leurs durées ou leurs effets"
                aria-label="Search">
     </div>
 
-    <!-- Psi energies -->
-    <div class="row col-12 form-row md-form p-0 m-0">
-        <div class="col-md-2 input-with-pre-icon">
-            <svg height="3em" width="2em" class="input-prefix">
-                <use xlink:href="#svg-psi"></use>
-            </svg>
-            <label for="psi-label">Énergie</label>
-            <input class="special-energy form-control text-center" id="psi-label" type="text" value="Psionique">
-        </div>
-        <div class="col-md-2">
-            <label for="psi"></label>
-            <input class="special-energy magical-energy form-control text-center" id="psi" type="number" value="0"
-                   min="0" max="3">
-        </div>
-    </div>
-
-    <!-- Psionic powers -->
-    <div class="row col-12 mt-2 m-0 p-0"><b>Pouvoirs</b></div>
+    <!-- warrior's ways powers -->
+    <div class="row col-12 mt-2 m-0 p-0"><b>Pouvoirs des Voies de la Guerre</b></div>
     <div class="table-responsive col-12 m-0 p-0" style="overflow-y: hidden !important;">
         <table class="table table-hover m-0 p-0">
             <thead class="m-0 p-0">
             <tr>
                 <th scope="col" style="width: 10%">Nom</th>
                 <th scope="col" class="text-center" style="width: 2.5%">Formule</th>
+                <th scope="col" class="text-center" style="width: 2.5%">Énergie</th>
                 <th scope="col" class="text-center" style="width: 10%">Difficulté</th>
                 <th scope="col" class="text-center" style="width: 5%">Valeur</th>
-                <th scope="col" class="text-center" style="width: 5%">Concentration</th>
                 <th scope="col" class="text-center" style="width: 5%"></th>
-                <th scope="col" class="text-center" style="width: 5%">Portée</th>
                 <th scope="col" class="text-center" style="width: 5%">Durée</th>
                 <th scope="col" style="width: 55%">Effet</th>
                 <th scope="col" class="text-center"></th>
             </tr>
             </thead>
-            <tbody id="psi-table" class="sortable-list">
-            <tr id="psi-x" class="spell" hidden>
+            <tbody id="warrior-table" class="sortable-list">
+            <tr id="warrior-x" class="spell" hidden>
                 <td class="md-form align-middle" data-toggle="tooltip" data-placement="bottom" title="">
-                    <i id="psi-x-name-handle" class="fas fa-arrows-alt prefix h-100"
+                    <i id="warrior-x-name-handle" class="fas fa-arrows-alt prefix h-100"
                        style="font-size: 1.5em;"></i>
-                    <label for="psi-x-name"></label>
-                    <input id="psi-x-name" class="spell-name form-control" type="text" value="">
+                    <label for="warrior-x-name"></label>
+                    <input id="warrior-x-name" class="spell-name form-control" type="text" value="">
                 </td>
                 <td class="my-0 py-0 spell-formula align-middle">
-                    {% with row_type = "psi", realm_checkbox = False %}
+                    {% with row_type = "warrior", realm_checkbox = False %}
                         {% include "roll_formula.html" %}
                     {% endwith %}
+                </td>
+                <td class="my-0 py-0 spell-formula align-middle">
+                    <select id="warrior-x-energy" title="Énergie"
+                            class="show-tick form-control energy-select selectpicker"
+                            data-live-search="true" data-style="col-12 px-3 align-middle">
+                    </select>
                 </td>
                 <td class="spell-difficulty my-0 py-0 align-middle">
                     <div class="row py-0 my-0 d-none">
                         <div class="text-center col-12 py-0 my-0">
                             <label class="py-0 my-0 spell-difficulty-value"
-                                   for="psi-x-difficulty-input"
-                                   id="psi-x-difficulty">
+                                   for="warrior-x-difficulty-input"
+                                   id="warrior-x-difficulty">
                                 0
                             </label>
                         </div>
                     </div>
                     <div class="row py-0 my-0 spell-difficulty-row d-none">
                         <div class="text-center col-12 py-0 my-0">
-                            <input id="psi-x-difficulty-input"
-                                   data-slider-id="psi-x-difficulty-slider"
+                            <input id="warrior-x-difficulty-input"
+                                   data-slider-id="warrior-x-difficulty-slider"
                                    type="text" data-slider-min="-4" data-slider-max="3" data-slider-step="1"
                                    data-slider-value="-4" class="input-slider spell-difficulty-input"
                                    data-slider-tooltip="hide"/>
@@ -75,12 +64,8 @@
                 </td>
                 <td class="my-0 py-0 text-center align-middle">
                     <div class="m-0 {{ padding }} p-0 spell-value-row">
-                        <span id="psi-x-value" class="spell-value"></span>
+                        <span id="warrior-x-value" class="spell-value"></span>
                     </div>
-                </td>
-                <td class="md-form my-0 py-0 align-middle">
-                    <input id="psi-x-time" class="spell-time form-control text-center" type="text">
-                    <label for="psi-x-time"></label>
                 </td>
                 <td class="my-0 py-0 text-center align-middle">
                     {% for level in range(1, 4) %}
@@ -91,10 +76,10 @@
                             {% set classes = "mt-4 pt-1" %}
                             {% set dice_classes = "invisible" %}
                         {% endif %}
-                        <div class="m-0 {{ classes }} p-0 psi-roll-row">
-                            <span class="psi-level-specific">Niv. {{ level }}</span>
+                        <div class="m-0 {{ classes }} p-0 warrior-roll-row">
+                            <span class="warrior-level-specific">Niv. {{ level }}</span>
                             <span class="{{ dice_classes }} m-0 p-0">
-                                <span id="psi-x-dice-{{ level }}" class="clickable row-roll-trigger" hidden>
+                                <span id="warrior-x-dice-{{ level }}" class="clickable row-roll-trigger" hidden>
                                     <i class="fas fa-dice"></i>
                                 </span>
                             </span>
@@ -103,31 +88,24 @@
                 </td>
                 <td class="md-form my-0 py-0 align-middle">
                     {% for level in range(1, 4) %}
-                        <input id="psi-x-distance-{{ level }}"
-                               class="spell-distance form-control text-center" type="text">
-                        <label for="psi-x-distance-{{ level }}"></label>
-                    {% endfor %}
-                </td>
-                <td class="md-form my-0 py-0 align-middle">
-                    {% for level in range(1, 4) %}
-                        <input id="psi-x-duration-{{ level }}"
+                        <input id="warrior-x-duration-{{ level }}"
                                class="spell-duration form-control text-center" type="text">
-                        <label for="psi-x-duration-{{ level }}"></label>
+                        <label for="warrior-x-duration-{{ level }}"></label>
                     {% endfor %}
                 </td>
                 <td class="md-form my-0 py-0 align-middle">
                     {% for level in range(1, 4) %}
-                        <input id="psi-x-effect-{{ level }}" class="spell-effect form-control" type="text">
-                        <label for="psi-x-effect-{{ level }}"></label>
+                        <input id="warrior-x-effect-{{ level }}" class="spell-effect form-control" type="text">
+                        <label for="warrior-x-effect-{{ level }}"></label>
                     {% endfor %}
                 </td>
                 <td class="md-form m-0 p-0 align-middle">
-                    <div id="psi-x-show-details" data-toggle="tooltip" data-placement="top"
+                    <div id="warrior-x-show-details" data-toggle="tooltip" data-placement="top"
                          title="Voir les détails du test"
                          class="btn btn-link rounded-lg mx-0 my-0 py-2 px-2">
                         <i class="fas fa-cogs"></i>
                     </div>
-                    {% with row_type = "psi" %}
+                    {% with row_type = "warrior" %}
                         {% include "roll_modal.html" %}
                     {% endwith %}
                 </td>
@@ -138,12 +116,12 @@
     <div class="row col-12 m-0 p-0">
         <div class="col-lg-2 col-md-4 row">
             <div class="col-6 px-0 mx-0">
-                <button id="add-psi" class="btn btn-success btn-block">
+                <button id="add-warrior" class="btn btn-success btn-block">
                     <i class="fas fa-plus"></i>
                 </button>
             </div>
             <div class="col-6 px-0 mx-0">
-                <div id="psi-table-remove" class="sortable-list text-center" style="min-height: 50px">
+                <div id="warrior-table-remove" class="sortable-list text-center" style="min-height: 50px">
                     <button class="btn-block btn btn-danger" style="cursor:default;" data-toggle="tooltip"
                             data-html="true" data-placement="bottom"
                             title="Déplacez un élément ici pour le supprimer">

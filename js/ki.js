@@ -1,5 +1,13 @@
-class KiRow extends SpellRow {
+class KiRow extends PsiRow {
     update_realm(realm_div) {
+    }
+
+    energy() {
+        return "ki"
+    }
+
+    energy_level() {
+        return parseInt(this.get("level").val())
     }
 
     roll_reason() {

@@ -5,6 +5,14 @@ class PsiRow extends SpellRow {
         return isNaN(level) ? "" : String(level)
     }
 
+    energy() {
+        return "psi"
+    }
+
+    energy_level() {
+        return parseInt($("#psi").val())
+    }
+
     get(element_id_suffix, leveled_div = null) {
         let elem = super.get(element_id_suffix)
         if (elem.length === 0 && leveled_div) {
@@ -29,7 +37,7 @@ class PsiRow extends SpellRow {
     }
 
     update_level() {
-        let power_level = parseInt($("#psi").val())
+        let power_level = this.energy_level()
         if (isNaN(power_level) || power_level === 0)
             power_level = 1
         for (let i = 2; i <= power_level; i++) {
