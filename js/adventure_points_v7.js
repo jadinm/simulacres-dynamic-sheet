@@ -96,7 +96,8 @@ function compute_remaining_ap() {
         const spell = row_of(elem)
         const spell_list_div = spell.get("list")
         const spell_list = spell_list_div.length > 0 ? spell.get("list")[0].value.trim() : ""
-        const spell_level = parseInt(spell.get("level")[0].value.trim())
+        const spell_level_div = spell.get("level")
+        const spell_level = spell_level_div.length > 0 ? parseInt(spell.get("level")[0].value.trim()) : 1
         if (spell_list === hermetic_energy) {
             name = $(elem).find("select.spell-talent").val().trim()
         } else {
