@@ -1,4 +1,4 @@
-<script id="plugin-js-true-random" class="plugin-js" data-plugin-version="1.0.3" data-plugin-id="true-random">
+<script id="plugin-js-true-random" class="plugin-js" data-plugin-version="2.0.0" data-plugin-id="true-random">
     if (!window.hasOwnProperty('plugin_true_random_old_roll_dices')) {
         // When we do not upgrade the plugin, fetch the roll function
         if (!window.hasOwnProperty('plugin_3d_dices_old_roll_dices')) {
@@ -35,7 +35,7 @@
         fetch_true_randoms()
 
         // Replace roll_dice function by our own that uses true random from random.org result if any available
-        function roll_true_random(number, type, dices) {
+        function roll_true_random(number, type, dices, exploding_dice = false) {
             if (true_random_d6s.length < 20) {
                 // Refill random numbers
                 fetch_true_randoms()
@@ -43,18 +43,27 @@
             if (type > 0 && type <= 6 && true_random_d6s.length >= number) {
                 // We have remaining random numbers to take
                 let sum = 0
-                for (let i = 0; i < number; i++) {
+                let count = 0
+                let last_dice_exploded = false
+                while (count !== number || last_dice_exploded && exploding_dice) {
+                    if (true_random_d6s.length < 20) {
+                        // Refill random numbers
+                        fetch_true_randoms()
+                    }
                     // We take a random index inside it to prevent predictability from players
                     const idx = Math.floor(Math.random() * true_random_d6s.length)
                     const single_roll = true_random_d6s[idx] % type + 1
                     true_random_d6s.splice(idx, 1)
                     if (dices)
                         dices.push(single_roll)
+                    if (!last_dice_exploded)
+                        count += 1
+                    last_dice_exploded = single_roll === type && type !== 1 && exploding_dice
                     sum += single_roll
                 }
                 return sum
             }
-            return roll_dices(number, type, dices)
+            return roll_dices(number, type, dices, exploding_dice)
         }
         if (Roll.prototype.roll_dices === window.plugin_true_random_old_roll_dices) { // No other plugin present
             Roll.prototype.roll_dices = roll_true_random

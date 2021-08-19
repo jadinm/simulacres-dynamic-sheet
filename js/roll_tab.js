@@ -152,12 +152,14 @@ class RollRow extends DataRow {
         const equipment_id = this.get("equipment").val()
         const equipment = (equipment_id && equipment_id.length > 0) ? row_of($("#" + this.get("equipment").val())).get("name").val() : ""
 
+        const exploding_effect = this.get("details-exploding-effect").prop("checked")
+
         // Do the actual roll
         const value = parseInt(this.get("value", button).text())
         new TalentRoll(this.roll_reason(), value, difficulty, this.get("effect", button).val(),
             critical_increase, formula_elements, margin_throttle, false, false,
             "", "", "", 0, "", "",
-            equipment, equipment_id).trigger_roll()
+            equipment, equipment_id, exploding_effect).trigger_roll()
     }
 
     update_title() {

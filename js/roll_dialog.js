@@ -1,11 +1,16 @@
 /* Actual roll */
 
-function roll_dices(number = 2, type = 6, dices = null) {
+function roll_dices(number = 2, type = 6, dices = null, exploding_dice = false) {
     let sum = 0
-    for (let i = 0; i < number; i++) {
+    let count = 0
+    let last_dice_exploded = false
+    while (count !== number || last_dice_exploded && exploding_dice) {
         const single_roll = Math.floor(Math.random() * type) + 1
         if (dices)
             dices.push(single_roll)
+        if (!last_dice_exploded)
+            count += 1
+        last_dice_exploded = single_roll === type && type !== 1 && exploding_dice
         sum += single_roll
     }
     return sum
@@ -73,8 +78,8 @@ class Roll {
         last_rolls.push(this)
     }
 
-    roll_dices(number, type, dices, reason = "") {
-        return roll_dices(number, type, dices)
+    roll_dices(number, type, dices, reason = "", exploding_effect = false) {
+        return roll_dices(number, type, dices, exploding_effect)
     }
 
     dice_value_text() {
@@ -255,14 +260,15 @@ class TalentRoll extends Roll {
         new this.constructor(this.reason, this.max_value, this.talent_level, this.effect, this.critical_increase,
             this.formula_elements, this.margin_throttle, this.is_magic, this.is_power, this.distance, this.focus,
             this.duration, this.base_energy_cost, this.black_magic, this.magic_resistance,
-            this.equipment, this.equipment_id).trigger_roll(false)
+            this.equipment, this.equipment_id, this.exploding_effect).trigger_roll(false)
     }
 
     constructor(reason = "", max_value = NaN, talent_level = 0, effect = "",
                 critical_increase = 0, formula_elements = [], margin_throttle = NaN,
                 is_magic = false, is_power = false, distance = "", focus = "",
                 duration = "", base_energy_cost = 0, black_magic = "",
-                magic_resistance = "", equipment = "", equipment_id = "") {
+                magic_resistance = "", equipment = "", equipment_id = "",
+                exploding_effect = false) {
         super()
         this.reason = reason
         this.formula_elements = formula_elements
@@ -317,6 +323,9 @@ class TalentRoll extends Roll {
 
         // Need to give energy investment or its magical components
         this.energy_investment_validated = false
+
+        // Whether an additional effect dice is rolled when 6 is rolled
+        this.exploding_effect = exploding_effect
     }
 
     dice_value_text() {
@@ -490,7 +499,7 @@ class TalentRoll extends Roll {
     effect_value() {
         if (is_v7 && this.effect_dices.length === 0) {
             // Roll needed
-            this.roll_dices(2, 6, this.effect_dices, "Dés d'effet du test")
+            this.roll_dices(2, 6, this.effect_dices, "Dés d'effet du test", this.exploding_effect)
         }
         return this.effect_dices.reduce((a, b) => {
             return a + b;
@@ -910,14 +919,15 @@ class SuperpowerRoll extends TalentRoll {
     /* Trigger the same roll */
     reroll() {
         new this.constructor(this.reason, this.number, this.under_value, this.formula_elements, this.distance,
-            this.focus, this.duration, this.effect, this.equipment, this.equipment_id).trigger_roll(false)
+            this.focus, this.duration, this.effect, this.equipment, this.equipment_id,
+            this.exploding_effect).trigger_roll(false)
     }
 
     constructor(reason = "", nbr_dices = 0, under_value = 0, formula_elements = [],
                 distance = "", focus = "", duration = "", effect = "",
-                equipment = "", equipment_id = "") {
+                equipment = "", equipment_id = "", exploding_effect = false) {
         super(reason, NaN, 0, effect, 0, formula_elements, NaN, false, true, distance, focus, duration, 0, "", "",
-            equipment, equipment_id)
+            equipment, equipment_id, exploding_effect)
         this.number = nbr_dices
         this.under_value = under_value
         this.superpower_modifier = 0
@@ -1082,14 +1092,15 @@ class FocusMagicRoll extends TalentRoll {
     reroll() {
         new this.constructor(this.reason, this.max_value, this.level, this.effect, this.distance,
             this.focus, this.duration, this.base_energy_cost, this.black_magic, this.magic_resistance, this.equipment,
-            this.equipment_id).trigger_roll(false);
+            this.equipment_id, this.exploding_effect).trigger_roll(false);
     }
 
     constructor(reason = "", max_value = NaN, level = 0, effect = "",
                 distance = "", focus = "", duration = "", base_energy_cost = 0,
-                black_magic = "", magic_resistance = "", equipment = "", equipment_id = "") {
+                black_magic = "", magic_resistance = "", equipment = "", equipment_id = "",
+                exploding_effect = false) {
         super(reason, max_value, level, effect, 0, [], NaN, true, true, distance, focus, duration, base_energy_cost,
-            black_magic, magic_resistance, equipment, equipment_id)
+            black_magic, magic_resistance, equipment, equipment_id, exploding_effect)
         this.margin_dices = []
     }
 
@@ -1217,14 +1228,15 @@ class GoodNatureEvilMagicRoll extends TalentRoll {
 
     reroll() {
         new this.constructor(this.reason, this.effect, this.distance, this.focus, this.duration, this.base_energy_cost,
-            this.black_magic, this.magic_resistance, this.equipment, this.equipment_id).trigger_roll(false);
+            this.black_magic, this.magic_resistance, this.equipment, this.equipment_id,
+            this.exploding_effect).trigger_roll(false);
     }
 
     constructor(reason = "", effect = "", distance = "", focus = "", duration = "",
                 base_energy_cost = 0, black_magic = "", magic_resistance = "",
-                equipment = "", equipment_id = "") {
+                equipment = "", equipment_id = "", exploding_effect = false) {
         super(reason, NaN, 0, effect, 0, [], NaN, true, true, distance, focus, duration, base_energy_cost,
-            black_magic, magic_resistance, equipment, equipment_id)
+            black_magic, magic_resistance, equipment, equipment_id, exploding_effect)
         this.margin_dices = []
         this.precision_dices = []
         this.type = 3

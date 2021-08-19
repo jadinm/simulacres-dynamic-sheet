@@ -52,9 +52,11 @@ class SuperpowerRow extends RollRow {
         const equipment_id = this.get("equipment").val()
         const equipment = (equipment_id && equipment_id.length > 0) ? row_of($("#" + this.get("equipment").val())).get("name").val() : ""
 
+        const exploding_effect = this.get("details-exploding-effect").prop("checked")
+
         // Do the actual roll
         new SuperpowerRoll(this.roll_reason(), nbr_dices, under_value, formula_elements, power_distance, power_focus,
-            power_duration, this.get("effect").val(), equipment, equipment_id).trigger_roll()
+            power_duration, this.get("effect").val(), equipment, equipment_id, exploding_effect).trigger_roll()
     }
 }
 

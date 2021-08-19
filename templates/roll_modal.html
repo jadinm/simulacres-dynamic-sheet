@@ -48,6 +48,21 @@
                                 data-style="col-12 align-middle" data-container="body" title="&nbsp;">
                         </select>
                     </div>
+                    {% if version == V7 %}
+                        <div class="row col-12 mx-1">
+                            Dés d'effet explosifs (sur un 6, on lance un dé supplémentaire à l'infini)
+                        </div>
+                        <div class="row col-12 mx-4">
+                            <div class="custom-control custom-checkbox custom-control-inline">
+                                <input type="checkbox" class="custom-control-input"
+                                       id="{{ row_type }}-x-details-exploding-effect"
+                                       name="{{ row_type }}-x-details-exploding-effect">
+                                <label class="custom-control-label" for="{{ row_type }}-x-details-exploding-effect">
+                                    <i class="fas fa-bomb"></i>
+                                </label>
+                            </div>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
