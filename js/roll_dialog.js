@@ -573,7 +573,8 @@ class TalentRoll extends Roll {
                 text += (2 * this.energy_cost())
                     + "</div><div class='row mx-1 align-middle'>Le coût est doublé à cause de l'échec critique"
                     + "</div><div class='row mx-1 align-middle'>La perte en plus est à retirer d'abord du focus" +
-                    " (si un a été utilisé), puis des PS, après des EP et enfin en PV."
+                    " (si un a été utilisé), puis des PS, après des EP et enfin en PV"
+                    + (localized_hp ? " localisés au torse." : ".")
             } else {
                 text += this.energy_cost()
             }
@@ -1196,7 +1197,8 @@ class FocusMagicRoll extends TalentRoll {
             text += (2 * magic_energy_cost)
                 + "</div><div class='row mx-1 align-middle'>Le coût est doublé à cause de l'échec critique"
                 + "</div><div class='row mx-1 align-middle'>La perte en plus est à retirer d'abord du focus" +
-                " (si un a été utilisé), puis des PS, après des EP et enfin en PV."
+                " (si un a été utilisé), puis des PS, après des EP et enfin en PVs"
+                + (localized_hp ? " localisés au torse." : ".")
         } else {
             text += magic_energy_cost
         }
@@ -1212,7 +1214,8 @@ class PsiRoll extends TalentRoll {
             text += (this.base_energy_cost + this.energy_cost())
                 + "</div><div class='row mx-1 align-middle'>Le coût est doublé à cause de l'échec critique"
                 + "</div><div class='row mx-1 align-middle'>La perte en plus est à retirer d'abord des EP,"
-                + " après des PS et enfin des PVs."
+                + " après des PS et enfin des PVs"
+                + (localized_hp ? " localisés au torse." : ".")
         } else {
             text += this.base_energy_cost
         }
