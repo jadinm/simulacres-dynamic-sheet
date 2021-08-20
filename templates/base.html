@@ -158,7 +158,7 @@
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#warrior-tab" role="tab"
                                aria-controls="warrior-tab" aria-selected="false">
-                                Voies du Guerrier
+                                Voies de la Guerre
                             </a>
                         </li>
                     {% endif %}
@@ -207,7 +207,14 @@
             {% for button in plugins.buttons %}
                 {{ button | safe }}
             {% endfor %}
-            <li class="ml-auto nav-item">
+            <li class="ml-auto"></li>
+            <li class="nav-item d-none" data-toggle="tooltip" data-html="true" data-placement="top"
+                title="Voir l'historique des tests">
+                <a id="roll-history" class="nav-link">
+                    <i class="fas fa-history"></i>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" data-toggle="modal" data-target="#hide-tabs">
                     <i class="fas fa-cogs"></i>
                 </a>

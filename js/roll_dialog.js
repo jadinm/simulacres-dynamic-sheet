@@ -191,6 +191,7 @@ class Roll {
     show_roll(ignore_sliders = false) {
         // Update current roll
         current_roll = this
+        $("#roll-history").parent().removeClass("d-none").tooltip()
 
         // Show roll navigation
         const forward = $("#roll-dialog-history-forward")
@@ -1622,3 +1623,9 @@ function roll_dialog_validate() {
 }
 
 $("#roll-dialog-validate").on("click", roll_dialog_validate)
+
+$("#roll-history").on("click", _ => {
+    if (!current_roll)
+        return
+    current_roll.show_modal()
+}).parent().addClass("d-none")
