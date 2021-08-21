@@ -1231,10 +1231,15 @@ class PsiRoll extends TalentRoll {
 
 class WarriorRoll extends TalentRoll {
 
+    constructor(...params) {
+        super(...params)
+        this.is_magic = false
+    }
+
     modify_dialog(ignore_sliders) {
         super.modify_dialog(ignore_sliders)
-        // Cannot invest to raise the threshold
-        $(".roll-dialog-base-energy-hide").addClass("d-none")
+        // Cannot invest to increase distance
+        $(".roll-dialog-magic-hide").addClass("d-none")
     }
 
     energy_cost_text() {
