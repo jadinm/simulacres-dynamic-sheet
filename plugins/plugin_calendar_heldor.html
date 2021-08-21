@@ -1,4 +1,4 @@
-<li id="plugin-button-calendar-heldor" class="plugin-button nav-item" data-plugin-version="1.0.3"
+<li id="plugin-button-calendar-heldor" class="plugin-button nav-item" data-plugin-version="1.1.0"
     data-plugin-id="calendar-heldor">
     <a class="nav-link" data-toggle="tab" href="#plugin-tab-calendar-heldor" role="tab"
        aria-controls="plugin-tab-calendar-heldor" aria-selected="false">
@@ -59,6 +59,7 @@
     <div class="row col-12 mt-2">
         Si le titre d'une note contient "[Rappel JJ/MM/AAA]" ou "[Rappel JJ/MM/AAA HH:MM]" (sans les guillemets),
         la note sera mise en jaune 48 heures avant et en rouge 24 heures avant ou passé.
+        On peut également utiliser un "[Rappel ...]" sans date limite pour qu'il apparaisse juste dans la liste.
         <br/>
         Pour les évènements se produisant en combat et se comptent en passes d'arme, le titre peut contenir
         "[Rappel Passe d'arme PP]", "[Rappel Passe PP]" ou "[Rappel PA PP]" (sans les guillemets).
@@ -122,6 +123,7 @@
 
         const reminder_regex = /\[Rappel ([0-9]{1,2})\/([0-9]{1,2})\/([0-9]+)(?: ([0-9]{1,2}):([0-9]{1,2}))?]/i
         const combat_reminder_regex = /\[Rappel (?:Passe d'arme|Passe|PA|Round|Tour) ([0-9]+)]/i
+        const custom_reminder_regex = /\[Rappel ?([^\[\]]*)?]/i
         const warning_delta = 48 * 60 * 60
         const danger_delta = 24 * 60 * 60
 
@@ -156,6 +158,13 @@
                         match = [...current_time]
                         match[match.length - 1] = ap
                         match.unshift($(elem).val())
+                    } else {
+                        match = $(elem).val().match(custom_reminder_regex)
+                        if (match != null) {
+                            match = [...current_time]
+                            match[2] = match[2] + 1  // Default to a year later
+                            match.unshift($(elem).val())
+                        }
                     }
                 }
                 if (match != null) {
