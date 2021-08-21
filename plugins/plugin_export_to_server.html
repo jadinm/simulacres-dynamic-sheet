@@ -1,4 +1,4 @@
-<li id="plugin-button-export-to-server" class="plugin-button nav-item" data-plugin-version="1.1.0"
+<li id="plugin-button-export-to-server" class="plugin-button nav-item" data-plugin-version="1.2.0"
     data-plugin-id="export-to-server">
     <a class="nav-link" data-toggle="tab" href="#plugin-tab-export-to-server" role="tab"
        aria-controls="plugin-tab-export-to-server" aria-selected="false">
@@ -143,7 +143,7 @@
             }, 10000)
         }
 
-        $("#plugin-export-to-server-export").on("click", _ => {
+        $("#plugin-export-to-server-export,#save-page").on("click", _ => {
             const page = "<!DOCTYPE html><html lang=\"fr\">" + $("html").html() + "</html>"
 
             // Retrieve the name of the character
