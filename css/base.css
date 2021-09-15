@@ -27,6 +27,16 @@ input {
     display: none;
 }
 
+/* Fix dropdown that exceed their container */
+.bootstrap-select .dropdown-menu {
+    width: 100%;
+}
+
+.bootstrap-select .dropdown-menu li small {
+    white-space: normal;
+}
+
+
 /* Change thickness of bootstrap borders */
 
 /* Make handles clickable on every pixel */
