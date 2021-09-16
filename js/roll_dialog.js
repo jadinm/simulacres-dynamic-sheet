@@ -416,7 +416,7 @@ class TalentRoll extends Roll {
     update_energy(input, current_value, force_update = false) {
         if (input.length > 0) {
             if (isNaN(current_value) || force_update) {
-                current_value = parseInt(input.val())
+                current_value = parseInt(input.val()) || 0
             } else { // Update input
                 input.val(current_value)
                 input[0].setAttribute("value", String(current_value))
@@ -1481,23 +1481,23 @@ function update_max_invested_energies(energy_input) {
     if (discovery)
         return
     const heroism = $("#heroism")
-    let heroism_value = heroism.length > 0 ? parseInt(heroism.val()) : 0
+    let heroism_value = heroism.length > 0 ? (parseInt(heroism.val()) || 0) : 0
     if (isNaN(heroism_value) || !current_roll || !current_roll.energy_investment_validated)
         heroism_value = 0
     heroism_value = Math.min(2, heroism_value)
-    let value = parseInt(energy_input.value)
+    let value = parseInt(energy_input.value) || 0
     if (isNaN(value))
         value = 0
     const elems = get_energy_investment_inputs(energy_input)
     let remaining = Math.max(value, heroism_value)
     elems.each((i, invested) => {
-        let current_value = parseInt(invested.value)
+        let current_value = parseInt(invested.value) || 0
         if (isNaN(current_value))
             current_value = 0
         remaining -= current_value
     })
     elems.each((i, invested) => {
-        let current_value = parseInt(invested.value)
+        let current_value = parseInt(invested.value) || 0
         if (isNaN(current_value))
             current_value = 0
         let energy_invested = 0
