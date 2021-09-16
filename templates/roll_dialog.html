@@ -259,6 +259,12 @@
                                     Portée
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#close_combat-tab" role="tab"
+                                   aria-controls="close_combat-tab" aria-selected="false">
+                                    Modificateur au corps à corps
+                                </a>
+                            </li>
                         {% elif version == V7 %}
                             <li class="nav-item">
                                 <a class="nav-link active" data-toggle="tab" href="#damage-tab" role="tab"
@@ -270,6 +276,12 @@
                                 <a class="nav-link" data-toggle="tab" href="#range-tab" role="tab"
                                    aria-controls="range-tab" aria-selected="false">
                                     Portée
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#close_combat-tab" role="tab"
+                                   aria-controls="close_combat-tab" aria-selected="false">
+                                    Modificateur au corps à corps
                                 </a>
                             </li>
                         {% else %}
@@ -636,6 +648,41 @@
                                 </div>
                             {% endif %}
                         </div>
+                        {% if version == V7 %}
+                            <div id="close_combat-tab" class="tab-pane fade row mx-1">
+                                <div class="row col-12 mx-1">
+                                    Nombre d'adversaires contrés (max 3), incluant ceux attaqués
+                                </div>
+                                <div class="row mx-1 md-form col-md-2 py-0 my-0">
+                                    <label class="py-0 my-0" for="roll-dialog-defense">
+                                    </label>
+                                    <input class="form-control py-0 my-0 text-center roll-dialog-attack-difficulty"
+                                           id="roll-dialog-defense" type="number" value="1" min="1">
+                                </div>
+                                <div class="row col-12 mx-1">
+                                    Nombre d'attaques personnelles (tous adversaires confondus)
+                                </div>
+                                <div class="row mx-1 md-form col-md-2 py-0 my-0">
+                                    <label class="py-0 my-0" for="roll-dialog-attack">
+                                    </label>
+                                    <input class="form-control py-0 my-0 text-center roll-dialog-attack-difficulty"
+                                           id="roll-dialog-attack" type="number" value="1" min="1">
+                                </div>
+                                <div class="row col-12 mx-1">
+                                    Nombre total d'attaques sur l'adversaire (alliées et personnelles)
+                                </div>
+                                <div class="row mx-1 md-form col-md-2 py-0 my-0">
+                                    <label class="py-0 my-0" for="roll-dialog-total-attack">
+                                    </label>
+                                    <input class="form-control py-0 my-0 text-center roll-dialog-attack-difficulty"
+                                           id="roll-dialog-total-attack" type="number" value="1" min="1">
+                                </div>
+                                <div class="row col-12 mx-1">
+                                    Modificateur pour les attaques au corps à corps:&nbsp;
+                                    <span id="roll-dialog-attack-difficulty">+0</span>
+                                </div>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>

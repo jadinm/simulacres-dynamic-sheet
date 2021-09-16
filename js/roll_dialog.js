@@ -1634,3 +1634,14 @@ $("#roll-history").on("click", _ => {
         return
     current_roll.show_modal()
 }).parent().addClass("d-none")
+
+/* Compute close combat difficulty */
+
+$(".roll-dialog-attack-difficulty").on("change", _ => {
+    const defending_against = parseInt($("#roll-dialog-defense").val()) || 1
+    const all_personal_attacks = parseInt($("#roll-dialog-attack").val()) || 1 // on every target
+    const all_attacks_on_target = parseInt($("#roll-dialog-total-attack").val()) || 1 // including allies on this target
+    const difficulty = Math.min(0, 1 - all_personal_attacks) + Math.min(3, all_attacks_on_target - 1) + Math.min(0, 1 - defending_against)
+
+    $("#roll-dialog-attack-difficulty").text((difficulty < 0 ? "" : "+") + difficulty)
+})
