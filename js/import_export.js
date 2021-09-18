@@ -3,8 +3,8 @@
  */
 
 let changed_page = false
-const modifiable_sliders = ["hp-head", "hp-trunk", "hp-right-arm", "hp-left-arm", "hp-right-leg", "hp-left-leg",
-    "breath", "psychic"]
+const modifiable_sliders = ["unease", "hp-head", "hp-trunk", "hp-right-arm", "hp-left-arm", "hp-right-leg",
+    "hp-left-leg", "breath", "psychic"]
 
 /* Remind the user that they need to save the page if they changed anything */
 window.onbeforeunload = function () {
@@ -105,9 +105,14 @@ $("#save-page").on("click", function (_) {
     const blob = new Blob([userInput], {type: "text/html;charset=utf-8"})
 
     // Use the name of the character as the name of the file
-    let character_name = $("input#character-name")[0].value
-    if (character_name === null || character_name.length === 0)
-        character_name = "Anonyme"
+    let character_name = $("input#character-name")
+    if (character_name.length === 0)
+        character_name = "NPC Grid"
+    else {
+        character_name = character_name[0].value
+        if (character_name === null || character_name.length === 0)
+            character_name = "Anonyme"
+    }
     saveAs(blob, character_name + ".html")
 
     changed_page = false
@@ -137,6 +142,8 @@ function show_import_warnings(missing_inputs, duplicated_inputs) {
  * @param html the jquery object of the page
  */
 function reset_tab_selection(html) {
+    if (html.find("#tabs").length === 0)
+        return
     html.find("#tabs .tab-pane").removeClass("show").removeClass("active")
     html.find("#status-tab").addClass("show").addClass("active")
     const tab_buttons = html.find("#nav-tabs a[role=\"tab\"]")
@@ -151,8 +158,9 @@ function reset_tab_selection(html) {
  * @param src_html source jquery object
  * @param dst_html destination jquery object
  * @param full_sheet whether this is a full sheet update
+ * @param template_copy whether we are copying a row to a row of another index (and therefore different ids)
  */
-function import_data(src_html, dst_html, full_sheet) {
+function import_data(src_html, dst_html, full_sheet, template_copy = false) {
     // Retrieve and copy all of the input values of the src_html
     const table_row_input_id = /(.+)-(\d+)-.+/
     const talent_input_id = /^(x|(?:-4)|(?:-2)|0|1)(\d+)-name$/
@@ -162,6 +170,9 @@ function import_data(src_html, dst_html, full_sheet) {
     const duplicated_inputs = []
 
     const existing_ids = []
+
+    const dst_row = template_copy ? row_of(dst_html) : null
+
     src_html.find("input").each((i, old_input) => {
         if (old_input.id && old_input.id.length > 0) {
             if (existing_ids.includes(old_input.id) && !old_input.id.includes("plugin-") && !old_input.id.includes("note-dialog-") && !old_input.id.includes("ColorPicker"))
@@ -169,8 +180,15 @@ function import_data(src_html, dst_html, full_sheet) {
             else
                 existing_ids.push(old_input.id)
 
-            const old_input_sel = "#" + old_input.id
+            let old_input_sel = "#" + old_input.id
             let new_input = dst_html.find(old_input_sel)
+            if (template_copy && new_input.length === 0) {
+                const match = old_input.id.match(row_id_regex)
+                if (match) {
+                    old_input_sel = "#" + dst_row.row_index + "-" + match[4]
+                    new_input = dst_html.find(old_input_sel)
+                }
+            }
 
             const talent_matching = old_input.id.match(talent_input_id)
             if (new_input.length === 0) {
@@ -251,10 +269,10 @@ function import_data(src_html, dst_html, full_sheet) {
                         }
                     }
                 }
-            } else {
+            } else if (new_input.length > 0 && !new_input[0].id.includes("-x-")) {
                 // Update the maximum through sliders that can change their maximum: HP/PS/EP
                 const old_max = parseInt(old_input.getAttribute("data-slider-max"))
-                if (new_input.length > 0 && modifiable_sliders.includes(new_input[0].id) && !isNaN(old_max)) {
+                if (new_input.length > 0 && modifiable_sliders.filter(s => s.includes(new_input[0].id)) && !isNaN(old_max)) {
                     set_slider_max(new_input, old_max)
                 }
 

@@ -1,0 +1,241 @@
+<div class="container">
+    <div class="row">
+        <!-- Localized HP and protection -->
+        {% set tooltip_base = "Cliquez pour modifier le maximum des PVs ou ajouter une note" %}
+        <div class="col-sm-8 col-12">
+            <div class="row">
+                <div class="offset-4 col-4 align-middle text-center">
+                    <div class="md-form form-sm m-0 align-middle input-with-pre-icon" data-toggle="tooltip"
+                         data-html="true" data-placement="right" title="Armure">
+                        <svg height="2em" width="2em" class="input-prefix">
+                            <use xlink:href="#svg-helmet"></use>
+                        </svg>
+                        <input type="number" id="npc-x-armor-head"
+                               class="armor form-control form-control-sm text-center"
+                               min="0" value="0">
+                        <label for="armor-head" hidden></label>
+                    </div>
+                    <div class="clickable btn-link hp-link" data-toggle="tooltip" data-html="true"
+                         data-placement="right" data-target="#npc-x-hp-head-max-update"
+                         title="{{ tooltip_base }}" data-original-title-base="{{ tooltip_base }}">
+                        <svg height="4.5em" width="4.5em">
+                            <use xlink:href="#svg-head"></use>
+                        </svg>
+                    </div>
+                    <div>
+                        <label for="npc-x-hp-head" hidden></label>
+                        <input id="npc-x-hp-head" class="hp input-slider" data-slider-id="npc-x-hp-head-slider"
+                               type="text" data-slider-min="0" data-slider-max="3" data-slider-step="1"
+                               data-slider-value="3" data-slider-handle="custom"/>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4 align-middle text-center p-0 m-0">
+                    <div class="md-form form-sm m-0 align-middle input-with-pre-icon" data-toggle="tooltip"
+                         data-html="true" data-placement="right" title="Armure">
+                        <svg height="2em" width="2em" class="input-prefix">
+                            <use xlink:href="#svg-right-gauntlet"></use>
+                        </svg>
+                        <input type="number" id="npc-x-armor-right-arm"
+                               class="armor form-control form-control-sm text-center" min="0" value="0">
+                        <label for="npc-x-armor-right-arm" hidden></label>
+                    </div>
+                    <label for="npc-x-hp-right-arm" hidden></label>
+                    <input id="npc-x-hp-right-arm" class="hp input-slider" data-slider-id="npc-x-hp-right-arm-slider"
+                           type="text" data-slider-min="0" data-slider-max="3" data-slider-step="1"
+                           data-slider-value="3" data-slider-handle="custom" data-slider-orientation="vertical"
+                           data-slider-reversed="true"/>
+                    <svg class="clickable btn-link hp-link" height="4.5em" width="4.5em" data-toggle="tooltip"
+                         data-html="true" data-placement="top" data-target="#npc-x-hp-right-arm-max-update"
+                         title="{{ tooltip_base }}" data-original-title-base="{{ tooltip_base }}">
+                        <use xlink:href="#svg-right-hand"></use>
+                    </svg>
+                </div>
+                <div class="col-4 align-middle text-center p-0 m-0">
+                    <div class="md-form form-sm m-0 align-middle input-with-pre-icon" data-toggle="tooltip"
+                         data-html="true" data-placement="right" title="Armure">
+                        <svg height="2em" width="2em" class="input-prefix">
+                            <use xlink:href="#svg-chest-armor"></use>
+                        </svg>
+                        <input type="number" id="npc-x-armor-trunk"
+                               class="armor form-control form-control-sm text-center"
+                               min="0" value="0">
+                        <label for="npc-x-armor-trunk" hidden></label>
+                    </div>
+                    <div class="clickable btn-link hp-link" data-toggle="tooltip" data-html="true"
+                         data-placement="top" data-target="#npc-x-hp-trunk-max-update"
+                         title="{{ tooltip_base }}" data-original-title-base="{{ tooltip_base }}">
+                        <svg height="4.5em" width="4.5em">
+                            <use xlink:href="#svg-chest"></use>
+                        </svg>
+                    </div>
+                    <label for="npc-x-hp-trunk" hidden></label>
+                    <input id="npc-x-hp-trunk" class="hp input-slider" data-slider-id="npc-x-hp-trunk-slider"
+                           type="text" data-slider-min="0" data-slider-max="3" data-slider-step="1"
+                           data-slider-value="3" data-slider-handle="custom"/>
+                </div>
+                <div class="col-4 align-middle text-center p-0 m-0">
+                    <div class="md-form form-sm m-0 align-middle input-with-pre-icon" data-toggle="tooltip"
+                         data-html="true" data-placement="right" title="Armure">
+                        <svg height="2em" width="2em" class="input-prefix">
+                            <use xlink:href="#svg-left-gauntlet"></use>
+                        </svg>
+                        <input type="number" id="npc-x-armor-left-arm"
+                               class="armor form-control form-control-sm text-center" min="0" value="0">
+                        <label for="npc-x-armor-left-arm" hidden></label>
+                    </div>
+                    <svg class="clickable btn-link hp-link" height="4.5em" width="4.5em" data-toggle="tooltip"
+                         data-html="true" data-placement="top" data-target="#npc-x-hp-left-arm-max-update"
+                         title="{{ tooltip_base }}" data-original-title-base="{{ tooltip_base }}">
+                        <use xlink:href="#svg-left-hand"></use>
+                    </svg>
+                    <label for="npc-x-hp-left-arm" hidden></label>
+                    <input id="npc-x-hp-left-arm" class="hp input-slider" data-slider-id="npc-x-hp-left-arm-slider"
+                           type="text"
+                           data-slider-min="0" data-slider-max="3" data-slider-step="1" data-slider-value="3"
+                           data-slider-handle="custom" data-slider-orientation="vertical"
+                           data-slider-reversed="true"/>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="offset-2 col-4 align-middle text-center px-0">
+                    <label for="npc-x-hp-right-leg" hidden></label>
+                    <input id="npc-x-hp-right-leg" class="hp input-slider" data-slider-id="npc-x-hp-right-leg-slider"
+                           type="text" data-slider-min="0" data-slider-max="3" data-slider-step="1"
+                           data-slider-value="3" data-slider-handle="custom" data-slider-orientation="vertical"
+                           data-slider-reversed="true"/>
+                    <svg class="clickable btn-link hp-link" height="4.5em" width="4.5em" data-toggle="tooltip"
+                         data-html="true" data-placement="top" data-target="#npc-x-hp-right-leg-max-update"
+                         title="{{ tooltip_base }}" data-original-title-base="{{ tooltip_base }}">
+                        <use xlink:href="#svg-right-foot"></use>
+                    </svg>
+                    <div class="md-form form-sm m-0 align-middle input-with-pre-icon" data-toggle="tooltip"
+                         data-html="true" data-placement="right" title="Armure">
+                        <svg height="2em" width="2em" class="input-prefix">
+                            <use xlink:href="#svg-right-leg-armor"></use>
+                        </svg>
+                        <input type="number" id="npc-x-armor-right-leg"
+                               class="armor form-control form-control-sm text-center" min="0" value="0">
+                        <label for="armor-right-leg" hidden></label>
+                    </div>
+                </div>
+                <div class="offset-lg-0 offset-md-1 col-4 align-middle text-center px-0">
+                    <svg class="clickable btn-link hp-link" height="4.5em" width="4.5em" data-toggle="tooltip"
+                         data-html="true" data-placement="top" data-target="#npc-x-hp-left-leg-max-update"
+                         title="{{ tooltip_base }}" data-original-title-base="{{ tooltip_base }}">
+                        <use xlink:href="#svg-left-foot"></use>
+                    </svg>
+                    <label for="npc-x-hp-left-leg" hidden></label>
+                    <input id="npc-x-hp-left-leg" class="hp input-slider" data-slider-id="npc-x-hp-left-leg-slider"
+                           type="text"
+                           data-slider-min="0" data-slider-max="3" data-slider-step="1" data-slider-value="3"
+                           data-slider-handle="custom" data-slider-orientation="vertical"
+                           data-slider-reversed="true"/>
+                    <div class="md-form form-sm m-0 align-middle input-with-pre-icon" data-toggle="tooltip"
+                         data-html="true" data-placement="right" title="Armure">
+                        <svg height="2em" width="2em" class="input-prefix">
+                            <use xlink:href="#svg-left-leg-armor"></use>
+                        </svg>
+                        <input type="number" id="npc-x-armor-left-leg"
+                               class="armor form-control form-control-sm text-center" min="0" value="0">
+                        <label for="npc-x-armor-left-leg" hidden></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Protection summary, unease, breath and psychic balance -->
+        <div class="col-lg-4 col-md-4 col-sm-3 col-12 align-middle pl-5">
+            <div class="row">
+                <div class="align-middle md-form input-with-pre-icon col-9 m-0 p-0" data-toggle="tooltip"
+                     data-placement="left" title="Armure uniforme">
+                    <svg height="2em" width="2em" class="input-prefix">
+                        <use xlink:href="#svg-chest-armor"></use>
+                    </svg>
+                    <input type="number" id="npc-x-full-armor" class="form-control form-control-sm text-center"
+                           min="0" value="0">
+                    <label for="npc-x-full-armor" hidden></label>
+                </div>
+                <div class="col-2">
+                    <div class="custom-control custom-checkbox custom-control-inline pl-3 pt-2 p-0 m-0">
+                        <input type="checkbox" class="custom-control-input"
+                               id="npc-x-armor-overwrite" name="npc-x-armor-overwrite" checked>
+                        <label class="custom-control-label h-100" for="npc-x-armor-overwrite">
+                            <i class="fas fa-lock"></i>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="row clickable btn-link" data-toggle="modal" data-target="#npc-x-unease-details">
+                <label for="npc-x-unease" class="clickable">Malaise (M):&nbsp;
+                    <span id="npc-x-unease-text">pas de malus</span>
+                    <span id="npc-x-unease-value" hidden></span>
+                </label>
+            </div>
+            <div class="row mb-1">
+                <input id="npc-x-unease" data-slider-id="npc-x-unease-slider" type="text" data-slider-min="0"
+                       data-slider-max="4" data-slider-step="1" data-slider-value="0" class="input-slider"
+                       data-slider-tooltip-position="bottom"/>
+            </div>
+            <div class="row clickable btn-link" data-toggle="modal" data-target="#npc-x-breath-max-update">
+                <label id="npc-x-breath-title" class="clickable" for="npc-x-breath" data-toggle="tooltip"
+                       data-placement="right" data-html="true">
+                    Souffle (PS)
+                </label>
+            </div>
+            <div class="row mb-1">
+                <input id="npc-x-breath" data-slider-id="npc-x-breath-slider" type="text" data-slider-min="0"
+                       data-slider-max="4" data-slider-step="1" data-slider-value="4"
+                       data-slider-reversed="true"
+                       class="input-slider" data-slider-handle="custom" data-slider-tooltip-position="bottom"/>
+            </div>
+            <div class="row clickable btn-link" data-toggle="modal" data-target="#npc-x-psychic-max-update">
+                <label id="npc-x-psychic-title" class="clickable" for="npc-x-psychic" data-toggle="tooltip"
+                       data-placement="right" data-html="true">Équilibre Psychique (EP)</label>
+            </div>
+            <div class="row">
+                <input id="npc-x-psychic" data-slider-id="npc-x-psychic-slider" type="text" data-slider-min="0"
+                       data-slider-max="4" data-slider-step="1" data-slider-value="4"
+                       data-slider-reversed="true"
+                       class="input-slider" data-slider-handle="custom" data-slider-tooltip-position="bottom"/>
+            </div>
+
+            <!-- Energies -->
+            <div class="row mt-1"><label>Énergies</label></div>
+            <div class="row my-0">
+                <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
+                     data-placement="left" title="Puissance">
+                    <svg height="3em" width="2em" class="input-prefix">
+                        <use xlink:href="#svg-power"></use>
+                    </svg>
+                    <label for="npc-x-power" hidden></label>
+                    <input class="form-control energy text-center" id="npc-x-power" name="power" type="number" value="0"
+                           min="0" max="3">
+                </div>
+            </div>
+            <div class="row my-0">
+                <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
+                     data-placement="left" title="Rapidité">
+                    <svg height="3em" width="2em" class="input-prefix">
+                        <use xlink:href="#svg-speed"></use>
+                    </svg>
+                    <label for="npc-x-speed" hidden></label>
+                    <input class="form-control energy text-center" id="npc-x-speed" name="speed" type="number" value="0"
+                           min="0" max="3">
+                </div>
+            </div>
+            <div class="row my-0">
+                <div class="align-middle md-form input-with-pre-icon col-12 m-0" data-toggle="tooltip"
+                     data-placement="left" title="Précision">
+                    <svg height="3em" width="2em" class="input-prefix">
+                        <use xlink:href="#svg-precision"></use>
+                    </svg>
+                    <label for="npc-x-precision" hidden></label>
+                    <input class="form-control energy text-center" id="npc-x-precision" name="precision" type="number"
+                           value="0" min="0" max="3">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

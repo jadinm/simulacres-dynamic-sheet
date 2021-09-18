@@ -11,6 +11,9 @@ function build_max_formatter(input) {
 
 function activate_slider(input, formatter_builder = build_max_formatter, post_build = _ => void 0, opts={},
                          slider_value_changed_event = null) {
+    if (input === undefined)
+        return
+
     // Remove pre-existing sliders (this happens after a save of the html page)
     const elem = "#" + input.getAttribute("data-slider-id")
     $(elem).remove()

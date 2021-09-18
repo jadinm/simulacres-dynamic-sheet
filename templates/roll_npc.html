@@ -1,0 +1,128 @@
+<div class="row my-0">
+    <div class="align-middle md-form input-with-pre-icon col-2 m-0" data-toggle="tooltip"
+         data-placement="left" title="Combat (arme principale)">
+        <svg height="3em" width="2em" class="input-prefix">
+            <use xlink:href="#svg-combat"></use>
+        </svg>
+        <label for="npc-x-combat" hidden></label>
+        <input class="form-control text-center" id="npc-x-combat" type="number" value="6" min="0">
+    </div>
+    <div class="row col-1 m-0 p-0 my-2 justify-content-center">
+        <span id="npc-x-dice-combat" class="clickable row-roll-trigger">
+            <i class="fas fa-dice"></i>
+        </span>
+    </div>
+    <div class="align-middle md-form col-3 m-0 p-0" data-toggle="tooltip"
+         data-placement="left" title="Effet de l'arme principale">
+        <label for="npc-x-combat-effect" hidden></label>
+        <input class="form-control text-center" id="npc-x-combat-effect" type="text" value="[D] PV">
+    </div>
+    <div class="align-middle md-form input-with-pre-icon col-2 m-0" data-toggle="tooltip"
+         data-placement="left" title="Combat (arme secondaire)">
+        <svg height="3em" width="2em" class="input-prefix">
+            <use xlink:href="#svg-range-combat"></use>
+        </svg>
+        <label for="npc-x-combat-2" hidden></label>
+        <input class="form-control text-center" id="npc-x-combat-2" type="number" value="6" min="0">
+    </div>
+    <div class="row col-1 m-0 p-0 my-2 justify-content-center">
+        <span id="npc-x-dice-combat-2" class="clickable row-roll-trigger">
+            <i class="fas fa-dice"></i>
+        </span>
+    </div>
+    <div class="align-middle md-form col-3 m-0 p-0 pr-2" data-toggle="tooltip"
+         data-placement="left" title="Effet de l'arme secondaire">
+        <label for="npc-x-combat-2-effect" hidden></label>
+        <input class="form-control text-center" id="npc-x-combat-2-effect" type="text"
+               value="[D] PV ([C], [B])">
+    </div>
+</div>
+<div class="row my-0">
+    <div class="align-middle md-form input-with-pre-icon col-2 m-0" data-toggle="tooltip"
+         data-placement="left" title="Course">
+        <svg height="3em" width="2em" class="input-prefix">
+            <use xlink:href="#svg-run"></use>
+        </svg>
+        <label for="npc-x-run" hidden></label>
+        <input class="form-control text-center" id="npc-x-run" name="perception" type="number" value="6" min="0">
+    </div>
+    <div class="row col-1 m-0 p-0 my-2 justify-content-center">
+        <span id="npc-x-dice-run" class="clickable row-roll-trigger">
+            <i class="fas fa-dice"></i>
+        </span>
+    </div>
+    <div class="align-middle md-form col-3 m-0" data-toggle="tooltip"
+         data-placement="left" title="Taille (Maniabilité) [Vitesse]">
+        <label for="npc-x-movement" hidden></label>
+        <input class="form-control text-center" id="npc-x-movement" type="text" value="1 (1) [B]">
+    </div>
+    <div class="align-middle md-form input-with-pre-icon col-2 m-0" data-toggle="tooltip"
+         data-placement="left" title="Perception">
+        <svg height="3em" width="2em" class="input-prefix">
+            <use xlink:href="#svg-perception"></use>
+        </svg>
+        <label for="npc-x-perception" hidden></label>
+        <input class="form-control text-center" id="npc-x-perception" name="perception" type="number"
+               value="6" min="0">
+    </div>
+    <div class="row col-1 m-0 p-0 my-2 justify-content-center">
+        <span id="npc-x-dice-perception" class="clickable row-roll-trigger">
+            <i class="fas fa-dice"></i>
+        </span>
+    </div>
+    <div class="align-middle md-form input-with-pre-icon col-2 m-0" data-toggle="tooltip"
+         data-placement="left" title="Résistance magique">
+        <svg height="3em" width="2em" class="input-prefix">
+            <use xlink:href="#svg-void"></use>
+        </svg>
+        <label for="npc-x-magic" hidden></label>
+        <input class="form-control text-center" id="npc-x-magic" name="combat" type="number" value="6" min="0">
+    </div>
+    <div class="row col-1 m-0 p-0 my-2 justify-content-center">
+        <span id="npc-x-dice-magic" class="clickable row-roll-trigger">
+            <i class="fas fa-dice"></i>
+        </span>
+    </div>
+</div>
+<div class="row py-0">
+    <div class="align-middle md-form input-with-pre-icon col-2 m-0" data-toggle="tooltip"
+         data-placement="left" title="Conduite/Équitation">
+        <svg height="3em" width="2em" class="input-prefix">
+            <use xlink:href="#svg-cavalry"></use>
+        </svg>
+        <label for="npc-x-cavalry" hidden></label>
+        <input class="form-control text-center" id="npc-x-cavalry" name="combat" type="number" value="6" min="0">
+    </div>
+    <div class="row col-1 m-0 p-0 my-2 justify-content-center">
+        <span id="npc-x-dice-cavalry" class="clickable row-roll-trigger">
+            <i class="fas fa-dice"></i>
+        </span>
+    </div>
+
+    <div class="col-4 form-row mt-2 md-form p-0 m-0">
+        <select id="npc-x-combat-level" class="show-tick form-control selectpicker"
+                data-live-search="true" data-style="px-3 py-2 m-0 col-12 align-middle"
+                title="">
+            <option value="0" selected>0 - Combattant novice</option>
+            <option value="1">1 - Guerrier</option>
+            <option value="2">2 - Maître d'armes</option>
+            <option value="3">3 - Expert d'armes</option>
+        </select>
+    </div>
+    <div class="col-4 form-row mt-2 md-form p-0 m-0 ml-3">
+        <select id="npc-x-cavalry-level" class="show-tick form-control selectpicker"
+                data-live-search="true" data-style="px-3 py-2 m-0 col-12 align-middle"
+                title="">
+            <option value="0" selected>0 - Cavalier amateur</option>
+            <option value="1">1 - Cavalier chevronné</option>
+            <option value="2">2 - Maître cavalier</option>
+            <option value="3">3 - Expert cavalier</option>
+        </select>
+    </div>
+</div>
+<!-- hidden fields -->
+<div class="d-none">
+    <input id="npc-x-defense" type="number" aria-label="" value="1">
+    <input id="npc-x-attack" type="number" aria-label="" value="1">
+    <input id="npc-x-total-attack" type="number" aria-label="" value="1">
+</div>

@@ -1,6 +1,7 @@
 /* HP slider */
 
 function hp_update(event) {
+    const base_id = event.target.id.split("hp-")[0]
     const value = parseInt(event.target.value)
     const max_value = parseInt(event.target.getAttribute("data-slider-max"))
     const slider = $($(event.target).slider("getElement"))
@@ -19,7 +20,7 @@ function hp_update(event) {
     }
     // Recompute minimum unease
     let unease_sum = 0
-    const old_unease = get_unease()
+    const old_unease = get_unease(base_id)
     const hp_sliders = $(".hp.input-slider")
     for (let i = 0; i < hp_sliders.length; i++) {
         const max_value = parseInt(hp_sliders[i].getAttribute("data-slider-max"))
@@ -27,8 +28,8 @@ function hp_update(event) {
         if (max_value - current_value >= 2 || current_value === 0) // The second part is needed if the maximum HP is 1
             unease_sum += 1
     }
-    set_slider_min($("#unease"), unease_sum)
-    if (get_unease() !== old_unease)
+    set_slider_min($("#" + base_id + "unease"), unease_sum)
+    if (get_unease(base_id) !== old_unease)
         unease_value_changed_event()
 }
 
@@ -56,7 +57,7 @@ function get_armor_penalty() {
     const armors = $.map($(".armor"), element => (parseInt(element.value) || 0))
     let armor_sum = 0
     for (let i = 0; i < armors.length; i++) {
-        armor_sum += armors[i] << 0
+        armor_sum += armors[i]
     }
 
     // Take shield into account
@@ -170,64 +171,113 @@ $("#instincts").on("change", event => {
     update_body_energy(event.target, $("#breath"))
 })
 
-/* Update PV, PS and EP if users click on the button */
-$("#increment-breath").on("click", _ => {
-    const breath = $("#breath")
+/* Update unease, PV, PS and EP if users click on the button */
+
+function increment_unease(event) {
+    const base_id = event.target.id.split("increment")[0]
+    const unease = $("#" + base_id + "unease")
+    const current_max = slider_max(unease[0])
+    set_slider_max(unease, current_max + 1)
+
+    // Adventure points
+    compute_remaining_ap()
+}
+
+$("#increment-unease").on("click", increment_unease)
+
+function decrement_unease(event) {
+    const base_id = event.target.id.split("decrement")[0]
+    const unease = $("#" + base_id + "unease")
+    const current_max = slider_max(unease[0])
+    if (current_max > 1)
+        set_slider_max(unease, current_max - 1)
+
+    // Adventure points
+    compute_remaining_ap()
+}
+
+$("#decrement-unease").on("click", decrement_unease)
+
+function increment_breath(event) {
+    const base_id = event.target.id.split("increment")[0]
+    const breath = $("#" + base_id + "breath")
     const current_max = slider_max(breath[0])
-    if (current_max < 8 && is_v7 || current_max < 7 && !is_v7)
+    if (current_max < 8 && is_v7 || current_max < 7 && !is_v7 || npc_grid)
         set_slider_max(breath, current_max + 1)
 
     // Adventure points
     compute_remaining_ap()
-})
-$("#decrement-breath").on("click", _ => {
-    const breath = $("#breath")
+}
+
+$("#increment-breath").on("click", increment_breath)
+
+function decrement_breath(event) {
+    const base_id = event.target.id.split("decrement")[0]
+    const breath = $("#" + base_id + "breath")
     const current_max = slider_max(breath[0])
     if (current_max > 1)
         set_slider_max(breath, current_max - 1)
 
     // Adventure points
     compute_remaining_ap()
-})
+}
+
+$("#decrement-breath").on("click", decrement_breath)
 $("#lost-breath").on("change", _ => {
     compute_remaining_ap()
 })
-$("#increment-psychic").on("click", _ => {
-    const psychic = $("#psychic")
+
+function increment_psychic(event) {
+    const base_id = event.target.id.split("increment")[0]
+    const psychic = $("#" + base_id + "psychic")
     const current_max = slider_max(psychic[0])
-    if (current_max < 8 && is_v7 || current_max < 7 && !is_v7)
+    if (current_max < 8 && is_v7 || current_max < 7 && !is_v7 || npc_grid)
         set_slider_max(psychic, current_max + 1)
 
     // Adventure points
     compute_remaining_ap()
-})
-$("#decrement-psychic").on("click", _ => {
-    const psychic = $("#psychic")
+}
+
+$("#increment-psychic").on("click", increment_psychic)
+
+function decrement_psychic(event) {
+    const base_id = event.target.id.split("decrement")[0]
+    const psychic = $("#" + base_id + "psychic")
     const current_max = slider_max(psychic[0])
     if (current_max > 1)
         set_slider_max(psychic, current_max - 1)
 
     // Adventure points
     compute_remaining_ap()
-})
+}
+
+$("#decrement-psychic").on("click", decrement_psychic)
 $("#lost-psychic").on("change", _ => {
     compute_remaining_ap()
 })
-$("[id^=increment-hp]").on("click", e => {
-    const hp_id = e.target.id.split("increment-")[1]
-    const hp = $("#" + hp_id)
+
+function increment_hp(e) {
+    const split = e.target.id.split("increment-")
+    const base_id = split[0]
+    const hp_id = split[1]
+    const hp = $("#" + base_id + hp_id)
     const current_max = slider_max(hp[0])
-    if (current_max < 8 && is_v7 || current_max < 7 && !is_v7) {
+    if (current_max < 8 && is_v7 || current_max < 7 && !is_v7 || npc_grid) {
         set_slider_max(hp, current_max + 1)
         hp_update({target: hp[0]})
     }
 
     // Adventure points
     compute_remaining_ap()
-})
-$("[id^=decrement-hp]").on("click", e => {
-    const hp_id = e.target.id.split("decrement-")[1]
-    const hp = $("#" + hp_id)
+}
+
+$("[id^=increment-hp]").on("click", increment_hp)
+
+function decrement_hp(e) {
+    const split = e.target.id.split("decrement-")
+    const base_id = split[0]
+    const hp_id = split[1]
+    const hp = $("#" + base_id + hp_id)
     const current_max = slider_max(hp[0])
     if (current_max > 1) {
         set_slider_max(hp, current_max - 1)
@@ -236,12 +286,16 @@ $("[id^=decrement-hp]").on("click", e => {
 
     // Adventure points
     compute_remaining_ap()
-})
+}
+
+$("[id^=decrement-hp]").on("click", decrement_hp)
 
 /* Update the tooltip */
-$("[id^=details-hp]").on("change", e => {
-    const hp_id = e.target.id.split("details-")[1]
-    const hp = localized_hp ? $("[data-target=\"#" + hp_id + "-max-update\"") : $("#hp-title")
+function details_hp(e) {
+    const split = e.target.id.split("details-")
+    const base_id = split[0]
+    const hp_id = split[1]
+    const hp = localized_hp ? $("[data-target=\"#" + base_id + hp_id + "-max-update\"") : $("#" + base_id + "hp-title")
     const note = $(e.target).val()
     let text = ""
     const base = hp[0].getAttribute("data-original-title-base")
@@ -254,7 +308,9 @@ $("[id^=details-hp]").on("change", e => {
     hp[0].setAttribute("data-original-title", text)
     hp.tooltip("dispose")
     hp.tooltip()
-})
+}
+
+$("[id^=details-hp]").on("change", details_hp)
 
 /* Show/hide absorption on click */
 $("#toggle-absorption").on("click", e => {
@@ -275,8 +331,8 @@ $("#toggle-absorption").on("click", e => {
 
 /* Enable all the sliders on load */
 
-function get_unease() {
-    const unease = parseInt($("#unease-value").text())
+function get_unease(base_id = "") {
+    const unease = parseInt($("#" + base_id + "unease-value").text())
     return isNaN(unease) ? 0 : unease
 }
 
@@ -286,14 +342,14 @@ function unease_value_changed_event() {
     })
 }
 
-$(_ => {
-    const temporary_breath_div = $("#temporary-breath")
+function init_status(base_id = "") {
+    const temporary_breath_div = $("#" + base_id + "temporary-breath")
     let current_temporary_breath = parseInt(temporary_breath_div.val())
     if (isNaN(current_temporary_breath))
         current_temporary_breath = 0
 
     temporary_breath_div.on("change", _ => {
-        const breath = $("#breath")
+        const breath = $("#" + base_id + "breath")
         const current_max = slider_max(breath[0])
 
         let new_value = parseInt(temporary_breath_div.val())
@@ -311,13 +367,13 @@ $(_ => {
      */
 
     if (localized_hp) {
-        activate_slider($('#unease')[0], input => {
+        activate_slider($('#' + base_id + 'unease')[0], input => {
             return value => {
                 const max = slider_max(input)
                 const initial_malus = -1 + max - 4
                 let text
                 let unease = 0
-                if (value === 0 || initial_malus - value === 0) {
+                if (value === 0 || initial_malus - value >= 0) {
                     text = "\u2205"
                 } else if (value === max) {
                     text = "coma"
@@ -326,8 +382,8 @@ $(_ => {
                     text = "malus de " + (initial_malus - value)
                     unease = initial_malus - value
                 }
-                $("#unease-text").text(text)
-                $("#unease-value").text(unease)
+                $("#" + base_id + "unease-text").text(text)
+                $("#" + base_id + "unease-value").text(unease)
                 return text
             }
         }, _ => void 0, {}, unease_value_changed_event)
@@ -346,14 +402,14 @@ $(_ => {
         })
     }
 
-    $('.hp.input-slider').each((i, input) => {
+    $("#" + base_id + "hp-head,#" + base_id + "hp-trunk,#" + base_id + "hp-right-arm,#" + base_id + "hp-left-arm,#" + base_id + "hp-right-leg,#" + base_id + "hp-left-leg").each((i, input) => {
         activate_slider(input, build_max_formatter, slider => {
             $(slider.slider("getElement")).addClass("hp-slider")
             hp_update({target: slider[0]})
         }, {}, hp_update)
     })
 
-    activate_slider($('#breath')[0], (input) => {
+    activate_slider($('#' + base_id + 'breath')[0], (input) => {
         return (value) => {
             if (value === 0)
                 return "K.O."
@@ -361,7 +417,7 @@ $(_ => {
         }
     })
 
-    activate_slider($('#psychic')[0], (input) => {
+    activate_slider($('#' + base_id + 'psychic')[0], (input) => {
         return (value) => {
             if (value === 0)
                 return "Fou"
@@ -369,5 +425,9 @@ $(_ => {
         }
     })
 
-    activate_slider($('#rest')[0])
+    activate_slider($('#' + base_id + 'rest')[0])
+}
+
+$(_ => {
+    init_status()
 })

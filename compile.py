@@ -48,7 +48,7 @@ parser.add_argument("--discovery", help="Discovery mode of SimulacreS (only supp
                     action='store_true')
 parser.add_argument("--plugin", help="Add the plugin at the following path", action='extend', nargs="*", default=[])
 parser.add_argument("--base-template", help="Path of to the html template inside the template folder",
-                    default="base.html")
+                    default="base_pc.html")
 parser.add_argument("-v", "--verbose", help="Increase output verbosity", action="store_true")
 args = parser.parse_args()
 if args.verbose:
@@ -153,13 +153,16 @@ params.update({
     "intermediate_discovery": (args.discovery or args.intermediate_discovery) and args.version == V8,
     "V7": V7, "V8": V8, "captain_voodoo": CAPTAIN_VOODOO, "med_fantasy": MED_FANTASY,
     "plugins": process_plugins(args.plugin), "tag_version": tag_version, "base_tag_version": base_tag_version,
-    "compilation_args": vars(args)
+    "npc_grid": False, "compilation_args": vars(args)
 })
 
 # Find release name
 
 params["base_sheet_name"] = ""
-if params["version"] == V7:
+if os.path.basename(args.base_template) == "base_npc_grid.html":
+    params["base_sheet_name"] = "simulacres_v7_npc_grid.html"
+    params["npc_grid"] = True
+elif params["version"] == V7:
     if params["localisation"]:
         if params["dual_wielding"] and params["universe"] == MED_FANTASY:
             params["base_sheet_name"] = "simulacres_v7_localisation_deux_armes_fiche_perso.html"

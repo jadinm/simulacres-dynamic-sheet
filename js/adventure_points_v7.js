@@ -50,6 +50,10 @@ function update_tooltip_cost(row, diff) {
 }
 
 function compute_remaining_ap() {
+    const ap_div = $("#remaining-adventure-points")
+    if (ap_div.length === 0) // No AP field => do not compute it
+        return
+
     let consumed_points = compute_component_means_cost() + compute_status_cost()
 
     // Realm & energies
@@ -179,5 +183,5 @@ function compute_remaining_ap() {
 
     // Show difference with total points
     const total_points = (parseInt($("#adventure-points").val()) || 0) + (parseInt($("#adventure-points-discount").val()) || 0)
-    $("#remaining-adventure-points").text(total_points - consumed_points)
+    ap_div.text(total_points - consumed_points)
 }

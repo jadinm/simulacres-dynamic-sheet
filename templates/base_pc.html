@@ -1,0 +1,185 @@
+{% extends "common.html" %}
+
+{% block body %}
+
+    <!-- Basic information -->
+    {% include "bio.html" %}
+
+    <!-- Components, means, realms and energies -->
+    {% include "base_stats.html" %}
+
+    <div class="card shadow-none border border-heavy rounded-lg pb-2">
+        <ul id="nav-tabs" class="nav nav-tabs mr-3 ml-4 mt-1" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#status-tab" role="tab" aria-controls="status-tab"
+                   aria-selected="true">
+                    États
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#roll-tab" role="tab" aria-controls="roll-tab"
+                   aria-selected="false">
+                    Tests
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#talent-tab" role="tab" aria-controls="talent-tab"
+                   aria-selected="false">
+                    Talents
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#equipment-tab" role="tab" aria-controls="equipment-tab"
+                   aria-selected="false">
+                    Équipement
+                </a>
+            </li>
+            {% if universe == med_fantasy %}
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#magic-tab" role="tab" aria-controls="magic-tab"
+                       aria-selected="false">
+                        Magie
+                    </a>
+                </li>
+                {% if version == V7 %}
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#ki-tab" role="tab" aria-controls="ki-tab"
+                           aria-selected="false">
+                            Ki
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#psi-tab" role="tab" aria-controls="psi-tab"
+                           aria-selected="false">
+                            Psi
+                        </a>
+                    </li>
+                    <!-- Warrior board -->
+                    {% if warrior_powers %}
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#warrior-tab" role="tab"
+                               aria-controls="warrior-tab" aria-selected="false">
+                                Voies de la Guerre
+                            </a>
+                        </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#superpower-tab" role="tab"
+                           aria-controls="superpower-tab" aria-selected="false">
+                            Super-pouvoirs
+                        </a>
+                    </li>
+                {% endif %}
+            {% elif universe == captain_voodoo %}
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#magic-tab" role="tab" aria-controls="magic-tab"
+                       aria-selected="false">
+                        Magie
+                    </a>
+                </li>
+            {% elif version == V7 %}
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#magic-tab" role="tab" aria-controls="magic-tab"
+                       aria-selected="false">
+                        Sorts
+                    </a>
+                </li>
+            {% endif %}
+            {% if not discovery %}
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#adventure-points-tab" role="tab"
+                       aria-controls="adventure-points-tab" aria-selected="false">
+                        PA
+                    </a>
+                </li>
+            {% endif %}
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#background-tab" role="tab" aria-controls="background-tab"
+                   aria-selected="false">
+                    Historique
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#notes-tab" role="tab" aria-controls="notes-tab"
+                   aria-selected="false">
+                    Notes
+                </a>
+            </li>
+            {% for button in plugins.buttons %}
+                {{ button | safe }}
+            {% endfor %}
+            <li class="ml-auto"></li>
+            <li class="nav-item d-none" data-toggle="tooltip" data-html="true" data-placement="top"
+                title="Voir l'historique des tests">
+                <a id="roll-history" class="nav-link">
+                    <i class="fas fa-history"></i>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="modal" data-target="#hide-tabs">
+                    <i class="fas fa-cogs"></i>
+                </a>
+            </li>
+        </ul>
+
+        <div id="tabs" class="container-fluid tab-content px-2 pt-1">
+            <!-- Status tab -->
+            {% if localisation %}
+                {% include "localized_status_tab.html" %}
+            {% else %}
+                {% include "status_tab.html" %}
+            {% endif %}
+
+            <!-- Quick rolls -->
+            {% include "roll_tab.html" %}
+
+            <!-- Talents -->
+            {% include "talent_tab.html" %}
+
+            <!-- Equipment -->
+            {% include "equipment_tab.html" %}
+
+            {% if universe == med_fantasy %}
+                <!-- Magic -->
+                {% include "magic_tab.html" %}
+
+                {% if version == V7 %}
+                    <!-- Ki board -->
+                    {% include "ki_tab.html" %}
+
+                    <!-- Psi board -->
+                    {% include "psi_tab.html" %}
+
+                    <!-- Warrior board -->
+                    {% if warrior_powers %}
+                        {% include "warrior_tab.html" %}
+                    {% endif %}
+
+                    <!-- Superpower board -->
+                    {% include "superpower_tab.html" %}
+                {% endif %}
+            {% elif universe == captain_voodoo %}
+                <!-- Magic -->
+                {% include "magic_tab.html" %}
+            {% elif version == V7 %}
+                <!-- Magic (for spell list) -->
+                {% include "magic_tab.html" %}
+            {% endif %}
+
+            {% if not discovery %}
+                <!-- Adventure Point Tracking -->
+                {% include "adventure_points.html" %}
+            {% endif %}
+
+            <!-- Background -->
+            {% include "background.html" %}
+
+            <!-- Notes -->
+            {% include "notes.html" %}
+
+            {% for tab in plugins.tabs %}
+                {{ tab | safe }}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

@@ -30,27 +30,27 @@
     background: orange;
 }
 
-#unease-slider .slider-selection {
+[id$="unease-slider"] .slider-selection {
     background: red;
 }
 
-#unease-slider .slider-handle {
+[id$="unease-slider"] .slider-handle {
     background: red;
 }
 
-#breath-slider .slider-selection {
+[id$="breath-slider"] .slider-selection {
     background: dodgerblue;
 }
 
-#breath-slider .slider-handle.custom::before {
+[id$="breath-slider"] .slider-handle.custom::before {
     content: '\1F4AA';
 }
 
-#psychic-slider .slider-selection {
+[id$="psychic-slider"] .slider-selection {
     background: pink;
 }
 
-#psychic-slider .slider-handle.custom::before {
+[id$="psychic-slider"] .slider-handle.custom::before {
     content: '\1F9E0';
 }
 

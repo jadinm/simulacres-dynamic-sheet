@@ -261,7 +261,8 @@ class TalentRoll extends Roll {
         new this.constructor(this.reason, this.max_value, this.talent_level, this.effect, this.critical_increase,
             this.formula_elements, this.margin_throttle, this.is_magic, this.is_power, this.distance, this.focus,
             this.duration, this.base_energy_cost, this.black_magic, this.magic_resistance,
-            this.equipment, this.equipment_id, this.exploding_effect, this.power_energy).trigger_roll(false)
+            this.equipment, this.equipment_id, this.exploding_effect, this.power_energy,
+            this.energy_base_id).trigger_roll(false)
     }
 
     constructor(reason = "", max_value = NaN, talent_level = 0, effect = "",
@@ -269,7 +270,7 @@ class TalentRoll extends Roll {
                 is_magic = false, is_power = false, distance = "", focus = "",
                 duration = "", base_energy_cost = 0, black_magic = "",
                 magic_resistance = "", equipment = "", equipment_id = "",
-                exploding_effect = false, power_energy = "") {
+                exploding_effect = false, power_energy = "", energy_base_id = "") {
         super()
         this.reason = reason
         this.formula_elements = formula_elements
@@ -309,6 +310,7 @@ class TalentRoll extends Roll {
         this.speed = NaN
         this.optional_speed = NaN
         this.power_energy = power_energy
+        this.energy_base_id = energy_base_id
         this.update_energies()
 
         this.incantation = false
@@ -460,9 +462,9 @@ class TalentRoll extends Roll {
         this.optional_precision = optional_precision_input.length > 0 ? this.update_energy(optional_precision_input, this.optional_precision, force_update) : precision
 
         /* Update remaining max on energies */
-        update_max_invested_energies($("#power")[0])
-        update_max_invested_energies($("#speed")[0])
-        update_max_invested_energies($("#precision")[0])
+        update_max_invested_energies($("#" + this.energy_base_id + "power")[0])
+        update_max_invested_energies($("#" + this.energy_base_id + "speed")[0])
+        update_max_invested_energies($("#" + this.energy_base_id + "precision")[0])
     }
 
     update_component(input, current_value, force_update = false) {
@@ -807,7 +809,7 @@ class TalentRoll extends Roll {
             component_inputs.removeAttr("disabled", "disabled")
         }
 
-        $(".energy").each((i, elem) => {
+        $(".energy[id^=\"" + this.energy_base_id + "\"]").each((i, elem) => {
             update_energy_investment_list(elem)
         })
 
@@ -930,7 +932,7 @@ class SuperpowerRoll extends TalentRoll {
                 distance = "", focus = "", duration = "", effect = "",
                 equipment = "", equipment_id = "", exploding_effect = false) {
         super(reason, NaN, 0, effect, 0, formula_elements, NaN, false, true, distance, focus, duration, 0, "", "",
-            equipment, equipment_id, exploding_effect, "")
+            equipment, equipment_id, exploding_effect, "", "")
         this.number = nbr_dices
         this.under_value = under_value
         this.superpower_modifier = 0
@@ -1103,7 +1105,7 @@ class FocusMagicRoll extends TalentRoll {
                 black_magic = "", magic_resistance = "", equipment = "", equipment_id = "",
                 exploding_effect = false) {
         super(reason, max_value, level, effect, 0, [], NaN, true, true, distance, focus, duration, base_energy_cost,
-            black_magic, magic_resistance, equipment, equipment_id, exploding_effect, "")
+            black_magic, magic_resistance, equipment, equipment_id, exploding_effect, "", "")
         this.margin_dices = []
     }
 
@@ -1274,7 +1276,7 @@ class GoodNatureEvilMagicRoll extends TalentRoll {
                 equipment = "", equipment_id = "", exploding_effect = false,
                 power_energy = "") {
         super(reason, NaN, 0, effect, 0, [], NaN, true, true, distance, focus, duration, base_energy_cost,
-            black_magic, magic_resistance, equipment, equipment_id, exploding_effect, power_energy)
+            black_magic, magic_resistance, equipment, equipment_id, exploding_effect, power_energy, "")
         this.margin_dices = []
         this.precision_dices = []
         this.type = 3
@@ -1473,7 +1475,11 @@ $("#roll-free").on("click", _ => {
 /* Energies */
 
 function get_energy_investment_inputs(energy_input) {
-    const id = energy_input.id
+    let id = energy_input.id
+    const row = row_of(energy_input)
+    if (row) {
+        id = id.split(row.row_index + "-")[1]
+    }
     return $("#roll-dialog-" + id + ", #roll-dialog-optional-" + id + ", #roll-dialog-magic-" + id)
 }
 

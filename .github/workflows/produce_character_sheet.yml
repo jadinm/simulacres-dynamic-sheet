@@ -3,6 +3,7 @@ on: [ push, pull_request ]
 env:
   PYTHON_SCRIPT: compile.py
   DOC_V7: manuel_feuille_perso_simv7
+  V7_NPC_GRID_FILENAME: simulacres_npc_grid.html
   V7_BASE_FINAL_FILENAME: simulacres_v7_fiche_perso.html
   V7_LOCALISATION_FINAL_FILENAME: simulacres_v7_localisation_fiche_perso.html
   V7_LOCALISATION_DUAL_FINAL_FILENAME: simulacres_v7_localisation_deux_armes_fiche_perso.html
@@ -30,6 +31,7 @@ jobs:
           mkdir -p target
           python3 -m pip install --upgrade pip
           python3 -m pip install -r requirements.txt
+          python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V7_NPC_GRID_FILENAME }} --localisation --base-template "base_npc_grid.html" --plugin plugins/plugin_export_to_server.html
           python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V7_BASE_FINAL_FILENAME }}
           python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V7_LOCALISATION_FINAL_FILENAME }} --localisation
           python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V7_LOCALISATION_DUAL_FINAL_FILENAME }} --localisation --dual-wielding --tomte-magic --warrior-powers
@@ -51,6 +53,11 @@ jobs:
           cd doc/images && python3 create_pictos.py && cd -
           cd doc && python3 -m rst2pdf.createpdf ${{ env.DOC_V7 }}.txt -v -s sim_styles.txt -e preprocess --use-floating-images --real-footnotes -o ${{ env.DOC_V7 }}.pdf && cd -
 
+      - name: Upload the v7 NPC grid
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.V7_NPC_GRID_FILENAME }}
+          path: target/${{ env.V7_NPC_GRID_FILENAME }}
       - name: Upload the base v7 sheet
         uses: actions/upload-artifact@v2
         with:
@@ -137,6 +144,17 @@ jobs:
           draft: true
           prerelease: false
           body_path: next_release_description.md
+
+      - name: Upload the v7 NPC grid in release assets
+        if: contains(github.ref, '/tags/')
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_content_type: text/html
+          asset_name: ${{ env.V7_NPC_GRID_FILENAME }}
+          asset_path: target/${{ env.V7_NPC_GRID_FILENAME }}
 
       - name: Upload the base v7 sheet in release assets
         if: contains(github.ref, '/tags/')

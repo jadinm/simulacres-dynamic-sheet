@@ -1,13 +1,20 @@
 const row_id_regex = /((\w+|limitedUse-equipment|magical-equipment)-(x|\d+))-?(.*)/
 
 row_classes_by_prefix = {}
+table_instance_by_prefix = {}
 
 class DataRow {
 
     constructor(data) {
         this.data = $(data)
         this.id = this.data[0].id
-        this.row_index = this.data[0].id.match(row_id_regex)[1]
+        const match = this.data[0].id.match(row_id_regex)
+        this.row_index = match[1]
+        this.row_number = match[3]
+    }
+
+    find(selector) {
+        return this.data.find(selector)
     }
 
     get(element_id_suffix) {
@@ -49,6 +56,9 @@ class DataTable {
         this.add_button = $("#add-" + this.name)
         this.remove_button = $("#" + this.id + "-remove")
 
+        // Remove any tooltip on the template because it will fail upon cloning
+        this.template_row.find("[data-toggle=\"tooltip\"]").tooltip("dispose")
+
         // Add listeners
         this.table.sortable({
             handle: '.fa-arrows-alt',
@@ -72,6 +82,7 @@ class DataTable {
 
     register() {
         row_classes_by_prefix[this.name] = this.constructor.row_class
+        table_instance_by_prefix[this.name] = this
     }
 
     is_template_row(row) {
@@ -245,9 +256,22 @@ $(".hide-section").uon("click", toggle_table)
  * @returns {*} a row object instance
  */
 function row_of(row_element) {
-    const prefix = $(row_element)[0].id.match(row_id_regex)[2]
+    const match = $(row_element)[0].id.match(row_id_regex)
+    if (!match)
+        return null
+    const prefix = match[2]
     const row_class = (prefix in row_classes_by_prefix) ? row_classes_by_prefix[prefix] : DataRow
     return row_class.of(row_element)
+}
+
+/**
+ * Get a table instance of the row of the element in parameter
+ * @param row_element != null and it must be either a jquery object or a html element
+ * @returns {*} a table object instance
+ */
+function table_of(row_element) {
+    const prefix = $(row_element)[0].id.match(row_id_regex)[2]
+    return table_instance_by_prefix[prefix]
 }
 
 function search_tables(value, selector) {

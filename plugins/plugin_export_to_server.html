@@ -1,4 +1,4 @@
-<li id="plugin-button-export-to-server" class="plugin-button nav-item" data-plugin-version="1.2.0"
+<li id="plugin-button-export-to-server" class="plugin-button nav-item" data-plugin-version="1.2.1"
     data-plugin-id="export-to-server">
     <a class="nav-link" data-toggle="tab" href="#plugin-tab-export-to-server" role="tab"
        aria-controls="plugin-tab-export-to-server" aria-selected="false">
@@ -75,9 +75,15 @@
                 return
 
             // Retrieve the name of the character
-            let character_name = $("input#character-name")[0].value
-            if (character_name === null || character_name.length === 0)
-                character_name = "Anonyme"
+            let character_name = $("input#character-name")
+            if (character_name.length === 0) {
+                // NPC Grid
+                character_name = "Rencontre"
+            } else {
+                character_name = character_name[0].value
+                if (character_name === null || character_name.length === 0)
+                    character_name = "Anonyme"
+            }
 
             let data = new FormData()
             data.append("name", character_name)
@@ -147,9 +153,15 @@
             const page = "<!DOCTYPE html><html lang=\"fr\">" + $("html").html() + "</html>"
 
             // Retrieve the name of the character
-            let character_name = $("input#character-name")[0].value
-            if (character_name === null || character_name.length === 0)
-                character_name = "Anonyme"
+            let character_name = $("input#character-name")
+            if (character_name.length === 0) {
+                // NPC Grid
+                character_name = "Rencontre"
+            } else {
+                character_name = character_name[0].value
+                if (character_name === null || character_name.length === 0)
+                    character_name = "Anonyme"
+            }
 
             // Export to server
             let data = new FormData()

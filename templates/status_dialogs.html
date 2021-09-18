@@ -1,6 +1,6 @@
 <!-- Unease Note -->
 <div class="container">
-    <div class="modal fade bd-modal-lg" id="unease-details" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal fade bd-modal-lg" id="{{ base_id }}unease-details" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header justify-content-center">
@@ -8,10 +8,21 @@
                 </div>
                 <div class="modal-body align-middle">
                     <div class="row mx-1 md-form col-12 py-0 my-0 mb-2">
-                        <label class="py-0 my-0" for="details-unease"></label>
-                        <input class="form-control py-0 my-0" type="text" value="" id="details-unease"
+                        <label class="py-0 my-0" for="{{ base_id }}details-unease"></label>
+                        <input class="form-control py-0 my-0" type="text" value="" id="{{ base_id }}details-unease"
                                placeholder="Note">
                     </div>
+                    {% if npc_grid %}
+                        <hr/>
+                        <div class="row">
+                            <button id="{{ base_id }}increment-unease" class="btn btn-success col-6 mx-0 px-0">
+                                Augmenter de 1 le maximum de malaise
+                            </button>
+                            <button id="{{ base_id }}decrement-unease" class="btn btn-danger col-6 mx-0 px-0">
+                                Diminuer de 1 le maximum de malaise
+                            </button>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -20,7 +31,8 @@
 
 <!-- Increase Breath -->
 <div class="container">
-    <div class="modal fade bd-modal-lg" id="breath-max-update" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal fade bd-modal-lg" id="{{ base_id }}breath-max-update" tabindex="-1" role="dialog"
+         aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header justify-content-center">
@@ -28,8 +40,8 @@
                 </div>
                 <div class="modal-body align-middle">
                     <div class="row mx-1 md-form col-12 py-0 my-0 mb-2">
-                        <label class="py-0 my-0" for="details-breath"></label>
-                        <input class="form-control py-0 my-0" type="text" value="" id="details-breath"
+                        <label class="py-0 my-0" for="{{ base_id }}details-breath"></label>
+                        <input class="form-control py-0 my-0" type="text" value="" id="{{ base_id }}details-breath"
                                placeholder="Note">
                     </div>
                     {% if version == V7 %}
@@ -47,16 +59,16 @@
                             </small>
                         </div>
                         <div class="row mx-1 md-form col-12 py-0 my-0 mb-2">
-                            <input id="temporary-breath" class="form-control py-0 my-0" type="number" value="0" min="0"
-                                   aria-label="">
+                            <input id="{{ base_id }}temporary-breath" class="form-control py-0 my-0" type="number"
+                                   value="0" min="0" aria-label="">
                         </div>
                     {% endif %}
                     <hr/>
                     <div class="row">
-                        <button id="increment-breath" class="btn btn-success col-6 mx-0 px-0">
+                        <button id="{{ base_id }}increment-breath" class="btn btn-success col-6 mx-0 px-0">
                             Augmenter de 1 le maximum des PS
                         </button>
-                        <button id="decrement-breath" class="btn btn-danger col-6 mx-0 px-0">
+                        <button id="{{ base_id }}decrement-breath" class="btn btn-danger col-6 mx-0 px-0">
                             Diminuer de 1 le maximum des PS
                         </button>
                     </div>
@@ -72,8 +84,8 @@
                         </small>
                     </div>
                     <div class="row mx-1 md-form col-12 py-0 my-0 mb-2">
-                        <input id="lost-breath" class="form-control py-0 my-0" type="number" value="0" min="0"
-                               aria-label="">
+                        <input id="{{ base_id }}lost-breath" class="form-control py-0 my-0" type="number" value="0"
+                               min="0" aria-label="">
                     </div>
                 </div>
             </div>
@@ -83,7 +95,8 @@
 
 <!-- Increase Psychic Balance -->
 <div class="container">
-    <div class="modal fade bd-modal-lg" id="psychic-max-update" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal fade bd-modal-lg" id="{{ base_id }}psychic-max-update" tabindex="-1" role="dialog"
+         aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header justify-content-center">
@@ -91,16 +104,16 @@
                 </div>
                 <div class="modal-body align-middle">
                     <div class="row mx-1 md-form col-12 py-0 my-0 mb-2">
-                        <label class="py-0 my-0" for="details-psychic"></label>
-                        <input class="form-control py-0 my-0" type="text" value="" id="details-psychic"
+                        <label class="py-0 my-0" for="{{ base_id }}details-psychic"></label>
+                        <input class="form-control py-0 my-0" type="text" value="" id="{{ base_id }}details-psychic"
                                placeholder="Note">
                     </div>
                     <hr/>
                     <div class="row">
-                        <button id="increment-psychic" class="btn btn-success col-6 mx-0 px-0">
+                        <button id="{{ base_id }}increment-psychic" class="btn btn-success col-6 mx-0 px-0">
                             Augmenter de 1 le maximum des EP
                         </button>
-                        <button id="decrement-psychic" class="btn btn-danger col-6 mx-0 px-0">
+                        <button id="{{ base_id }}decrement-psychic" class="btn btn-danger col-6 mx-0 px-0">
                             Diminuer de 1 le maximum des EP
                         </button>
                     </div>
@@ -116,8 +129,8 @@
                         </small>
                     </div>
                     <div class="row mx-1 md-form col-12 py-0 my-0 mb-2">
-                        <input id="lost-psychic" class="form-control py-0 my-0" type="number" value="0" min="0"
-                               aria-label="">
+                        <input id="{{ base_id }}lost-psychic" class="form-control py-0 my-0" type="number" value="0"
+                               min="0" aria-label="">
                     </div>
                 </div>
             </div>
@@ -135,7 +148,7 @@
 {% endif %}
 {% for zone in health_zones %}
     <div class="container">
-        <div class="modal fade bd-modal-lg" id="hp-{{ zone }}-max-update" tabindex="-1" role="dialog"
+        <div class="modal fade bd-modal-lg" id="{{ base_id }}hp-{{ zone }}-max-update" tabindex="-1" role="dialog"
              aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -144,16 +157,16 @@
                     </div>
                     <div class="modal-body align-middle">
                         <div class="row mx-1 md-form col-12 py-0 my-0 mb-2">
-                            <label class="py-0 my-0" for="details-hp-{{ zone }}"></label>
+                            <label class="py-0 my-0" for="{{ base_id }}details-hp-{{ zone }}"></label>
                             <input class="form-control py-0 my-0" type="text" value=""
-                                   id="details-hp-{{ zone }}" placeholder="{{ note_desc }}">
+                                   id="{{ base_id }}details-hp-{{ zone }}" placeholder="{{ note_desc }}">
                         </div>
                         <hr/>
                         <div class="row">
-                            <button id="increment-hp-{{ zone }}" class="btn btn-success col-6 mx-0 px-0">
+                            <button id="{{ base_id }}increment-hp-{{ zone }}" class="btn btn-success col-6 mx-0 px-0">
                                 Augmenter de 1 le maximum des PV{{ health_zones[zone] }}
                             </button>
-                            <button id="decrement-hp-{{ zone }}" class="btn btn-danger col-6 mx-0 px-0">
+                            <button id="{{ base_id }}decrement-hp-{{ zone }}" class="btn btn-danger col-6 mx-0 px-0">
                                 Diminuer de 1 le maximum des PV{{ health_zones[zone] }}
                             </button>
                         </div>
