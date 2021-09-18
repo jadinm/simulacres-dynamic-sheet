@@ -227,6 +227,7 @@ class Roll {
         $(document).trigger("roll", this)
         if (show_modal)
             this.show_modal()
+        play_audio_sound(this.number)
     }
 
     /* Trigger the same roll */
@@ -1631,6 +1632,7 @@ function roll_dialog_validate() {
     current_roll.invested_energies = invested_energies
     current_roll.show_roll()
     $(document).trigger("roll", current_roll)
+    play_audio_sound(current_roll.number + 3)
 }
 
 $("#roll-dialog-validate").on("click", roll_dialog_validate)
@@ -1651,3 +1653,17 @@ $(".roll-dialog-attack-difficulty").on("change", _ => {
 
     $("#roll-dialog-attack-difficulty").text((difficulty < 0 ? "" : "+") + difficulty)
 })
+
+/* Audio handling */
+
+function play_audio_sound(number) {
+    // Get all dice audio
+    const audio_base = $('.audio-roll');
+    for (let i = 0; i < number; i++) {
+        setTimeout(function () {
+            // Generate random number in [0, len(audio_base)-1]
+            const rand = Math.floor(Math.random() * audio_base.length);
+            audio_base[rand].cloneNode(true).play();
+        }, 200 * i);
+    }
+}

@@ -285,6 +285,13 @@
 
 </body>
 
+<!-- Audio resources -->
+{% for audio in audios %}
+    <audio preload="auto" class="audio-roll">
+        <source src="data:audio/wav;base64,{{ audio }}" type="audio/x-wav">
+    </audio>
+{% endfor %}
+
 <!-- Custom Javascript -->
 <script>
     const base_sheet_name = "{{ base_sheet_name }}"

@@ -119,15 +119,20 @@ env = Environment(loader=loader, autoescape=select_autoescape(['html', 'xml']))
 # This add an include option that do not treat the content of the file as a jinja template
 env.globals['include_static'] = include_static
 
-# Parsing fonts
+# Parsing fonts and audio
 
 params = {}
 for root, dirs, filenames in os.walk(os.path.join(html_dir, "../font")):
     for filename in filenames:
-        if filename[-4:] != ".ttf":
-            continue
-        with open(os.path.join(root, filename), "rb") as extern_file:
-            params[filename.split(".")[0] + "_font"] = base64.b64encode(extern_file.read()).decode()
+        if filename[-4:] == ".ttf":
+            with open(os.path.join(root, filename), "rb") as extern_file:
+                params[filename.split(".")[0] + "_font"] = base64.b64encode(extern_file.read()).decode()
+
+for root, dirs, filenames in os.walk(os.path.join(html_dir, "../audio")):
+    for filename in filenames:
+        if filename[-4:] == ".wav":
+            with open(os.path.join(root, filename), "rb") as extern_file:
+                params.setdefault("audios", []).append(base64.b64encode(extern_file.read()).decode())
 
 # Git tag version
 
