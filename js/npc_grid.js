@@ -21,6 +21,17 @@ class NPC extends DataRow {
         "run": "Course"
     }
 
+    localized_hp = {
+        3: {"head": 3, "trunk": 3, "arm": 3, "leg": 3},
+        4: {"head": 3, "trunk": 4, "arm": 3, "leg": 3},
+        5: {"head": 3, "trunk": 5, "arm": 3, "leg": 4},
+        6: {"head": 4, "trunk": 6, "arm": 3, "leg": 4},
+        7: {"head": 4, "trunk": 6, "arm": 4, "leg": 4},
+        8: {"head": 4, "trunk": 7, "arm": 4, "leg": 5},
+        9: {"head": 5, "trunk": 8, "arm": 4, "leg": 5},
+        10: {"head": 5, "trunk": 9, "arm": 5, "leg": 5}
+    }
+
     armor_overwrite() {
         if (this.get("armor-overwrite")[0].checked) {
             this.find("input.armor").val(this.get("full-armor").val()).trigger("change")
@@ -86,10 +97,118 @@ class NPC extends DataRow {
             "", "", false, "",
             this.row_index + "-").trigger_roll()
     }
+
+    set_hp(unlocalized_hp) {
+        if (!(unlocalized_hp in this.localized_hp)) {
+            console.log("Pas de conversion automatique entre '" + unlocalized_hp + "' PV non-localisés en PV localisés")
+            return
+        }
+        const conversion = this.localized_hp[unlocalized_hp]
+        set_slider_max(this.get("hp-head"), conversion["head"], true)
+        set_slider_max(this.get("hp-trunk"), conversion["trunk"], true)
+        set_slider_max(this.get("hp-right-arm"), conversion["arm"], true)
+        set_slider_max(this.get("hp-left-arm"), conversion["arm"], true)
+        set_slider_max(this.get("hp-right-leg"), conversion["leg"], true)
+        set_slider_max(this.get("hp-left-leg"), conversion["leg"], true)
+        set_slider_max(this.get("unease"), conversion["trunk"] + 1)
+        this.get("unease").slider("setValue", 0).slider("refresh", {useCurrentValue: true}).trigger("change")
+    }
 }
 
 class NPCGrid extends DataTable {
     static row_class = NPC
+
+    bestiary = []
+    priority_keys = ["combat", "hp", "unease", "full-armor"]
+
+    constructor(table) {
+        super(table)
+        const bestiary = $("#bestiary").on("change", e => {
+            this.load_bestiary($(e.target).val())
+        })
+        this.load_bestiary(bestiary.val())
+        this.add_button.off("click").on("click", (event, idx = null) => { // Add parameter for forced index
+            const row = this.add_row(idx)
+            changed_page = true
+            if (idx == null) {
+                // We are not importing new data and want to take the selection of the base NPC into account
+                const creature_name = $("#npc-table-add-select").val()
+                if (creature_name) {
+                    const creature = $(this.bestiary).filter((_, c) => c.name === creature_name)
+                    if (creature.length > 0) {
+                        this.load_creature(row, creature.get(0))
+                    }
+                }
+            }
+        })
+    }
+
+    load_bestiary(new_bestiary) {
+        new_bestiary = JSON5.parse(new_bestiary)
+
+        // Overwrite entries with the same name
+        $(this.bestiary).map((idx, current_elem) => {
+            const updated_elem = $(new_bestiary).filter((_, new_elem) => new_elem.name === current_elem.name)
+            if (updated_elem.length > 0) // Overwrite elements with the same name
+                this.bestiary[idx] = updated_elem.get(0)
+        })
+
+        // Add new entries
+        $(new_bestiary).map((_, new_elem) => {
+            const same_elem = $(this.bestiary).filter((_, current_elem) => new_elem.name === current_elem.name)
+            if (same_elem.length === 0) // Overwrite elements with the same name
+                this.bestiary.push(new_elem)
+        })
+
+        // Update the field, so that it stays upon saving
+        $("#bestiary").text(JSON5.stringify(this.bestiary))
+
+        // Add names to the select
+        const creature_list = this.bestiary.map(elem => {
+            return {name: elem.name, content: null}
+        })
+        creature_list.push({name: "", content: null})
+        update_select($("#npc-table-add-select"), $(creature_list))
+    }
+
+    load_creature(row, creature) {
+        for (const [key, value] of Object.entries(creature).sort((a, b) => {
+            if (this.priority_keys.includes(a[0]) && !this.priority_keys.includes(b[0]))
+                return -1 // Favor priority key a
+            else if (!this.priority_keys.includes(a[0]) && this.priority_keys.includes(b[0]))
+                return 1 // Favor priority key b
+            else if (this.priority_keys.includes(a[0]) && this.priority_keys.includes(b[0]))
+                // Favor the index in the priority list
+                return this.priority_keys.indexOf(a[0]) < this.priority_keys.indexOf(b[0]) ? -1 : (a[0] === b[0]) ? 0 : 1
+            else
+                return a[0].localeCompare(b[0])
+        })) {
+            const input = row.get(key)
+            if (input.length === 0 && key !== "hp") {
+                console.log("Le champ avec l'id '" + key + "' du '" + value.name + "' est introuvable")
+                continue
+            }
+            if (key === "hp") {
+                row.set_hp(value)
+            } else if (input.hasClass("input-slider")) {
+                // Update the maximum of a slider
+                set_slider_max(input, value, true)
+                if (key === "unease") { // Unease need to be set to 0
+                    input.slider("setValue", 0).slider("refresh", {useCurrentValue: true}).trigger("change")
+                }
+            } else {
+                input.val(value).trigger("change")
+                if (key === "combat") {
+                    // Set the default value for basic abilities to the same value as combat
+                    row.get("combat-2").val(value).trigger("change")
+                    row.get("cavalry").val(value).trigger("change")
+                    row.get("run").val(value).trigger("change")
+                } else if (key === "full-armor") {
+                    row.armor_overwrite()
+                }
+            }
+        }
+    }
 
     armor_overwrite(event) {
         row_of(event.target).armor_overwrite()
@@ -160,6 +279,31 @@ class NPCGrid extends DataTable {
     }
 }
 
+let npc_grid = null
+
+$("#import-bestiary").on("change", event => {
+    if (event.target.files.length === 0)
+        return
+
+    const reader = new FileReader()
+    reader.onload = e => {
+        // Executed at the completion of the read
+        try {
+            JSON5.parse(e.target.result)
+            npc_grid.load_bestiary(e.target.result)
+        } catch (e) {
+            alert("Le document n'est pas un bestiaire. Si vous essayez d'importer une fiche ou un plugin,"
+                + " utilisez un des autres boutons.")
+            return
+        }
+        event.target.setAttribute("value", "")
+        $(event.target).next().text("Importer un bestiaire")
+    }
+
+    // Asynchronous read
+    reader.readAsText(event.target.files[0])
+})
+
 $(_ => {
-    new NPCGrid($("#npc-table"))
+    npc_grid = new NPCGrid($("#npc-table"))
 })

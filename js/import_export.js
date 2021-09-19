@@ -311,18 +311,21 @@ function import_data(src_html, dst_html, full_sheet, template_copy = false) {
     })
 
     // Update all text areas
-    src_html.find("textarea.summernote").each((i, old_input) => {
+    src_html.find("textarea.summernote,#bestiary").each((i, old_input) => {
         if (old_input.id && old_input.id.length > 0) {
             const old_input_sel = "#" + old_input.id
             let new_input = dst_html.find(old_input_sel)
             let old_value = src_html.find(old_input).val()
             new_input.val(old_value)
-            new_input.html(old_value)
+            if (new_input.hasClass("summernote"))
+                new_input.html(old_value)
+            else
+                new_input.text(old_value).trigger("change")
 
             if (new_input.length === 0) { // The old input is lost
                 if (!old_input.id.includes("plugin-"))
                     missing_inputs.push([old_input.id, old_input.value])
-            } else if (!new_input[0].id.includes("note-")) {
+            } else if (!new_input[0].id.includes("note-") && new_input.hasClass("summernote")) {
                 // Update associated summernote (the editors for the notes are initialized lazily)
                 new_input.summernote("code", new_input.val())
 

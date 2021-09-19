@@ -16,6 +16,7 @@
         "file-saver": "^2.0.2",
         "jquery": "^3.5.1",
         "jquery-sortablejs": "^1.0.1",
+        "json5": "^2.2.0",
         "mdbootstrap": "^4.19.1",
         "popper.js": "^1.16.1",
         "sortablejs": "^1.12.0",

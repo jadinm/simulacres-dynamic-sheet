@@ -35,13 +35,15 @@ function activate_slider(input, formatter_builder = build_max_formatter, post_bu
     post_build(slider)
 }
 
-function set_slider_max(slider, value) {
+function set_slider_max(slider, value, set_value_to_max = false) {
     if (slider.length === 0)
         return
 
     slider.slider("setAttribute", "max", value)
     slider[0].setAttribute("data-slider-max", value.toString())
-    slider.slider("refresh", {useCurrentValue: true})
+    if (set_value_to_max)
+        slider.slider("setValue", value)
+    slider.slider("refresh", {useCurrentValue: true}).trigger("change")
 }
 
 function set_slider_min(slider, new_min) {

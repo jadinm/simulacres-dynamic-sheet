@@ -5,3 +5,4 @@ html5lib
 rst2pdf
 svglib
 reportlab
+pyjson5

@@ -8,6 +8,7 @@ import shlex
 import subprocess
 import sys
 from typing import List, Dict
+import pyjson5
 
 from bs4 import BeautifulSoup
 from jinja2 import Environment, FileSystemLoader, select_autoescape
@@ -113,13 +114,14 @@ def process_plugins(plugins: List[str]) -> Dict[str, List[str]]:
 
 # Jinja settings
 
-html_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "templates")
+code_dir = os.path.dirname(os.path.abspath(__file__))
+html_dir = os.path.join(code_dir, "templates")
 loader = FileSystemLoader(html_dir)
 env = Environment(loader=loader, autoescape=select_autoescape(['html', 'xml']))
 # This add an include option that do not treat the content of the file as a jinja template
 env.globals['include_static'] = include_static
 
-# Parsing fonts and audio
+# Parsing fonts, audio and bestiary
 
 params = {}
 for root, dirs, filenames in os.walk(os.path.join(html_dir, "../font")):
@@ -133,6 +135,10 @@ for root, dirs, filenames in os.walk(os.path.join(html_dir, "../audio")):
         if filename[-4:] == ".wav":
             with open(os.path.join(root, filename), "rb") as extern_file:
                 params.setdefault("audios", []).append(base64.b64encode(extern_file.read()).decode())
+
+with open(os.path.join(code_dir, "bestiary.json5")) as file:
+    params["bestiary"] = file.read() if args.universe == MED_FANTASY else "[]"
+    pyjson5.loads(params["bestiary"])  # Parse check
 
 # Git tag version
 

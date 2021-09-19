@@ -68,6 +68,19 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-lg-2 col-md-4">
+                        <select id="npc-table-add-select" class="show-tick form-control selectpicker"
+                                data-live-search="true" data-style="px-3 pt-3 pb-2 m-0 col-12 align-middle"
+                                title="PNJ faible">
+                        </select>
+                    </div>
+                    <div class="input-group col-lg-2 col-md-4 mx-0 px-0">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="import-bestiary"
+                                   accept="application/json, application/json5">
+                            <label class="custom-file-label" for="import-bestiary">Importer un bestiaire</label>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -75,5 +88,8 @@
                 {{ tab | safe }}
             {% endfor %}
         </div>
+    <textarea id="bestiary" class="d-none" aria-label="">
+        {{ bestiary }}
+    </textarea>
     </div>
 {% endblock %}
