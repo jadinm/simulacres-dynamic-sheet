@@ -4,7 +4,7 @@
 
 let changed_page = false
 const modifiable_sliders = ["unease", "hp-head", "hp-trunk", "hp-right-arm", "hp-left-arm", "hp-right-leg",
-    "hp-left-leg", "breath", "psychic", "hp-right-wing", "hp-left-wing"]
+    "hp-left-leg", "breath", "psychic", "hp-right-wing", "hp-left-wing", "hp-right-leg-2", "hp-left-leg-2"]
 
 /* Remind the user that they need to save the page if they changed anything */
 window.onbeforeunload = function () {

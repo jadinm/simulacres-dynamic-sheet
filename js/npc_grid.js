@@ -158,7 +158,7 @@ class NPCGrid extends DataTable {
 
     bestiary = []
     priority_keys = ["combat", "hp", "unease", "full-armor"]
-    input_less_keys = ["localization", "wings"]
+    input_less_keys = ["localization", "wings", "hexapod"]
 
     constructor(table) {
         super(table)
@@ -235,6 +235,9 @@ class NPCGrid extends DataTable {
             } else if (key === "wings") {
                 if (value)
                     row.find(".wing-div").removeClass("invisible")
+            } else if (key === "hexapod") {
+                if (value)
+                    row.find(".leg-2-div").removeClass("invisible")
             } else if (input.hasClass("input-slider")) {
                 // Update the maximum of a slider
                 set_slider_max(input, value, true)

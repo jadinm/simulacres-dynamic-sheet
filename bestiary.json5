@@ -5,12 +5,17 @@
     "hp": 3, // The non-localized HP of a creature. If the creature has localized HP and this value is in [3, 10], this is converted to localized HP and unease
     "localization": true,
     "wings": false, // if localized, wings zones can be added for 4-legged creatures such as griffins
+    "hexapod": false, // if localized, wings zones can be added for 4-legged and 2-hands creatures such as griffins or 6-legged creatures such as insects
     "hp-head": 3,
     "hp-trunk": 3,
     "hp-right-arm": 3,
     "hp-left-arm": 3,
+    "hp-right-wing": 3, // For four-legged and humanoids with wings, or 8-legged (e.g., spiders, octopus)
+    "hp-left-wing": 3,
     "hp-right-leg": 3,
     "hp-left-leg": 3,
+    "hp-right-leg-2": 3, // For six-legged or centaurs-like creatures
+    "hp-left-leg-2": 3,
     "armor-head": 0,
     "armor-trunk": 0,
     "armor-right-arm": 0,
@@ -188,6 +193,21 @@
     "perception": 9,
     "run": 9,
     "movement": "2 (1) [C]",
+  },
+  {
+    "name": "Centaure",
+    // 4-legged creature with hands
+    hexapod: true,
+    "hp": 5,
+    "breath": 5,
+    "psychic": 1,
+    "speed": 1,
+    "combat": 6,
+    "combat-effect": "[C] PV [F] PS (ruade)",
+    "combat-2-effect": "[A] PV [E] PS (piétinement)",
+    "perception": 9,
+    "run": 10,
+    "movement": "3 (1) [E]",
   },
   {
     "name": "Griffon",

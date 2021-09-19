@@ -142,7 +142,28 @@
                 </div>
             </div>
             <div class="row mt-3">
-                <div class="offset-2 col-4 align-middle text-center px-0">
+                <div class="col-2 align-middle text-center px-0 invisible leg-2-div">
+                    <label for="npc-x-hp-right-leg-2" hidden></label>
+                    <input id="npc-x-hp-right-leg-2" class="hp input-slider"
+                           data-slider-id="npc-x-hp-right-leg-2-slider" type="text" data-slider-min="0"
+                           data-slider-max="3" data-slider-step="1" data-slider-value="3"
+                           data-slider-handle="custom" data-slider-orientation="vertical" data-slider-reversed="true"/>
+                    <svg class="clickable btn-link hp-link" height="2em" width="2em" data-toggle="tooltip"
+                         data-html="true" data-placement="top" data-target="#npc-x-hp-right-leg-2-max-update"
+                         title="{{ tooltip_base }}" data-original-title-base="{{ tooltip_base }}">
+                        <use xlink:href="#svg-right-foot-base"></use>
+                    </svg>
+                    <div class="md-form form-sm m-0 align-middle input-with-pre-icon" data-toggle="tooltip"
+                         data-html="true" data-placement="right" title="Armure">
+                        <svg height="2em" width="2em" class="input-prefix">
+                            <use xlink:href="#svg-right-leg-armor"></use>
+                        </svg>
+                        <input type="number" id="npc-x-armor-right-leg-2"
+                               class="armor form-control form-control-sm text-center" min="0" value="0">
+                        <label for="armor-right-leg-2" hidden></label>
+                    </div>
+                </div>
+                <div class="col-4 align-middle text-center px-0">
                     <label for="npc-x-hp-right-leg" hidden></label>
                     <input id="npc-x-hp-right-leg" class="hp input-slider" data-slider-id="npc-x-hp-right-leg-slider"
                            type="text" data-slider-min="0" data-slider-max="3" data-slider-step="1"
@@ -183,6 +204,28 @@
                         <input type="number" id="npc-x-armor-left-leg"
                                class="armor form-control form-control-sm text-center" min="0" value="0">
                         <label for="npc-x-armor-left-leg" hidden></label>
+                    </div>
+                </div>
+                <div class="col-2 align-middle text-center px-0 invisible leg-2-div">
+                    <svg class="clickable btn-link hp-link" height="2em" width="2em" data-toggle="tooltip"
+                         data-html="true" data-placement="top" data-target="#npc-x-hp-left-leg-2-max-update"
+                         title="{{ tooltip_base }}" data-original-title-base="{{ tooltip_base }}">
+                        <use xlink:href="#svg-left-foot-base"></use>
+                    </svg>
+                    <label for="npc-x-hp-left-leg-2" hidden></label>
+                    <input id="npc-x-hp-left-leg-2" class="hp input-slider" data-slider-id="npc-x-hp-left-leg-2-slider"
+                           type="text"
+                           data-slider-min="0" data-slider-max="3" data-slider-step="1" data-slider-value="3"
+                           data-slider-handle="custom" data-slider-orientation="vertical"
+                           data-slider-reversed="true"/>
+                    <div class="md-form form-sm m-0 align-middle input-with-pre-icon" data-toggle="tooltip"
+                         data-html="true" data-placement="right" title="Armure">
+                        <svg height="2em" width="2em" class="input-prefix">
+                            <use xlink:href="#svg-left-leg-armor"></use>
+                        </svg>
+                        <input type="number" id="npc-x-armor-left-leg-2"
+                               class="armor form-control form-control-sm text-center" min="0" value="0">
+                        <label for="npc-x-armor-left-leg-2" hidden></label>
                     </div>
                 </div>
             </div>

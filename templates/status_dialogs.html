@@ -148,7 +148,7 @@
 {% endif %}
 {% if base_id %}
     {# For NPC Grid #}
-    {% set _ = health_zones.update({"": "", "-right-wing": " à l'aile droite", "-left-wing": " à l'aile gauche"}) %}
+    {% set _ = health_zones.update({"": "", "-right-wing": " à l'aile droite", "-left-wing": " à l'aile gauche", "-right-leg-2": " à la jambe arrière droite", "-left-leg-2": " à la jambe arrière gauche"}) %}
 {% endif %}
 {% for zone in health_zones %}
     <div class="container">
