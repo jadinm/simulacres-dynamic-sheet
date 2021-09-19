@@ -4,7 +4,28 @@
         {% set tooltip_base = "Cliquez pour modifier le maximum des PVs ou ajouter une note" %}
         <div id="npc-x-localized-status" class="col-sm-8 col-12">
             <div class="row">
-                <div class="offset-4 col-4 align-middle text-center">
+                <div class="col-4 align-middle text-center p-0 m-0 invisible wing-div">
+                    <div class="md-form form-sm m-0 align-middle input-with-pre-icon" data-toggle="tooltip"
+                         data-html="true" data-placement="right" title="Armure">
+                        <svg height="2em" width="2em" class="input-prefix">
+                            <use xlink:href="#svg-shield"></use>
+                        </svg>
+                        <input type="number" id="npc-x-armor-right-wing"
+                               class="armor form-control form-control-sm text-center" min="0" value="0">
+                        <label for="npc-x-armor-right-wing" hidden></label>
+                    </div>
+                    <label for="npc-x-hp-right-wing" hidden></label>
+                    <input id="npc-x-hp-right-wing" class="hp input-slider" data-slider-id="npc-x-hp-right-wing-slider"
+                           type="text" data-slider-min="0" data-slider-max="3" data-slider-step="1"
+                           data-slider-value="3" data-slider-handle="custom" data-slider-orientation="vertical"
+                           data-slider-reversed="true"/>
+                    <svg class="clickable btn-link hp-link" height="4.5em" width="4.5em" data-toggle="tooltip"
+                         data-html="true" data-placement="top" data-target="#npc-x-hp-right-wing-max-update"
+                         title="{{ tooltip_base }}" data-original-title-base="{{ tooltip_base }}">
+                        <use xlink:href="#svg-right-wing"></use>
+                    </svg>
+                </div>
+                <div class="col-4 align-middle text-center">
                     <div class="md-form form-sm m-0 align-middle input-with-pre-icon" data-toggle="tooltip"
                          data-html="true" data-placement="right" title="Armure">
                         <svg height="2em" width="2em" class="input-prefix">
@@ -28,6 +49,28 @@
                                type="text" data-slider-min="0" data-slider-max="3" data-slider-step="1"
                                data-slider-value="3" data-slider-handle="custom"/>
                     </div>
+                </div>
+                <div class="col-4 align-middle text-center p-0 m-0 invisible wing-div">
+                    <div class="md-form form-sm m-0 align-middle input-with-pre-icon" data-toggle="tooltip"
+                         data-html="true" data-placement="right" title="Armure">
+                        <svg height="2em" width="2em" class="input-prefix">
+                            <use xlink:href="#svg-shield"></use>
+                        </svg>
+                        <input type="number" id="npc-x-armor-left-wing"
+                               class="armor form-control form-control-sm text-center" min="0" value="0">
+                        <label for="npc-x-armor-left-wing" hidden></label>
+                    </div>
+                    <svg class="clickable btn-link hp-link" height="4.5em" width="4.5em" data-toggle="tooltip"
+                         data-html="true" data-placement="top" data-target="#npc-x-hp-left-wing-max-update"
+                         title="{{ tooltip_base }}" data-original-title-base="{{ tooltip_base }}">
+                        <use xlink:href="#svg-left-wing"></use>
+                    </svg>
+                    <label for="npc-x-hp-left-wing" hidden></label>
+                    <input id="npc-x-hp-left-wing" class="hp input-slider" data-slider-id="npc-x-hp-left-wing-slider"
+                           type="text"
+                           data-slider-min="0" data-slider-max="3" data-slider-step="1" data-slider-value="3"
+                           data-slider-handle="custom" data-slider-orientation="vertical"
+                           data-slider-reversed="true"/>
                 </div>
             </div>
             <div class="row">

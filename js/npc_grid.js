@@ -126,6 +126,8 @@ class NPC extends DataRow {
         set_slider_max(this.get("hp-trunk"), conversion["trunk"], true)
         set_slider_max(this.get("hp-right-arm"), conversion["arm"], true)
         set_slider_max(this.get("hp-left-arm"), conversion["arm"], true)
+        set_slider_max(this.get("hp-right-wing"), conversion["arm"], true)
+        set_slider_max(this.get("hp-left-wing"), conversion["arm"], true)
         set_slider_max(this.get("hp-right-leg"), conversion["leg"], true)
         set_slider_max(this.get("hp-left-leg"), conversion["leg"], true)
         set_slider_max(this.get("unease"), conversion["trunk"] + 1)
@@ -156,6 +158,7 @@ class NPCGrid extends DataTable {
 
     bestiary = []
     priority_keys = ["combat", "hp", "unease", "full-armor"]
+    input_less_keys = ["localization", "wings"]
 
     constructor(table) {
         super(table)
@@ -220,7 +223,7 @@ class NPCGrid extends DataTable {
                 return a[0].localeCompare(b[0])
         })) {
             const input = row.get(key)
-            if (input.length === 0 && key !== "localization") {
+            if (input.length === 0 && !this.input_less_keys.includes(key)) {
                 alert("Le champ avec l'id '" + key + "' du '" + value.name + "' est introuvable")
                 continue
             }
@@ -229,6 +232,9 @@ class NPCGrid extends DataTable {
             } else if (key === "localization") {
                 if (!value)
                     row.toggle_localization()
+            } else if (key === "wings") {
+                if (value)
+                    row.find(".wing-div").removeClass("invisible")
             } else if (input.hasClass("input-slider")) {
                 // Update the maximum of a slider
                 set_slider_max(input, value, true)

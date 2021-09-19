@@ -4,6 +4,7 @@
     "name": "PNJ",
     "hp": 3, // The non-localized HP of a creature. If the creature has localized HP and this value is in [3, 10], this is converted to localized HP and unease
     "localization": true,
+    "wings": false, // if localized, wings zones can be added for 4-legged creatures such as griffins
     "hp-head": 3,
     "hp-trunk": 3,
     "hp-right-arm": 3,
@@ -190,6 +191,8 @@
   },
   {
     "name": "Griffon",
+    // 4-legged creature with wings
+    wings: true,
     "hp": 6,
     "breath": 5,
     "psychic": 1,
