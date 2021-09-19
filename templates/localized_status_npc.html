@@ -1,8 +1,8 @@
 <div class="container">
-    <div class="row">
+    <div class="row justify-content-center">
         <!-- Localized HP and protection -->
         {% set tooltip_base = "Cliquez pour modifier le maximum des PVs ou ajouter une note" %}
-        <div class="col-sm-8 col-12">
+        <div id="npc-x-localized-status" class="col-sm-8 col-12">
             <div class="row">
                 <div class="offset-4 col-4 align-middle text-center">
                     <div class="md-form form-sm m-0 align-middle input-with-pre-icon" data-toggle="tooltip"
@@ -165,6 +165,19 @@
                             <i class="fas fa-lock"></i>
                         </label>
                     </div>
+                </div>
+            </div>
+            <div id="npc-x-non-localized-status" class="d-none">
+                <div class="row clickable btn-link" data-toggle="modal" data-target="#npc-x-hp-max-update">
+                    <label id="hp-title" class="clickable" for="npc-x-hp" data-toggle="tooltip" data-placement="right"
+                           title="" data-original-title-base="" data-html="true">
+                        Points de vie (PV)
+                    </label>
+                </div>
+                <div class="row mb-1">
+                    <input id="npc-x-hp" class="hp input-slider hp-non-localized" data-slider-id="npc-x-hp-slider"
+                           type="text" data-slider-min="0" data-slider-max="3" data-slider-step="1"
+                           data-slider-value="3" data-slider-handle="custom" data-slider-reversed="true"/>
                 </div>
             </div>
             <div class="row clickable btn-link" data-toggle="modal" data-target="#npc-x-unease-details">

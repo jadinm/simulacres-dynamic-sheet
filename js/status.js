@@ -402,9 +402,11 @@ function init_status(base_id = "") {
         })
     }
 
-    $("#" + base_id + "hp-head,#" + base_id + "hp-trunk,#" + base_id + "hp-right-arm,#" + base_id + "hp-left-arm,#" + base_id + "hp-right-leg,#" + base_id + "hp-left-leg").each((i, input) => {
+    $("#" + base_id + "hp,#" + base_id + "hp-head,#" + base_id + "hp-trunk,#" + base_id + "hp-right-arm,#" + base_id + "hp-left-arm,#" + base_id + "hp-right-leg,#" + base_id + "hp-left-leg").each((i, input) => {
         activate_slider(input, build_max_formatter, slider => {
             $(slider.slider("getElement")).addClass("hp-slider")
+            if ($(input).hasClass("hp-non-localized"))
+                $(slider.slider("getElement")).addClass("hp-non-localized")
             hp_update({target: slider[0]})
         }, {}, hp_update)
     })

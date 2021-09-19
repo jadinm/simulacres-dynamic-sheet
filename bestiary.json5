@@ -2,6 +2,8 @@
   /* Default values:
   {
     "name": "PNJ",
+    "hp": 3, // The non-localized HP of a creature. If the creature has localized HP and this value is in [3, 10], this is converted to localized HP and unease
+    "localization": true,
     "hp-head": 3,
     "hp-trunk": 3,
     "hp-right-arm": 3,
@@ -158,13 +160,9 @@
   // Mythology
   {
     "name": "Araignée géante",
-    // Every zone is defined explicitly here because HP 2 is not defined
-    "hp-head": 2,
-    "hp-trunk": 2,
-    "hp-right-arm": 2,
-    "hp-left-arm": 2,
-    "hp-right-leg": 2,
-    "hp-left-leg": 2,
+    // This creature is defined with non-localized HP
+    "hp": 2,
+    "localization": false,
     "breath": 2,
     "psychic": 1,
     "full-armor": 2,

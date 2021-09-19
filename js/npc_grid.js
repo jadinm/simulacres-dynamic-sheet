@@ -98,11 +98,14 @@ class NPC extends DataRow {
             this.row_index + "-").trigger_roll()
     }
 
-    set_hp(unlocalized_hp) {
-        if (!(unlocalized_hp in this.localized_hp)) {
-            console.log("Pas de conversion automatique entre '" + unlocalized_hp + "' PV non-localisés en PV localisés")
+    set_hp(unlocalized_hp, localization = true) {
+        set_slider_max(this.get("hp"), unlocalized_hp, true)
+        if (!(unlocalized_hp in this.localized_hp) && localization) {
+            alert("Pas de conversion automatique entre '" + unlocalized_hp + "' PV non-localisés en PV localisés")
             return
         }
+        if (!localization)
+            return
         const conversion = this.localized_hp[unlocalized_hp]
         set_slider_max(this.get("hp-head"), conversion["head"], true)
         set_slider_max(this.get("hp-trunk"), conversion["trunk"], true)
@@ -112,6 +115,24 @@ class NPC extends DataRow {
         set_slider_max(this.get("hp-left-leg"), conversion["leg"], true)
         set_slider_max(this.get("unease"), conversion["trunk"] + 1)
         this.get("unease").slider("setValue", 0).slider("refresh", {useCurrentValue: true}).trigger("change")
+    }
+
+    is_localized() {
+        return !this.get("localized-status").hasClass("d-none")
+    }
+
+    toggle_localization() {
+        if (this.is_localized()) {
+            this.get("non-localized-status").removeClass("d-none")
+            this.get("localized-status").addClass("d-none")
+            this.get("add-localization").removeAttr("hidden").tooltip()
+            this.get("remove-localization").tooltip("dispose").attr("hidden", "hidden")
+        } else {
+            this.get("non-localized-status").addClass("d-none")
+            this.get("localized-status").removeClass("d-none")
+            this.get("add-localization").tooltip("dispose").attr("hidden", "hidden")
+            this.get("remove-localization").removeAttr("hidden").tooltip()
+        }
     }
 }
 
@@ -184,12 +205,15 @@ class NPCGrid extends DataTable {
                 return a[0].localeCompare(b[0])
         })) {
             const input = row.get(key)
-            if (input.length === 0 && key !== "hp") {
-                console.log("Le champ avec l'id '" + key + "' du '" + value.name + "' est introuvable")
+            if (input.length === 0 && key !== "localization") {
+                alert("Le champ avec l'id '" + key + "' du '" + value.name + "' est introuvable")
                 continue
             }
             if (key === "hp") {
-                row.set_hp(value)
+                row.set_hp(value,  !("localization" in creature) || creature["localization"])
+            } else if (key === "localization") {
+                if (!value)
+                    row.toggle_localization()
             } else if (input.hasClass("input-slider")) {
                 // Update the maximum of a slider
                 set_slider_max(input, value, true)
@@ -208,6 +232,14 @@ class NPCGrid extends DataTable {
                 }
             }
         }
+    }
+
+    toggle_localization(event) {
+        let button = $(event.target)
+        if (!button.hasClass("npc-localization")) {
+            button = button.parents(".npc-localization")
+        }
+        row_of(button).toggle_localization()
     }
 
     armor_overwrite(event) {
@@ -248,6 +280,10 @@ class NPCGrid extends DataTable {
 
     add_custom_listener_to_row(row) {
         super.add_custom_listener_to_row(row)
+
+        /* Localization switch */
+        row.get("add-localization").uon("click", this.toggle_localization)
+        row.get("remove-localization").uon("click", this.toggle_localization)
 
         /* Status part */
         init_status(row.row_index + "-")

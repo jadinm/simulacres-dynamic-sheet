@@ -33,11 +33,21 @@
                          hidden>
                         <div class="row my-0">
                             <i class="fas fa-arrows-alt prefix h-100 col-1" style="font-size: 1.5em;"></i>
-                            <div class="align-middle md-form col-10 m-0" data-toggle="tooltip" data-placement="top"
+                            <div class="align-middle md-form col-9 m-0" data-toggle="tooltip" data-placement="top"
                                  title="Name">
                                 <label for="npc-x-name" hidden></label>
                                 <input class="form-control text-center" id="npc-x-name" type="text" value="">
                             </div>
+                            <i id="npc-x-add-localization"
+                               class="fas fa-search-plus h-100 col-1 clickable npc-localization"
+                               data-toggle="tooltip" data-placement="top" title="Localiser les PV"
+                               style="font-size: 1.5em;" hidden>
+                            </i>
+                            <i id="npc-x-remove-localization"
+                               class="fas fa-search-minus h-100 col-1 clickable npc-localization"
+                               data-toggle="tooltip" data-placement="top" title="Enlever la localisation des PV"
+                               style="font-size: 1.5em;">
+                            </i>
                             <i id="npc-x-copy" class="fas fa-copy prefix h-100 col-1 clickable npc-copy"
                                data-toggle="tooltip"
                                data-placement="top" title="Copier PNJ" style="font-size: 1.5em;">
@@ -88,7 +98,7 @@
                 {{ tab | safe }}
             {% endfor %}
         </div>
-    <textarea id="bestiary" class="d-none" aria-label="">
+        <textarea id="bestiary" class="d-none" aria-label="">
         {{ bestiary }}
     </textarea>
     </div>
