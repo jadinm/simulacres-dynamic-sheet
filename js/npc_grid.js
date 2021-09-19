@@ -130,6 +130,8 @@ class NPC extends DataRow {
         set_slider_max(this.get("hp-left-wing"), conversion["arm"], true)
         set_slider_max(this.get("hp-right-leg"), conversion["leg"], true)
         set_slider_max(this.get("hp-left-leg"), conversion["leg"], true)
+        set_slider_max(this.get("hp-right-leg-2"), conversion["leg"], true)
+        set_slider_max(this.get("hp-left-leg-2"), conversion["leg"], true)
         set_slider_max(this.get("unease"), conversion["trunk"] + 1)
         this.get("unease").slider("setValue", 0).slider("refresh", {useCurrentValue: true}).trigger("change")
     }
