@@ -29,7 +29,22 @@ class NPC extends DataRow {
         7: {"head": 4, "trunk": 6, "arm": 4, "leg": 4},
         8: {"head": 4, "trunk": 7, "arm": 4, "leg": 5},
         9: {"head": 5, "trunk": 8, "arm": 4, "leg": 5},
-        10: {"head": 5, "trunk": 9, "arm": 5, "leg": 5}
+        10: {"head": 5, "trunk": 9, "arm": 5, "leg": 5},
+        11: {"head": 5, "trunk": 10, "arm": 5, "leg": 6},
+        12: {"head": 6, "trunk": 10, "arm": 5, "leg": 6},
+        13: {"head": 6, "trunk": 11, "arm": 6, "leg": 6},
+        14: {"head": 6, "trunk": 12, "arm": 6, "leg": 7},
+        15: {"head": 7, "trunk": 13, "arm": 6, "leg": 7},
+        16: {"head": 7, "trunk": 14, "arm": 7, "leg": 7},
+        17: {"head": 7, "trunk": 15, "arm": 7, "leg": 8},
+        18: {"head": 8, "trunk": 16, "arm": 7, "leg": 8},
+        19: {"head": 8, "trunk": 17, "arm": 8, "leg": 8},
+        20: {"head": 8, "trunk": 18, "arm": 8, "leg": 9},
+        21: {"head": 8, "trunk": 19, "arm": 8, "leg": 9},
+        22: {"head": 8, "trunk": 20, "arm": 9, "leg": 9},
+        23: {"head": 8, "trunk": 21, "arm": 9, "leg": 10},
+        24: {"head": 8, "trunk": 22, "arm": 9, "leg": 10},
+        25: {"head": 8, "trunk": 23, "arm": 10, "leg": 10},
     }
 
     armor_overwrite() {
