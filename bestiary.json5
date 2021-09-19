@@ -5,7 +5,8 @@
     "hp": 3, // The non-localized HP of a creature. If the creature has localized HP and this value is in [3, 10], this is converted to localized HP and unease
     "localization": true,
     "wings": false, // if localized, wings zones can be added for 4-legged creatures such as griffins
-    "hexapod": false, // if localized, wings zones can be added for 4-legged and 2-hands creatures such as griffins or 6-legged creatures such as insects
+    "hexapod": false, // if localized, two more leg zones for 4-legged and 2-hands creatures such as griffins or 6-legged creatures such as insects
+    "octopod": false, // if localized, two more leg zones and wings are replaced by hands for 8-legged creatures such as spiders. This is incompatible with wings.
     "hp-head": 3,
     "hp-trunk": 3,
     "hp-right-arm": 3,
@@ -224,6 +225,22 @@
     "perception": 9,
     "run": 10,
     "movement": "3 (1) [E]",
+  },
+  {
+    "name": "Pieuvre géante",
+    // 8-legged animal
+    "octopod": true,
+    "hp": 10,
+    "breath": 10,
+    "psychic": 1,
+    "full-armor": 3,
+    "power": 1,
+    "combat": 12,
+    "combat-effect": "[E] PV [F] PS (étouffement)",
+    "combat-2-effect": "",
+    "perception": 10,
+    "run": 8,
+    "movement": "6 (3) [C] (nage)",
   },
   {
     "name": "Yéti",

@@ -158,7 +158,7 @@ class NPCGrid extends DataTable {
 
     bestiary = []
     priority_keys = ["combat", "hp", "unease", "full-armor"]
-    input_less_keys = ["localization", "wings", "hexapod"]
+    input_less_keys = ["localization", "wings", "hexapod", "octopod"]
 
     constructor(table) {
         super(table)
@@ -224,11 +224,11 @@ class NPCGrid extends DataTable {
         })) {
             const input = row.get(key)
             if (input.length === 0 && !this.input_less_keys.includes(key)) {
-                alert("Le champ avec l'id '" + key + "' du '" + value.name + "' est introuvable")
+                alert("Le champ avec l'id '" + key + "' de '" + creature.name + "' est introuvable")
                 continue
             }
             if (key === "hp") {
-                row.set_hp(value,  !("localization" in creature) || creature["localization"])
+                row.set_hp(value, !("localization" in creature) || creature["localization"])
             } else if (key === "localization") {
                 if (!value)
                     row.toggle_localization()
@@ -238,6 +238,15 @@ class NPCGrid extends DataTable {
             } else if (key === "hexapod") {
                 if (value)
                     row.find(".leg-2-div").removeClass("invisible")
+            } else if (key === "octopod") {
+                if (value) {
+                    row.find(".leg-2-div,.wing-div").removeClass("invisible")
+                    const images = ["#svg-right-gauntlet", "#svg-right-hand-base", "#svg-left-gauntlet",
+                        "#svg-left-hand-base"]
+                    row.find(".wing-div use").each((i, elem) => {
+                        $(elem).attr("xlink:href", images[i])
+                    })
+                }
             } else if (input.hasClass("input-slider")) {
                 // Update the maximum of a slider
                 set_slider_max(input, value, true)
