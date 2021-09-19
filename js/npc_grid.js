@@ -42,9 +42,9 @@ class NPC extends DataRow {
         20: {"head": 8, "trunk": 18, "arm": 8, "leg": 9},
         21: {"head": 8, "trunk": 19, "arm": 8, "leg": 9},
         22: {"head": 8, "trunk": 20, "arm": 9, "leg": 9},
-        23: {"head": 8, "trunk": 21, "arm": 9, "leg": 10},
-        24: {"head": 8, "trunk": 22, "arm": 9, "leg": 10},
-        25: {"head": 8, "trunk": 23, "arm": 10, "leg": 10},
+        23: {"head": 9, "trunk": 21, "arm": 9, "leg": 10},
+        24: {"head": 9, "trunk": 22, "arm": 9, "leg": 10},
+        25: {"head": 9, "trunk": 23, "arm": 10, "leg": 10},
     }
 
     armor_overwrite() {
