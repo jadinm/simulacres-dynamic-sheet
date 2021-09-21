@@ -84,7 +84,8 @@
         stdTimes: Times-Roman,
         stdTitle: Augusta-Bold,
         stdTitleItalic: Augusta-BoldOblique,
-        SimulacreS: Simulacres-Bats
+        SimulacreS: Simulacres-Bats,
+        Runic: Noto Sans Runic-Regular
     },
     "styles": [
         ["normal" , {
@@ -140,7 +141,7 @@
               "parent": "table",
               "fontSize": 60%,
               "spaceBefore": 0,
-              "spaceAfter": "-20",
+              "spaceAfter": "0",
               "alignment": "TA_LEFT",
             "leftIndent": 0,
             "rightIndent": 0,
