@@ -39,6 +39,14 @@
 .. |b| replace:: :simb:`!`
 .. |bb| replace:: :simb:`?`
 
+.. |history| image:: images/history.png
+            :height: 2ex
+            :align: bottom
+
+.. |upangles| image:: images/angle-double-up.png
+            :height: 2ex
+            :align: bottom
+
 .. |move| image:: images/move.png
             :height: 2ex
             :align: bottom
@@ -67,16 +75,14 @@
     
  .. class:: ccfooter
 
-  +-----------------------------+-----------------------------------------------------------------------+
-  |                             | .. class:: small                                                      |
-  | .. image:: images/cc-by.jpg |                                                                       |
-  |     :align: center          |   Sauf mention contraire, ce document est placé sous licence          |
-  |                             |   Creative Commons `Attribution 4.0                                   |
-  |                             |   International (CC BY 4.0)                                           |
-  |                             |   <https://creativecommons.org/licenses/by/4.0/deed.fr>`_             |
-  +-----------------------------+-----------------------------------------------------------------------+
- 
- 
+  +-----------------------------+----------------------------------------------------------+
+  |                             | .. class:: small                                         |
+  | .. image:: images/cc-by.jpg |                                                          |
+  |     :align: center          |  Sauf mention contraire, ce document est                 |
+  |                             |  placé sous licence Creative Commons                     |
+  |                             |  `Attribution 4.0 International (CC BY 4.0)              |  
+  |                             |  <https://creativecommons.org/licenses/by/4.0/deed.fr>`_ |
+  +-----------------------------+----------------------------------------------------------+
  
 .. image:: images/entete.jpg
     :width: 2000px
@@ -170,6 +176,28 @@ redéfinir certains paramètres. Par exemple, pour Chrome : **Paramètres >
 Paramètres avancés > Téléchargements**. Cochez « Toujours demander où
 enregistrer les fichiers ».
 
+Téléchargement, mises à jour et importation
+-------------------------------------------
+
+On peut donc télécharger et enregistrer sur son disque local une version
+choisie de la fiche. Mathieu publiée régulièrement des *releases*, des
+éditions, des différentes fiches préparées lorsqu'un ensemble de nouvelles
+fonctionnalités y ont été ajoutées. On trouve celles-ci dans `l'endroit
+approprié du dépôt
+<https://github.com/jadinm/simulacres-dynamic-sheet/releases>`_.
+
+Lorsque Mathieu publie une nouvelle version, un bouton comportant 2 chevrons
+|upangles| apparaît à côté du titre principal des fiches existantes. Lorsqu'on
+clique sur ce bouton, la dernière version est téléchargée afin de permettre
+l'importation de l'ancienne fiche.
+
+En effet, quelle que soit la version de votre fiche, il est toujours possible
+d'importer celle-ci dans un fiche plus récente via le champ « |n| Importer une
+ancienne fiche |n| » situé en bas à gauche.  Toutes les données enregistrées y
+seront recopiées et éventuellement adaptées, sous réserve d'être toujours
+supportées par le nouveau code.  En cas de problème la fiche vous indiquera
+quelles données n'ont pas pu être récupérées.
+
 Description générale et caractéristiques
 ----------------------------------------
 
@@ -192,7 +220,7 @@ corrects avec leur MJ (ex. 18 points à répartir entre les 4 composantes).
 .. sidebar:: Illustration
 
     Vous pouvez importer une image pour illustrer votre personnage via le
-    bouton « image ».
+    bouton « |n| image |n| ».
 
 Pour l'instant, laissons de côté les 2 champs notés « |n| PA non dépensés |n| »
 et « |n| PC |n| », nous y reviendrons plus loin.
@@ -203,10 +231,10 @@ Choisir ses onglets
 La feuille supporte donc de nombreuses règles optionnelles et possibilités
 supplémentaires. Ces fonctionnalités sont pour la plupart implémentées dans des
 onglets visibles dans la partie inférieure de la feuille. Selon ce que vous
-souhaitez utiliser, **vous pourrez choisir d'afficher ou de cacher l'un ou
-l'autre de ces onglets** en cliquant sur ce bouton |cogs| |n| situé à droite
-des intitulés des onglets. Ceci vous permet de n'inclure dans votre feuille de
-personnage que les onglets qui vous intéressent.
+souhaitez utiliser, **vous pourrez choisir d'afficher, de cacher ou de renommer
+l'un ou l'autre de ces onglets** en cliquant sur ce bouton |cogs| |n| situé à
+droite des intitulés des onglets. Ceci vous permet de n'inclure dans votre
+feuille de personnage que les onglets qui vous intéressent.
 
 Onglet États
 ------------
@@ -461,6 +489,30 @@ final du Test.
     résister à un poison.  Nul besoin de créer une ligne à chaque fois, vous
     pourrez réutiliser la même.
 
+Historique des tests
+^^^^^^^^^^^^^^^^^^^^
+
+La fiche enregistre les résultats des tests au fur et à mesure pendant la durée
+d'une session (tant qu'on ne ferme pas l'onglet ou la fenêtre de navigation),
+amis ils ne sont *pas* enregistrés lorsqu'on fait une sauvegarde ou lorsqu'on
+exporte la fiche sur un serveur (voir plus loin).
+
+Lorsqu'on est dans la fenêtre de jet, après avoir cliqué sur les petits dés
+associés au jet, si on a déjà effectué un jet de ce type pendant la session
+actuelle, on verra un bouton portant deux chevrons vers la gauche, en haut à
+gauche de la fenêtre. Cliquer sur ce bouton reconstitue la fenêtre de jet telle
+qu'elle était au moment du jet précédent, y compris avec la possibilité de
+relancer les dés. Il apparaît alors un bouton équivalent en haut à droite de la
+fenêtre qui permet de revenir au jet courant.  Ces deux boutons ont donc pour
+fonction de parcourir l'historique des lancers faits pour ce jet particulier,
+interactivement.
+
+Pour consulter cet historique, on peut également cliquer sur le bouton spécifique
+|history| situé tout à fait à droite de la barre d'onglets, juste à côté de
+celui destiné à la gestion de l'affichage de ceux-ci |cogs|. Lorsqu'on clique
+sur le bouton d'historique, on peut parcourir l'historique de *tous* les
+lancers enregistrés par la fiche.
+
 Onglet Magie
 ------------
 
@@ -705,3 +757,5 @@ Des exemples et de la documentation sont donnés sur le `dépôt github de Mathi
     Un petit bouton noté |i| en bas à droite de la fiche permet d'obtenir les
     détails de génération de la feuille : numéro de version, options de
     compilation, greffons présent, etc.
+
+    Ce bouton permet également de supprimer ou de mettre à jour les plugins !
