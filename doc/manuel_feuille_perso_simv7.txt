@@ -39,6 +39,18 @@
 .. |b| replace:: :simb:`!`
 .. |bb| replace:: :simb:`?`
 
+.. |search| image:: images/search.png
+            :height: 2ex
+            :align: bottom
+
+.. |eye-slash| image:: images/eye-slash.png
+            :height: 2ex
+            :align: bottom
+
+.. |eye| image:: images/eye.png
+            :height: 2ex
+            :align: bottom
+
 .. |history| image:: images/history.png
             :height: 2ex
             :align: bottom
@@ -217,6 +229,10 @@ Le minimum et maximum des caractéristiques est implémenté. À la création du
 personnage c’est aux joueuses et joueurs de vérifier que les totaux sont
 corrects avec leur MJ (ex. 18 points à répartir entre les 4 composantes).
 
+Dans le cadre d'une campagne, le coût en PA des améliorations est consultable
+via des info-bulles qui apparaissent lorsque la souris passer sur "Moyen",
+"Composantes", "Règnes" et "Énergies".
+
 .. sidebar:: Illustration
 
     Vous pouvez importer une image pour illustrer votre personnage via le
@@ -236,25 +252,70 @@ l'un ou l'autre de ces onglets** en cliquant sur ce bouton |cogs| |n| situé à
 droite des intitulés des onglets. Ceci vous permet de n'inclure dans votre
 feuille de personnage que les onglets qui vous intéressent.
 
+Dans la plupart des onglets
+---------------------------
+
+Les informations à afficher sont nombreuses dans la plupart des onglets. Pour
+faciliter leur utilisation, Mathieu a ajouté 2 mécanismes qui sont présents
+dans pratiquement chacun d'entre-eux |n| : une fonction de recherche et la
+possibilité de cacher ou dévoiler certaines parties de l'onglet.
+
+La **fonction de recherche** est faite via un grand champ en haut de l'onglet,
+à droite d'un bouton dédié |search|. La recherche est évidemment effectuée dans
+les informations présentées par l'onglet actuel.
+
+Au dessus du champ de recherche se trouve souvent quelques boutons munis du
+symbole œil |eye|. Cliquer sur l'un ou l'autre de ceux-ci permet de cacher la
+partie correspondante pour alléger la présentation. L'œil sera alors barré
+|eye-slash|. On peut bien sûr re-cliquer sur le bouton faire ré-apparaître la
+partie concernée.
+
 Onglet États
 ------------
 
 Le choix a donc été fait d'utiliser les règles optionnelles des Points de Vie
 localisés, ainsi que du malaise, de la localisation des armures et de
-l'utilisation du talent de bouclier. Dans cette version de la fiche v7 il
-n'est pas possible de revenir aux Points de Vie non-localisés, mais le dépôt
-Github de Mathieu permet de télécharger d'autres versions, ou même d'en
-produire de nouvelles, complètement adaptées à vos besoins et envies (`plus
-d'info <https://github.com/jadinm/simulacres-dynamic-sheet>`_).
+l'utilisation du talent de bouclier. Dans cette version de la fiche v7 il n'est
+pas possible de revenir aux Points de Vie non-localisés dans le fiche présentée
+ici, mais le dépôt Github de Mathieu permet de télécharger d'autres versions,
+ou même d'en produire de nouvelles, complètement adaptées à vos besoins et
+envies, y compris pour utiliser des Points de Vie non localisés (`plus d'info
+<https://github.com/jadinm/simulacres-dynamic-sheet>`_).
 
 La valeur maximum de chaque curseur est ajustée automatiquement en tenant
 compte des Composantes et des Moyens. Toutefois, si vous payez en PA pour
-augmenter les PS ou EP, vous pouvez manuellement augmenter le maximum en
-cliquant sur le nom du curseur (l'augmentation des Points de Vie dans les zones
-est faite automatiquement lorsque vous faites monter vos caractéristiques). De
-la même manière vous pouvez diminuer le maximum en cas de pertes « définitives
-», par exemple dans une zone lors d'une blessure critique mal soignée : il faut
-alors cliquer sur l'icône de la zone concernée.
+augmenter les PS ou EP (le coût en PA est indiqué par une info-bulle), vous
+pouvez manuellement augmenter le maximum en cliquant sur le nom du curseur
+(l'augmentation des Points de Vie dans les zones est faite automatiquement
+lorsque vous faites monter vos caractéristiques). De la même manière vous
+pouvez diminuer le maximum en cas de pertes « définitives », par exemple dans
+une zone lors d'une blessure critique mal soignée |n| : il faut alors cliquer
+sur l'icône de la zone concernée. Le dialogue qui s'affiche permet également
+d'enregistrer une remarque ou une note explicative associée à la zone ou au
+compteur. Dans le cas des PS, il est également possible d'encoder les *points
+de souffle temporaires* obtenus par l'usage de la Concentration Psychique, un
+pouvoir de la Voie du Moine.
+
+La fiche gère automatiquement tous les aspects de l'armure en faisant le compte
+total de la *Protection* et en indiquant le malus à appliquer. On peut
+également indiquer si on porte un grand ou un petit bouclier afin d'ajouter
+leur score au calcul du malus de protection. Il faut noter que le *Malaise* est
+appliqué automatiquement à tous les tests, **mais pas le malus d'armure** car
+celui-ci ne s'applique qu'aux actions physiques lorsqu'il est inférieur à 3 (et
+à toutes les actions à partir de 3). Lorsqu'il s'applique, il faut donc ajouter
+celui-ci à la main au moment du test comme *Modificateur Circonstanciel*.
+
+Pour tenir compte des sorts et autres particularités d'équipement qui ajoutent
+de la Protection *sans impliquer de difficulté supplémentaire* (par exemple,
+sur une armure enchantée), on peut utiliser la notion d'*absorption*. C'est un
+compteur à part, caché par défaut, et qui peut enregistrer un score différent
+sur chaque zone.
+
+Enfin, les règles proposent (HS10 p.33) que les personnages disposent d'une
+dernière chance : au seuil de la mort, la possibilité de faire un jet désespéré
+pour sauver leur vie. Ceci n'est disponible qu'une fois par personnage (mais
+peut être racheté pour 25 PAs). Une case à cocher, en bas à droite de l'onglet,
+permet d'enregistrer l'utilisation de cette options pour le personnage.
 
 Onglet Historique
 -----------------
