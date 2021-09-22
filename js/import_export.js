@@ -282,8 +282,10 @@ function import_data(src_html, dst_html, full_sheet, template_copy = false) {
                     new_input.slider("refresh", {useCurrentValue: true})
                 }
 
-                if (new_input.hasClass("selectpicker") && old_input.getAttribute("type") === "number") {
-                    // If the old input is a number input and the new one a list, we select the first options
+                if (new_input.hasClass("selectpicker") && old_input.getAttribute("type") === "number"
+                    && isNaN(new_input.find("option").last().val())) {
+                    // If the old input is a number input and the new one a list of something else than numbers,
+                    // we select the N first options
                     let nbr_options = parseInt(old_input.value)
                     if (isNaN(nbr_options))
                         nbr_options = 0
