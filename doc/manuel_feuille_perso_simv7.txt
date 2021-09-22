@@ -425,19 +425,37 @@ Onglet Tests
 
 Dans cet onglet, vous pouvez gérer les Tests les plus courants.
 
-Si vous faites vous-même vos calculs, vous y trouvez un bouton pour lancer
-2dés, voire un 3ème en cas de besoin. Les deux dés du lancer apparaissent, vous
-pouvez cliquer sur chacun pour le relancer, au cas où vous en auriez la
-possibilité (comme un système de Point de Chance fait maison ou l'importation
-de l’énergie d'Héroïsme dans la v7 par exemple).
+Si vous faites vous-même vos calculs, vous y trouvez, tout en bas, un bouton
+pour lancer un ou deux dés, voire plus en cas de besoin. On peut également
+spécifier le seuil sous lequel il faut faire le test. Les dés du lancer
+apparaissent, vous pouvez cliquer sur chacun pour le relancer, au cas où vous
+en auriez la possibilité (comme un système de Point de Chance fait maison ou
+l'importation de l’énergie d'Héroïsme dans la v7 par exemple).
 
 En revanche, si vous utilisez souvent les mêmes Talents, vous pouvez créer des
 lignes pour mémoriser des Tests courants et en avoir aussitôt les résultats.
 Toutefois, tous les Talents concernés doivent exister dans l’onglet Talents
-pour pouvoir être utilisé dans les tests courants.
+pour pouvoir être utilisé dans les tests courants. Cet onglet comporte 4
+sections que l'on peut afficher ou cacher via des boutons spécifiques |n| : les
+tests s'y rapportant sont évidemment destinés à s'y trouver. Il s'agit de |n| :
+
+- Combat au contact
+- Combat à distance
+- Combat à 2 armes
+- Tests courants
+
+Les trois premières sections intègrent les quelques spécificités des tests
+concernés. Ainsi un test de combat au contact utilise obligatoirement Corps
+|corps| + Action  |action|, on ne peut changer que le règne. La partie de
+combat à distance permet, en plus, de définir les effets de la *distance de la
+cible* sur les dégâts (typiquement un recul de colonne pour le calcul des
+dégâts). La section sur le combat à 2 armes se rapporte à la règle optionnelle
+proposée par Karl Karas, et la dernière catégorie, *Tests Courants*, permet de
+définir n'importe quel test.
 
 Pour créer un Test :
 
+0. choisissez une catégorie
 1. créez une ligne en cliquant sur le **(+)**;
 2. dans la case ainsi créée, utilisez le menu déroulant pour y insérer le
    Talent concerné (ou rien du tout, voir plus bas);
@@ -478,6 +496,21 @@ fenêtre du résultat par leur valeur, déterminée selon le résultat du jet.
 
 **Exemple :** Talent Épée Longue, Formule |corps| + |action| + |mecanique|,
 Description : Dégâts de [F] PV et [A] PS.
+
+Paramètres
+^^^^^^^^^^
+
+Le petit bouton |cogs| à droite de chaque test permet de définir quelques
+paramètres intéressants (mais optionnels) du test |n| :
+
+- l'effet, avec les calculs automatiques (cf. paragraphe précédent)
+- le nom, qui sera affiché directement au dessus de la ligne du test et qui
+  permettra de distinguer les différents tests basés sur le même Talent
+- un éventuel modificateur permanent à appliquer au test
+- des valeurs minimales et maximales
+- un éventuel équipement dépensé lors du test, comme une flèche ou un carreau
+  d'arbalète
+- la possibilité d'avoir un jet d'effet explosif 
 
 Effectuer le Test
 ^^^^^^^^^^^^^^^^^
