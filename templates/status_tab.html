@@ -72,13 +72,16 @@
                            value="0">
                 </div>
 
-                <div class="row mt-1 md-form form-sm m-0 input-with-pre-icon" style="width: 200px">
-                    <svg height="2em" width="2em" class="input-prefix">
+                <div class="row mt-1 md-form form-sm m-0 pl-0 ml-0 input-with-pre-icon" style="width: 200px">
+                    <svg height="2em" width="2em" class="input-prefix pl-0 ml-0">
                         <use xlink:href="#svg-shield"></use>
                     </svg>
-                    <input type="number" id="shield" class="form-control form-control-sm text-center" min="0" max="2"
-                           value="0">
-                    <label for="shield" hidden></label>
+                    <select id="shield" title=""
+                            class="show-tick form-control form-control-sm text-center selectpicker mr-2 pl-0 ml-0">
+                        <option value="0" selected>Pas de bouclier</option>
+                        <option value="1">Petit bouclier</option>
+                        <option value="2">Grand bouclier</option>
+                    </select>
                 </div>
 
                 <div class="row mt-1 md-form form-sm m-0 input-with-pre-icon" style="width: 200px">

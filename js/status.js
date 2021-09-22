@@ -63,14 +63,7 @@ function get_armor_penalty() {
     // Take shield into account
     const shield = parseInt($("#shield").val()) || 0
     if (!isNaN(shield) && shield > 0) {
-        // Check if shield talent exists and is above 0
-        const shield_talent = talent_from_name('Bouclier')
-        const level = shield_talent.length > 0 ? parseInt(talent_level(shield_talent)[0]) : NaN
-        if (!isNaN(level) && level >= 0) {
-            return armor_penalty(armor_sum) + " en parade, "
-                + armor_penalty(armor_sum + shield * 6) + " en protection"
-        }
-        return armor_penalty(armor_sum) + " en parade (protection impossible car le talent 'Bouclier' est à moins de 0)"
+        return armor_penalty(armor_sum + shield * 6)
     }
 
     return armor_penalty(armor_sum)
