@@ -376,5 +376,7 @@ $("#import-bestiary").on("change", event => {
 })
 
 $(_ => {
-    npc_grid = new NPCGrid($("#npc-table"))
+    const npc_table = $("#npc-table")
+    if (npc_table.length > 0)
+        npc_grid = new NPCGrid(npc_table)
 })
