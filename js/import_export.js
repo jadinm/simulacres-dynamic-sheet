@@ -513,7 +513,7 @@ function build_plugin_list() {
     for (let i = 0; i < plugins.length; i++) {
         const new_element = template.clone(true, true)
         new_element.removeClass("d-none").addClass("d-flex")
-        new_element.children().first().text(plugins[i])
+        new_element.children().first().text(plugins[i] + " (version " + plugin_versions[plugins[i]] + ")")
         const upgrade = new_element.find(".plugin-update")
         const url = "https://raw.githubusercontent.com/jadinm/simulacres-dynamic-sheet/" + latest_released_version + "/plugins/plugin_" + plugins[i].replaceAll("-", "_") + ".html"
         query_raw_plugin(url, (data) => {
