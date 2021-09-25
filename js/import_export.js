@@ -562,14 +562,12 @@ function insert_or_replace_block(block, parent, overwrite = true) {
         if (overwrite)
             $(block).replaceAll(block_selector)
     } else {
-        let last_child = null
-        if (parent[0].id === "nav-tabs") { // Keep setting button last
-            last_child = parent.children().last()
+        let last_children = $()
+        if (parent[0].id === "nav-tabs") { // Keep setting buttons last
+            last_children = parent.children().filter(".tab-left")
         }
         parent.append(block)
-        if (last_child) {
-            parent.append(last_child)
-        }
+        last_children.each((i, elem) => parent.append($(elem)))
     }
 }
 
