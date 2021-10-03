@@ -241,9 +241,7 @@ class RangeRow extends RollRow {
         if (base_effect_div.length === 0)
             return // Version 8
         const base_effect = base_effect_div.val()
-        this.data.find(".roll-effect").filter((i, elem) => {
-            return elem.id !== base_effect_div[0].id
-        }).each((i, elem) => {
+        this.data.find("span.roll-effect").each((i, elem) => {
             if (!base_effect || base_effect.length === 0) {
                 $(elem).html("&nbsp;")
             } else {
@@ -257,7 +255,7 @@ class RangeRow extends RollRow {
                     return prefix + "["  + escape + new_effect + escape2 + "]" + suffix
                 })
                 $(elem).text(text)
-                $(elem).prev().val(text)
+                $(elem).prev().val(text).trigger("change")
             }
         })
     }
