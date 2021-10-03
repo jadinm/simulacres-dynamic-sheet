@@ -90,6 +90,8 @@ class DataTable {
     }
 
     add_custom_listener_to_row(row) {
+        /* Copy row */
+        row.get("copy").uon("click", this.copy_row)
     }
 
     add_custom_listeners() {
@@ -104,7 +106,16 @@ class DataTable {
         return this.template_row.clone(true, true)
     }
 
-    add_row(fixed_idx = null) {
+    copy_row(event) {
+        let button = $(event.target)
+        if (!button.hasClass("row-copy")) {
+            button = button.parents(".row-copy")
+        }
+        table_of(button).add_row(null, row_of(button))
+        changed_page = true
+    }
+
+    add_row(fixed_idx = null, from_row = null) {
         const new_elem = this.clone_row()
 
         let new_id
@@ -136,6 +147,11 @@ class DataTable {
         // Add custom listeners
         const row = new this.constructor.row_class(new_elem)
         this.add_custom_listener_to_row(row)
+
+        // Copy data from one NPC to the other
+        if (from_row) {
+            import_data(from_row.data, row.data, false, true)
+        }
         return row
     }
 

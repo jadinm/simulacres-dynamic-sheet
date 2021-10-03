@@ -293,23 +293,9 @@ class NPCGrid extends DataTable {
         row_of(button).roll(button)
     }
 
-    copy_row(event) {
-        let button = $(event.target)
-        if (!button.hasClass("npc-copy")) {
-            button = button.parents(".npc-copy")
-        }
-        table_of(button).add_row(null, row_of(button))
-        changed_page = true
-    }
-
     add_row(fixed_idx = null, from_row = null) {
         const row = super.add_row(fixed_idx)
         row.get("name").val("NPC " + row.row_number).trigger("change")
-
-        // Copy data from one NPC to the other
-        if (from_row) {
-            import_data(from_row.data, row.data, false, true)
-        }
         return row
     }
 
@@ -337,9 +323,6 @@ class NPCGrid extends DataTable {
         /* Armor lock */
         row.get("armor-overwrite").uon("change", this.armor_overwrite)
         row.get("full-armor").uon("change", this.armor_overwrite)
-
-        /* Copy NPC */
-        row.get("copy").uon("click", this.copy_row)
 
         /* Roll triggers */
         row.find(".row-roll-trigger").uon("click", this.trigger_roll)

@@ -352,6 +352,7 @@ class TalentRollTable extends DataTable {
             row.update_roll_value()
         }
         row.get("details-name").uon("change", this.update_title)
+        row.get("copy").tooltip()
     }
 
     clone_row() {

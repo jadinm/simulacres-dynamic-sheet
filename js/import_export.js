@@ -350,7 +350,12 @@ function import_data(src_html, dst_html, full_sheet, template_copy = false) {
         const selection = src_html.find("select#" + old_select.id + " option:selected").map((i, elem) => $(elem).val()).toArray()
         if (selection.length > 0 && !old_select.id.includes("-x-")) {
             // Set this option on the new document
-            const new_select = dst_html.find("#" + old_select.id)
+            let new_select = dst_html.find("#" + old_select.id)
+            if (template_copy && new_select.length === 0) {
+                const match = old_select.id.match(row_id_regex)
+                if (match)
+                    new_select = dst_html.find("#" + dst_row.row_index + "-" + match[4])
+            }
             new_select.selectpicker("val", selection)
         }
     })
