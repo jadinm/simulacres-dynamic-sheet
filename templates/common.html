@@ -178,6 +178,30 @@
 </div>
 
 <div class="container">
+    <div class="modal fade bd-modal-sm" id="select-tabs" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header justify-content-between">
+                    <button type="button" class="hidden close" data-dismiss="modal" aria-label="Close">
+                    </button>
+                    <h4 class="modal-title text-center">Choisir un onglets</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body align-middle d-flex justify-content-center col-12 px-0">
+                    <!-- List of tabs -->
+                    <ul id="select-tabs-tabs" class="list-group-flush row col-12 d-flex justify-content-center px-0">
+                        <li class="list-group-item text-center px-0 py-1 my-1 mx-1 btn btn-light col-5 d-none">
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
     <div class="modal fade bd-modal-lg" id="about-sheet" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content" style="font-family: 'Linux Libertine', serif">
@@ -299,6 +323,15 @@
 <!-- SVG images -->
 {% include "images.html" %}
 
+<!-- Allow bootstrap screen size detection from js -->
+<div id="sizer">
+    <div class="d-block d-sm-none d-md-none d-lg-none d-xl-none" data-size="xs"></div>
+    <div class="d-none d-sm-block d-md-none d-lg-none d-xl-none" data-size="sm"></div>
+    <div class="d-none d-sm-none d-md-block d-lg-none d-xl-none" data-size="md"></div>
+    <div class="d-none d-sm-none d-md-none d-lg-block d-xl-none" data-size="lg"></div>
+    <div class="d-none d-sm-none d-md-none d-lg-none d-xl-block" data-size="xl"></div>
+</div>
+
 </body>
 
 <!-- Audio resources -->
@@ -339,6 +372,7 @@
     {% endif %}
 </script>
 <script>{{ include_static("../js/utils.js") }}</script>
+<script>{{ include_static("../js/resize.js") }}</script>
 <script>{{ include_static("../js/import_export.js") }}</script>
 <script>{{ include_static("../js/adventure_points_utils.js") }}</script>
 {% if version == V7 %}

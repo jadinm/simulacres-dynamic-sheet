@@ -120,6 +120,8 @@ loader = FileSystemLoader(html_dir)
 env = Environment(loader=loader, autoescape=select_autoescape(['html', 'xml']))
 # This add an include option that do not treat the content of the file as a jinja template
 env.globals['include_static'] = include_static
+# Add {% do <statement> %}
+env.add_extension("jinja2.ext.do")
 
 # Parsing fonts, audio and bestiary
 

@@ -165,11 +165,18 @@ $("#dark-mode").on("click", _ => {
 
 // Tab customization
 function build_tab_hide_list() {
-    const parent_list = $("#hide-tabs-tabs")
-    parent_list.children().slice(1).remove()
-    const to_clone = parent_list.children().first()
+    const hide_list = $("#hide-tabs-tabs")
+    hide_list.children().slice(1).remove()
+    const hide_to_clone = hide_list.children().first()
+
+    const select_list = $("#select-tabs-tabs")
+    select_list.children().slice(1).remove()
+    const select_to_clone = select_list.children().first()
+
     $("#nav-tabs a[role=\"tab\"]").each((i, elem) => {
-        const list_item = to_clone.clone(false, false)
+        /* Set hide list */
+        const tab_name = $(elem).text().trim()
+        let list_item = hide_to_clone.clone(false, false)
         list_item.removeClass("d-none").addClass("d-flex")
         list_item.find(".show-tab").on("click", _ => {
             $(elem).removeClass("d-none")
@@ -181,7 +188,7 @@ function build_tab_hide_list() {
             list_item.find(".hide-tab").addClass("d-none")
             list_item.find(".show-tab").removeClass("d-none")
         })
-        list_item.children().first().children().first().val($(elem).text().trim()).on("change", e => {
+        list_item.children().first().children().first().val(tab_name).on("change", e => {
             $(elem).text($(e.target).val().trim())
         })
 
@@ -192,7 +199,17 @@ function build_tab_hide_list() {
             list_item.find(".show-tab").addClass("d-none")
             list_item.find(".hide-tab").removeClass("d-none")
         }
-        parent_list.append(list_item)
+        hide_list.append(list_item)
+
+        /* Set select list */
+        list_item = select_to_clone.clone(false, false)
+        list_item.removeClass("d-none")
+        list_item.text(tab_name).on("click", _ => {
+            $(elem).click()
+            $("#nav-tabs-collasped").children().first().children().first().text(tab_name)
+            $("#select-tabs").modal("hide")
+        })
+        select_list.append(list_item)
     })
 }
 

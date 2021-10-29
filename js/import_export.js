@@ -151,6 +151,8 @@ function reset_tab_selection(html) {
         elem.setAttribute("aria-selected", "true")
     })
     tab_buttons.first().addClass("active")[0].setAttribute("aria-selected", "false")
+    // Reset it also for the collapsed navbar
+    navbar_collapsing()
 }
 
 /**
