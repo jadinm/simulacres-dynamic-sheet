@@ -3,6 +3,9 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header justify-content-between">
+                    <button type="button" class="hidden close d-md-none"
+                            data-dismiss="modal" aria-label="Close">
+                    </button>
                     <div>
                         <button id="roll-dialog-history-backward" class="btn btn-light">
                             <i class="fas fa-angle-double-left"></i>
@@ -20,6 +23,10 @@
                             <i class="fas fa-angle-double-right"></i>
                         </button>
                     </div>
+                    <button type="button" class="close d-md-none" data-dismiss="modal"
+                            aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
                 </div>
                 <div class="modal-body align-middle">
                     <div id="roll-dialog-critical" class="row mx-1">

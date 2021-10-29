@@ -148,8 +148,13 @@
     <div class="modal fade bd-modal-lg" id="hide-tabs" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content" style="font-family: 'Linux Libertine', serif">
-                <div class="modal-header justify-content-center">
-                    <h4>Renommer/Cacher/Montrer les onglets</h4>
+                <div class="modal-header justify-content-between">
+                    <button type="button" class="hidden close" data-dismiss="modal" aria-label="Close">
+                    </button>
+                    <h4 class="modal-title text-center">Renommer/Cacher/Montrer les onglets</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
                 </div>
                 <div class="modal-body align-middle">
                     <!-- List of tabs -->
@@ -176,8 +181,13 @@
     <div class="modal fade bd-modal-lg" id="about-sheet" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content" style="font-family: 'Linux Libertine', serif">
-                <div class="modal-header justify-content-center">
-                    <h4>À propos de votre fiche de personnage dynamique</h4>
+                <div class="modal-header justify-content-between">
+                    <button type="button" class="hidden close" data-dismiss="modal" aria-label="Close">
+                    </button>
+                    <h4 class="modal-title text-center">À propos de votre fiche de personnage dynamique</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
                 </div>
                 <div class="modal-body align-middle">
                     <p class="mx-1">
@@ -238,12 +248,17 @@
     <div class="modal fade bd-modal-lg" id="import-warning" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content" style="font-family: 'Linux Libertine', serif">
-                <div class="modal-header justify-content-center">
-                    <h4 class="text-warning">
+                <div class="modal-header justify-content-between">
+                    <button type="button" class="hidden close" data-dismiss="modal" aria-label="Close">
+                    </button>
+                    <h4 class="modal-title text-center">
                         <i class="fas fa-exclamation-triangle"></i>
                         Problème à l'importation
                         <i class="fas fa-exclamation-triangle"></i>
                     </h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
                 </div>
                 <div class="modal-body align-middle">
                     <p class="mx-1">

@@ -3,10 +3,13 @@
          aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header justify-content-center">
-                    <span class="text-center">
-                        <span id="{{ row_type }}-x-details-title" class="modal-title text-center"></span>
-                    </span>
+                <div class="modal-header justify-content-between">
+                    <button type="button" class="hidden close" data-dismiss="modal" aria-label="Close">
+                    </button>
+                    <span id="{{ row_type }}-x-details-title" class="modal-title text-center"></span>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
                 </div>
                 <div class="modal-body align-middle">
                     <span id="{{ row_type }}-x-details-effect" class="row col-12 mx-1"></span>
