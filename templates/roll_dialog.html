@@ -48,11 +48,11 @@
                             Modificateur au nombre de réussites (ex. les duels entre super-héros)
                         </label>
                     </div>
-                    <div class="row mx-1 mb-5 roll-dialog-effect-hide roll-dialog-slider roll-dialog-superpower-slider col-md-6 col-12">
+                    <div class="row mx-1 mt-5 roll-dialog-effect-hide roll-dialog-slider roll-dialog-superpower-slider col-md-6 col-12">
                         <input id="roll-dialog-superpower-modifier"
                                data-slider-id="roll-dialog-superpower-modifier-slider" type="text" data-slider-min="-12"
                                data-slider-max="0" data-slider-step="1" data-slider-value="0" class="input-slider"
-                               data-slider-tooltip-position="bottom"/>
+                               data-slider-tooltip-position="top"/>
                     </div>
                     <div class="row mx-1 roll-dialog-effect-hide roll-dialog-slider">
                         <label id="roll-dialog-modifier-label" for="roll-dialog-modifier">
@@ -63,10 +63,10 @@
                             {% endif %}
                         </label>
                     </div>
-                    <div class="row mx-1 mb-5 roll-dialog-effect-hide roll-dialog-slider col-md-6 col-12">
+                    <div class="row mx-1 mt-5 roll-dialog-effect-hide roll-dialog-slider col-md-6 col-12">
                         <input id="roll-dialog-modifier" data-slider-id="roll-dialog-modifier-slider" type="text"
                                data-slider-min="-12" data-slider-max="12" data-slider-step="1" data-slider-value="0"
-                               class="input-slider" data-slider-tooltip-position="bottom"/>
+                               class="input-slider" data-slider-tooltip-position="top"/>
                     </div>
                     {% if version == V7 %}
                         <div class="row mx-1 roll-dialog-effect-hide roll-dialog-slider-effect">
@@ -74,10 +74,10 @@
                                 Modificateur aux dés d'effet (ex. armure cible)&nbsp;
                             </label>
                         </div>
-                        <div class="row mx-1 mb-5 roll-dialog-effect-hide roll-dialog-slider-effect col-md-6 col-12">
+                        <div class="row mx-1 mt-5 roll-dialog-effect-hide roll-dialog-slider-effect col-md-6 col-12">
                             <input id="roll-dialog-effect-modifier" data-slider-id="roll-dialog-effect-modifier-slider"
                                    type="text" data-slider-min="-12" data-slider-max="12" data-slider-step="1"
-                                   data-slider-value="0" class="input-slider" data-slider-tooltip-position="bottom"/>
+                                   data-slider-value="0" class="input-slider" data-slider-tooltip-position="top"/>
                         </div>
                     {% endif %}
                     {% if not discovery %}

@@ -34,7 +34,7 @@
                 <input id="breath" data-slider-id="breath-slider" type="text" data-slider-min="0"
                        data-slider-max="{{ max_breath_slider }}" data-slider-step="1"
                        data-slider-value="{{ max_breath_slider }}" data-slider-reversed="true"
-                       class="input-slider" data-slider-handle="custom" data-slider-tooltip-position="bottom"/>
+                       class="input-slider" data-slider-handle="custom" data-slider-tooltip-position="top"/>
             </div>
             <div class="row clickable btn-link" data-toggle="modal" data-target="#psychic-max-update">
                 <label id="psychic-title" class="clickable" for="psychic" data-toggle="tooltip" data-placement="right"
@@ -46,7 +46,7 @@
                 <input id="psychic" data-slider-id="psychic-slider" type="text" data-slider-min="0"
                        data-slider-max="{{ max_slider }}" data-slider-step="1" data-slider-value="{{ max_slider }}"
                        data-slider-reversed="true"
-                       class="input-slider" data-slider-handle="custom" data-slider-tooltip-position="bottom"/>
+                       class="input-slider" data-slider-handle="custom" data-slider-tooltip-position="top"/>
             </div>
             <div class="row">
                 <label for="rest">Jours de repos</label>
@@ -55,7 +55,7 @@
                 <input id="rest" data-slider-id="rest-slider" type="text" data-slider-min="0"
                        data-slider-max="7"
                        data-slider-step="1" data-slider-value="0" class="input-slider"
-                       data-slider-handle="custom" data-slider-tooltip-position="bottom"/>
+                       data-slider-handle="custom" data-slider-tooltip-position="top"/>
             </div>
         </div>
         {% if not intermediate_discovery %}
