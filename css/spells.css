@@ -29,6 +29,14 @@
     z-index: 1; /* Prevent checkboxes to overlap with it */
 }
 
+#magic-tab .spell-difficulty {
+    min-width: 15em;
+}
+
 .focusMagic-name, .focusMagic-focus {
     min-width: 15em;
+}
+
+#magic-tab .talent-select {
+    min-width: 300px;
 }

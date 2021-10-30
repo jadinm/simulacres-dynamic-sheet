@@ -1,5 +1,9 @@
 /* Sliders styling */
 
+.slider.slider-horizontal {
+    width: 100%;
+}
+
 .slider.slider-vertical.hp-slider {
     height: 5em;
 }

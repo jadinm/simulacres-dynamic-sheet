@@ -1,3 +1,7 @@
 .ki-roll-row {
     min-width: 4.5em;
 }
+
+#ki-tab .talent-select {
+    min-width: 300px;
+}
