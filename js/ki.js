@@ -6,6 +6,10 @@ class KiRow extends PsiRow {
         return "ki"
     }
 
+    is_talent_based_spell() {
+        return true
+    }
+
     energy_level() {
         return parseInt(this.get("level").val())
     }

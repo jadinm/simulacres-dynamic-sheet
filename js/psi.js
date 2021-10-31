@@ -22,7 +22,7 @@ class PsiRow extends SpellRow {
     }
 
     is_talent_based_spell() {
-        return true
+        return false
     }
 
     is_hermetic_spell() {
