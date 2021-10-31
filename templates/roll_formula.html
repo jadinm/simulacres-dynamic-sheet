@@ -4,7 +4,7 @@
     {% set realm_class = "custom-radio" %}
 {% endif %}
 
-<div class="row">
+<div class="row {{ row_class }}">
     <div class="custom-control custom-radio custom-control-inline">
         <input type="checkbox" class="custom-control-input formula-elem"
                id="{{ row_type }}-x-body" name="{{ row_type }}-x-component">
@@ -64,7 +64,7 @@
         </div>
     {% endif %}
 </div>
-<div class="row">
+<div class="row {{ row_class }}">
     {% if matrix_4x4 %}
         <div class="custom-control custom-radio custom-control-inline">
             <input type="checkbox" class="custom-control-input formula-elem"
@@ -137,7 +137,7 @@
         </div>
     {% endif %}
 </div>
-<div class="row">
+<div class="row {{ row_class }}">
     {% if matrix_4x4 %}
         <div class="custom-control custom-radio custom-control-inline">
             <input type="checkbox" class="custom-control-input formula-elem"
@@ -215,7 +215,7 @@
         </div>
     {% endif %}
 </div>
-<div class="row">
+<div class="row {{ row_class }}">
     {% if matrix_4x4 %}
         <div class="custom-control custom-radio custom-control-inline">
             <input type="checkbox" class="custom-control-input formula-elem"

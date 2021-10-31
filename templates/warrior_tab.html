@@ -8,7 +8,7 @@
 
     <!-- warrior's ways powers -->
     <div class="row col-12 mt-2 m-0 p-0"><b>Pouvoirs des Voies de la Guerre</b></div>
-    <div class="table-responsive col-12 m-0 p-0" style="overflow-y: hidden !important;">
+    <div class="collapsible-table table-responsive col-12 m-0 p-0" style="overflow-y: hidden !important;">
         <table class="table table-hover m-0 p-0">
             <thead class="m-0 p-0">
             <tr>
@@ -25,24 +25,25 @@
             </thead>
             <tbody id="warrior-table" class="sortable-list">
             <tr id="warrior-x" class="spell" hidden>
-                <td class="md-form align-middle" data-toggle="tooltip" data-placement="bottom" title="">
-                    <i id="warrior-x-name-handle" class="fas fa-arrows-alt prefix h-100"
+                <td data-title="Nom" class="md-form my-0 py-0 align-middle"
+                    data-toggle="tooltip" data-placement="bottom" title="">
+                    <i id="warrior-x-name-handle" class="fas fa-arrows-alt prefix h-100 d-none d-md-inline"
                        style="font-size: 1.5em;"></i>
                     <label for="warrior-x-name"></label>
                     <input id="warrior-x-name" class="spell-name form-control" type="text" value="">
                 </td>
-                <td class="my-0 py-0 spell-formula align-middle">
-                    {% with row_type = "warrior", realm_checkbox = False %}
+                <td data-title="Formule" class="my-0 py-0 spell-formula align-middle">
+                    {% with row_type = "warrior", realm_checkbox = False, row_class = "pl-md-0 pl-3" %}
                         {% include "roll_formula.html" %}
                     {% endwith %}
                 </td>
-                <td class="my-0 py-0 spell-formula align-middle">
+                <td data-title="Énergie" class="my-0 py-0 spell-formula align-middle">
                     <select id="warrior-x-energy" title="Énergie"
                             class="show-tick form-control energy-select selectpicker"
                             data-live-search="true" data-style="col-12 px-3 align-middle">
                     </select>
                 </td>
-                <td class="spell-difficulty my-0 py-0 align-middle">
+                <td data-title="Difficulté" class="spell-difficulty hide-data-title my-0 py-0 align-middle">
                     <div class="row py-0 my-0 d-none">
                         <div class="text-center col-12 py-0 my-0">
                             <label class="py-0 my-0 spell-difficulty-value"
@@ -62,22 +63,22 @@
                         </div>
                     </div>
                 </td>
-                <td class="my-0 py-0 text-center align-middle">
+                <td data-title="Valeur" class="my-md-0 py-md-0 py-2 text-center align-middle">
                     <div class="m-0 {{ padding }} p-0 spell-value-row">
                         <span id="warrior-x-value" class="spell-value"></span>
                     </div>
                 </td>
-                <td class="my-0 py-0 text-center align-middle">
+                <td data-title="&nbsp;" class="my-0 py-0 text-center align-middle">
                     {% for level in range(1, 4) %}
                         {% if level == 1 %}
                             {% set classes = "" %}
                             {% set dice_classes = "" %}
                         {% else %}
-                            {% set classes = "mt-4 pt-1" %}
+                            {% set classes = "mt-3" %}
                             {% set dice_classes = "invisible" %}
                         {% endif %}
                         <div class="m-0 {{ classes }} p-0 warrior-roll-row">
-                            <span class="warrior-level-specific">Niv. {{ level }}</span>
+                            <span class="warrior-level-specific">Niv.&nbsp;{{ level }}</span>
                             <span class="{{ dice_classes }} m-0 p-0">
                                 <span id="warrior-x-dice-{{ level }}" class="clickable row-roll-trigger" hidden>
                                     <i class="fas fa-dice"></i>
@@ -86,14 +87,14 @@
                         </div>
                     {% endfor %}
                 </td>
-                <td class="md-form my-0 py-0 align-middle">
+                <td data-title="Durées" class="md-form my-0 py-0 align-middle">
                     {% for level in range(1, 4) %}
                         <input id="warrior-x-duration-{{ level }}"
                                class="spell-duration form-control text-center" type="text">
                         <label for="warrior-x-duration-{{ level }}"></label>
                     {% endfor %}
                 </td>
-                <td class="md-form my-0 py-0 align-middle">
+                <td data-title="Effets" class="md-form my-0 py-0 align-middle">
                     {% for level in range(1, 4) %}
                         <input id="warrior-x-effect-{{ level }}" class="spell-effect form-control" type="text">
                         <label for="warrior-x-effect-{{ level }}"></label>

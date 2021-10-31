@@ -184,10 +184,13 @@ class SpellRow extends RollRow {
             spell_difficulty_inputs.removeClass("d-none")
             spell_difficulty.removeClass("d-none")
             spell_value.removeClass("d-none")
+            spell_difficulty_inputs.parent().removeClass("hide-data-title")
         } else {
             spell_difficulty_inputs.addClass("d-none")
             spell_difficulty.addClass("d-none")
             spell_value.addClass("d-none")
+            if (inline_realms === 0)
+                spell_difficulty_inputs.parent().addClass("hide-data-title")
         }
         if (inline_realms > 1) {
             this.data.find(".spell-realm").removeClass("d-none")
@@ -220,7 +223,7 @@ class SpellRow extends RollRow {
         hermetic_mr_difficulty.parent().addClass("d-none")
         hermetic_talent.parent().parent().addClass("d-none")
         name.removeClass("d-none")
-        handle.removeClass("d-none")
+        handle.addClass("d-md-inline")
         difficulty.parent().removeClass("d-none")
 
         if (this.is_instinctive_magic() || this.is_priest_magic()) {
@@ -239,7 +242,7 @@ class SpellRow extends RollRow {
             hermetic_mr_difficulty.parent().removeClass("d-none")
             hermetic_talent.parent().parent().removeClass("d-none")
             name.addClass("d-none")
-            handle.addClass("d-none")
+            handle.removeClass("d-md-inline")
             difficulty.parent().addClass("d-none")
 
             // Fix hermetic formula to body + action + humanoid

@@ -30,7 +30,7 @@
         {% if universe == med_fantasy %}
             <div class="col-lg-1 col-3">
                 <label for="gold-coins"></label>
-                <input class="form-control" id="gold-coins" type="number" value="0">
+                <input class="form-control" id="gold-coins" type="number" value="0" min="0">
             </div>
             <div class="col-lg-3 col-9">
                 <label for="gold-currency"></label>
@@ -39,7 +39,7 @@
 
             <div class="col-lg-1 col-3">
                 <label for="silver-coins"></label>
-                <input class="form-control" id="silver-coins" type="number" value="0">
+                <input class="form-control" id="silver-coins" type="number" value="0" min="0">
             </div>
             <div class="col-lg-3 col-9">
                 <label for="silver-currency"></label>
@@ -48,7 +48,7 @@
 
             <div class="col-lg-1 col-3">
                 <label for="copper-coins"></label>
-                <input class="form-control" id="copper-coins" type="number" value="0">
+                <input class="form-control" id="copper-coins" type="number" value="0" min="0">
             </div>
             <div class="col-lg-3 col-9">
                 <label for="copper-currency"></label>
@@ -74,7 +74,7 @@
         <div class="row col-12 justify-content-center mb-2">
             <b>Focus</b>
         </div>
-        <div class="table-responsive row col-12 m-0 p-0" style="overflow-y: hidden !important;">
+        <div class="collapsible-table table-responsive row col-12 m-0 p-0" style="overflow-y: hidden !important;">
             <table class="table table-hover m-0 p-0">
                 <thead>
                 <tr>
@@ -85,17 +85,17 @@
                 </thead>
                 <tbody id="focus-table" class="sortable-list">
                 <tr id="focus-x" hidden>
-                    <td class="md-form my-0 py-0 align-middle">
-                        <i class="fas fa-arrows-alt prefix mt-2 ml-1" style="font-size: 1.5em;"></i>
+                    <td data-title="Aspect" class="md-form my-0 py-0 align-middle">
+                        <i class="fas fa-arrows-alt prefix h-100 d-none d-md-inline" style="font-size: 1.5em;"></i>
                         <label for="focus-x-name"></label>
                         <input id="focus-x-name" class="focus-name form-control" type="text" value="">
                     </td>
-                    <td class="md-form my-0 py-0 align-middle">
+                    <td data-title="Charge actuelle" class="md-form my-0 py-0 align-middle">
                         <input id="focus-x-charge" class="focus-charge form-control text-center" type="number"
                                value="" min="0">
                         <label for="focus-x-charge"></label>
                     </td>
-                    <td class="md-form my-0 py-0 align-middle">
+                    <td data-title="Charge maximum" class="md-form my-0 py-0 align-middle">
                         <input id="focus-x-max" class="focus-max form-control text-center" type="number"
                                value="" min="0">
                         <label for="focus-x-max"></label>
@@ -128,7 +128,7 @@
         <div class="row col-12 justify-content-center mb-2">
             <b>Équipement à charge</b>
         </div>
-        <div class="table-responsive col-12 m-0 p-0" style="overflow-y: hidden !important;">
+        <div class="collapsible-table table-responsive col-12 m-0 p-0" style="overflow-y: hidden !important;">
             <table class="table table-hover m-0 p-0">
                 <thead>
                 <tr>
@@ -139,19 +139,19 @@
                 </thead>
                 <tbody id="magical-equipment-table" class="sortable-list">
                 <tr id="magical-equipment-x" hidden>
-                    <td class="md-form my-0 py-0 align-middle">
-                        <i class="fas fa-arrows-alt prefix mt-2 ml-1" style="font-size: 1.5em;"></i>
+                    <td data-title="Nom" class="md-form my-0 py-0 align-middle">
+                        <i class="fas fa-arrows-alt prefix h-100 d-none d-md-inline" style="font-size: 1.5em;"></i>
                         <label for="magical-equipment-x-name"></label>
                         <input id="magical-equipment-x-name" class="magical-equipment-name form-control"
                                type="text"
                                value="">
                     </td>
-                    <td class="md-form my-0 py-0 align-middle">
+                    <td data-title="Nbr utilisations" class="md-form my-0 py-0 align-middle">
                         <input id="magical-equipment-x-charge"
                                class="magical-equipment-charge form-control text-center" type="text">
                         <label for="magical-equipment-x-charge"></label>
                     </td>
-                    <td class="md-form my-0 py-0 align-middle">
+                    <td data-title="Fonctionnement" class="md-form my-0 py-0 align-middle">
                         <label for="magical-equipment-x-details"></label>
                         <input id="magical-equipment-x-details" class="magical-equipment-details form-control"
                                type="text" value="">
@@ -186,7 +186,7 @@
     <div class="row col-12 justify-content-center mb-2">
         <b>Équipement</b>
     </div>
-    <div class="table-responsive col-12 m-0 p-0" style="overflow-y: hidden !important;">
+    <div class="collapsible-table table-responsive col-12 m-0 p-0" style="overflow-y: hidden !important;">
         <table class="table table-hover m-0 p-0">
             <thead>
             <tr>
@@ -199,17 +199,17 @@
             </thead>
             <tbody id="equipment-table" class="sortable-list">
             <tr id="equipment-x" hidden>
-                <td class="md-form my-0 py-0 align-middle">
-                    <i class="fas fa-arrows-alt prefix mt-2 ml-1" style="font-size: 1.5em;"></i>
+                <td data-title="Quantité" class="md-form my-0 py-0 align-middle">
+                    <i class="fas fa-arrows-alt prefix h-100 d-none d-md-inline" style="font-size: 1.5em;"></i>
                     <input id="equipment-x-quantity" class="equipment quantity form-control text-center"
                            type="number" value="0" min="0">
                     <label for="equipment-x-quantity"></label>
                 </td>
-                <td class="md-form my-0 py-0 align-middle">
+                <td data-title="Description" class="md-form my-0 py-0 align-middle">
                     <label for="equipment-x-name"></label>
                     <input id="equipment-x-name" class="equipment-name form-control" type="text" value="">
                 </td>
-                <td class="md-form my-0 py-0 align-middle">
+                <td data-title="Prix à l'unité" class="md-form my-0 py-0 align-middle">
                     <input id="equipment-x-price" class="equipment-price form-control text-center"
                            type="number" value="0" min="0">
                     <label for="equipment-x-price"></label>
@@ -242,7 +242,7 @@
     <div class="row col-12 justify-content-center mb-2">
         <b>Équipement à solidité/usage limité(e)</b>
     </div>
-    <div class="table-responsive col-12 m-0 p-0" style="overflow-y: hidden !important;">
+    <div class="collapsible-table table-responsive col-12 m-0 p-0" style="overflow-y: hidden !important;">
         <table class="table table-hover m-0 p-0">
             <thead>
             <tr>
@@ -253,19 +253,19 @@
             </thead>
             <tbody id="limitedUse-equipment-table" class="sortable-list">
             <tr id="limitedUse-equipment-x" hidden>
-                <td class="md-form my-0 py-0 align-middle">
-                    <i class="fas fa-arrows-alt prefix mt-2 ml-1" style="font-size: 1.5em;"></i>
+                <td data-title="Nom" class="md-form my-0 py-0 align-middle">
+                    <i class="fas fa-arrows-alt prefix h-100 d-none d-md-inline" style="font-size: 1.5em;"></i>
                     <label for="limitedUse-equipment-x-name"></label>
                     <input id="limitedUse-equipment-x-name" class="magical-equipment-name form-control"
                            type="text"
                            value="">
                 </td>
-                <td class="md-form my-0 py-0 align-middle">
+                <td data-title="Nbr utilisations/solidité" class="md-form my-0 py-0 align-middle">
                     <input id="limitedUse-equipment-x-charge"
-                           class="magical-equipment-charge form-control text-center" type="number">
+                           class="magical-equipment-charge form-control text-center" type="number" min="0">
                     <label for="limitedUse-equipment-x-charge"></label>
                 </td>
-                <td class="md-form my-0 py-0 align-middle">
+                <td data-title="Description" class="md-form my-0 py-0 align-middle">
                     <label for="limitedUse-equipment-x-details"></label>
                     <input id="limitedUse-equipment-x-details" class="magical-equipment-details form-control"
                            type="text" value="">

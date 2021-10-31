@@ -22,7 +22,7 @@
     </div>
     <!-- Power levels -->
     <div class="row col-12 mt-2"><b>Niveaux de pouvoirs débloqués pour chaque talent de moine</b></div>
-    <div class="table-responsive col-12 m-0 p-0" style="overflow-y: hidden !important;">
+    <div class="collapsible-table table-responsive col-12 m-0 p-0" style="overflow-y: hidden !important;">
         <table class="table table-hover m-0 p-0">
             <thead>
             <tr>
@@ -39,52 +39,52 @@
             </thead>
             <tbody id="ki-table" class="sortable-list">
             <tr id="ki-x" hidden>
-                <td class="md-form align-middle my-0 mr-0 pr-0 py-0" data-toggle="tooltip" data-placement="bottom"
-                    title="">
+                <td data-title="Nom" class="md-form align-middle my-0 mr-0 pr-0 py-0"
+                    data-toggle="tooltip" data-placement="bottom" title="">
                     <div class="row col-12 md-form mx-0 px-0 my-0 py-0 align-middle d-flex">
                         <div class="col-12 m-0 p-0 align-middle">
-                            <div id="ki-x-name" class="row col-12 ml-5 text-center d-none"></div>
+                            <div id="ki-x-name" class="row col-12 ml-md-5 text-center d-none"></div>
                             <div class="row col-12">
                                 <label for="ki-x-talent"></label>
                                 <select class="show-tick form-control talent-select selectpicker spell-talent"
                                         data-live-search="true" data-container="body" id="ki-x-talent"
-                                        data-style="col-10 ml-5 mx-0 px-3 align-middle">
+                                        data-style="col-10 ml-md-5 mx-0 px-3 align-middle">
                                 </select>
                             </div>
                         </div>
-                        <i class="fas fa-arrows-alt prefix h-100" style="font-size: 1.5em;"></i>
+                        <i class="fas fa-arrows-alt prefix h-100 d-none d-md-inline" style="font-size: 1.5em;"></i>
                     </div>
                 </td>
-                <td class="md-form my-0 py-0 align-middle">
+                <td data-title="Niveau max" class="md-form my-0 py-0 align-middle">
                     <input id="ki-x-level" class="spell-level form-control text-center"
                            type="number" value="1" min="1" max="1">
                     <label for="ki-x-level"></label>
                 </td>
-                <td class="my-0 py-0 spell-formula align-middle">
-                    {% with row_type = "ki", realm_checkbox = False %}
+                <td data-title="Formule" class="my-0 py-0 spell-formula align-middle">
+                    {% with row_type = "ki", realm_checkbox = False, row_class = "pl-md-0 pl-3" %}
                         {% include "roll_formula.html" %}
                     {% endwith %}
                 </td>
-                <td class="my-0 py-0 text-center align-middle">
+                <td data-title="Valeur" class="my-md-0 py-md-0 py-2 text-center align-middle">
                     <div class="m-0 {{ padding }} p-0 spell-value-row">
                         <span id="ki-x-value" class="spell-value"></span>
                     </div>
                 </td>
-                <td class="md-form my-0 py-0 align-middle">
+                <td data-title="Concentration" class="md-form my-0 py-0 align-middle">
                     <input id="ki-x-time" class="spell-time form-control text-center" type="text">
                     <label for="ki-x-time"></label>
                 </td>
-                <td class="my-0 py-0 text-center align-middle">
+                <td data-title="&nbsp;" class="my-0 py-0 text-center align-middle">
                     {% for level in range(1, 4) %}
                         {% if level == 1 %}
                             {% set classes = "" %}
                             {% set dice_classes = "" %}
                         {% else %}
-                            {% set classes = "mt-4 pt-1" %}
+                            {% set classes = "mt-3" %}
                             {% set dice_classes = "invisible" %}
                         {% endif %}
                         <div class="m-0 {{ classes }} p-0 ki-roll-row">
-                            <span class="ki-level-specific">Niv. {{ level }}</span>
+                            <span class="ki-level-specific">Niv.&nbsp;{{ level }}</span>
                             <span class="{{ dice_classes }} m-0 p-0">
                                 <span id="ki-x-dice-{{ level }}" class="clickable row-roll-trigger" hidden>
                                     <i class="fas fa-dice"></i>
@@ -93,14 +93,14 @@
                         </div>
                     {% endfor %}
                 </td>
-                <td class="md-form my-0 py-0 align-middle">
+                <td data-title="Durées" class="md-form my-0 py-0 align-middle">
                     {% for level in range(1, 4) %}
                         <input id="ki-x-duration-{{ level }}"
                                class="spell-duration form-control text-center" type="text">
                         <label for="ki-x-duration-{{ level }}"></label>
                     {% endfor %}
                 </td>
-                <td class="md-form my-0 py-0 align-middle">
+                <td data-title="Effets" class="md-form my-0 py-0 align-middle">
                     {% for level in range(1, 4) %}
                         <input id="ki-x-effect-{{ level }}" class="spell-effect form-control" type="text">
                         <label for="ki-x-effect-{{ level }}"></label>

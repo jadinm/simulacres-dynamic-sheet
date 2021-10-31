@@ -1,15 +1,4 @@
 /* Spell table */
-.spell-name {
-    min-width: 15em;
-}
-
-.spell-list {
-    min-width: 10em;
-}
-
-.spell-effect, .focusMagic-effect, .rune-meaning {
-    min-width: 300px;
-}
 
 .spell-formula {
     min-width: 15em;
@@ -33,10 +22,26 @@
     min-width: 15em;
 }
 
-.focusMagic-name, .focusMagic-focus {
-    min-width: 15em;
-}
+@media only screen and (min-width: 768px) {
+    /* >= md screen */
 
-#magic-tab .talent-select {
-    min-width: 300px;
+    .spell-name {
+        min-width: 15em;
+    }
+
+    #magic-tab .talent-select {
+        min-width: 300px;
+    }
+
+    .spell-list {
+        min-width: 10em;
+    }
+
+    .spell-effect, .focusMagic-effect, .rune-meaning {
+        min-width: 300px;
+    }
+
+    .focusMagic-name, .focusMagic-focus {
+        min-width: 15em;
+    }
 }

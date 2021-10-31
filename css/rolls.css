@@ -1,19 +1,4 @@
 /* Roll table */
-#roll-tab .talent-select {
-    min-width: 300px;
-}
-
-.roll-formula {
-    min-width: 15em;
-}
-
-.dual_wielding-formula {
-    min-width: 15em;
-}
-
-.roll-effect {
-    min-width: 500px;
-}
 
 #roll-dialog-modifier-slider .slider-selection {
     background: black;
@@ -34,4 +19,24 @@
 /* Mark body parts as buttons */
 .clickable.btn-link.roll-link:hover {
     color: #1266F1;
+}
+
+@media only screen and (min-width: 768px) {
+    /* >= md screen */
+
+    #roll-tab .talent-select {
+        min-width: 300px;
+    }
+
+    .roll-formula {
+        min-width: 15em;
+    }
+
+    .dual_wielding-formula {
+        min-width: 15em;
+    }
+
+    .roll-effect {
+        min-width: 500px;
+    }
 }

@@ -75,6 +75,7 @@ class DataTable {
         this.remove_button.sortable({
             group: this.id, // So that it can delete the appropriate table items
             ghostClass: "remove-drop",
+            handle: '.fa-arrows-alt', // So that the button itself cannot be moved
             onAdd: this.remove_row
         })
         this.add_custom_listeners()
@@ -245,7 +246,7 @@ class EquipmentTable extends DataTable {
 function toggle_table() {
     const table_selector = this.getAttribute("data-hide-table")
     const row_selector = this.getAttribute("data-hide-row")
-    const table_frame = (table_selector) ? $(table_selector).parents(".table-responsive") : $(row_selector)
+    const table_frame = (table_selector) ? $(table_selector).parents(".table-responsive,.collapsible-table") : $(row_selector)
     const svg = $(this).children("svg.svg-inline--fa").first()
     if (!table_frame.hasClass("d-none")) {
         table_frame.addClass("d-none")

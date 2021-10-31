@@ -1,0 +1,44 @@
+@media only screen and (max-width: 768px) {
+    /* sm screen */
+
+    /* Force table to not be like tables anymore */
+    .collapsible-table table,
+    .collapsible-table thead,
+    .collapsible-table tbody,
+    .collapsible-table th,
+    .collapsible-table td,
+    .collapsible-table tr {
+        display: block;
+    }
+
+    /* Hide table headers */
+    .collapsible-table thead tr {
+        display: none;
+    }
+
+    .collapsible-table tr { border: 1px solid #ccc; }
+
+    .collapsible-table td {
+        /* Behave like a "row" */
+        border: none;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        padding-left: 30%;
+        white-space: normal;
+        text-align:left;
+    }
+
+    .collapsible-table td:not(.hide-data-title):before {
+        /* Now like a table header */
+        position: absolute;
+        /* Top/left values mimic padding */
+        top: 1px;
+        left: 1em;
+        width: 30%;
+        white-space: nowrap;
+        text-align:left;
+        font-weight: bold;
+        /* Label the data */
+        content: attr(data-title);
+    }
+}

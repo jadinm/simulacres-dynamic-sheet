@@ -11,13 +11,33 @@ function navbar_collapsing() {
     $("#nav-tabs-collasped").children().first().children().first().text(active_tab_name)
 }
 
-$(() => {
+function collapse_table() {
+    // Remove blank space before input due to prefix class
+    $(".collapsible-table .fa-arrows-alt.d-none.prefix").removeClass("prefix")
+    // Remove horizontal scroll
+    $(".collapsible-table").removeClass("table-responsive").css("overflow-y", "")
+}
+
+function uncollapse_table() {
+    // Re-add the handler
+    $(".collapsible-table .fa-arrows-alt.d-none").addClass("prefix")
+    // Add horizontal scroll
+    $(".collapsible-table").addClass("table-responsive").css("overflow-y", "hidden !important")
+}
+
+function resize() {
     const size = bootstrap_screen_size()
-    if (size === "xs" || size === "sm")
+    if (size === "xs" || size === "sm") {
         navbar_collapsing()
+        collapse_table()
+    } else {
+        uncollapse_table()
+    }
+}
+
+$(() => {
+    resize()
     $(window).resize(_ => {
-        const size = bootstrap_screen_size()
-        if (size === "xs" || size === "sm")
-            navbar_collapsing()
+        resize()
     })
 })

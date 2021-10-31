@@ -2,6 +2,9 @@
     min-width: 4.5em;
 }
 
-#ki-tab .talent-select {
-    min-width: 300px;
+@media only screen and (min-width: 768px) {
+    /* >= md screen */
+    #ki-tab .talent-select {
+        min-width: 300px;
+    }
 }
