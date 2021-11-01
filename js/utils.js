@@ -146,20 +146,20 @@ const dark_theme = {brightness: 100, contrast: 100, sepia: 0}
 
 function enable_dark_mode() {
     DarkReader.enable(dark_theme, dark_fixes)
-    $("#dark-mode").addClass("d-none").tooltip("dispose")
-    $("#light-mode").removeClass("d-none").tooltip()
+    $("#dark-mode,#dark-mode-2").addClass("d-none").tooltip("dispose")
+    $("#light-mode,#light-mode-2").removeClass("d-none").tooltip()
 }
 
 function disable_dark_mode() {
     DarkReader.disable()
-    $("#light-mode").addClass("d-none").tooltip("dispose")
-    $("#dark-mode").removeClass("d-none").tooltip()
+    $("#light-mode,#light-mode-2").addClass("d-none").tooltip("dispose")
+    $("#dark-mode,#dark-mode-2").removeClass("d-none").tooltip()
 }
 
-$("#light-mode").on("click", _ => {
+$("#light-mode,#light-mode-2").on("click", _ => {
     disable_dark_mode()
 })
-$("#dark-mode").on("click", _ => {
+$("#dark-mode,#dark-mode-2").on("click", _ => {
     enable_dark_mode()
 })
 
