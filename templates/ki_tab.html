@@ -93,14 +93,16 @@
                         </div>
                     {% endfor %}
                 </td>
-                <td data-title="Durées" class="md-form my-0 py-0 align-middle">
+                <td data-title="Durées&#xa;  Niv. 1 &#xa;&#xa;  Niv. 2&#xa;&#xa;  Niv. 3"
+                    class="md-form my-0 py-0 align-middle">
                     {% for level in range(1, 4) %}
                         <input id="ki-x-duration-{{ level }}"
                                class="spell-duration form-control text-center" type="text">
                         <label for="ki-x-duration-{{ level }}"></label>
                     {% endfor %}
                 </td>
-                <td data-title="Effets" class="md-form my-0 py-0 align-middle">
+                <td data-title="Effets&#xa;  Niv. 1 &#xa;&#xa;  Niv. 2&#xa;&#xa;  Niv. 3"
+                    class="md-form my-0 py-0 align-middle">
                     {% for level in range(1, 4) %}
                         <input id="ki-x-effect-{{ level }}" class="spell-effect form-control" type="text">
                         <label for="ki-x-effect-{{ level }}"></label>

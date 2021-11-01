@@ -155,6 +155,7 @@
                     {% endif %}
                     {% for range in ranges %}
                         <div class="row col-12 m-0 p-0 my-2 justify-content-center">
+                            <span class="d-md-none col-6 text-right">{{ ranges[range] }}</span>
                             <span id="range_combat-x-value{{ range }}" class="roll-value"></span>
                             <span id="range_combat-x-dice{{ range }}" class="clickable row-roll-trigger" hidden>
                                 <i class="fas fa-dice"></i>
