@@ -144,8 +144,9 @@ function show_import_warnings(missing_inputs, duplicated_inputs) {
 function reset_tab_selection(html) {
     if (html.find("#tabs").length === 0)
         return
-    html.find("#tabs .tab-pane").removeClass("show").removeClass("active")
-    html.find("#status-tab").addClass("show").addClass("active")
+    const tabs = html.find("#tabs .tab-pane");
+    tabs.removeClass("show").removeClass("active")
+    tabs.first().addClass("show").addClass("active")
     const tab_buttons = html.find("#nav-tabs a[role=\"tab\"]")
     tab_buttons.removeClass("active").each((i, elem) => {
         elem.setAttribute("aria-selected", "true")

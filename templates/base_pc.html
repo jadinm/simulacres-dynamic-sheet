@@ -2,14 +2,8 @@
 
 {% block body %}
 
-    <!-- Basic information -->
-    {% include "bio.html" %}
-
-    <!-- Components, means, realms and energies -->
-    {% include "base_stats.html" %}
-
     <div class="card shadow-none border border-heavy rounded-lg pb-2">
-        {% set tabs = [("roll", "Tests"), ("talent", "Talents"), ("equipment", "Équipement")] %}
+        {% set tabs = [("roll", "Tests"), ("stats", "Caractéristiques"), ("talent", "Talents"), ("equipment", "Équipement")] %}
         {% if universe == med_fantasy %}
             {% do tabs.append(("magic", "Magie")) %}
             {% if version == V7 %}
@@ -94,6 +88,13 @@
 
             <!-- Quick rolls -->
             {% include "roll_tab.html" %}
+
+            <div id="stats-tab" class="tab-pane fade row container-fluid m-0">
+                <!-- Basic information -->
+                {% include "bio.html" %}
+                <!-- Components, means, realms and energies -->
+                {% include "base_stats.html" %}
+            </div>
 
             <!-- Talents -->
             {% include "talent_tab.html" %}

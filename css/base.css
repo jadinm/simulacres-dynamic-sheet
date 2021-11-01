@@ -45,14 +45,20 @@ input {
 }
 
 /* Prepare background image style */
+body, html {
+    height: 100%;
+}
+
 #main-container {
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
+    height: 100%;
 }
 
 footer {
     max-height: 2em;
+    background-color: white !important;
 }
 
 :root {
