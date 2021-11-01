@@ -136,15 +136,16 @@ $("#resistance").on("change", event => {
 
 /* Update PS and EP max values depending on respectively heart and mind values */
 
+const bonus_applied = "bonus-applied"
 function update_body_energy(component, body_energy) {
     const value = parseInt(component.value) || 0
     const current_max = slider_max(body_energy[0])
-    if (value >= 5 && !$(component).hasClass("bonus-applied")) { // Higher value to update
+    if (value >= 5 && !$(component).hasClass(bonus_applied)) { // Higher value to update
         set_slider_max(body_energy, current_max + 1)
-        $(component).addClass("bonus-applied")
-    } else if (value < 5 && $(component).hasClass("bonus-applied")) { // Lower value to update
+        $(component).addClass(bonus_applied)
+    } else if (value < 5 && $(component).hasClass(bonus_applied)) { // Lower value to update
         set_slider_max(body_energy, current_max - 1)
-        $(component).removeClass("bonus-applied")
+        $(component).removeClass(bonus_applied)
     }
 }
 

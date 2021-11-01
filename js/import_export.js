@@ -176,7 +176,21 @@ function import_data(src_html, dst_html, full_sheet, template_copy = false) {
 
     const dst_row = template_copy ? row_of(dst_html) : null
 
-    src_html.find("input").each((i, old_input) => {
+    src_html.find("input").sort((a, b) => {
+        // Treat means and components first because they influence the HP/PS/EP/Unease sliders
+        const j_a = $(a)
+        const j_b = $(b)
+        const is_a_prior = j_a.hasClass("component") || j_a.hasClass("means")
+        const is_b_prior = j_b.hasClass("component") || j_b.hasClass("means")
+        if (is_a_prior) {
+            if (is_b_prior)
+                return 0
+            return -1
+        }
+        if (is_b_prior)
+            return 1
+        return 0
+    }).each((i, old_input) => {
         if (old_input.id && old_input.id.length > 0) {
             if (existing_ids.includes(old_input.id) && !old_input.id.includes("plugin-") && !old_input.id.includes("note-dialog-") && !old_input.id.includes("ColorPicker"))
                 duplicated_inputs.push(old_input.id)
@@ -273,6 +287,13 @@ function import_data(src_html, dst_html, full_sheet, template_copy = false) {
                     }
                 }
             } else if (new_input.length > 0 && !new_input[0].id.includes("-x-")) {
+                // Add bonus-applied classes if any (useful to avoid unwanted updates of HP/EP/PS sliders)
+                for (const class_item of [" " + bonus_applied, light_bonus_class, heavy_bonus_class]) {
+                    if (old_input.getAttribute("class").includes(class_item)) {
+                        new_input.addClass(class_item)
+                    }
+                }
+
                 // Update the maximum through sliders that can change their maximum: HP/PS/EP
                 const old_max = parseInt(old_input.getAttribute("data-slider-max"))
                 if (new_input.length > 0 && modifiable_sliders.filter(s => s.includes(new_input[0].id)) && !isNaN(old_max)) {
