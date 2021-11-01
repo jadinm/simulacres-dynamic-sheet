@@ -16,7 +16,10 @@
         display: none;
     }
 
-    .collapsible-table tr { border: 1px solid #ccc; }
+    .collapsible-table tr {
+        border: 2px solid #ccc;
+        border-radius: .3rem;
+    }
 
     .collapsible-table td {
         /* Behave like a "row" */
