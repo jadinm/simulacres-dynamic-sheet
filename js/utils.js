@@ -174,17 +174,35 @@ function build_tab_hide_list() {
     const select_to_clone = select_list.children().first()
 
     $("#nav-tabs a[role=\"tab\"]").each((i, elem) => {
-        /* Set hide list */
         const tab_name = $(elem).text().trim()
-        let list_item = hide_to_clone.clone(false, false)
+
+        /* Set select list */
+        const select_list_item = select_to_clone.clone(false, false)
+        select_list_item.removeClass("d-none")
+        select_list_item.text(tab_name).on("click", _ => {
+            $(elem).click()
+            $("#nav-tabs-collasped").children().first().children().first().text(tab_name)
+            $("#select-tabs").modal("hide")
+        })
+        if ($(elem).hasClass("d-none")) {
+            select_list_item.addClass("d-none")
+        } else {
+            select_list_item.removeClass("d-none")
+        }
+        select_list.append(select_list_item)
+
+        /* Set hide list */
+        const list_item = hide_to_clone.clone(false, false)
         list_item.removeClass("d-none").addClass("d-flex")
         list_item.find(".show-tab").on("click", _ => {
             $(elem).removeClass("d-none")
+            select_list_item.removeClass("d-none")
             list_item.find(".show-tab").addClass("d-none")
             list_item.find(".hide-tab").removeClass("d-none")
         })
         list_item.find(".hide-tab").on("click", _ => {
             $(elem).addClass("d-none")
+            select_list_item.addClass("d-none")
             list_item.find(".hide-tab").addClass("d-none")
             list_item.find(".show-tab").removeClass("d-none")
         })
@@ -200,16 +218,6 @@ function build_tab_hide_list() {
             list_item.find(".hide-tab").removeClass("d-none")
         }
         hide_list.append(list_item)
-
-        /* Set select list */
-        list_item = select_to_clone.clone(false, false)
-        list_item.removeClass("d-none")
-        list_item.text(tab_name).on("click", _ => {
-            $(elem).click()
-            $("#nav-tabs-collasped").children().first().children().first().text(tab_name)
-            $("#select-tabs").modal("hide")
-        })
-        select_list.append(list_item)
     })
 }
 
