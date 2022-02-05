@@ -40,7 +40,7 @@
             ],
             "showHeader" : false,
             "showFooter" : false
-	    },	
+        },
         "oneColumn": {
             "frames": [
                 [0cm, 0cm, 100%, 100%]
@@ -159,7 +159,7 @@
             "alignment": "TA_CENTER",
             "commands": [
                 [VALIGN, [ 0, 0 ], [ -1, -1 ], TOP ],
-                [ROWBACKGROUNDS, [0, 0], [-1, -1], [#EBEBEB,white]]
+                [ROWBACKGROUNDS, [0, 0], [-1, -1], ["#EBEBEB",white]]
             ]
         }],
         ["table-title", {
