@@ -25,13 +25,27 @@ function uncollapse_table() {
     $(".collapsible-table").addClass("table-responsive").css("overflow-y", "hidden !important")
 }
 
+function characteristics_head_to_tab() {
+    $("#stats-tab").detach().insertAfter("#roll-tab").addClass("tab-pane fade")
+    $("li a[href='#stats-tab']").attr("role", "tab").parent().removeClass("d-none")
+    build_tab_hide_list()
+}
+
+function characteristics_tab_to_head() {
+    $("#stats-tab").detach().insertAfter($("#sheet-header")).removeClass("tab-pane fade active show")
+    $("li a[href='#stats-tab']").removeAttr("role").parent().addClass("d-none")
+    build_tab_hide_list()
+}
+
 function resize() {
     const size = bootstrap_screen_size()
     if (size === "xs" || size === "sm") {
         navbar_collapsing()
         collapse_table()
+        characteristics_head_to_tab()
     } else {
         uncollapse_table()
+        characteristics_tab_to_head()
     }
 }
 
