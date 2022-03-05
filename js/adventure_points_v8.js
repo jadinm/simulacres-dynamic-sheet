@@ -35,7 +35,7 @@ let spell_same_realm_discount = 0  // No special cost, a spell is a talent
 let power_level_ap_cost = 5 // From 1 to 2 and from 2 to 3
 
 
-function compute_remaining_ap() {
+function do_compute_remaining_ap() {
     const ap_div = $("#remaining-adventure-points")
     if (ap_div.length === 0) // No AP field => do not compute it
         return

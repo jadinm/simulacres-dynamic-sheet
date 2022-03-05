@@ -35,7 +35,7 @@
     /* For version 7, you need to include your new energy in the spell list choice for the spells */
     $(_ => {
         $("select.spell-list").each((i, input) => {
-            init_spell_list(input)
+            init_spell_list(input, true)
         })
     })
 
@@ -55,7 +55,7 @@
      */
     function dispose_plugin_other_world() {
         $("select.spell-list").each((i, input) => {
-            init_spell_list(input)
+            init_spell_list(input, true)
         })
         $("select.special-energy-select").each((i, elem) => {
             update_special_energy_select(elem)

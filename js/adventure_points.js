@@ -1,3 +1,14 @@
+let ap_computation_event = null
+const AP_COMPUTATION_THROTTLE = 100 // ms
+
+// Throttle costly AP computation
+function compute_remaining_ap() {
+    if (ap_computation_event != null) {
+        clearTimeout(ap_computation_event)
+    }
+    ap_computation_event = setTimeout(do_compute_remaining_ap, AP_COMPUTATION_THROTTLE)
+}
+
 $(".component,.means,.realm,.energy,.special-energy,.adventure-points-setting").on("change", compute_remaining_ap)
 $("select.adventure-points-select").on("changed.bs.select", compute_remaining_ap)
 
@@ -144,8 +155,10 @@ function update_spell_select(select) {
         // Get spell difficulties of each realm
         const spell = row_of(elem)
         if (!no_realm) {
-            const realm_list = spell.data.find("input[name*=-realm]:checked")
+            const realm_list = spell.data.find(".formula-elem-realm")
             return realm_list.map((j, checkbox) => {
+                if (!$(checkbox).is(":checked"))
+                    return []
                 const realm = spell.realm(checkbox)
                 const realm_svg = $("label[for=\"" + checkbox.id + "\"] svg").first().clone(false, false).removeClass("input-prefix").get(0)
                 const spell_level = spell.get("difficulty", checkbox).text()

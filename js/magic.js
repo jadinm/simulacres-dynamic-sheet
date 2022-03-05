@@ -265,7 +265,7 @@ class SpellRow extends RollRow {
         } else {
             // Other mage lists
             slider.each((i, elem) => {
-                $(elem).slider("enable").slider("refresh", {useCurrentValue: true})
+                $(elem).slider("enable")
                 $($(elem).slider("getElement")).parent().removeClass("d-none")
             })
         }
@@ -513,15 +513,19 @@ function get_magical_energies() {
     })
 }
 
-function init_spell_list(input) {
-    const list = get_magical_energies()
-    list.push({
-        name: instinctive_magic,
-        content: "<svg height=\"1em\" width=\"1em\">" +
-            "<use xlink:href=\"#svg-instincts\"></use>" +
-            "</svg>&nbsp;" + instinctive_magic
-    })
-    update_select($(input), list)
+let spell_list = []
+
+function init_spell_list(input, regenerate = false) {
+    if (spell_list.length === 0 || regenerate) {
+        spell_list = get_magical_energies()
+        spell_list.push({
+            name: instinctive_magic,
+            content: "<svg height=\"1em\" width=\"1em\">" +
+                "<use xlink:href=\"#svg-instincts\"></use>" +
+                "</svg>&nbsp;" + instinctive_magic
+        })
+    }
+    update_select($(input), spell_list)
 }
 
 /* Triggers */

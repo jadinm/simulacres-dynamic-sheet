@@ -6,7 +6,7 @@
 
 <div class="row {{ row_class }}">
     <div class="custom-control custom-radio custom-control-inline">
-        <input type="checkbox" class="custom-control-input formula-elem"
+        <input type="checkbox" class="custom-control-input formula-elem formula-elem-component"
                id="{{ row_type }}-x-body" name="{{ row_type }}-x-component">
         <label class="custom-control-label" for="{{ row_type }}-x-body"
                data-toggle="tooltip" data-placement="top" title="Corps">
@@ -16,7 +16,7 @@
         </label>
     </div>
     <div class="custom-control custom-radio custom-control-inline">
-        <input type="checkbox" class="custom-control-input formula-elem"
+        <input type="checkbox" class="custom-control-input formula-elem formula-elem-means"
                id="{{ row_type }}-x-perception" name="{{ row_type }}-x-means">
         <label class="custom-control-label" for="{{ row_type }}-x-perception"
                data-toggle="tooltip" data-placement="top" title="Perception">
@@ -27,7 +27,7 @@
     </div>
     {% if version == V7 and not no_realm %}
         <div class="custom-control {{ realm_class }} custom-control-inline">
-            <input type="checkbox" class="custom-control-input formula-elem"
+            <input type="checkbox" class="custom-control-input formula-elem formula-elem-realm"
                    id="{{ row_type }}-x-mineral" name="{{ row_type }}-x-realm">
             <label class="custom-control-label" for="{{ row_type }}-x-mineral"
                    data-toggle="tooltip" data-placement="top" title="Minéral">
@@ -37,7 +37,7 @@
             </label>
         </div>
         <div class="custom-control {{ realm_class }} custom-control-inline">
-            <input type="checkbox" class="custom-control-input formula-elem"
+            <input type="checkbox" class="custom-control-input formula-elem formula-elem-realm"
                    id="{{ row_type }}-x-humanoid" name="{{ row_type }}-x-realm">
             <label class="custom-control-label" for="{{ row_type }}-x-humanoid"
                    data-toggle="tooltip" data-placement="top"
@@ -53,7 +53,7 @@
         </div>
     {% elif not discovery and not no_realm %}
         <div class="custom-control custom-radio custom-control-inline">
-            <input type="checkbox" class="custom-control-input formula-elem"
+            <input type="checkbox" class="custom-control-input formula-elem formula-elem-realm"
                    id="{{ row_type }}-x-nature" name="{{ row_type }}-x-realm">
             <label class="custom-control-label" for="{{ row_type }}-x-nature"
                    data-toggle="tooltip" data-placement="top" title="Nature">
@@ -67,7 +67,7 @@
 <div class="row {{ row_class }}">
     {% if matrix_4x4 %}
         <div class="custom-control custom-radio custom-control-inline">
-            <input type="checkbox" class="custom-control-input formula-elem"
+            <input type="checkbox" class="custom-control-input formula-elem formula-elem-component"
                    id="{{ row_type }}-x-instincts" name="{{ row_type }}-x-component">
             <label class="custom-control-label" for="{{ row_type }}-x-instincts"
                    data-toggle="tooltip" data-placement="top" title="Instincts">
@@ -78,7 +78,7 @@
         </div>
     {% else %}
         <div class="custom-control custom-radio custom-control-inline">
-            <input type="checkbox" class="custom-control-input formula-elem"
+            <input type="checkbox" class="custom-control-input formula-elem formula-elem-component"
                    id="{{ row_type }}-x-heart" name="{{ row_type }}-x-component">
             <label class="custom-control-label" for="{{ row_type }}-x-heart"
                    data-toggle="tooltip" data-placement="top" title="Cœur">
@@ -89,7 +89,7 @@
         </div>
     {% endif %}
     <div class="custom-control custom-radio custom-control-inline">
-        <input type="checkbox" class="custom-control-input formula-elem"
+        <input type="checkbox" class="custom-control-input formula-elem formula-elem-means"
                id="{{ row_type }}-x-action" name="{{ row_type }}-x-means">
         <label class="custom-control-label" for="{{ row_type }}-x-action"
                data-toggle="tooltip" data-placement="top" title="Action">
@@ -100,7 +100,7 @@
     </div>
     {% if version == V7 and not no_realm %}
         <div class="custom-control {{ realm_class }} custom-control-inline">
-            <input type="checkbox" class="custom-control-input formula-elem"
+            <input type="checkbox" class="custom-control-input formula-elem formula-elem-realm"
                    id="{{ row_type }}-x-vegetal" name="{{ row_type }}-x-realm">
             <label class="custom-control-label" for="{{ row_type }}-x-vegetal"
                    data-toggle="tooltip" data-placement="top" title="Végétal">
@@ -110,7 +110,7 @@
             </label>
         </div>
         <div class="custom-control {{ realm_class }} custom-control-inline">
-            <input type="checkbox" class="custom-control-input formula-elem"
+            <input type="checkbox" class="custom-control-input formula-elem formula-elem-realm"
                    id="{{ row_type }}-x-mechanical" name="{{ row_type }}-x-realm">
             <label class="custom-control-label" for="{{ row_type }}-x-mechanical"
                    data-toggle="tooltip" data-placement="top" title="Mécanique">
@@ -121,7 +121,7 @@
         </div>
     {% elif not discovery and not no_realm %}
         <div class="custom-control custom-radio custom-control-inline">
-            <input type="checkbox" class="custom-control-input formula-elem"
+            <input type="checkbox" class="custom-control-input formula-elem formula-elem-realm"
                    id="{{ row_type }}-x-humanoid" name="{{ row_type }}-x-realm">
             <label class="custom-control-label" for="{{ row_type }}-x-humanoid"
                    data-toggle="tooltip" data-placement="top"
@@ -140,7 +140,7 @@
 <div class="row {{ row_class }}">
     {% if matrix_4x4 %}
         <div class="custom-control custom-radio custom-control-inline">
-            <input type="checkbox" class="custom-control-input formula-elem"
+            <input type="checkbox" class="custom-control-input formula-elem formula-elem-component"
                    id="{{ row_type }}-x-heart" name="{{ row_type }}-x-component">
             <label class="custom-control-label" for="{{ row_type }}-x-heart"
                    data-toggle="tooltip" data-placement="top" title="Cœur">
@@ -150,7 +150,7 @@
             </label>
         </div>
         <div class="custom-control custom-radio custom-control-inline">
-            <input type="checkbox" class="custom-control-input formula-elem"
+            <input type="checkbox" class="custom-control-input formula-elem formula-elem-means"
                    id="{{ row_type }}-x-desire" name="{{ row_type }}-x-means">
             <label class="custom-control-label" for="{{ row_type }}-x-desire"
                    data-toggle="tooltip" data-placement="top" title="Désir">
@@ -161,7 +161,7 @@
         </div>
     {% else %}
         <div class="custom-control custom-radio custom-control-inline">
-            <input type="checkbox" class="custom-control-input formula-elem"
+            <input type="checkbox" class="custom-control-input formula-elem formula-elem-component"
                    id="{{ row_type }}-x-mind" name="{{ row_type }}-x-component">
             <label class="custom-control-label" for="{{ row_type }}-x-mind"
                    data-toggle="tooltip" data-placement="top" title="Esprit">
@@ -171,7 +171,7 @@
             </label>
         </div>
         <div class="custom-control custom-radio custom-control-inline">
-            <input type="checkbox" class="custom-control-input formula-elem"
+            <input type="checkbox" class="custom-control-input formula-elem formula-elem-means"
                    id="{{ row_type }}-x-resistance" name="{{ row_type }}-x-means">
             <label class="custom-control-label" for="{{ row_type }}-x-resistance"
                    data-toggle="tooltip" data-placement="top" title="Résistance">
@@ -183,7 +183,7 @@
     {% endif %}
     {% if version == V7 and not no_realm %}
         <div class="custom-control {{ realm_class }} custom-control-inline">
-            <input type="checkbox" class="custom-control-input formula-elem"
+            <input type="checkbox" class="custom-control-input formula-elem formula-elem-realm"
                    id="{{ row_type }}-x-animal" name="{{ row_type }}-x-realm">
             <label class="custom-control-label" for="{{ row_type }}-x-animal"
                    data-toggle="tooltip" data-placement="top" title="Animal">
@@ -193,7 +193,7 @@
             </label>
         </div>
         <div class="custom-control {{ realm_class }} custom-control-inline">
-            <input type="checkbox" class="custom-control-input formula-elem"
+            <input type="checkbox" class="custom-control-input formula-elem formula-elem-realm"
                    id="{{ row_type }}-x-void" name="{{ row_type }}-x-realm">
             <label class="custom-control-label" for="{{ row_type }}-x-void"
                    data-toggle="tooltip" data-placement="top" title="Néant">
@@ -204,7 +204,7 @@
         </div>
     {% elif not discovery and not no_realm %}
         <div class="custom-control custom-radio custom-control-inline">
-            <input type="checkbox" class="custom-control-input formula-elem"
+            <input type="checkbox" class="custom-control-input formula-elem formula-elem-realm"
                    id="{{ row_type }}-x-artificial" name="{{ row_type }}-x-realm">
             <label class="custom-control-label" for="{{ row_type }}-x-artificial"
                    data-toggle="tooltip" data-placement="top" title="Artificiel">
@@ -218,7 +218,7 @@
 <div class="row {{ row_class }}">
     {% if matrix_4x4 %}
         <div class="custom-control custom-radio custom-control-inline">
-            <input type="checkbox" class="custom-control-input formula-elem"
+            <input type="checkbox" class="custom-control-input formula-elem formula-elem-component"
                    id="{{ row_type }}-x-mind" name="{{ row_type }}-x-component">
             <label class="custom-control-label" for="{{ row_type }}-x-mind"
                    data-toggle="tooltip" data-placement="top" title="Esprit">
@@ -228,7 +228,7 @@
             </label>
         </div>
         <div class="custom-control custom-radio custom-control-inline">
-            <input type="checkbox" class="custom-control-input formula-elem"
+            <input type="checkbox" class="custom-control-input formula-elem formula-elem-means"
                    id="{{ row_type }}-x-resistance" name="{{ row_type }}-x-means">
             <label class="custom-control-label" for="{{ row_type }}-x-resistance"
                    data-toggle="tooltip" data-placement="top" title="Résistance">
@@ -257,7 +257,7 @@
     {% endif %}
     {% if version == V8 and not discovery and not no_realm %}
         <div class="custom-control custom-radio custom-control-inline">
-            <input type="checkbox" class="custom-control-input formula-elem"
+            <input type="checkbox" class="custom-control-input formula-elem formula-elem-realm"
                    id="{{ row_type }}-x-supernatural" name="{{ row_type }}-x-realm">
             <label class="custom-control-label" for="{{ row_type }}-x-supernatural"
                    data-toggle="tooltip" data-placement="top" title="Surnaturel">

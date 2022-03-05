@@ -3,10 +3,14 @@ realms = /mineral|vegetal|animal|nature|humanoid|mechanical|artificial|void|supe
 class RollRow extends DataRow {
 
     formula_elem(element, fixed_realm = null) {
-        const elem_name = this.id + "-" + element
-        let checked_elem = $("input[name=" + elem_name + "]:checked")
-        if (element === "realm" && fixed_realm != null)
-            checked_elem = checked_elem.filter("[id*=\"-" + fixed_realm + "\"]")
+        let checked_elem
+        if (element === "realm" && fixed_realm != null) {
+            checked_elem = this.get(fixed_realm)
+            if (!checked_elem.is(":checked"))
+                checked_elem = $()
+        } else {
+            checked_elem = this.data.find(".formula-elem-" + element + ":checked")
+        }
         if (checked_elem.length === 0)
             return [0, $()]  // Allow partial formulas
         const base_array = checked_elem[0].id.split("-")

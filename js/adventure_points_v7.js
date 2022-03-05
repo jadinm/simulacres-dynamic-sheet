@@ -49,7 +49,7 @@ function update_tooltip_cost(row, diff) {
     }
 }
 
-function compute_remaining_ap() {
+function do_compute_remaining_ap() {
     const ap_div = $("#remaining-adventure-points")
     if (ap_div.length === 0) // No AP field => do not compute it
         return
