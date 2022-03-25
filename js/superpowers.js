@@ -1,7 +1,19 @@
 class SuperpowerRow extends RollRow {
-    realm(realm_based_div) {
-        return "" // No realm for superpowers
+    static requirements = [
+        "biography", // Some ethnics have formula bonuses
+        "characteristics", // For the formula
+        "status", // The unease is needed in the formula
+    ]
+
+    // No realm for superpowers
+    static selects = []
+    static radio_groups = {
+        "component": Characteristics.components,
+        "means": Characteristics.means,
     }
+    static independent_checkboxes = []
+    static numeric_inputs = ["component-modifier", "means-modifier"]
+    static basic_inputs = [...this.numeric_inputs, ...["name", "time", "distance", "duration", "effect"]]
 
     component_value() {
         return this.formula_elem("component")[0]
@@ -17,10 +29,10 @@ class SuperpowerRow extends RollRow {
         let under_value = this.means_value()
 
         // Retrieve dice and value modifier
-        const component_modifier = parseInt(this.get("component-modifier").val())
+        const component_modifier = this["component-modifier"]
         if (!isNaN(component_modifier))
             nbr_dices += component_modifier
-        const means_modifier = parseInt(this.get("means-modifier").val())
+        const means_modifier = this["means-modifier"]
         if (!isNaN(means_modifier))
             under_value += means_modifier
 
@@ -30,11 +42,10 @@ class SuperpowerRow extends RollRow {
     }
 
     roll_reason() {
-        return this.get("name").val()
+        return this["name"]
     }
 
     roll(button) {
-        // Find either spell difficulty or talent level to detect critical rolls
         const formula_elements = this.compute_formula()[1]
         let nbr_dices = parseInt(this.get("nbr-dices").text())
         if (isNaN(nbr_dices)) {
@@ -44,19 +55,28 @@ class SuperpowerRow extends RollRow {
         if (isNaN(under_value)) {
             under_value = 0
         }
-        let power_distance = this.get("distance").val()
-        let power_focus = this.get("time").val()
-        let power_duration = this.get("duration").val()
-
-        // Equipment linked to the roll
-        const equipment_id = this.get("equipment").val()
-        const equipment = (equipment_id && equipment_id.length > 0) ? row_of($("#" + this.get("equipment").val())).get("name").val() : ""
-
-        const exploding_effect = this.get("details-exploding-effect").prop("checked")
 
         // Do the actual roll
-        new SuperpowerRoll(this.roll_reason(), nbr_dices, under_value, formula_elements, power_distance, power_focus,
-            power_duration, this.get("effect").val(), equipment, equipment_id, exploding_effect).trigger_roll()
+        new SuperpowerRoll(this.roll_reason(), nbr_dices, under_value, formula_elements, this["distance"], this["time"],
+            this["duration"], this.get("effect").val()).trigger_roll()
+    }
+
+    formula_changed(e) {
+        super.formula_changed(e)
+
+        // Update all of the roll and spell values
+        sheet.get_all_rolls_with_formula_part(this.formula_elem("component")[1]).forEach((row) => {
+            row.update_roll_value()
+        })
+    }
+
+    add_listeners() {
+        super.add_listeners()
+
+        if (!this.is_template()) {
+            this.get("component-modifier").on("change", e => this.update_value(e))
+            this.get("means-modifier").on("change", e => this.update_value(e))
+        }
     }
 }
 
@@ -65,38 +85,13 @@ class SuperpowerRollTable extends TalentRollTable {
 
     static components() {
         // Get all of the superpower components
-        return $(".superpower").map((i, elem) => {
-            const component = row_of(elem).formula_elem("component")[1].filter((i, elem) => {
-                return $(elem).attr("name").includes("component")
-            }).map((i, elem) => {
-                const base_array = elem.id.split("-")
-                return base_array[base_array.length - 1]
-            })
-            return component ? component[0] : []
-        }).toArray().flat()
-    }
-
-    formula_changed(e) {
-        super.formula_changed(e)
-
-        // Update all of the roll and spell values
-        $(".row-roll-trigger").each((i, elem) => {
-            row_of(elem).update_roll_value(elem)
+        const components = []
+        sheet.superpowers.rows.forEach(row => {
+            const component = row.component_value()
+            if (component)
+                components.push(components)
         })
-    }
-
-    update_value(e) {
-        row_of(e.target).update_roll_value()
-    }
-
-    add_custom_listener_to_row(row) {
-        super.add_custom_listener_to_row(row)
-        row.get("component-modifier").uon("change", this.update_value)
-        row.get("means-modifier").uon("change", this.update_value)
-    }
-
-    clone_row() {
-        return this.template_row.clone(true, false)
+        return components
     }
 }
 

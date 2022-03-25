@@ -1,13 +1,15 @@
 class Note extends DataRow {
+    static basic_inputs = ["name"]
+    static text_areas = ["input"]
 
-    constructor(data) {
-        super(data)
+    constructor(data, opts = {}, other_html = null) {
+        super(data, opts, other_html)
         this.broadcast_channel = new BroadcastChannel('note_channel_' + this.id)
         this.broadcast_channel.onmessage = (ev) => {
             const textarea = this.get("input")
-            textarea.html(ev.data).val(ev.data).trigger("change")
+            textarea.val(ev.data).trigger("change")
 
-            if (this.data.find("button.note-show-button svg").hasClass("fa-angle-up")) {
+            if (this.find("button.note-show-button svg").hasClass("fa-angle-up")) {
                 // If the note is opened, update the summernote field
                 textarea.summernote("code", textarea.val())
             }
@@ -15,8 +17,8 @@ class Note extends DataRow {
     }
 
     toggle_show_button(show = true) {
-        const svg = this.data.find("button.note-show-button svg")
-        const text_area = this.data.find("textarea.summernote")
+        const svg = this.find("button.note-show-button svg")
+        const text_area = this.find("textarea.summernote")
         if (show) {
             text_area.summernote(summernote_cfg)
             svg.removeClass("fa-angle-down").addClass("fa-angle-up")
@@ -26,7 +28,7 @@ class Note extends DataRow {
     }
 
     destroy_summernote() {
-        this.data.find("textarea.summernote").summernote('destroy')
+        this.find("textarea.summernote").summernote('destroy')
     }
 
     open_window() {
@@ -57,42 +59,26 @@ class Note extends DataRow {
             new_window.document.write($("#script-note-dialog").get(0).outerHTML)
         }
         // Set the title
-        const title = this.get("name").val()
-        new_window.document.title = title ? this.get("name").val() : "Note"
+        new_window.document.title = this["name"] ? this["name"] : "Note"
+    }
+
+    add_listeners() {
+        super.add_listeners()
+
+        if (!this.is_template()) {
+            this.find(".note-body").on('show.bs.collapse', () => this.toggle_show_button(true))
+                .on('hide.bs.collapse', () => this.toggle_show_button(false))
+                .on('hidden.bs.collapse', () => this.destroy_summernote())
+            this.get("external").on("click", () => this.open_window())
+        }
     }
 }
 
-function row_show() {
-    row_of(this).toggle_show_button(true)
-}
-
-function row_hide() {
-    row_of(this).toggle_show_button(false)
-}
-
-function row_clean() {
-    row_of(this).destroy_summernote()
-}
-
-class NoteTable extends DataTable {
+class NoteTable extends DataList {
     static row_class = Note
 
-    open_window() {
-        row_of(this).open_window()
-    }
-
-    add_custom_listener_to_row(row) {
-        super.add_custom_listener_to_row(row)
-        add_save_to_dom_listeners(row.data)
-        add_summernote_listeners(row.data)
-        row.data.find(".note-body").uon('show.bs.collapse', row_show)
-            .uon('hide.bs.collapse', row_hide)
-            .uon('hidden.bs.collapse', row_clean)
-        row.get("external").uon("click", this.open_window)
-    }
-
     clone_row() {
-        return this.template_row.clone(true, false)
+        return this.template_row.data.clone(true, false)
     }
 
     remove_row(event) {
@@ -114,8 +100,4 @@ $("#note-search").on("keyup", event => {
             }
         }
     })
-})
-
-$(_ => {
-    new NoteTable($("#note-table"))
 })

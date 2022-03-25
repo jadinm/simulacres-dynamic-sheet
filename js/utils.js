@@ -6,12 +6,41 @@
     }
 }(jQuery));
 
-/* Data */
-const priest_energy = "Divin"
-const hermetic_energy = "Hermétique"
-const instinctive_magic = "Magie instinctive"
-const good_nature_evil_energies = ["Bien", "Mal", "Nature"]
+/**
+ * Convert jquery result to array of ids
+ * @param obj
+ */
+function to_id_array(obj) {
+    return obj.map((_, elem) => elem.id).toArray()
+}
 
+/**
+ * selectpickers can return either a string or a list, call it if you need uniformity
+ */
+function multiselect_to_array(value) {
+    if (!Array.isArray(value)) {
+        if (value == null || value === "null" || value === "")
+            value = []
+        else
+            value = [value]
+    }
+    return value
+}
+
+/**
+ * Restrains the input type
+ */
+function number_input_key_event() {
+    if (number_filter(this.value, this.getAttribute("min"), this.getAttribute("max"))) {
+        this.oldValue = this.value
+    } else if (this.hasOwnProperty("oldValue")) {
+        this.value = this.oldValue
+    } else {
+        this.value = ""
+    }
+}
+
+/* Data */
 function sanitize(string) {
     const map = {
         '&': '&amp;',
@@ -42,15 +71,6 @@ function find_index(parent, child) {
     })
     return idx
 }
-
-// Update the title when the character name changes
-$("#character-name").on("change", e => {
-    const value = e.target.value
-    if (value && value.length > 0)
-        document.title = value
-    else
-        document.title = "SimulacreS"
-})
 
 // Test if there is a new version
 let latest_released_version = base_tag_version
@@ -241,17 +261,6 @@ $(_ => {
     } else {
         disable_dark_mode()
     }
-
-    // We enable the use of svg images inside some of the select pickers
-    $("select.spell-list, select.component-select, select.special-energy-select, select.realm-energy-select, select.spell-select").each((i, elem) => {
-        if (!elem.id.includes("-x-")) {
-            $(elem).selectpicker({sanitize: false})
-            $(elem).selectpicker("refresh")
-        }
-    })
-
-    // Initialize AP computation
-    compute_remaining_ap()
 
     // Button collapse toggle
     $(".collapse-button").on("click", e => {

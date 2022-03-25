@@ -1,4 +1,4 @@
-<li id="plugin-button-export-to-server" class="plugin-button nav-item" data-plugin-version="1.2.1"
+<li id="plugin-button-export-to-server" class="plugin-button nav-item" data-plugin-version="2.0.0"
     data-plugin-id="export-to-server">
     <a class="nav-link" data-toggle="tab" href="#plugin-tab-export-to-server" role="tab"
        aria-controls="plugin-tab-export-to-server" aria-selected="false">
@@ -54,148 +54,169 @@
 </style>
 
 <script id="plugin-js-export-to-server" class="plugin-js" data-plugin-id="export-to-server">
-    // We create a new block to avoid errors in case of redeclaration of global variables
-    // This can happen if this plugin is imported twice
-    $(_ => {
-        /* Toggle recording of roll stats */
-        $("#plugin-export-to-server-record").on("click", e => {
-            $(e.target).parent().addClass("d-none")
-            $("#plugin-export-to-server-stop-record").parent().removeClass("d-none")
-        })
-        $("#plugin-export-to-server-stop-record").on("click", e => {
-            $(e.target).parent().addClass("d-none")
-            $("#plugin-export-to-server-record").parent().removeClass("d-none")
-        })
+    {
 
-        /* Update roll */
-        let hold_rolls = false
-        function update_roll(_, roll) {
-            const url = $("#plugin-export-to-server-roll-url").val()
-            if (hold_rolls || !url || url.length === 0)
-                return
+        class ExportToServerPlugin extends PluginModel {
+            static id = "export-to-server"
 
-            // Retrieve the name of the character
-            let character_name = $("input#character-name")
-            if (character_name.length === 0) {
-                // NPC Grid
-                character_name = "Rencontre"
-            } else {
-                character_name = character_name[0].value
-                if (character_name === null || character_name.length === 0)
-                    character_name = "Anonyme"
-            }
+            static basic_inputs = ["roll-url", "url"]
 
-            let data = new FormData()
-            data.append("name", character_name)
-            data.append("critical_success", roll.is_critical_success())
-            data.append("critical_failure", roll.is_critical_failure())
-            data.append("recording", $("#plugin-export-to-server-record").parent().hasClass("d-none"))
-            for (const [key, value] of Object.entries(roll)) {
-                data.append(key, value)
-            }
-            if (roll instanceof TalentRoll) {
-                data.append("margin", roll.post_test_margin())
-                data.append("threshold", roll.max_threshold())
-                data.set("power_dices", roll.power_dices_activated())
-                data.set("formula_elements", roll.formula())
-            }
-            $.ajax({
-                url: url,
-                method: "POST",
-                data: data,
-                processData: false,
-                contentType: false,
-                error: (jqXHR, textStatus, errorThrown) => {
-                    // Failed to export data
-                    let text = "Le résultat du roll n'a pas été exporté."
-                    if (errorThrown)
-                        text += " " + errorThrown + "."
-                    else if (textStatus === "error" && jqXHR.readyState !== 4) {
-                        text += " Cela peut arriver si le serveur n'est pas joignable" +
-                            " ou s'il n'a pas ajouté le header 'Access-Control-Allow-Origin: *' à sa réponse"
-                    } else {
-                        text += " La raison est '" + textStatus + "'"
-                    }
-                    text += "."
-                    console.log(text)
+            static hold_rolls = false
+
+            update_roll(_, roll) {
+                const url = this["roll-url"]
+                if (this.constructor.hold_rolls || !url || url.length === 0)
+                    return
+
+                // Retrieve the name of the character
+                let character_name
+                if (sheet.biography === undefined) {
+                    // NPC Grid
+                    character_name = "Rencontre"
+                } else {
+                    character_name = sheet.biography["character-name"]
+                    if (character_name === null || character_name.length === 0)
+                        character_name = "Anonyme"
                 }
-            })
-        }
-        $(document).off("roll").on("roll", update_roll)
-        $(document).off("update-roll").on("update-roll", update_roll)
-        $(document).off("stop-roll-broadcast").on("stop-roll-broadcast", _ => {
-            hold_rolls = true
-        })
-        $(document).off("resume-roll-broadcast").on("resume-roll-broadcast", _ => {
-            hold_rolls = false
-            update_roll(null, current_roll)
-        })
 
-        // Fix graphical bug with the label overlapping the default value
-        $("#plugin-export-to-server-url").trigger("change")
-        $("#plugin-export-to-server-roll-url").trigger("change")
-
-        /* Hide alert */
-        $("#plugin-export-to-server-alert-button").on("click", _ => {
-            $("#plugin-export-to-server-alert").addClass("d-none")
-        })
-
-        /* Export character page */
-        const alert = $("#plugin-export-to-server-alert")
-        alert.addClass("d-none") // Hide old alerts
-        function hide_message() {
-            setTimeout(_ => {
-                alert.addClass("d-none")
-            }, 10000)
-        }
-
-        $("#plugin-export-to-server-export,#save-page").on("click", _ => {
-            const page = "<!DOCTYPE html><html lang=\"fr\">" + $("html").html() + "</html>"
-
-            // Retrieve the name of the character
-            let character_name = $("input#character-name")
-            if (character_name.length === 0) {
-                // NPC Grid
-                character_name = "Rencontre"
-            } else {
-                character_name = character_name[0].value
-                if (character_name === null || character_name.length === 0)
-                    character_name = "Anonyme"
+                let data = new FormData()
+                data.append("name", character_name)
+                data.append("critical_success", roll.is_critical_success())
+                data.append("critical_failure", roll.is_critical_failure())
+                data.append("recording", this.get("record").parent().hasClass("d-none"))
+                for (const [key, value] of Object.entries(roll)) {
+                    data.append(key, value)
+                }
+                if (roll instanceof TalentRoll) {
+                    data.append("margin", roll.post_test_margin())
+                    data.append("threshold", roll.max_threshold())
+                    data.set("power_dices", roll.power_dices_activated())
+                    data.set("formula_elements", roll.formula())
+                }
+                $.ajax({
+                    url: url,
+                    method: "POST",
+                    data: data,
+                    processData: false,
+                    contentType: false,
+                    error: (jqXHR, textStatus, errorThrown) => {
+                        // Failed to export data
+                        let text = "Le résultat du roll n'a pas été exporté."
+                        if (errorThrown)
+                            text += " " + errorThrown + "."
+                        else if (textStatus === "error" && jqXHR.readyState !== 4) {
+                            text += " Cela peut arriver si le serveur n'est pas joignable" +
+                                " ou s'il n'a pas ajouté le header 'Access-Control-Allow-Origin: *' à sa réponse"
+                        } else {
+                            text += " La raison est '" + textStatus + "'"
+                        }
+                        text += "."
+                        logger.error(text)
+                    }
+                })
             }
 
-            // Export to server
-            let data = new FormData()
-            data.append("name", character_name)
-            data.append("page", page)
-            const url = $("#plugin-export-to-server-url").val()
-            $.ajax({
-                url: url,
-                method: "POST",
-                data: data,
-                processData: false,
-                contentType: false,
-                success: _ => {
-                    $("#plugin-export-to-server-alert-message").text("La page a été exportée")
-                    alert.removeClass("d-none").removeClass("alert-danger").addClass("alert-success")
-                    hide_message()
-                },
-                error: (jqXHR, textStatus, errorThrown) => {
-                    // Failed to export data
-                    let text = "La fiche n'a pas été exportée."
-                    if (errorThrown)
-                        text += " " + errorThrown + "."
-                    else if (textStatus === "error" && jqXHR.readyState !== 4) {
-                        text += " Cela peut arriver si le serveur n'est pas joignable" +
-                            " ou s'il n'a pas ajouté le header 'Access-Control-Allow-Origin: *' à sa réponse"
+            add_listeners() {
+                super.add_listeners()
+
+                /* Toggle recording of roll stats */
+                this.get("record").on("click", e => {
+                    $(e.target).parent().addClass("d-none")
+                    this.get("stop-record").parent().removeClass("d-none")
+                })
+                this.get("stop-record").on("click", e => {
+                    $(e.target).parent().addClass("d-none")
+                    this.get("record").parent().removeClass("d-none")
+                })
+
+                /* Update roll */
+                $(document).off("roll").on("roll", (e, roll) => this.update_roll(e, roll))
+                $(document).off("update-roll").on("update-roll", (e, roll) => this.update_roll(e, roll))
+                $(document).off("stop-roll-broadcast").on("stop-roll-broadcast", _ => {
+                    this.constructor.hold_rolls = true
+                })
+                $(document).off("resume-roll-broadcast").on("resume-roll-broadcast", _ => {
+                    this.constructor.hold_rolls = false
+                    this.update_roll(null, current_roll)
+                })
+
+                /* Hide alert */
+                this.get("alert-button").on("click", _ => {
+                    this.get("alert").addClass("d-none")
+                })
+                this.get("alert").addClass("d-none") // Hide old alerts
+
+                /* Export character page */
+                this.find("#plugin-export-to-server-export,#save-page").on("click", _ => {
+                    const page = "<!DOCTYPE html><html lang=\"fr\">" + $("html").html() + "</html>"
+
+                    // Retrieve the name of the character
+                    let character_name
+                    if (sheet.biography === undefined) {
+                        // NPC Grid
+                        character_name = "Rencontre"
                     } else {
-                        text += " La raison est '" + textStatus + "'"
+                        character_name = sheet.biography["character-name"]
+                        if (character_name === null || character_name.length === 0)
+                            character_name = "Anonyme"
                     }
-                    text += "."
-                    $("#plugin-export-to-server-alert-message").text(text)
-                    alert.removeClass("d-none").removeClass("alert-success").addClass("alert-danger")
-                    hide_message()
-                }
-            })
-        })
-    })
+
+                    // Export to server
+                    let data = new FormData()
+                    data.append("name", character_name)
+                    data.append("page", page)
+                    $.ajax({
+                        url: this["url"],
+                        method: "POST",
+                        data: data,
+                        processData: false,
+                        contentType: false,
+                        success: _ => {
+                            this.get("alert-message").text("La page a été exportée")
+                            this.get("alert").removeClass("d-none").removeClass("alert-danger").addClass("alert-success")
+                            this.hide_message()
+                        },
+                        error: (jqXHR, textStatus, errorThrown) => {
+                            // Failed to export data
+                            let text = "La fiche n'a pas été exportée."
+                            if (errorThrown)
+                                text += " " + errorThrown + "."
+                            else if (textStatus === "error" && jqXHR.readyState !== 4) {
+                                text += " Cela peut arriver si le serveur n'est pas joignable" +
+                                    " ou s'il n'a pas ajouté le header 'Access-Control-Allow-Origin: *' à sa réponse"
+                            } else {
+                                text += " La raison est '" + textStatus + "'"
+                            }
+                            text += "."
+                            this.get("alert-message").text(text)
+                            this.get("alert").removeClass("d-none").removeClass("alert-success").addClass("alert-danger")
+                            this.hide_message()
+                        }
+                    })
+                })
+            }
+
+            hide_message() {
+                setTimeout(_ => {
+                    this.get("alert").addClass("d-none")
+                }, 10000)
+            }
+
+            static install() {
+                super.install()
+                // Fix graphical bug with the label overlapping the default value
+                $("#plugin-export-to-server-url").trigger("change")
+                $("#plugin-export-to-server-roll-url").trigger("change")
+            }
+
+            static upgrade() {
+                super.upgrade()
+                // Fix graphical bug with the label overlapping the default value
+                $("#plugin-export-to-server-url").trigger("change")
+                $("#plugin-export-to-server-roll-url").trigger("change")
+            }
+        }
+
+        ExportToServerPlugin.load()
+    }
 </script>

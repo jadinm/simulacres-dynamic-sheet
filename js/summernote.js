@@ -45,10 +45,6 @@ function summer_note_listener(we, contents) {
     changed_page = true
 }
 
-function add_summernote_listeners(base = $(document)) {
-    base.find('textarea.summernote').uon('summernote.change', summer_note_listener)
-}
-
 function EmojiButton(context) {
     const ui = $.summernote.ui;
     const buttonGroup = ui.buttonGroup([

@@ -68,6 +68,10 @@
 
 <body>
 
+<div id="saved-data" class="d-none">
+    {}
+</div>
+
 <div id="main-container" class="container-fluid main-container px-md-4 px-0 rounded-bottom">
 
     <!-- Logo -->
@@ -112,7 +116,8 @@
             Sauvegarder
         </button>
         <div class="d-md-none col-2 justify-content-center align-middle">
-            <div id="dark-mode-2" class="btn btn-dark rounded-lg col-12 px-0 mx-0" data-toggle="tooltip" data-html="true"
+            <div id="dark-mode-2" class="btn btn-dark rounded-lg col-12 px-0 mx-0" data-toggle="tooltip"
+                 data-html="true"
                  data-placement="bottom" title="Mode sombre">
                 <i class="fas fa-moon"></i>
             </div>
@@ -289,7 +294,7 @@
                     </button>
                     <h4 class="modal-title text-center">
                         <i class="fas fa-exclamation-triangle"></i>
-                        Problème à l'importation
+                        <span id="import-warning-title">Problème à l'importation</span>
                         <i class="fas fa-exclamation-triangle"></i>
                     </h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -298,25 +303,44 @@
                 </div>
                 <div class="modal-body align-middle">
                     <p class="mx-1">
-                        Les données de votre ancienne fiche n'ont pas pu être toutes importées.
+                        Les données de votre fiche n'ont pas pu être toutes chargées.
                         Vérifiez que vous avez pris la bonne version de la fiche.
-                        Si c'est le cas, vérifiez que toutes vos données se trouvent bien dans la nouvelle fiche.
                     </p>
                     <p class="mx-1">
                         Si jamais vous rencontrez ce problème, n'hésitez pas à en parler en
                         <a href="https://github.com/jadinm/simulacres-dynamic-sheet/issues/new">créant une "issue"</a>
-                        et en y mentionnant les données qui n'ont pas été importées (voir la liste ci-dessous)
+                        et en y fournissant la capture d'écran de ce pop-up
                     </p>
                     <hr/>
+                    <div class="row mx-1 align-middle">
+                        <h5>Liste des problèmes de dépendances</h5>
+                    </div>
+                    <ul id="import-warning-dependencies" class="list-group-flush col-12">
+                    </ul>
                     <div class="row mx-1 align-middle">
                         <h5>Liste des valeurs manquantes</h5>
                     </div>
                     <ul id="import-warning-missing" class="list-group-flush col-12">
                     </ul>
                     <div class="row mx-1 align-middle">
-                        <h5>Liste des champs avec le même identifiant (seule une des deux versions a été importée)</h5>
+                        <h5>Liste des champs non gérés par la fiche</h5>
+                    </div>
+                    <ul id="import-warning-unhandled" class="list-group-flush col-12">
+                    </ul>
+                    <div class="row mx-1 align-middle">
+                        <h5>Liste des champs avec le même identifiant (seule une version va fonctionner)</h5>
                     </div>
                     <ul id="import-warning-duplicated" class="list-group-flush col-12">
+                    </ul>
+                    <div class="row mx-1 align-middle">
+                        <h5>Liste des champs avec une valeur invalide</h5>
+                    </div>
+                    <ul id="import-warning-invalid" class="list-group-flush col-12">
+                    </ul>
+                    <div class="row mx-1 align-middle">
+                        <h5>Liste des champs qui ne sont pas correctement synchonisés</h5>
+                    </div>
+                    <ul id="import-warning-unsync" class="list-group-flush col-12">
                     </ul>
                 </div>
             </div>
@@ -355,6 +379,14 @@
 
 <!-- Custom Javascript -->
 <script>
+    let debug = false
+    {% if debug %}
+        debug = true
+    {% endif %}
+    let npc_grid = false
+    {% if npc_grid %}
+        npc_grid = true
+    {% endif %}
     const base_sheet_name = "{{ base_sheet_name }}"
     const base_tag_version = "{{ base_tag_version }}"
     let is_v7 = true
@@ -369,7 +401,7 @@
     {% endif %}
     {% if version != V7 %}
         is_v7 = false
-        matrix_4x4 = true
+        matrix_4x4 = false
     {% endif %}
     {% if matrix_4x4 %}
         matrix_4x4 = true
@@ -382,29 +414,32 @@
     {% if discovery %}
         discovery = true
     {% endif %}
+    let universe = null
+    {% if universe %}
+        universe = "{{ universe }}"
+    {% endif %}
+    let captain_voodoo = "{{ captain_voodoo }}"
+    let med_fantasy = "{{ med_fantasy }}"
 </script>
+<script>{{ include_static("../js/logger.js") }}</script>
 <script>{{ include_static("../js/utils.js") }}</script>
+<script>{{ include_static("../js/graph.js") }}</script>
+<script>{{ include_static("../js/model.js") }}</script>
 <script>{{ include_static("../js/resize.js") }}</script>
 <script>{{ include_static("../js/import_export.js") }}</script>
-<script>{{ include_static("../js/adventure_points_utils.js") }}</script>
+<script>{{ include_static("../js/adventure_points.js") }}</script>
 {% if version == V7 %}
     <script>{{ include_static("../js/adventure_points_v7.js") }}</script>
 {% else %}
     <script>{{ include_static("../js/adventure_points_v8.js") }}</script>
 {% endif %}
-<script>{{ include_static("../js/adventure_points.js") }}</script>
-<script>{{ include_static("../js/components_means.js") }}</script>
+<script>{{ include_static("../js/characteristics.js") }}</script>
+<script>{{ include_static("../js/checkboxes.js") }}</script>
 <script>{{ include_static("../js/slider.js") }}</script>
+<script>{{ include_static("../js/select.js") }}</script>
 <script>{{ include_static("../js/status.js") }}</script>
 <script>{{ include_static("../js/data_tables.js") }}</script>
-<script>{{ include_static("../js/roll_dialog.js") }}</script>
-<script>{{ include_static("../js/roll_tab.js") }}</script>
-<script>{{ include_static("../js/magic.js") }}</script>
-<script>{{ include_static("../js/psi.js") }}</script>
-<script>{{ include_static("../js/warrior.js") }}</script>
-<script>{{ include_static("../js/ki.js") }}</script>
-<script>{{ include_static("../js/superpowers.js") }}</script>
-<script>{{ include_static("../js/setup_roll_tables.js") }}</script>
+<script>{{ include_static("../js/equipment.js") }}</script>
 {% if universe == med_fantasy %}
     <script id="default-talents">{{ include_static("../js/talent_med_fantasy.js") }}</script>
 {% elif universe == captain_voodoo %}
@@ -413,12 +448,20 @@
     <script id="default-talents">default_talents = {x: [], "-4": [], "-2": [], "0": []}</script>
 {% endif %}
 <script>{{ include_static("../js/talent.js") }}</script>
+<script>{{ include_static("../js/roll_dialog.js") }}</script>
+<script>{{ include_static("../js/roll_tab.js") }}</script>
+<script>{{ include_static("../js/magic.js") }}</script>
+<script>{{ include_static("../js/psi.js") }}</script>
+<script>{{ include_static("../js/warrior.js") }}</script>
+<script>{{ include_static("../js/ki.js") }}</script>
+<script>{{ include_static("../js/superpowers.js") }}</script>
 <script id="script-summernote">{{ include_static("../js/summernote.js") }}</script>
 <script>{{ include_static("../js/background.js") }}</script>
 <script>{{ include_static("../js/notes.js") }}</script>
 <script id="script-note-dialog">{{ include_static("../js/notes_dialog.js") }}</script>
-<script>{{ include_static("../js/equipment.js") }}</script>
 <script>{{ include_static("../js/npc_grid.js") }}</script>
+<script>{{ include_static("../js/character.js") }}</script>
+<script>{{ include_static("../js/plugin.js") }}</script>
 
 {% for css_block in plugins.css_blocks %}
     {{ css_block | safe }}

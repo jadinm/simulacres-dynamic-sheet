@@ -1,4 +1,4 @@
-<style id="plugin-css-generic-world" class="plugin-css" data-plugin-version="1.0.2" data-plugin-id="generic-world">
+<style id="plugin-css-generic-world" class="plugin-css" data-plugin-version="2.0.0" data-plugin-id="generic-world">
     /* Change font the sheet */
     body {
         font-family: "Linux Biolinum", "Linux Libertine", serif;
@@ -15,11 +15,11 @@
     .note-editor h1 *, .note-editor h2 *, .note-editor h3 *, .note-editor h4 *, .note-editor h5 *, .note-editor h6 * {
         font-family: "Linux Libertine", serif;
     }
-    
-    .card.border-heavy { 
+
+    .card.border-heavy {
         border-image: unset !important;
         border: 3px solid #ced4da !important;
-    } 
+    }
 
     @font-face {
         font-family: "Linux Biolinum";
@@ -30,54 +30,58 @@
 </style>
 
 <script id="plugin-js-generic-world" class="plugin-js" data-plugin-id="generic-world">
-    $(_ => {
-        let elem = $("#plugin-generic-world-energy")
+    {
+        class GenericWorldPlugin extends PluginModel {
+            static id = "generic-world"
+            static additional_magical_energy = ["energy"]
 
-        /* To remove this plugin, it is not sufficient to remove every block
-         * We need to remove the extra energy as well
-         */
-        function dispose_plugin_generic_world() {
-            // Remove extra energy row
-            elem.parents("div.row").first().remove()
-            $("select.special-energy-select").each((i, elem) => {
-                update_special_energy_select(elem)
-            })
-            compute_remaining_ap()
+            static add_energy(overwrite = false) {
+                let elem = $("#plugin-generic-world-energy")
+
+                /* Adds your energy to the list of base energies if not already present */
+                if (elem.length > 0) { // In case of upgrade, the field already exists
+                    if (!overwrite)
+                        return
+                    elem.parents("div.row").first().remove()
+                }
+                const energy_list = $("#energy-title").parents("div.card").first()
+                const row = energy_list.children().last().clone(true, false)
+                const svg = row.find("svg")
+                // The following svg images are exported from the "Simulacres Bats.ttf" font found
+                // on https://www.facebook.com/groups/Simulacres/permalink/2205424619709932/
+                // and created by Pierre Rosenthal
+                svg.html("<path fill=\"currentColor\"\n d=\"M858 108l-412 706l-411 -706h823z\" />")
+                svg[0].setAttribute("viewBox", "-10 0 903 1000")
+
+                row.find("[data-toggle]")[0].setAttribute("title", "Énergie extraordinaire")
+                row.find("label")[0].setAttribute("for", "plugin-generic-world-energy")
+                elem = row.find("input")
+                elem[0].setAttribute("id", "plugin-generic-world-energy")
+                energy_list.append(row)
+                row.find('[data-toggle="tooltip"]').tooltip()
+            }
+
+            static load() {
+                this.add_energy(false)
+                super.load()
+            }
+
+            static install() {
+                this.add_energy(true)
+                super.install()
+            }
+
+            static upgrade() {
+                this.add_energy(true)
+                super.upgrade()
+            }
+
+            remove() {
+                this.get("energy").parents("div.row").first().remove()
+                super.remove()
+            }
         }
-        // Register the function (avoid typos here or the method won't be called)
-        plugin_dispose_methods["generic-world"] = dispose_plugin_generic_world
 
-        /* Adds your energy to the list of base energies if not already present */
-        let current_val = "0"
-        if (elem.length > 0) { // In case of upgrade, the field already exists
-            current_val = elem.val()
-            elem.parents("div.row").first().remove()
-        }
-        const energy_list = $("#energy-title").parents("div.card")
-        const row = energy_list.children().last().clone(true, false)
-        const svg = row.find("svg")
-        // The following svg images are exported from the "Simulacres Bats.ttf" font found
-        // on https://www.facebook.com/groups/Simulacres/permalink/2205424619709932/
-        // and created by Pierre Rosenthal
-        svg.html("<path fill=\"currentColor\"\n d=\"M858 108l-412 706l-411 -706h823z\" />")
-        svg[0].setAttribute("viewBox", "-10 0 903 1000")
-
-        row.find("[data-toggle]")[0].setAttribute("title", "Énergie extraordinaire")
-        row.find("label")[0].setAttribute("for", "plugin-generic-world-energy")
-        elem = row.find("input")
-        elem[0].setAttribute("id", "plugin-generic-world-energy")
-        energy_list.append(row)
-
-        add_save_to_dom_listeners(row)
-        row.find('[data-toggle="tooltip"]').tooltip()
-        /* Trigger Adventure Point computation on change of your magic energy level */
-        elem.on("change", _ => { // Update lists of special energies
-            $("select.special-energy-select").each((i, elem) => {
-                update_special_energy_select(elem)
-            })
-            compute_remaining_ap()
-        })
-        elem.val(current_val)
-        elem.trigger("change")
-    })
+        GenericWorldPlugin.load()
+    }
 </script>

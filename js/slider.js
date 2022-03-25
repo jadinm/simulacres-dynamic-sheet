@@ -35,14 +35,17 @@ function activate_slider(input, formatter_builder = build_max_formatter, post_bu
     post_build(slider)
 }
 
-function set_slider_max(slider, value, set_value_to_max = false) {
+function set_slider_max(slider, value, set_value_to_max = false, set_value_to_min = false) {
     if (slider.length === 0)
         return
 
     slider.slider("setAttribute", "max", value)
     slider[0].setAttribute("data-slider-max", value.toString())
-    if (set_value_to_max)
+    if (set_value_to_max) {
         slider.slider("setValue", value)
+    } else if (set_value_to_min) {
+        slider.slider("setValue", slider.slider("getAttribute", "min"))
+    }
     slider.slider("refresh", {useCurrentValue: true}).trigger("change")
 }
 
@@ -60,5 +63,5 @@ function set_slider_min(slider, new_min) {
     // Update the minimum
     slider.slider("setAttribute", "min", new_min)
     slider[0].setAttribute("data-slider-min", new_min.toString())
-    slider.slider("refresh")
+    slider.slider("refresh").trigger("change")
 }

@@ -1,96 +1,97 @@
-<script id="plugin-js-true-random" class="plugin-js" data-plugin-version="2.0.0" data-plugin-id="true-random">
-    if (!window.hasOwnProperty('plugin_true_random_old_roll_dices')) {
-        // When we do not upgrade the plugin, fetch the roll function
-        if (!window.hasOwnProperty('plugin_3d_dices_old_roll_dices')) {
-            window.plugin_true_random_old_roll_dices = Roll.prototype.roll_dices
-        } else { // 3D roll was inserted first
-            window.plugin_true_random_old_roll_dices = window.plugin_3d_dices_old_roll_dices
-        }
-    }
-    $(_ => {
-        let true_random_d6s = []
-        function fetch_true_randoms(needed_numbers = 100) {
-            $.get({
-                url: "https://www.random.org/integers/",
-                method: "GET",
-                data: {
-                    "num": String(needed_numbers),
-                    "min": "1",
-                    "max": "6",
-                    "base": "10",
-                    "format": "plain",
-                    "col": "1",
-                    "rnd": "new"
-                },
-                success: (data) => {
-                    true_random_d6s = true_random_d6s.concat(String(data).trim().split("\n"))
-                },
-                error: (jqXHR, textStatus, errorThrown) => {
-                    // Failed to fetch randoms
-                    console.log("Impossible d'importer des nombres de random.org: ", textStatus, " - ", errorThrown)
-                },
-                timeout: 120000 // random.org advises for a couple of minute of timeout
-            })
-        }
-        fetch_true_randoms()
+<script id="plugin-js-true-random" class="plugin-js" data-plugin-version="3.0.0" data-plugin-id="true-random">
 
-        // Replace roll_dice function by our own that uses true random from random.org result if any available
-        function roll_true_random(number, type, dices, exploding_dice = false) {
-            if (true_random_d6s.length < 20) {
-                // Refill random numbers
-                fetch_true_randoms()
+    {
+        class TrueRandomPlugin extends PluginModel {
+            static id = "true-random"
+
+            static true_random_d6s = []
+            static old_roll_dices = Roll.prototype.roll_dices
+
+            static fetch_true_randoms(needed_numbers = 100) {
+                $.get({
+                    url: "https://www.random.org/integers/",
+                    method: "GET",
+                    data: {
+                        "num": String(needed_numbers),
+                        "min": "1",
+                        "max": "6",
+                        "base": "10",
+                        "format": "plain",
+                        "col": "1",
+                        "rnd": "new"
+                    },
+                    success: (data) => {
+                        this.true_random_d6s = this.true_random_d6s.concat(String(data).trim().split("\n"))
+                    },
+                    error: (jqXHR, textStatus, errorThrown) => {
+                        // Failed to fetch randoms
+                        logger.error("Impossible d'importer des nombres de random.org: ", textStatus, " - ", errorThrown)
+                    },
+                    timeout: 120000 // random.org advises for a couple of minute of timeout
+                })
             }
-            if (type > 0 && type <= 6 && true_random_d6s.length >= number) {
-                // We have remaining random numbers to take
-                let sum = 0
-                let count = 0
-                let last_dice_exploded = false
-                while (count !== number || last_dice_exploded && exploding_dice) {
-                    if (true_random_d6s.length < 20) {
-                        // Refill random numbers
-                        fetch_true_randoms()
-                    }
-                    // We take a random index inside it to prevent predictability from players
-                    const idx = Math.floor(Math.random() * true_random_d6s.length)
-                    const single_roll = true_random_d6s[idx] % type + 1
-                    true_random_d6s.splice(idx, 1)
-                    if (dices)
-                        dices.push(single_roll)
-                    if (!last_dice_exploded)
-                        count += 1
-                    last_dice_exploded = single_roll === type && type !== 1 && exploding_dice
-                    sum += single_roll
+
+            static roll_true_random(number, type, dices, reason = "", exploding_dice = false) {
+                if (TrueRandomPlugin.true_random_d6s.length < 20) {
+                    // Refill random numbers
+                    TrueRandomPlugin.fetch_true_randoms()
                 }
-                return sum
+                if (type > 0 && type <= 6 && TrueRandomPlugin.true_random_d6s.length >= number) {
+                    // We have remaining random numbers to take
+                    let sum = 0
+                    let count = 0
+                    let last_dice_exploded = false
+                    while (count !== number || last_dice_exploded && exploding_dice) {
+                        if (TrueRandomPlugin.true_random_d6s.length < 20) {
+                            // Refill random numbers
+                            TrueRandomPlugin.fetch_true_randoms()
+                        }
+                        // We take a random index inside it to prevent predictability from players
+                        const idx = Math.floor(Math.random() * TrueRandomPlugin.true_random_d6s.length)
+                        const single_roll = TrueRandomPlugin.true_random_d6s[idx] % type + 1
+                        TrueRandomPlugin.true_random_d6s.splice(idx, 1)
+                        if (dices)
+                            dices.push(single_roll)
+                        if (!last_dice_exploded)
+                            count += 1
+                        last_dice_exploded = single_roll === type && type !== 1 && exploding_dice
+                        sum += single_roll
+                    }
+                    return sum
+                }
+                return roll_dices(number, type, dices, exploding_dice)
             }
-            return roll_dices(number, type, dices, exploding_dice)
-        }
-        if (Roll.prototype.roll_dices === window.plugin_true_random_old_roll_dices) { // No other plugin present
-            Roll.prototype.roll_dices = roll_true_random
-        } else { // Hook after other plugins
-            window.plugin_3d_dices_old_roll_dices = roll_true_random
+
+            static load() {
+                this.fetch_true_randoms()
+                super.load()
+
+                if (Object.keys(sheet_type.plugin_names).includes("plugin-3d-dices")) { // Hook after other plugins
+                    sheet_type.plugin_names["plugin-3d-dices"].old_roll_dices = this.roll_true_random
+                } else { // No other plugin present
+                    Roll.prototype.roll_dices = this.roll_true_random
+                }
+            }
+
+            remove() {
+                // Reset correct function
+                if (Object.keys(sheet_type.plugin_names).includes("plugin-3d-dices")) { // No other plugin present
+                    sheet_type.plugin_names["plugin-3d-dices"].old_roll_dices = this.constructor.old_roll_dices
+                } else {
+
+                    Roll.prototype.roll_dices = this.constructor.old_roll_dices
+                }
+                $("#roll-dialog-1d6").off().on("click", trigger_1d6_roll)
+            }
         }
 
-        $("#roll-dialog-1d6").off().on("click", _ => {
-            const dice_value = roll_true_random(1, 6, null)
-            $("#roll-dialog-1d6-result").text("1d6 additionnel: " + dice_value)
+        TrueRandomPlugin.load()
+
+        $(_ => {
+            $("#roll-dialog-1d6").off().on("click", _ => {
+                const dice_value = TrueRandomPlugin.roll_true_random(1, 6, null)
+                $("#roll-dialog-1d6-result").text("1d6 additionnel: " + dice_value)
+            })
         })
-
-        /* To remove a plugin, it might not always be sufficient to remove every block
-         * Sometimes, additional cleaning is needed depending on the plugin
-         *
-         * To do so, we create a function for that and register it
-         * This function will be called after removing all the blocks of this plugin
-         */
-        function dispose_plugin_true_random() {
-            // Reset correct function
-            if (Roll.prototype.roll_dices === roll_true_random) // No other plugin
-                Roll.prototype.roll_dices = window.plugin_true_random_old_roll_dices
-            else // Remove the hook
-                window.plugin_3d_dices_old_roll_dices = window.plugin_true_random_old_roll_dices
-            delete window.plugin_true_random_old_roll_dices
-        }
-        // Register the function (avoid typos here or the method won't be called)
-        plugin_dispose_methods["true-random"] = dispose_plugin_true_random
-    })
+    }
 </script>

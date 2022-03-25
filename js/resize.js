@@ -47,6 +47,7 @@ function resize() {
         uncollapse_table()
         characteristics_tab_to_head()
     }
+    TalentLists.update_talent_tooltip_resize(size)
 }
 
 $(() => {

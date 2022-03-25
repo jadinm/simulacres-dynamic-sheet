@@ -1,301 +1,355 @@
 /* This file handles the talent lists */
 
-regex_talent_from_id = /talent_(x|(?:-4)|(?:-2)|0|1)(\d*)/
+class Talent extends DataRow {
+    static row_id_regex = /(?:talent_)?((x|-4|-2|0|1)(\d*))-?(.*)/
+    static basic_inputs = ["name"]
 
-function talent_from_name(name, from_elem = $("#talent-tab")) {
-    if (name == null)
-        return $()
-    return from_elem.find("input[value='" + name.replace("'", "\\'") + "']")
-}
-
-function talent_index(talent) {
-    return parseInt(talent.id.match(regex_talent_from_id)[2])
-}
-
-function talent_level(talent, target_list = null) {
-    const list = (target_list) ? target_list : $(talent).parents(".talent-list")[0]
-    if (list == null)
-        return "0"
-    return list.id.replace("talents_", "")
-}
-
-function talent_base_level(talent) {
-    talent = $(talent)
-    if (!talent.hasClass("talent"))
-        talent = talent.parents(".talent").first()
-    return talent.length > 0 ? talent[0].id.match(regex_talent_from_id)[1] : "0"
-}
-
-function talent_cost(talent, list = null) {
-    const current_value = talent_level(talent, list)
-    let old_value = talent_base_level(talent)
-
-    const talent_name = $(talent).find("input").val()
-    if (work_talents().includes(talent_name)) {
-        // Check that it is not a work talent
-        old_value = "0" // Compute PA cost from level 0
-    }
-    if (main_work_talents().includes(talent_name)) {
-        // Check that it is not the main work talent
-        old_value = "1" // Compute PA cost from level 1
+    constructor(current_list, data, opts = {}, other_html = null) {
+        super(data, opts, other_html)
+        this.current_list = current_list
     }
 
-    let cost = talent_increment_cost[old_value][current_value]
-
-    if (talent_x_inefficient_raise().includes(talent_name) && parseInt(current_value) >= 0) {
-        // 6 PA were consumed to raise this talent from X to 0 instead of 5
-        cost += indirect_x_to_0_raise_cost
+    prepare(data) {
+        super.prepare(data)
+        const match = this.id.match(this.constructor.row_id_regex)
+        this.base_level = match[2]
+        this.old_cost = null
     }
 
-    if (advised_talent().includes(talent_name))
-        cost = Math.max(0, cost - advised_talent_save)
-    return cost
-}
+    is_template() {
+        return this.row_number.length === 0
+    }
 
-function get_selected_options(select, new_value, old_value) {
-    const is_template = select[0].id.includes("-x-")
+    talent_level(target_list = null) {
+        return (target_list) ? target_list.list_level : this.current_list.list_level
+    }
 
-    // Find the selected option
-    let selected_options = !is_template ? select.selectpicker('val') : []
-    if (!Array.isArray(selected_options))
-        selected_options = [selected_options]
-    selected_options = $(selected_options).map((i, elem) => {
-        if (elem === old_value) { // Update selection based on the changed value
-            elem = new_value
+    talent_cost(list = null) {
+        const current_value = this.talent_level(list)
+        let old_value = this.base_level
+
+        if (sheet["ap"].work_talents().includes(this.name)) {
+            // Check that it is not a work talent
+            old_value = "0" // Compute PA cost from level 0
         }
-        return elem
-    }).toArray().flat()
-    return selected_options
-}
-
-function update_select(select, elements, new_value, old_value) {
-    const is_template = select[0].id.includes("-x-")
-
-    // Find the selected option
-    let selected_options = get_selected_options(select, new_value, old_value)
-    select.empty()
-
-    // Sort it
-    elements.sort((a, b) => {
-        return a.name.localeCompare(b.name) // Sort correctly accents
-    }).each((i, elem) => {
-        const value = (elem.hasOwnProperty("value") ? elem.value : elem.name)
-        let new_option = "<option value=\"" + value + "\""
-        if (elem.content) {// Custom data-content (like images)
-            new_option += " data-content='" + elem.content.replaceAll("'", "&apos;") + "'"
+        if (sheet["ap"].main_work_talents().includes(this.name)) {
+            // Check that it is not the main work talent
+            old_value = "1" // Compute PA cost from level 1
         }
-        if (selected_options.includes(value)) // Keep selection
-            new_option += " selected='selected'"
-        new_option += ">" + elem.name + "</option>"
-        select.append(new_option)
-    })
 
-    if (!is_template) {// Ignore template lines
-        select.selectpicker("refresh")
-    }
-    changed_page = true
-}
+        let original_cost = talent_increment_cost[old_value][current_value]
+        let cost = original_cost
 
-/**
- * Update the select options based on a talent list
- */
-function update_talent_select(select, new_value, old_value) {
-    // Recover talent list, potentially filtered
-    const only_from = select[0].getAttribute("data-talent-filter-origin-level")
-    let only_at_levels = select[0].getAttribute("data-talent-filter-current-level")
-    if (only_at_levels != null)
-        only_at_levels = only_at_levels.split(",")
-    const talent_list = $(talent_list_selector).filter((i, e) => {
-        const talent = $(e).parents(".talent")[0]
-        return e.value && e.value.length > 0
-            && (only_from == null || talent_base_level(talent) === only_from)
-            && (only_at_levels == null || only_at_levels.includes(talent_level(talent)))
-    }).map((i, e) => {
-        return {name: e.value, content: null}
-    })
-    talent_list.push({name: "", content: null})
-    update_select(select, talent_list, new_value, old_value)
-}
+        if (sheet["ap"].talent_x_inefficient_raise().includes(this.name) && parseInt(current_value) >= 0) {
+            // 6 PA were consumed to raise this talent from X to 0 instead of 5
+            cost += indirect_x_to_0_raise_cost
+        }
 
-function add_talent(list, fixed_id = null, bulk = false) {
-    if (list.length === 0)
-        return $()
-    const initial_level = list[0].id.replace("talents_", "")
-
-    // Find new id
-    let new_id_idx = 0
-    if (fixed_id === null) {
-        while ($("#talent_" + initial_level + new_id_idx).length > 0)
-            new_id_idx++
-    } else {
-        new_id_idx = fixed_id
+        if (sheet["ap"].advised_talent().includes(this.name))
+            cost = Math.max(0, cost - advised_talent_save)
+        return [cost, original_cost]
     }
 
-    // Clone and set ids
-    const new_talent = $("#talent_" + initial_level).clone(true, true)
-    new_talent[0].id = "talent_" + initial_level + new_id_idx
-    const input = $(new_talent).find("input")
-    input[0].id = initial_level + new_id_idx + "-name"
-    input[0].value = ""
-    input[0].setAttribute("value", "")
-    const label = $(new_talent).find("label")[0]
-    label.for = initial_level + new_id_idx + "-name"
-    $(new_talent).removeAttr("hidden")
-    $(new_talent).tooltip()
+    update_talent_tooltip(target_list = null) {
+        const current_level = this.talent_level(target_list)
+        const old_level = this.base_level
+        if (current_level !== old_level) {
+            const [cost, cost_without_reductions] = this.talent_cost(target_list)
+            if (cost === this.old_cost && cost_without_reductions === this.old_cost_without_reductions)
+                return // Tooltip still valid
+            if (!isNaN(cost)) {
+                if (!intermediate_discovery) {
+                    this.data.attr("data-original-title",
+                        "Talent " + old_level.toUpperCase() + " à la base <br />" + "Coût: " + cost + " PA")
+                    this.find(".talent-origin").text("< " + old_level.toUpperCase())
+                    this.data.addClass("increased-talent")
+                }
+            } else {
+                this.data.attr("data-original-title",
+                    "Talent " + old_level.toUpperCase() + " à la base <br />" + "Mouvement invalide")
+                this.find(".talent-origin").text("< " + old_level.toUpperCase() + " (Mouvement invalide)")
+            }
+            this.data.tooltip({disabled: false})
+            this.old_cost = cost
+            this.old_cost_without_reductions = cost_without_reductions
+        } else {
+            this.data.attr("data-original-title", "")
+            if (!intermediate_discovery) {
+                this.data.removeClass("increased-talent").tooltip({disabled: true})
+            }
+            this.find(".talent-origin").text("")
+            this.old_cost = 0
+        }
+    }
 
-    list.children().last().before(new_talent)
-    // Update talent tooltip if needed
-    update_talent_tooltip(new_talent[0])
+    update_talent(list) {
+        if (list === this.current_list)
+            return // No change of list
+        this.current_list.rows = this.current_list.rows.filter((talent) => talent.id !== this.id)
+        list.rows.push(this)
+        this.current_list = list
+        this.update_talent_tooltip(list)
 
-    // Update all list selections of talents
-    if (!bulk) {
-        $("select.talent-select").each((i, elem) => {
+        // Update all list selections of talents that are changed when a talent level is changed
+        $("select.talent-select[data-talent-filter-current-level]").each((i, elem) => {
             update_talent_select($(elem))
         })
+
+        // Update related rolls
+        sheet.get_all_rolls_with_talent(this).forEach((elem) => {
+            elem.update_roll_value()
+        })
+
+        // Update Adventure points
+        compute_remaining_ap()
+
+        changed_page = true
     }
-    // Update armor penalty
-    recompute_armor_penalty()
-    return new_talent
-}
 
-$("#add-talent-x").on("click", (event, idx = null) => { // Add parameter to fix the id
-    add_talent($("#talents_x"), idx)
-})
-$("#add-talent--4").on("click", (event, idx = null) => { // Add parameter to fix the id
-    add_talent($("#talents_-4"), idx)
-})
-$("#add-talent--2").on("click", (event, idx = null) => { // Add parameter to fix the id
-    add_talent($("#talents_-2"), idx)
-})
-$("#add-talent-0").on("click", (event, idx = null) => { // Add parameter to fix the id
-    add_talent($("#talents_0"), idx)
-})
-$("#add-talent-1").on("click", (event, idx = null) => { // Add parameter to fix the id
-    add_talent($("#talents_1"), idx)
-})
+    add_listeners() {
+        super.add_listeners()
 
-function add_missing_talents(talents) {
-    // Insert missing default talent if they do not exist
-    for (const [level, level_talents] of Object.entries(talents)) {
-        for (const talent of level_talents) {
-            if (talent_from_name(talent).length === 0) {
-                const elem = add_talent($("#talents_" + level), null, true).find("input")
-                elem.val(talent)
-                elem.trigger("change")
-            }
+        if (!this.is_template()) {
+            this.get("name").on("change", (e, bulk = false) => {
+                // Update all list selections of talents while changing the selection value if the changed talent was selected
+
+                if (!bulk) {
+                    $("select.talent-select").each((i, elem) => {
+                        update_talent_select($(elem), e.target.value, e.target.oldvalue)
+                    })
+                    e.target.oldvalue = null
+                }
+            }).on("focus", e => {
+                e.target.oldvalue = e.target.value
+            })
         }
     }
-    // Update all list selections of talents
-    $("select.talent-select").each((i, elem) => {
-        update_talent_select($(elem))
-    })
-}
 
-function update_talent_tooltip(talent, target_list = null) {
-    const current_level = talent_level(talent, target_list)
-    const old_level = talent_base_level(talent)
-    if (current_level !== old_level) {
-        const cost = talent_cost(talent, target_list)
-        if (!isNaN(cost)) {
-            if (!intermediate_discovery) {
-                talent.setAttribute("data-original-title",
-                    "Talent " + old_level.toUpperCase() + " à la base <br />" + "Coût: " + cost + " PA")
-                $(talent).find(".talent-origin").text("< " + old_level.toUpperCase())
-                $(talent).addClass("increased-talent")
-            }
-        } else {
-            talent.setAttribute("data-original-title",
-                "Talent " + old_level.toUpperCase() + " à la base <br />" + "Mouvement invalide")
-            $(talent).find(".talent-origin").text("< " + old_level.toUpperCase() + " (Mouvement invalide)")
-        }
-        $(talent).tooltip({disabled: false})
-    } else {
-        talent.setAttribute("data-original-title", "")
-        if (!intermediate_discovery) {
-            $(talent).removeClass("increased-talent").tooltip({disabled: true})
-        }
-        $(talent).find(".talent-origin").text("")
+    export() {
+        const to_export = super.export()
+        to_export["current_level"] = this.current_list.list_level
+        to_export["base_level"] = this.base_level
+        return to_export
     }
 }
-add_missing_talents(default_talents)
-$(".talent").each((i, elem) => {
-    if (elem.getAttribute("hidden") == null)
-        update_talent_tooltip(elem)
-})
 
-function update_talent(event) {
-    update_talent_tooltip(event.item, event.to)
+class TalentLists extends DataList {
+    static talent_tables = [
+        "talents_x", "talents_-4", "talents_-2", "talents_0", "talents_1", "talents_2", "talents_3"
+    ]
 
-    // Update all list selections of talents that are changed when a talent level is changed
-    $("select.talent-select[data-talent-filter-current-level]").each((i, elem) => {
-        update_talent_select($(elem))
-    })
+    static row_class = Talent
 
-    // Update rolls
-    $(".row-roll-trigger").each((i, elem) => {
-        row_of(elem).update_roll_value(elem)
-    })
-
-    // Update armor penalty
-    recompute_armor_penalty()
-
-    // Update Adventure points
-    compute_remaining_ap()
-
-    changed_page = true
-}
-
-$(".talent input[id*='-name']").on("change", e => {
-    // Update all list selections of talents while changing the selection value if the changed talent was selected
-    $("select.talent-select").each((i, elem) => {
-        update_talent_select($(elem), e.target.value, e.target.oldvalue)
-    })
-    e.target.oldvalue = null
-}).on("focus", e => {
-    e.target.oldvalue = e.target.value
-})
-
-$('.talent-list').each((i, elem) => {
-    $(elem).sortable({
-        handle: '.fa-arrows-alt',
-        group: 'talent-lists',
-        dragoverBubble: true,
-        onEnd: update_talent,
-        onMove: (e, _) => {
-            // Prevent moves that have an invalid PA cost
-            if (!$(e.to).hasClass("remove-talent") && isNaN(talent_cost(e.dragged, e.to))) {
-                return false
-            }
-            return e.willInsertAfter ? 1 : -1
+    constructor(table, opts, other_html = null) {
+        super(table, opts, other_html)
+        if (this.id === undefined)
+            return // Table absent
+        this.list_level = this.id.split("_")[1]
+        if (this.list_level === "3") {
+            // Need to have all the talents initialized before checking for the missing ones
+            this.constructor.add_missing_talents(default_talents)
         }
-    })
-})
+    }
 
-$("select.talent-select").each((i, elem) => {
-    update_talent_select($(elem))
-})
+    setup_table_ids() {
+        this.name = this.id
+        this.list_level = this.id.split("_")[1]
+        const template_div = this.get(this.name.replace("talents", "talent"))
+        this.template_row = template_div.length > 0 ? new this.constructor.row_class(this, template_div, {}, this.other_html) : null
+        this.add_button = this.get("add-talent-" + this.list_level)
+        this.remove_button = this.table.parent().find(".remove-talent")
+    }
 
-$('.remove-talent').sortable({
-    group: 'talent-lists', // So that it can delete those items
-    ghostClass: "remove-drop",
-    onAdd: event => {
-        // Remove the element
-        $(event.item).tooltip("dispose")
-        $(event.item).remove()
+    setup_sortable() {
+        this.table.sortable({
+            handle: '.fa-arrows-alt',
+            group: 'talent-lists', // So we can move the talent around
+            dragoverBubble: true,
+            onEnd: (e) => {
+                if (!$(e.to).hasClass("remove-talent")) {
+                    const new_list = sheet.get_talent_list(e.to.id)
+                    const talent = this.get_row(e.item.id)
+                    talent.update_talent(new_list)
+                }
+                changed_page = true
+            },
+            onMove: (e, _) => {
+                // Prevent moves that have an invalid PA cost
+                const new_list = sheet.get_talent_list(e.to.id)
+                const talent = this.get_row(e.dragged.id)
+                if (!$(e.to).hasClass("remove-talent") && isNaN(talent.talent_cost(new_list)[0])) {
+                    return false
+                }
+                return e.willInsertAfter ? 1 : -1
+            }
+        })
+        this.add_button.on("click", (event, idx = null) => { // Add parameter for forced index
+            this.add_row(idx)
+            changed_page = true
+        })
 
+        this.remove_button.sortable({
+            group: 'talent-lists', // So that it can delete those items
+            ghostClass: "remove-drop",
+            handle: '.fa-arrows-alt', // So that the button itself cannot be moved
+            onAdd: event => this.remove_row(event)
+        })
+    }
+
+    children() {
+        return this.table.children().slice(1)
+    }
+
+    get_row(row_element_id) {
+        const base_id = "talent_" + row_element_id.match(this.constructor.row_class.row_id_regex)[1]
+        if (this.template_row && this.template_row.id === base_id)
+            return this.template_row
+        for (let i = 0; i < this.rows.length; i++) {
+            if (this.rows[i].id === base_id) {
+                return this.rows[i]
+            }
+        }
+        return sheet.get_talent_from_id(base_id)
+    }
+
+    construct_row(elem, opts) { // (this, new_talent, opts, this.other_html)
+        return new this.constructor.row_class(this, elem, opts, this.other_html)
+    }
+
+    remove_row(event) {
+        const row = this.get_row(event.item.id)
+        super.remove_row(event)
         // Update rolls
-        $(".row-roll-trigger").each((i, elem) => {
-            row_of(elem).update_roll_value(elem)
+        sheet.get_all_rolls_with_talent(row).forEach((elem) => {
+            elem.update_roll_value()
         })
 
         // Update all list selections of talents
         $("select.talent-select").each((i, elem) => {
             update_talent_select($(elem))
         })
-
-        changed_page = true
     }
-})
+
+    add_row(fixed_id = null, opts = {}) {
+        const initial_level = this.list_level
+
+        // Find new id
+        let new_id_idx = 0
+        if (fixed_id === null) {
+            while ($("#talent_" + initial_level + new_id_idx).length > 0)
+                new_id_idx++
+        } else {
+            new_id_idx = fixed_id
+        }
+
+        // Clone and set ids
+        const new_talent = this.template_row.data.clone(true, true)
+        new_talent[0].id = "talent_" + initial_level + new_id_idx
+        const input = $(new_talent).find("input")
+        input[0].id = initial_level + new_id_idx + "-name"
+        input[0].value = ""
+        input[0].setAttribute("value", "")
+        const label = $(new_talent).find("label")[0]
+        label.for = initial_level + new_id_idx + "-name"
+        $(new_talent).removeAttr("hidden")
+        $(new_talent).attr("data-toggle", "tooltip")
+        $(new_talent).tooltip()
+
+        this.children().last().before(new_talent)
+
+        const row = this.construct_row(new_talent, opts)
+        row.update_talent_tooltip()
+        this.rows.push(row)
+
+        // Add custom listeners
+        if (this.other_html === null) {
+            this.add_custom_listener_to_row(row)
+        }
+        return row
+    }
+
+    static add_missing_talents(default_talents) {
+        let updated = false
+        for (const [level, talents] of Object.entries(default_talents)) {
+            for (const talent of talents) {
+                if (!sheet.get_talent_from_name(talent)) {
+                    // Need to add it, but telling the Talent not to trigger update of all the select pickers
+                    sheet.get_talent_list("talents_" + level).add_row(null).get("name").val(talent).trigger("change", true)
+                    updated = true
+                }
+            }
+        }
+        if (updated) {
+            // Update all list selections of talents if needed
+            $("select.talent-select").each((i, elem) => {
+                update_talent_select($(elem))
+            })
+        }
+    }
+
+    get_talent_from_name(name) {
+        const res = this.rows.filter((talent) => talent.name === name)
+        if (res.length === 0)
+            return null
+        return res[0]
+    }
+
+    /**
+     * Import talents that might initially be from another list
+     * table_opts: The part of the data exported by this table
+     * full_opts: The complete dictionary given to the sheet
+     */
+    import(table_opts, full_opts) {
+        // Creating talents that originate from this talent list, even if they were moved to another list
+        this.constructor.talent_tables.forEach((name) => {
+            for (const talent_desc of full_opts[name].rows) {
+                if (talent_desc["base_level"] === this.list_level && !sheet.get_talent_from_name(talent_desc["name"])) {
+                    // This talent needs to be created here (it will be moved later)
+                    this.add_row(null, {}).import(talent_desc)
+                }
+            }
+        })
+
+        // Since talent lists are imported in increasing order of level, we know that talents that should be moved
+        // in this list are already created (because moves to the lower levels are forbidden)
+        for (const talent_desc of table_opts.rows) {
+            const talent = sheet.get_talent_from_name(talent_desc["name"])
+            // Move the talent on the other list (or don't move if not needed)
+            if (this === talent.current_list) {
+                talent.update_talent_tooltip() // potentially updating the tooltip if the it was moved
+            } else {
+                talent.update_talent(this)
+            }
+            this.table.append(talent.data) // Moves the element to the end of the list
+        }
+
+        if (sheet[this.constructor.talent_tables[this.constructor.talent_tables.length - 1]] === this) {
+            // This was the last talent list to update: this is time to update all the talent select pickers
+            $("select.talent-select").each((i, elem) => {
+                update_talent_select($(elem))
+            })
+        }
+    }
+
+    static update_talent_tooltip_resize(size) {
+        if (!sheet)
+            return
+        // We need template rows so that new elements are built correctly
+        sheet.talents(true).forEach((elem) => {
+            if (size === "xs" || size === "sm" || size === "md") {
+                // Only triggered when clicking on the input
+                // Otherwise, the tooltip hides the handler, making it impossible to move around
+                elem.data.attr("data-trigger", "focus")
+                if (!elem.is_template())
+                    elem.data.tooltip('dispose').tooltip({trigger: "focus"})
+            } else {
+                elem.data.attr("data-trigger", "hover focus")
+                if (!elem.is_template())
+                    elem.data.tooltip('dispose').tooltip({trigger: "hover focus"})
+            }
+        })
+    }
+}
 
 $("#talent-search").on("change", event => {
     let value = $(event.target).val().toLowerCase()

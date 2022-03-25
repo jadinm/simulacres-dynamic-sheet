@@ -1,8 +1,17 @@
 class KiRow extends PsiRow {
+    static requirements = RollRow.requirements
+
+    static selects_no_sanitize = RollRow.selects_no_sanitize
+    static selects = RollRow.selects
+    static numeric_inputs = [...RollRow.numeric_inputs, ...["level"]]
+    static basic_inputs = [...this.numeric_inputs,
+        ...["talent", "time", "duration", "effect", "details-name", "details-max", "details-min"]]
+    static sliders = []
+
     update_realm(realm_div) {
     }
 
-    energy() {
+    energy_name() {
         return "ki"
     }
 
@@ -10,8 +19,8 @@ class KiRow extends PsiRow {
         return true
     }
 
-    energy_level() {
-        return parseInt(this.get("level").val())
+    get_difficulty(realm) {
+        return 0 // The difficulty depends on the talent level, not a difficulty slider
     }
 
     roll_reason() {
@@ -27,11 +36,6 @@ class KiRow extends PsiRow {
 
 class KiTable extends PsiRollTable {
     static row_class = KiRow
-
-    update_level(e) {
-        row_of(e.target).update_level()
-        super.update_level(e)
-    }
 }
 
 $("#ki").on("change", event => {
@@ -53,9 +57,4 @@ $("#ki").on("change", event => {
 $("#ki-search").on("change", event => {
     let value = $(event.target).val().toLowerCase()
     search_tables(value, $("#ki-table tr"))
-})
-
-$(_ => {
-    // Initialize tables
-    new KiTable($("#ki-table"))
 })

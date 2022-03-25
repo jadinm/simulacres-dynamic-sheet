@@ -3,13 +3,12 @@
  */
 
 let changed_page = false
-const modifiable_sliders = ["unease", "hp-head", "hp-trunk", "hp-right-arm", "hp-left-arm", "hp-right-leg",
-    "hp-left-leg", "breath", "psychic", "hp-right-wing", "hp-left-wing", "hp-right-leg-2", "hp-left-leg-2"]
 
 /* Remind the user that they need to save the page if they changed anything */
 window.onbeforeunload = function () {
-    if (changed_page)
+    if (changed_page) {
         return ""
+    }
 }
 
 /* Remove duplicated select picker */
@@ -24,83 +23,10 @@ $("select").each((i, select) => {
 
 $(".note-editor.note-frame").remove()
 
-/* Update field value attributes as the user writes so that it will be saved in the HTML */
+function save_page() {
+    // Save data to DOM
+    sheet.save()
 
-function check_radio(elem) {
-    elem.setAttribute("checked", "")
-    $(elem).prop("checked", true)
-}
-
-function uncheck_checkbox(elem) {
-    $(elem).prop("checked", false).removeAttr("checked")
-}
-
-function input_change(event) {
-    event.target.setAttribute("value", event.target.value)
-    changed_page = true
-}
-
-function input_slider_change(event) {
-    event.target.setAttribute("data-slider-value", event.target.value)
-    changed_page = true
-}
-
-function checkbox_click(event) {
-    const already_present = $(event.target).is(':checked')
-    if ($(event.target).parents(".custom-control").first().hasClass("custom-radio")) {
-        // Uncheck previous selection if we want to emulate radio buttons
-        $("input[name='" + event.target.name + "']").prop("checked", false).removeAttr("checked")
-    }
-
-    if (already_present) { // Do not check if the same element was selected twice
-        check_radio(event.target)
-    } else {
-        uncheck_checkbox(event.target)
-    }
-    changed_page = true
-}
-
-function select_change(e) {
-    if (e.target.id.includes("-x-"))
-        return
-    let current_value = $(e.target).selectpicker('val')
-    if (!Array.isArray(current_value))
-        current_value = [current_value]
-    $(e.target).children().each((i, elem) => { // Save results in DOM
-        elem.removeAttribute('selected')
-        if (current_value.includes(elem.value)) {
-            $(e.target).children()[i].setAttribute('selected', 'selected')
-        }
-    })
-    changed_page = true
-}
-
-function number_input_key_event() {
-    if (number_filter(this.value, this.getAttribute("min"), this.getAttribute("max"))) {
-        this.oldValue = this.value
-    } else if (this.hasOwnProperty("oldValue")) {
-        this.value = this.oldValue
-    } else {
-        this.value = ""
-    }
-}
-
-function add_save_to_dom_listeners(base = $(document)) {
-    base.find("input").uon("change", input_change)
-    base.find("input.input-slider").uon("change", input_slider_change)
-    base.find("input[type=\"checkbox\"]").uon("click", checkbox_click)
-
-    base.find("select").uon("changed.bs.select", select_change)
-
-    // Install input filters on number inputs
-    base.find("input[type='number']").uon("input keydown keyup mousedown mouseup select contextmenu drop",
-        number_input_key_event)
-}
-
-add_save_to_dom_listeners()
-
-/* Save Character page */
-$("#save-page").on("click", function (_) {
     const userInput = "<!DOCTYPE html><html lang=\"fr\">" + $("html").html() + "</html>"
     const blob = new Blob([userInput], {type: "text/html;charset=utf-8"})
 
@@ -116,26 +42,14 @@ $("#save-page").on("click", function (_) {
     saveAs(blob, character_name + ".html")
 
     changed_page = false
+}
+
+/* Save Character page */
+$("#save-page").on("click", function () {
+    save_page()
 })
 /* Remove the mdbootstrap button effects if any */
 $(".waves-ripple").remove()
-
-/**
- * Show the modal with import warnings
- */
-function show_import_warnings(missing_inputs, duplicated_inputs) {
-    const list_missing = $("#import-warning-missing")
-    list_missing.children().remove()
-    $(missing_inputs).each((i, elem) => {
-        const value = elem[1] == null ? "" : elem[1]
-        list_missing.append($("<li class=\"list-group-item align-items-center py-1 my-0\">\"" + value + "\" dans un champ avec l'identifiant \"" + elem[0] + "\"</li>"))
-    })
-    const list_duplicated = $("#import-warning-duplicated")
-    $(duplicated_inputs).each((i, elem) => {
-        list_duplicated.append($("<li class=\"list-group-item align-items-center py-1 my-0\">" + elem + "</li>"))
-    })
-    $("#import-warning").modal()
-}
 
 /**
  * Update tabs, reset the first tab as the default one
@@ -159,281 +73,36 @@ function reset_tab_selection(html) {
 /**
  * Overwrite data from input fields, images, select options, radio buttons and sortables of the destination
  * @param src_html source jquery object
- * @param dst_html destination jquery object
- * @param full_sheet whether this is a full sheet update
- * @param template_copy whether we are copying a row to a row of another index (and therefore different ids)
  */
-function import_data(src_html, dst_html, full_sheet, template_copy = false) {
-    // Retrieve and copy all of the input values of the src_html
-    const table_row_input_id = /(.+)-(\d+)-.+/
-    const talent_input_id = /^(x|(?:-4)|(?:-2)|0|1)(\d+)-name$/
-    const spell_difficulty_input_id = /^(spell-\d+)-(difficulty-input|hermetic-difficulty)$/
+function import_data(src_html) {
+    logger.info("Extracting data from old sheet")
+    const old_sheet = new Character(src_html)
+    old_sheet.build()
 
-    const missing_inputs = []
-    const duplicated_inputs = []
-
-    const existing_ids = []
-
-    const dst_row = template_copy ? row_of(dst_html) : null
-
-    src_html.find("input").sort((a, b) => {
-        // Treat means and components first because they influence the HP/PS/EP/Unease sliders
-        const j_a = $(a)
-        const j_b = $(b)
-        const is_a_prior = j_a.hasClass("component") || j_a.hasClass("means")
-        const is_b_prior = j_b.hasClass("component") || j_b.hasClass("means")
-        if (is_a_prior) {
-            if (is_b_prior)
-                return 0
-            return -1
-        }
-        if (is_b_prior)
-            return 1
-        return 0
-    }).each((i, old_input) => {
-        if (old_input.id && old_input.id.length > 0) {
-            if (existing_ids.includes(old_input.id) && !old_input.id.includes("plugin-") && !old_input.id.includes("note-dialog-") && !old_input.id.includes("ColorPicker"))
-                duplicated_inputs.push(old_input.id)
-            else
-                existing_ids.push(old_input.id)
-
-            let old_input_sel = "#" + old_input.id
-            let new_input = dst_html.find(old_input_sel)
-            if (template_copy && new_input.length === 0) {
-                const match = old_input.id.match(row_id_regex)
-                if (match) {
-                    old_input_sel = "#" + dst_row.row_index + "-" + match[4]
-                    new_input = dst_html.find(old_input_sel)
-                }
-            }
-
-            const talent_matching = old_input.id.match(talent_input_id)
-            if (new_input.length === 0) {
-                let matching = old_input.id.match(table_row_input_id)
-                const difficulty_slider_match = old_input.id.match(spell_difficulty_input_id)
-                if (difficulty_slider_match) {
-                    // This is an old unified spell difficulty input
-                    // => transfer it to the appropriate per-realm spell difficulty
-                    const new_spell = $("#" + difficulty_slider_match[1])
-                    const old_spell = src_html.find("#" + old_input.id).parents("tr").first()
-                    const old_spell_realm = old_spell.find("input[name*=-realm]:checked").first()
-                    if (old_spell_realm.length > 0) {
-                        const realm_split = old_spell_realm[0].id.split("-")
-                        const realm = realm_split[realm_split.length - 1]
-                        new_input = row_of(new_spell).get(difficulty_slider_match[2] + "-" + realm)
-                    }
-                } else if (matching) {
-                    // Add rows to the tables until it finds the appropriate field
-                    const button = dst_html.find("#add-" + matching[1])
-                    const row_selector = "#" + matching[1] + "-" + matching[2]
-                    if ($(row_selector).length === 0) {
-                        // The row does not exist, so create it
-                        button.trigger("click", parseInt(matching[2])) // Add a new elem with forced index
-                        new_input = dst_html.find(old_input_sel)
-                        if (new_input.length === 0) {
-                            // The new created row do not contain the new id,
-                            // it is likely that the field was deleted in the new version => we remove the line
-                            $(row_selector).remove()
-                        }
-                    }
-                }
-            }
-
-            // Check the list of the talent
-            const talent_name = old_input.value.trim()
-            if (talent_matching && talent_name.length > 0) {
-                new_input = talent_from_name(talent_name)
-                if (new_input.length === 0) {
-                    // Add element
-                    const button = dst_html.find("#add-talent-" + talent_matching[1])
-                    button.trigger("click")
-                    let max_idx = -1
-                    let max_id = null
-                    $("#talents_" + talent_matching[1]).find("input").each((i, elem) => {
-                        const current_idx = talent_index($(elem).parents(".talent")[0])
-                        if (current_idx >= max_idx) {
-                            max_idx = current_idx
-                            max_id = elem.id
-                        }
-                    })
-                    // Just added input
-                    new_input = $("#" + max_id)
-                }
-                if (new_input.length !== 0) {
-                    const target_talent_list = src_html.find(old_input).parents(".talent-list")
-                    const current_talent_list = dst_html.find(new_input).parents(".talent-list")
-                    if (target_talent_list.length > 0 && target_talent_list[0].id !== current_talent_list[0].id) {
-                        // Move to new table if needed
-                        const row = dst_html.find(new_input).parents(".talent")
-                        const list = dst_html.find("#" + target_talent_list[0].id)
-                        const header = list.children().first()
-                        const last_orig_moved = list.find(".talent-origin:not(:empty)").last()
-                        if (last_orig_moved.length > 0) { // Insert after last moved item (to preserve the order)
-                            last_orig_moved.parents(".talent").after(row)
-                        } else {
-                            header.after(row)
-                        }
-                        // We change the value and trigger the change in case of a listener
-                        new_input.val(old_input.value)
-                        new_input.trigger("change")
-
-                        update_talent({item: row[0], to: list[0]})
-                    } else {
-                        // We change the value and trigger the change in case of a listener
-                        if (new_input[0].value !== old_input.value) {
-                            new_input.val(old_input.value)
-                            new_input.trigger("change")
-                        }
-                    }
-                }
-            } else if (new_input.length > 0 && !new_input[0].id.includes("-x-")) {
-                // Add bonus-applied classes if any (useful to avoid unwanted updates of HP/EP/PS sliders)
-                for (const class_item of [" " + bonus_applied, light_bonus_class, heavy_bonus_class]) {
-                    if (old_input.getAttribute("class").includes(class_item)) {
-                        new_input.addClass(class_item)
-                    }
-                }
-
-                // Update the maximum through sliders that can change their maximum: HP/PS/EP
-                const old_max = parseInt(old_input.getAttribute("data-slider-max"))
-                if (new_input.length > 0 && modifiable_sliders.filter(s => s.includes(new_input[0].id)) && !isNaN(old_max)) {
-                    set_slider_max(new_input, old_max)
-                }
-
-                // Refresh modified sliders
-                if (new_input.hasClass("input-slider") && !new_input[0].id.includes("-x-")) {
-                    new_input.slider("setValue", old_input.value)
-                    new_input.slider("refresh", {useCurrentValue: true})
-                }
-
-                if (new_input.hasClass("selectpicker") && old_input.getAttribute("type") === "number"
-                    && isNaN(new_input.find("option").last().val())) {
-                    // If the old input is a number input and the new one a list of something else than numbers,
-                    // we select the N first options
-                    let nbr_options = parseInt(old_input.value)
-                    if (isNaN(nbr_options))
-                        nbr_options = 0
-                    new_input.selectpicker("val",
-                        new_input.find("option").slice(0, nbr_options).map((i, elem) => $(elem).val()).toArray())
-                    new_input.trigger("change")
-                } else if (new_input.length > 0 && old_input.getAttribute("type") === "checkbox") {
-                    if (new_input.prop("checked") && old_input.getAttribute("checked") == null || !new_input.prop("checked") && old_input.getAttribute("checked") != null) {
-                        new_input.trigger("click")
-                        new_input.trigger("change")
-                    }
-                } else {
-                    // We change the value and trigger the change in case of a listener
-                    if (new_input.length > 0 && new_input[0].value !== old_input.value
-                        || new_input.hasClass("input-slider")) {
-                        new_input.val(old_input.value)
-                        new_input.trigger("change")
-                    }
-                }
-            }
-            if (!(talent_matching && talent_name.length === 0) && new_input.length === 0 && !old_input.id.includes("plugin-") && !old_input.id.includes("note-dialog-") && !old_input.id.includes("ColorPicker")) { // The old input is lost
-                missing_inputs.push([old_input.id, old_input.value])
-            }
-        }
-    })
-
-    // Update all text areas
-    src_html.find("textarea.summernote,#bestiary").each((i, old_input) => {
-        if (old_input.id && old_input.id.length > 0) {
-            const old_input_sel = "#" + old_input.id
-            let new_input = dst_html.find(old_input_sel)
-            let old_value = src_html.find(old_input).val()
-            new_input.val(old_value)
-            if (new_input.hasClass("summernote"))
-                new_input.html(old_value)
-            else
-                new_input.text(old_value).trigger("change")
-
-            if (new_input.length === 0) { // The old input is lost
-                if (!old_input.id.includes("plugin-"))
-                    missing_inputs.push([old_input.id, old_input.value])
-            } else if (!new_input[0].id.includes("note-") && new_input.hasClass("summernote")) {
-                // Update associated summernote (the editors for the notes are initialized lazily)
-                new_input.summernote("code", new_input.val())
-
-                if (existing_ids.includes(old_input.id) && !old_input.id.includes("plugin-"))
-                    duplicated_inputs.push(old_input.id)
-                else
-                    existing_ids.push(old_input.id)
-            }
-        }
-    })
-
-    // Update all list selections of talents
-    dst_html.find("select.talent-select").each((i, elem) => {
-        update_talent_select(dst_html.find(elem))
-    })
-
-    // Select the correct element in the list
-    src_html.find("select").each((i, old_select) => {
-        // Find the correct option
-        const selection = src_html.find("select#" + old_select.id + " option:selected").map((i, elem) => $(elem).val()).toArray()
-        if (selection.length > 0 && !old_select.id.includes("-x-")) {
-            // Set this option on the new document
-            let new_select = dst_html.find("#" + old_select.id)
-            if (template_copy && new_select.length === 0) {
-                const match = old_select.id.match(row_id_regex)
-                if (match)
-                    new_select = dst_html.find("#" + dst_row.row_index + "-" + match[4])
-            }
-            new_select.selectpicker("val", selection)
-        }
-    })
-    dst_html.find("select").trigger("changed.bs.select")
-
-    // Preserve order of sortable elements
-    dst_html.find(".sortable-list").each((i, elem) => {
-        const items = dst_html.find(elem).children().sort((a, b) => {
-            if (a.id === "") {
-                return b.id === "" ? 0 : -1
-            } else if (b.id === "") {
-                return a.id === "" ? 0 : 1
-            }
-            let old_a
-            let old_b
-            if ($(elem).hasClass("talent-list")) {
-                // Sorting talents (ids can defer between versions)
-                old_a = talent_from_name($(a).find("input").val(), src_html.find("#talent-tab")).parents(".talent")
-                old_b = talent_from_name($(b).find("input").val(), src_html.find("#talent-tab")).parents(".talent")
-            } else {
-                old_a = src_html.find("#" + a.id)
-                old_b = src_html.find("#" + b.id)
-            }
-            const a_idx = find_index(old_a.parent(), old_a[0])
-            const b_idx = find_index(old_b.parent(), old_b[0])
-            return a_idx - b_idx
-        })
-        dst_html.find(elem).append(items)
-    })
+    logger.info("Importing data from old sheet")
+    sheet.import(old_sheet.export(), true)
 
     // Update the image if any
+    logger.info("Updating image")
     const old_image = src_html.find("#character-image")
     if (old_image.length > 0 && old_image[0].src && old_image[0].src.length > 0)
-        dst_html.find("#character-image")[0].src = old_image[0].src
+        $("#character-image")[0].src = old_image[0].src
     const old_background = src_html.filter("#main-container").css("background-image")
     if (old_background)
-        dst_html.find("#main-container").css("background-image", old_background)
-
-    // Update all of the roll values
-    $(".row-roll-trigger").each((i, elem) => {
-        row_of(elem).update_roll_value(elem)
-    })
+        $("#main-container").css("background-image", old_background)
 
     // Set the same theme
-    if (full_sheet) {
-        if (is_dark_mode(src_html) && !is_dark_mode()) {
-            enable_dark_mode()
-        } else if (!is_dark_mode(src_html) && is_dark_mode()) {
-            disable_dark_mode()
-        }
+    logger.info("Setting the same theme")
+    if (is_dark_mode(src_html) && !is_dark_mode()) {
+        enable_dark_mode()
+    } else if (!is_dark_mode(src_html) && is_dark_mode()) {
+        disable_dark_mode()
     }
 
+    logger.info("Showing the same sections")
+
     // Hide the same sections
-    dst_html.find(".hide-section").each((i, elem) => {
+    $(".hide-section").each((i, elem) => {
         const hide_table = elem.getAttribute("data-hide-table")
         const hide_row = elem.getAttribute("data-hide-row")
         let src_elem = $()
@@ -451,17 +120,13 @@ function import_data(src_html, dst_html, full_sheet, template_copy = false) {
 
     // Hide the same tabs
     src_html.find("#nav-tabs a[role=\"tab\"].d-none").each((i, old_tab) => {
-        dst_html.find("#nav-tabs a[role=\"tab\"][href=\"" + old_tab.getAttribute("href") + "\"]").addClass("d-none")
+        $("#nav-tabs a[role=\"tab\"][href=\"" + old_tab.getAttribute("href") + "\"]").addClass("d-none")
     })
 
     // Have the same name for all of the tabs
     src_html.find("#nav-tabs a[role=\"tab\"]").each((i, old_tab) => {
-        dst_html.find("#nav-tabs a[role=\"tab\"][href=\"" + old_tab.getAttribute("href") + "\"]").text($(old_tab).text().trim())
+        $("#nav-tabs a[role=\"tab\"][href=\"" + old_tab.getAttribute("href") + "\"]").text($(old_tab).text().trim())
     })
-
-    if (full_sheet && (missing_inputs.length > 0 || duplicated_inputs.length > 0)) {
-        show_import_warnings(missing_inputs, duplicated_inputs)
-    }
 }
 
 const plugin_selectors = [".plugin-tab", ".plugin-button", ".plugin-css", ".plugin-js"]
@@ -477,38 +142,6 @@ function query_raw_plugin(url, success_function, error_function) {
         error: error_function,
         timeout: 2000
     })
-}
-
-function get_plugin_version(plugin) {
-    let version = null
-    $(plugin).children().each((i, elem) => {
-        const attr = elem.getAttribute("data-plugin-version")
-        if (attr)
-            version = attr
-    })
-    return version
-}
-
-function is_older_than(version_a, version_b) {
-    if (!version_a)
-        return true
-    if (!version_b)
-        return false
-    if (version_a === version_b)
-        return false
-    const split_a = version_a.split(".")
-    const split_b = version_b.split(".")
-    for (let i = 0; i < split_a.length && i < split_b.length; i++) {
-        const part_a = parseInt(split_a[i])
-        const part_b = parseInt(split_b[i])
-        if (part_a > part_b)
-            return false
-        if (part_a < part_b)
-            return true
-    }
-    // This is a new version only if b has a more specified version
-    // e.g., a == "1.0" and b == "1.0.1"
-    return split_a.length < split_b.length
 }
 
 function build_plugin_list() {
@@ -546,8 +179,8 @@ function build_plugin_list() {
         const upgrade = new_element.find(".plugin-update")
         const url = "https://raw.githubusercontent.com/jadinm/simulacres-dynamic-sheet/" + latest_released_version + "/plugins/plugin_" + plugins[i].replaceAll("-", "_") + ".html"
         query_raw_plugin(url, (data) => {
-            const remote_version = get_plugin_version($(data))
-            if (is_older_than(plugin_versions[plugins[i]], remote_version)) {
+            const remote_version = PluginModel.get_plugin_version($(data))
+            if (PluginModel.is_older_than(plugin_versions[plugins[i]], remote_version)) {
                 // Have a candidate for upgrade
                 upgrade.removeClass("invisible")
             } else {
@@ -623,9 +256,6 @@ function insert_or_replace_plugins(plugin, overwrite = true) {
     // Reset tab selection
     reset_tab_selection($("html"))
 
-    // Add default listeners
-    add_save_to_dom_listeners()
-
     // Update plugin list
     build_plugin_list()
 
@@ -633,18 +263,16 @@ function insert_or_replace_plugins(plugin, overwrite = true) {
     build_tab_hide_list()
 }
 
-const plugin_dispose_methods = {}
-
 function remove_plugin(plugin_id) {
     // Remove blocks related to this plugin
     for (let i = 0; i < plugin_selectors.length; i++) {
-        $("[id*=\"" + plugin_selectors[i].slice(1) + "-" + plugin_id + "\"]").remove()
+        $("[id*=\"plugin-" + plugin_selectors[i].slice(1) + "-" + plugin_id + "\"]").remove()
         $("[data-plugin-id*=\"" + plugin_id + "\"]").remove()
     }
     // Call the dispose method of the plugin if any
-    if (plugin_id in plugin_dispose_methods) {
-        plugin_dispose_methods[plugin_id]()
-        delete plugin_dispose_methods[plugin_id]
+    plugin_id = "plugin-" + plugin_id
+    if (sheet && plugin_id in sheet) {
+        sheet[plugin_id].remove()
     }
     // Update plugin list
     build_plugin_list()
@@ -659,21 +287,33 @@ $("#import-page").on("change", function (event) {
 
     const reader = new FileReader()
     reader.onload = e => {
+        const startTime = performance.now()
         // Executed at the completion of the read
         const old_html = $(e.target.result)
 
         // Check that users don't import plugins with the wrong button
         if (old_html.find("#import-page").length === 0)
             alert("Le document n'est pas une fiche de personnage. Si vous essayez d'importer un plugin, utilisez l'autre bouton.")
+        else {
+            // We insert new plugins from the old character sheet
+            // but we keep the current version of existing plugins
+            insert_or_replace_plugins($(e.target.result), false)
 
-        import_data(old_html, $("html"), true)
-        reset_tab_selection($("html"))
-        // We insert new plugins from the old character sheet
-        // but we keep the current version of existing plugins
-        insert_or_replace_plugins($(e.target.result), false)
+            import_data(old_html)
+            reset_tab_selection($("html"))
 
-        event.target.setAttribute("value", "")
-        $(event.target).next().text("Importer une ancienne fiche")
+            event.target.setAttribute("value", "")
+            $(event.target).next().text("Importer une ancienne fiche")
+            const endTime = performance.now()
+            logger.info(`Importing the page took ${endTime - startTime} milliseconds`)
+
+            if (sheet.has_errors()) { // No automatic saving if there are import errors
+                sheet.build_import_error_summary()
+            } else {
+                logger.info("Saving page")
+                $("#save-page").click()
+            }
+        }
     }
 
     // Asynchronous read
@@ -733,20 +373,11 @@ $("#import-plugin").on("change", event => {
         // Check that users don't import character sheets with the wrong button
         if (plugin.find("#import-page").length > 0)
             alert("Le document n'est pas un plugin. Si vous essayez d'importer une fiche, utilisez l'autre bouton.")
-
-        // Update fields in the tab if it already exists
-        let tab = plugin.find(".plugin-tab")
-        if (tab.length === 0)
-            tab = plugin.filter(".plugin-tab")
-        if (tab.length > 0) {
-            const current_plugin_version = $("#" + tab[0].id)
-            if (current_plugin_version.length > 0) {
-                import_data(current_plugin_version, tab, false)
-            }
+        else {
+            // Insert or replace components in the current page
+            // Note: this will trigger import automatically if the PluginModel is loaded in the imported js
+            insert_or_replace_plugins(plugin)
         }
-
-        // Insert or replace components in the current page
-        insert_or_replace_plugins(plugin)
 
         event.target.setAttribute("value", "")
         $(event.target).next().text("Importer un plugin")
@@ -759,7 +390,7 @@ $("#import-plugin").on("change", event => {
 $(_ => {
     // Plugin handling
     $(".plugin-remove").on("click", event => {
-        const plugin_id = $(event.target).parent().children().first().text()
+        const plugin_id = $(event.target).parent().children().first().text().split(" (version ")[0]
         remove_plugin(plugin_id)
     })
     build_plugin_list()

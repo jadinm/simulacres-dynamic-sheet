@@ -1,4 +1,4 @@
-<li id="plugin-button-example" class="plugin-button nav-item" data-plugin-version="1.0.1" data-plugin-id="example">
+<li id="plugin-button-example" class="plugin-button nav-item" data-plugin-version="2.0.0" data-plugin-id="example">
     <a class="nav-link" data-toggle="tab" href="#plugin-tab-example" role="tab"
        aria-controls="plugin-tab-example" aria-selected="false">
         Plugin exemple
@@ -25,19 +25,44 @@
 </style>
 
 <script id="plugin-js-example" class="plugin-js" data-plugin-id="example">
-    $("#plugin-example-field").on("change", _ => {
-        alert("Vous avez changé le texte de l'exemple")
-    })
+    { // Declaring it in a block prevent issues when loading the same plugin twice
+        /**
+         * PluginModel is the base class that any plugin have to extend.
+         *
+         * Some methods exist for classic operations, such as adding a new energy.
+         *
+         * Specific methods are called when the plugin is installed, upgraded or removed.
+         * Extend them to add custom processing.
+         *
+         * Inputs, selects and textarea id suffix have to be declared in the appropriate static variable.
+         * These variables depend on Model class and their documentation is found there.
+         */
+        class PluginExample extends PluginModel {
+            static basic_inputs = ["field"]
+            static id = "example" // The plugin id, as written in data-plugin-id, that prefixes every input, text area or select picker
 
-    /* To remove a plugin, it might not always be sufficient to remove every block
-     * Sometimes, additional cleaning is needed depending on the plugin
-     *
-     * To do so, we create a function for that and register it
-     * This function will be called after removing all the blocks of this plugin
-     */
-    function dispose_plugin_example() {
-        alert("Vous avez supprimé le plugin exemple")
+            /**
+             * This method is called at the loading of the module, and each time that the page loads
+             * Sliders and select pickers are initialized after the call to the parent class' method
+             */
+            add_listeners() {
+                super.add_listeners()
+                this.get("field").on("change", _ => {
+                    alert("Vous avez changé le texte de l'exemple")
+                })
+            }
+
+            /**
+             * To remove a plugin, it might not always be sufficient to remove every block
+             * Sometimes, additional cleaning is needed depending on the plugin
+             */
+            remove() {
+                super.remove()
+                alert("Vous avez supprimé le plugin exemple")
+            }
+        }
+
+        // Registers the plugin
+        PluginExample.load()
     }
-    // Register the function (avoid typos here or the method won't be called)
-    plugin_dispose_methods["example"] = dispose_plugin_example
 </script>

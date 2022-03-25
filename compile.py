@@ -8,8 +8,8 @@ import shlex
 import subprocess
 import sys
 from typing import List, Dict
-import pyjson5
 
+import pyjson5
 from bs4 import BeautifulSoup
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from markupsafe import Markup
@@ -50,6 +50,8 @@ parser.add_argument("--discovery", help="Discovery mode of SimulacreS (only supp
 parser.add_argument("--plugin", help="Add the plugin at the following path", action='extend', nargs="*", default=[])
 parser.add_argument("--base-template", help="Path of to the html template inside the template folder",
                     default="base_pc.html")
+parser.add_argument("-d", "--debug", help="Build the sheet with debug info such sanity checks on every load",
+                    action="store_true")
 parser.add_argument("-v", "--verbose", help="Increase output verbosity", action="store_true")
 args = parser.parse_args()
 if args.verbose:
@@ -166,7 +168,7 @@ params.update({
     "intermediate_discovery": (args.discovery or args.intermediate_discovery) and args.version == V8,
     "V7": V7, "V8": V8, "captain_voodoo": CAPTAIN_VOODOO, "med_fantasy": MED_FANTASY,
     "plugins": process_plugins(args.plugin), "tag_version": tag_version, "base_tag_version": base_tag_version,
-    "npc_grid": False, "compilation_args": vars(args)
+    "npc_grid": False, "debug": args.debug, "compilation_args": vars(args),
 })
 
 # Find release name

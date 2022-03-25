@@ -1,139 +1,177 @@
-<script id="plugin-js-roll-probability" class="plugin-js" data-plugin-version="1.0.3" data-plugin-id="roll-probability">
-    if (!window.hasOwnProperty('plugin_roll_probability_old_fn')) {
-        // When we do not upgrade the plugin, fetch the roll function
-        window.plugin_roll_probability_old_fn = {
-            RollRow: [RollRow, RollRow.prototype.update_roll_value],
-            SpellRow: [SpellRow, SpellRow.prototype.update_roll_value],
-            KiRow: [KiRow, KiRow.prototype.update_roll_value]
-        }
-    }
-    $(_ => {
-        // Get all combinations
-        let combinations = []
-        for (let i = 1; i <= 6; i++) {
-            for (let j = 1; j <= 6; j++) {
-                combinations.push(i + j)
-            }
-        }
-        combinations = combinations.sort()
+<script id="plugin-js-roll-probability" class="plugin-js" data-plugin-version="2.0.0" data-plugin-id="roll-probability">
 
-        function is_success(rolled_value, test_value) {
-            const margin = (test_value - rolled_value)
-            return rolled_value !== 12
-                && (margin > 0 || margin === 0 && !is_v7 || rolled_value === 2)
-        }
+    {
+        class RollProbabilityPlugin extends PluginModel {
+            static requirements = [...sheet_type.all_roll_tables]
+            static id = "roll-probability"
 
-        function probability_sum_below(test_value) {
-            // Count those which matches the condition
-            let count = 0
-            for (let i = 0; i < combinations.length; i++) {
-                if (is_success(combinations[i], test_value)) {
-                    count++
-                }
-            }
-            return count / combinations.length * 100
-        }
+            static old_update_rolls = {}
+            static combinations = []
 
-        function row_tab_header() {
-            let text = "<thead><tr>"
-            for (let i = 2; i <= 12; i++) {
-                text += "<th scope='col' class='text-center align-middle' style='width: 9.09%'>"
-                    + ((is_v7) ? "&le;" : "&lt;") + i + "</th>"
-            }
-            return text + "</tr></thead>"
-        }
+            add_listeners() {
+                super.add_listeners()
 
-        function row_tab_probabilities() {
-            let text = "<tbody><tr>"
-            for (let i = 2; i <= 12; i++) {
-                text += "<td class='text-center align-middle'>"
-                    + probability_sum_below(i).toLocaleString("fr-BE", {maximumFractionDigits: 2}) + "%</td>"
-            }
-            return text + "</tr></tbody>"
-        }
-
-        /* Add tab for probabilities in roll dialog */
-        const tabs = $("#roll-dialog .nav-tabs")
-        tabs.find("#plugin-roll-probability-roll-dialog-button").remove()
-        tabs.append("<li class=\"nav-item\" id=\"plugin-roll-probability-roll-dialog-button\">" +
-            "            <a class=\"nav-link\" data-toggle=\"tab\"" +
-            "               href=\"#plugin-roll-probability-roll-dialog-tab\" role=\"tab\" aria-selected=\"false\">" +
-            "                Chances de réussir" +
-            "            </a>" +
-            "        </li>")
-
-        const table = $("#roll-dialog .tab-content")
-        table.find("#plugin-roll-probability-roll-dialog-tab").remove()
-        table.append("<div id=\"plugin-roll-probability-roll-dialog-tab\" class=\"tab-pane fade row mx-1 pt-2\">" +
-            "<div class=\"table-responsive col-12\" style=\"overflow-y: hidden !important;\">" +
-            "<table class=\"table table-hover table-bordered table-striped my-1\">" +
-            row_tab_header() + row_tab_probabilities() + "</table></div></div>")
-
-        /* Add a function to execute after the update of the roll value */
-        function probability_text(test_value) {
-            let text = ""
-            text += "-1: " + probability_sum_below(test_value - 1).toLocaleString("fr-BE", {maximumFractionDigits: 2}) + "%<br/>"
-            text += "0: " + probability_sum_below(test_value).toLocaleString("fr-BE", {maximumFractionDigits: 2}) + "%<br/>"
-            text += "+1: " + probability_sum_below(test_value + 1).toLocaleString("fr-BE", {maximumFractionDigits: 2}) + "%"
-            return text
-        }
-
-        function update_roll_tooltip_fn(base_fn) {
-            function hook(dive_div) {
-                // We call the old function and pass "this" in its context
-                base_fn.call(this, dive_div)
-                // Add tooltips
-                dive_div = $(dive_div)
-                dive_div = (dive_div.length > 0) ? dive_div : this.data.find(".row-roll-trigger")
-                dive_div.each((i, roll_elem) => {
-                    roll_elem = $(roll_elem)
-                    const value_elem = this.get("value", roll_elem)
-                    const value = parseInt(value_elem.text())
-                    if (value_elem.length > 0 && !isNaN(value)) {
-                        roll_elem.attr("data-toggle", "tooltip")
-                        roll_elem.attr("data-placement", "top")
-                        roll_elem.attr("title", "")
-                        roll_elem.attr("data-original-title", probability_text(value))
-                        roll_elem.attr("data-html", "true")
-                        roll_elem.tooltip()
-                    } else {
-                        roll_elem.tooltip("dispose")
-                    }
+                // Bootstrap tooltips on existing rows
+                sheet.get_all_rolls().forEach((roll) => {
+                    roll.update_roll_value()
                 })
             }
 
-            return hook
-        }
+            static load() {
+                // Get all combinations
+                for (let i = 1; i <= 6; i++) {
+                    for (let j = 1; j <= 6; j++) {
+                        this.combinations.push(i + j)
+                    }
+                }
+                this.combinations = this.combinations.sort()
 
-        for (const value of Object.values(window.plugin_roll_probability_old_fn)) {
-            value[0].prototype.update_roll_value = update_roll_tooltip_fn(value[1])
-        }
-        // Bootstrap tooltips on existing rows
-        $(".row-roll-trigger").each((i, elem) => {
-            row_of(elem).update_roll_value(elem)
-        })
+                // Hook to the update_roll_value calls
+                Object.entries(sheet_type.table_names).forEach(([key, [class_name, _]]) => {
+                    if (this.requirements.includes(key)) {
+                        if (class_name.row_class.prototype.update_roll_value.name !== "hook") { // Not inherited
+                            this.old_update_rolls[key] = class_name.row_class.prototype.update_roll_value
+                            class_name.row_class.prototype.update_roll_value = this.update_roll_tooltip_fn(this.old_update_rolls[key])
+                        }
+                    }
+                })
 
-        /* To remove a plugin, it might not always be sufficient to remove every block
-         * Sometimes, additional cleaning is needed depending on the plugin
-         *
-         * To do so, we create a function for that and register it
-         * This function will be called after removing all the blocks of this plugin
-         */
-        function dispose_plugin_roll_probability() {
-            // Reset correct function
-            for (const [key, value] of Object.entries(window.plugin_roll_probability_old_fn)) {
-                value[0].prototype.update_roll_value = value[1]
-                delete window.plugin_roll_probability_old_fn[key]
+                super.load()
             }
-            delete window.plugin_roll_probability_old_fn
-            // Remove tooltips
-            $(".row-roll-trigger").tooltip("dispose")
-            // Remove tab in roll dialog
-            tabs.find("#plugin-roll-probability-roll-dialog-button").remove()
-            table.find("#plugin-roll-probability-roll-dialog-tab").remove()
+
+            /**
+             * Add tab for probabilities in roll dialog
+             */
+            static add_roll_dialog_tab() {
+                const tabs = $("#roll-dialog .nav-tabs")
+                tabs.find("#plugin-roll-probability-roll-dialog-button").remove()
+                tabs.append("<li class=\"nav-item\" id=\"plugin-roll-probability-roll-dialog-button\">" +
+                    "            <a class=\"nav-link\" data-toggle=\"tab\"" +
+                    "               href=\"#plugin-roll-probability-roll-dialog-tab\" role=\"tab\" aria-selected=\"false\">" +
+                    "                Chances de réussir" +
+                    "            </a>" +
+                    "        </li>")
+
+                const table = $("#roll-dialog .tab-content")
+                table.find("#plugin-roll-probability-roll-dialog-tab").remove()
+                table.append("<div id=\"plugin-roll-probability-roll-dialog-tab\" class=\"tab-pane fade row mx-1 pt-2\">" +
+                    "<div class=\"table-responsive col-12\" style=\"overflow-y: hidden !important;\">" +
+                    "<table class=\"table table-hover table-bordered table-striped my-1\">" +
+                    this.row_tab_header() + this.row_tab_probabilities() + "</table></div></div>")
+            }
+
+            static install() {
+                super.install()
+                this.add_roll_dialog_tab()
+            }
+
+            static upgrade() {
+                super.upgrade()
+                this.add_roll_dialog_tab()
+            }
+
+            remove() {
+                super.remove()
+                // Reset the correct functions
+                for (const [key, value] of Object.entries(this.constructor.old_update_rolls)) {
+                    sheet[key].constructor.row_class.prototype.update_roll_value = value
+                }
+                // Remove tooltips
+                this.find(".row-roll-trigger").each((i, elem) => {
+                    const roll_elem = $(elem)
+                    roll_elem.removeAttr("data-toggle")
+                    roll_elem.removeAttr("data-placement")
+                    roll_elem.removeAttr("title")
+                    roll_elem.removeAttr("data-original-title")
+                    roll_elem.removeAttr("data-html")
+                    roll_elem.tooltip("dispose")
+                })
+                // Remove tab in roll dialog
+                this.get("roll-dialog-button").remove()
+                this.get("roll-dialog-tab").remove()
+            }
+
+            static is_success(rolled_value, test_value) {
+                const margin = (test_value - rolled_value)
+                return rolled_value !== 12
+                    && (margin > 0 || margin === 0 && !is_v7 || rolled_value === 2)
+            }
+
+            static probability_sum_below(test_value) {
+                // Count those which matches the condition
+                let count = 0
+                for (let i = 0; i < this.combinations.length; i++) {
+                    if (this.is_success(this.combinations[i], test_value)) {
+                        count++
+                    }
+                }
+                return count / this.combinations.length * 100
+            }
+
+            static row_tab_header() {
+                let text = "<thead><tr>"
+                for (let i = 2; i <= 12; i++) {
+                    text += "<th scope='col' class='text-center align-middle' style='width: 9.09%'>"
+                        + ((is_v7) ? "&le;" : "&lt;") + i + "</th>"
+                }
+                return text + "</tr></thead>"
+            }
+
+            static row_tab_probabilities() {
+                let text = "<tbody><tr>"
+                for (let i = 2; i <= 12; i++) {
+                    text += "<td class='text-center align-middle'>"
+                        + this.probability_sum_below(i).toLocaleString("fr-BE", {maximumFractionDigits: 2}) + "%</td>"
+                }
+                return text + "</tr></tbody>"
+            }
+
+            /**
+             * Add a function to execute after the update of the roll value
+             */
+            static probability_text(test_value) {
+                let text = ""
+                text += "-1: " + this.probability_sum_below(test_value - 1).toLocaleString("fr-BE", {maximumFractionDigits: 2}) + "%<br/>"
+                text += "0: " + this.probability_sum_below(test_value).toLocaleString("fr-BE", {maximumFractionDigits: 2}) + "%<br/>"
+                text += "+1: " + this.probability_sum_below(test_value + 1).toLocaleString("fr-BE", {maximumFractionDigits: 2}) + "%"
+                return text
+            }
+
+            /**
+             * Build the function to execute after the update of the roll value
+             * @param base_fn the original function to call before
+             */
+            static update_roll_tooltip_fn(base_fn) {
+                // We create a new lambda because this allows us to continue using "this" as the plugin class in probability_text
+                const prob_text_fn = (test_value) => this.probability_text(test_value)
+
+                function hook(dive_div) {
+                    // We call the old function and pass "this" in its context
+                    base_fn.call(this, dive_div)
+                    // Add tooltips
+                    dive_div = $(dive_div)
+                    dive_div = (dive_div.length > 0) ? dive_div : this.data.find(".row-roll-trigger")
+                    dive_div.each((i, roll_elem) => {
+                        roll_elem = $(roll_elem)
+                        const value_elem = this.get("value", roll_elem)
+                        const value = parseInt(value_elem.text())
+                        if (value_elem.length > 0 && !isNaN(value)) {
+                            roll_elem.attr("data-toggle", "tooltip")
+                            roll_elem.attr("data-placement", "top")
+                            roll_elem.attr("title", "")
+                            roll_elem.attr("data-original-title", prob_text_fn(value))
+                            roll_elem.attr("data-html", "true")
+                            roll_elem.tooltip()
+                        } else {
+                            roll_elem.tooltip("dispose")
+                        }
+                    })
+                }
+
+                return hook
+            }
         }
 
-        // Register the function (avoid typos here or the method won't be called)
-        plugin_dispose_methods["roll-probability"] = dispose_plugin_roll_probability
-    })
+        RollProbabilityPlugin.load()
+    }
 </script>

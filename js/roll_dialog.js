@@ -16,10 +16,12 @@ function roll_dices(number = 2, type = 6, dices = null, exploding_dice = false) 
     return sum
 }
 
-$("#roll-dialog-1d6").on("click", _ => {
+function trigger_1d6_roll() {
     const dice_value = roll_dices(1)
     $("#roll-dialog-1d6-result").text("1d6 additionnel: " + dice_value)
-})
+}
+
+$("#roll-dialog-1d6").on("click", trigger_1d6_roll)
 
 effect_table = {
     /*  0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 */
@@ -44,12 +46,6 @@ function set_result_label(margin) {
     } else {
         $("#roll-dialog-result-label").html("Marge d'échec = ")
     }
-}
-
-function has_any_base_energy() {
-    return $("#power, #speed, #precision").filter((i, elem) => {
-        return elem.value && parseInt(elem.value) > 0
-    }).length > 0
 }
 
 const effect_column_regex = /(^|[^\w"]?)(")?\[ *([ABCDEFGHIJK]) *([+-] *\d+)? *](")?([^\w"]?|$)/gi
@@ -263,7 +259,7 @@ class TalentRoll extends Roll {
         new this.constructor(this.reason, this.max_value, this.talent_level, this.effect, this.critical_increase,
             this.formula_elements, this.margin_throttle, this.is_magic, this.is_power, this.distance, this.focus,
             this.duration, this.base_energy_cost, this.black_magic, this.magic_resistance,
-            this.equipment, this.equipment_id, this.exploding_effect, this.power_energy,
+            this.equipment, this.exploding_effect, this.power_energy,
             this.energy_base_id).trigger_roll(false)
     }
 
@@ -271,10 +267,10 @@ class TalentRoll extends Roll {
                 critical_increase = 0, formula_elements = [], margin_throttle = NaN,
                 is_magic = false, is_power = false, distance = "", focus = "",
                 duration = "", base_energy_cost = 0, black_magic = "",
-                magic_resistance = "", equipment = "", equipment_id = "",
+                magic_resistance = "", equipment = null,
                 exploding_effect = false, power_energy = "", energy_base_id = "") {
         super()
-        this.reason = reason
+        this.reason = reason ? reason : ""
         this.formula_elements = formula_elements
         this.max_value = max_value
         this.margin_throttle = margin_throttle
@@ -298,7 +294,6 @@ class TalentRoll extends Roll {
 
         // Equipment-dependent roll
         this.equipment = equipment
-        this.equipment_id = equipment_id
         this.expended_charge = NaN
 
         this.invested_energies = []
@@ -320,8 +315,9 @@ class TalentRoll extends Roll {
         this.material_component = false
         this.update_components()
 
-        this.unease = get_unease()
-        this.armor_penalty = get_armor_penalty()
+        const status = sheet.get_status(this.energy_base_id)
+        this.unease = status.get_unease()
+        this.armor_penalty = status.get_armor_penalty()
         this.timestamp = new Date()
 
         this.margin_modifier = 0
@@ -350,10 +346,7 @@ class TalentRoll extends Roll {
     }
 
     formula() {
-        return $.map(this.formula_elements, (elem) => {
-            const base_array = elem[0].id.split("-")
-            return base_array[base_array.length - 1]
-        })
+        return this.formula_elements
     }
 
     column_effect(column, modifier) {
@@ -644,16 +637,16 @@ class TalentRoll extends Roll {
 
         let racial_bonus = ""
         const formula = this.formula()
-        for (let i in formula) {
-            if (formula[i] === "resistance" && is_hobbit()) {
+        for (let elem of formula) {
+            if (elem === "resistance" && sheet.is_hobbit()) {
                 racial_bonus = " (bonus ethnique déjà appliqué)" +
                     "</div><div class='row mx-1 align-middle'>Ce test est raté s'il s'agit de résister à l'hypnose ou aux illusions"
             }
         }
 
         let superpower_bonus = ""
-        for (let i in formula) {
-            if (SuperpowerRollTable.components().includes(formula[i])) {
+        for (let elem of formula) {
+            if (SuperpowerRollTable.components().includes(elem)) {
                 superpower_bonus = "</div><div class='row mx-1 align-middle'> La composante utilisée est celle d'un super-pouvoir (bonus de +4 déjà appliqué)"
             }
         }
@@ -667,9 +660,9 @@ class TalentRoll extends Roll {
         if (this.formula_elements.length > 0) {
             title += "<h4>"
             for (let i = 0; i < this.formula_elements.length; i++) {
-                const symbol = $("label[for='" + this.formula_elements[i][0].id + "'] svg").get(0)
+                const symbol = Characteristics.build_svg_image(this.formula_elements[i])
                 if (symbol) {
-                    title += symbol.outerHTML
+                    title += symbol
                     if (i !== this.formula_elements.length - 1)
                         title += "&nbsp;+&nbsp;"
                 }
@@ -733,37 +726,27 @@ class TalentRoll extends Roll {
         const equipment_remaining = $("#roll-dialog-remaining-equipment")
         let charges = NaN
         if (this.equipment) {
-            const equipment_elem = $("#" + this.equipment_id)
-            if (equipment_elem.length > 0) {
-                const row = row_of(equipment_elem)
-                charges = row.current_charges()
-                if (!isNaN(charges)) {
-                    equipment_remaining.text("il en reste " + charges)
-                    if (charges === 0) {
-                        equipment_remaining.addClass("text-warning")
-                    } else {
-                        equipment_remaining.removeClass("text-warning")
-                    }
-
-                    const charges_div = $("#roll-dialog-expended-charges")
-                    if (charges === 0 && isNaN(this.expended_charge)) {
-                        charges_div.val(0)
-                    } else if (isNaN(this.expended_charge)) {
-                        charges_div.val(1)
-                    }
-                    charges_div.attr("max", charges)
-                    charges_div.trigger("change")
-
-                    $("#roll-dialog-unit-equipment").text(row.unit())
-                    $("#roll-dialog-expended-equipment").text(this.equipment)
-
-                    equipment_divs.removeClass("d-none")
-                } else {
-                    equipment_divs.addClass("d-none")
-                }
+            charges = this.equipment.current_charges()
+            equipment_remaining.text("il en reste " + charges)
+            if (charges === 0) {
+                equipment_remaining.addClass("text-warning")
             } else {
-                equipment_divs.addClass("d-none")
+                equipment_remaining.removeClass("text-warning")
             }
+
+            const charges_div = $("#roll-dialog-expended-charges")
+            if (charges === 0 && isNaN(this.expended_charge)) {
+                charges_div.val(0)
+            } else if (isNaN(this.expended_charge)) {
+                charges_div.val(1)
+            }
+            charges_div.attr("max", charges)
+            charges_div.trigger("change")
+
+            $("#roll-dialog-unit-equipment").text(this.equipment.unit())
+            $("#roll-dialog-expended-equipment").text(this.equipment.name)
+
+            equipment_divs.removeClass("d-none")
         } else {
             equipment_divs.addClass("d-none")
         }
@@ -926,15 +909,13 @@ class SuperpowerRoll extends TalentRoll {
     /* Trigger the same roll */
     reroll() {
         new this.constructor(this.reason, this.number, this.under_value, this.formula_elements, this.distance,
-            this.focus, this.duration, this.effect, this.equipment, this.equipment_id,
-            this.exploding_effect).trigger_roll(false)
+            this.focus, this.duration, this.effect).trigger_roll(false)
     }
 
     constructor(reason = "", nbr_dices = 0, under_value = 0, formula_elements = [],
-                distance = "", focus = "", duration = "", effect = "",
-                equipment = "", equipment_id = "", exploding_effect = false) {
+                distance = "", focus = "", duration = "", effect = "") {
         super(reason, NaN, 0, effect, 0, formula_elements, NaN, false, true, distance, focus, duration, 0, "", "",
-            equipment, equipment_id, exploding_effect, "", "")
+            null, false, "", "")
         this.number = nbr_dices
         this.under_value = under_value
         this.superpower_modifier = 0
@@ -1058,7 +1039,7 @@ class SuperpowerRoll extends TalentRoll {
         let racial_bonus = ""
         const formula = this.formula()
         for (let i in formula) {
-            if (formula[i] === "resistance" && is_hobbit()) {
+            if (formula[i] === "resistance" && sheet.is_hobbit()) {
                 racial_bonus = " (bonus ethnique déjà appliqué)" +
                     "</div><div class='row mx-1 align-middle'>Ce test est raté s'il s'agit de résister à l'hypnose ou aux illusions"
             }
@@ -1099,15 +1080,15 @@ class FocusMagicRoll extends TalentRoll {
     reroll() {
         new this.constructor(this.reason, this.max_value, this.level, this.effect, this.distance,
             this.focus, this.duration, this.base_energy_cost, this.black_magic, this.magic_resistance, this.equipment,
-            this.equipment_id, this.exploding_effect).trigger_roll(false)
+            this.exploding_effect).trigger_roll(false)
     }
 
     constructor(reason = "", max_value = NaN, level = 0, effect = "",
                 distance = "", focus = "", duration = "", base_energy_cost = 0,
-                black_magic = "", magic_resistance = "", equipment = "", equipment_id = "",
+                black_magic = "", magic_resistance = "", equipment = null,
                 exploding_effect = false) {
         super(reason, max_value, level, effect, 0, [], NaN, true, true, distance, focus, duration, base_energy_cost,
-            black_magic, magic_resistance, equipment, equipment_id, exploding_effect, "", "")
+            black_magic, magic_resistance, equipment, exploding_effect, "", "")
         this.margin_dices = []
     }
 
@@ -1269,16 +1250,16 @@ class GoodNatureEvilMagicRoll extends TalentRoll {
 
     reroll() {
         new this.constructor(this.reason, this.effect, this.distance, this.focus, this.duration, this.base_energy_cost,
-            this.black_magic, this.magic_resistance, this.equipment, this.equipment_id,
+            this.black_magic, this.magic_resistance, this.equipment,
             this.exploding_effect, this.power_energy).trigger_roll(false)
     }
 
     constructor(reason = "", effect = "", distance = "", focus = "", duration = "",
                 base_energy_cost = 0, black_magic = "", magic_resistance = "",
-                equipment = "", equipment_id = "", exploding_effect = false,
+                equipment = null, exploding_effect = false,
                 power_energy = "") {
         super(reason, NaN, 0, effect, 0, [], NaN, true, true, distance, focus, duration, base_energy_cost,
-            black_magic, magic_resistance, equipment, equipment_id, exploding_effect, power_energy, "")
+            black_magic, magic_resistance, equipment, exploding_effect, power_energy, "")
         this.margin_dices = []
         this.precision_dices = []
         this.type = 3
@@ -1379,7 +1360,7 @@ class GoodNatureEvilMagicRoll extends TalentRoll {
     }
 }
 
-function slider_value_changed(input) {
+function slider_value_changed() {
     return modifier => {
         return (modifier <= 0 ? "" : "+") + modifier
     }
@@ -1545,10 +1526,6 @@ function update_energy_investment_list(input) {
     update_max_invested_energies(input)
 }
 
-$(".energy").on("change", event => {
-    update_energy_investment_list(event.target)
-})
-
 $(".roll-dialog-energy").on("change", e => {
     if (!current_roll || !(current_roll instanceof TalentRoll))
         return
@@ -1580,9 +1557,8 @@ $("#roll-dialog-validate-equipment").on("click", _ => {
     current_roll.expended_charge = parseInt($("#roll-dialog-expended-charges").val())
 
     // Update count
-    const equipment = $("#" + current_roll.equipment_id)
-    if (equipment.length > 0 && !isNaN(current_roll.expended_charge)) {
-        row_of(equipment).expend_charges(current_roll.expended_charge)
+    if (!isNaN(current_roll.expended_charge)) {
+        current_roll.equipment.expend_charges(current_roll.expended_charge)
     }
 
     current_roll.show_roll()

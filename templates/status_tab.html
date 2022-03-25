@@ -85,22 +85,33 @@
                 </div>
 
                 <div class="row mt-1 md-form form-sm m-0 input-with-pre-icon" style="width: 200px">
-                <span class="input-prefix">
-                    Gêne
-                </span>
+                    <span class="input-prefix">
+                        Gêne
+                    </span>
                     <input class="form-control energy text-center" id="armor-penalty-input" type="number"
                            value="0" min="0">
                     <label for="armor-penalty-input" hidden></label>
                 </div>
 
                 <div class="row mt-1 md-form form-sm m-0 input-with-pre-icon" style="width: 200px">
-                <span class="input-prefix">
-                    Absorption
-                </span>
+                    <span class="input-prefix">
+                        Absorption
+                    </span>
                     <input class="form-control text-center" id="armor-absorption" type="number"
                            value="0" min="0">
                     <label for="armor-absorption" hidden></label>
                 </div>
+                {% if version == V7 %}
+                    <div class="row ml-2 mt-2 w-100">
+                        <div class="custom-control custom-checkbox custom-control-inline w-100">
+                            <input type="checkbox" class="custom-control-input formula-elem"
+                                   id="survival-available" name="survival-available" checked>
+                            <label class="custom-control-label custom-checkbox" for="survival-available">
+                                Miracle disponible
+                            </label>
+                        </div>
+                    </div>
+                {% endif %}
             </div>
         {% endif %}
     </div>

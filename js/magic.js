@@ -1,4 +1,44 @@
+const priest_energy = "Divin"
+const hermetic_energy = "Hermétique"
+const instinctive_magic = "Magie instinctive"
+const good_nature_evil_energies = ["Bien", "Mal", "Nature"]
+
 class SpellRow extends RollRow {
+    static radio_groups = {
+        "component": Characteristics.components,
+        "means": Characteristics.means,
+    }
+    static independent_checkboxes = is_v7 ? [...Characteristics.realms, ...["details-exploding-effect"]] : Characteristics.realms
+    static selects_no_sanitize = ["list"]
+    static selects = [...super.selects, ...["list"]]
+    static sliders = ["difficulty-input"]
+    static numeric_inputs = [...super.numeric_inputs, ...["level", "hermetic-mr-learning", "hermetic-difficulty"]]
+    static basic_inputs = [...this.numeric_inputs, ...["name", "time", "distance", "duration", "effect",
+        "details-max", "details-min", "details-black-magic", "details-resistance", "details-ap-cost"]]
+    static duplicated_inputs = {
+        "hermetic-mr-learning": Characteristics.realms,
+        "hermetic-difficulty": Characteristics.realms,
+        "difficulty-input": Characteristics.realms,
+    }
+
+    static convert_casts_to_difficulty(value) {
+        let difficulty // Use the count of the spell casted to compute difficulty
+        if (value < 4)
+            difficulty = -4
+        else if (value <= 6)
+            difficulty = -3
+        else if (value <= 8)
+            difficulty = -2
+        else if (value === 9)
+            difficulty = -1
+        else if (value <= 19)
+            difficulty = 0
+        else if (value <= 29)
+            difficulty = 1
+        else
+            difficulty = 2
+        return difficulty
+    }
 
     realm(realm_based_div) {
         const realm_split = $(realm_based_div)[0].id.split("-")
@@ -13,39 +53,47 @@ class SpellRow extends RollRow {
         return elem
     }
 
+    get_var(element_id_suffix, realm) {
+        return this[element_id_suffix + "-" + (typeof realm === "string" ? realm : this.realm(realm))]
+    }
+
+    uses_talent(talent) {
+        return this.is_talent_based_spell() && this["talent"] === talent.name
+    }
+
     is_talent_based_spell() {
         return this.is_hermetic_spell()
     }
 
     is_hermetic_spell() {
-        const value = this.get("list").val()
-        return value && value.trim() === hermetic_energy
+        return this.list && this.list.trim() === hermetic_energy
     }
 
     is_instinctive_magic() {
-        const value = this.get("list").val()
-        return value && value.trim() === instinctive_magic
+        return this.list && this.list.trim() === instinctive_magic
     }
 
     is_priest_magic() {
-        const value = this.get("list").val()
-        return value && value.trim() === priest_energy
+        return this.list && this.list.trim() === priest_energy
     }
 
     is_evil_nature_good() {
-        const value = this.get("list").val()
-        return value && good_nature_evil_energies.includes(value.trim())
+        return this.list && good_nature_evil_energies.includes(this.list.trim())
     }
 
     filter_invisible_dices(i, elem) {
         return elem && !$(elem).hasClass("d-none") && !$(elem).parents(".spell-value-row").hasClass("d-none")
     }
 
+    get_difficulty(realm) {
+        return this.constructor.convert_casts_to_difficulty(this.get_var("difficulty-input", realm))
+    }
+
     update_roll_value(dive_div) {
         if (this.is_evil_nature_good())
             return
         dive_div = $(dive_div)
-        dive_div = (dive_div.length > 0) ? dive_div : this.data.find(".row-roll-trigger")
+        dive_div = (dive_div.length > 0) ? dive_div : this.find(".row-roll-trigger")
         dive_div.filter(this.filter_invisible_dices).each((i, dice_div) => {
             let sum = 0
             const realm = this.realm(dice_div)
@@ -53,44 +101,36 @@ class SpellRow extends RollRow {
             // Recover component, means and realm
             const formula = this.compute_formula(realm)[0]
             sum += formula
-
-            const bonus = this.get("details-bonus", dice_div)
-            if (bonus.length > 0 && !isNaN(parseInt(bonus.val()))) {
-                sum += parseInt(bonus.val())
-            }
+            sum += this["details-bonus"]
 
             // Recover difficulty
-            const difficulty = this.get("difficulty", dice_div).text()
-            if (difficulty)
-                sum += parseInt(difficulty)
+            sum += this.get_difficulty(dice_div)
 
             if (this.is_talent_based_spell()) {
                 // Recover hermetic difficulty
-                const cast_diff = parseInt(this.get("hermetic-difficulty", dice_div).val())
-                if (!isNaN(cast_diff)) {
-                    sum += cast_diff
-                }
+                sum += this.get_var("hermetic-difficulty", dice_div) || 0
                 // Recover associated talent level
-                const name = this.get("talent", dice_div).val()
-                if (name && name.length !== 0) {
-                    const talent = talent_from_name(name)
+                const name = this["talent"]
+                if (name) {
+                    const talent = sheet.get_talent_from_name(name)
                     // This is complicated because hermetic spells can have a penalty when they are not learned correctly
                     // (MR < 0) and this penalty can be outside of the talent levels, like -6 or -3
                     // However, once the talent is raised for the first time, this odd penalty disappears
-                    let level = parseInt(talent_level(talent[0]))
-                    let origin_level = parseInt(talent_base_level(talent[0]))
-                    let mr_learning = parseInt(this.get("hermetic-mr-learning", dice_div).val())
+                    let level = parseInt(talent.talent_level())
+                    let origin_level = parseInt(talent.base_level)
+                    let mr_learning = this.get_var("hermetic-mr-learning", dice_div) || 0
 
                     // For hermetic spells, a level "X" does not mean that they cannot cast the spell (though it will be difficult)
                     if (isNaN(level))
                         level = this.is_hermetic_spell() ? -5 : "X"
                     if (isNaN(origin_level))
                         origin_level = this.is_hermetic_spell() ? -5 : "X"
-                    if (isNaN(mr_learning))
-                        mr_learning = 0
 
                     if (level === origin_level && mr_learning < 0) {
                         // Did not pay the learning failure at least once
+                        // Note that mr_learning already includes the talent level
+                        // (that is the closest feasible talent column, rounded up),
+                        // thus we don't add it twice
                         sum += mr_learning
                     } else if (!isNaN(level)) {
                         sum += level
@@ -103,7 +143,7 @@ class SpellRow extends RollRow {
 
             // Unease is applied at the end
             if (!isNaN(sum))
-                sum += get_unease()
+                sum += sheet.status.get_unease()
 
             // Update
             this.get("value", dice_div).text(sum)
@@ -111,20 +151,19 @@ class SpellRow extends RollRow {
         })
     }
 
-    level(button) {
-        return this.get("level", button).val()
+    get_level(button) {
+        return this.get_var("level", button)
     }
 
     roll_reason() {
-        if (!this.is_talent_based_spell()) { // Spell
-            return this.get("name").val()
+        if (!this.is_talent_based_spell()) {
+            return this["name"]
         }
-        const talent_select = this.get("talent")
-        return talent_select.find("option:selected").val()
+        return this["talent"]
     }
 
-    energy() {
-        return this.get("list").val()
+    energy_name() {
+        return this["list"]
     }
 
     roll(button) {
@@ -132,46 +171,40 @@ class SpellRow extends RollRow {
         let difficulty
         let critical_increase = 0
         const realm = this.realm(button)
-        const spell_difficulty = this.get("difficulty", button)
+        const spell_difficulty = this.get_var("difficulty", button)
         const formula_elements = this.compute_formula(realm)[1]
         let margin_throttle = NaN
         if (!this.is_talent_based_spell()) { // Spell
-            difficulty = parseInt(spell_difficulty.text())
-            margin_throttle = this.is_instinctive_magic(button[0]) ? 1 : NaN
+            difficulty = spell_difficulty
+            margin_throttle = this.is_instinctive_magic() ? 1 : NaN
         } else { // Talent
-            const talent_select = this.get("talent", button)
-            const talent = talent_select.find("option:selected").val()
-            difficulty = parseInt(talent_level(talent_from_name(talent)))
+            difficulty = this["talent"] ? parseInt(sheet.get_talent_from_name(this["talent"]).talent_level()) : 0
         }
-        let spell_distance = this.get("distance", button).val()
-        let spell_focus = this.get("time", button).val()
-        let spell_duration = this.get("duration", button).val()
-        let spell_level = this.level(button)
+        let spell_distance = this.get_var("distance", button)
+        let spell_focus = this.get_var("time", button)
+        let spell_duration = this.get_var("duration", button)
+        let spell_level = this.get_level(button)
         difficulty = isNaN(difficulty) ? 0 : difficulty
 
-        const exploding_effect = this.get("details-exploding-effect").prop("checked")
-
         // Equipment linked to the roll
-        const equipment_id = this.get("equipment").val()
-        const equipment = (equipment_id && equipment_id.length > 0) ? row_of($("#" + this.get("equipment").val())).get("name").val() : ""
+        const equipment = this["equipment"] ? sheet.get_equipment(this["equipment"]) : null
 
         // Do the actual roll
         if (this.is_evil_nature_good()) {
-            new GoodNatureEvilMagicRoll(this.roll_reason(), this.get("effect", button).val(),
+            new GoodNatureEvilMagicRoll(this.roll_reason(), this.get_var("effect", button),
                 spell_distance, spell_focus, spell_duration, spell_level,
-                this.get("details-black-magic", button).val(),
-                this.get("details-resistance", button).val(), equipment, equipment_id,
-                exploding_effect, this.energy()).trigger_roll()
+                this["details-black-magic"],
+                this["details-resistance"], equipment,
+                this["details-exploding-effect"], this.energy_name()).trigger_roll()
         } else {
             const value = parseInt(this.get("value", button).text())
             const type = this.data[0].id.includes("psi-") ? PsiRoll
                 : (this.data[0].id.includes("warrior-") ? WarriorRoll : TalentRoll)
-            new type(this.roll_reason(), value, difficulty, this.get("effect", button).val(),
+            new type(this.roll_reason(), value, difficulty, this.get_var("effect", button),
                 critical_increase, formula_elements, margin_throttle, this.data.hasClass("spell"),
                 true, spell_distance, spell_focus, spell_duration, spell_level,
-                this.get("details-black-magic", button).val(),
-                this.get("details-resistance", button).val(), equipment, equipment_id,
-                exploding_effect, this.energy()).trigger_roll()
+                this["details-black-magic"], this["details-resistance"], equipment,
+                this["details-exploding-effect"], this.energy_name()).trigger_roll()
         }
     }
 
@@ -179,7 +212,7 @@ class SpellRow extends RollRow {
         const spell_difficulty_inputs = this.get("difficulty-input", realm_div).parents(".spell-difficulty-row")
         const spell_value = this.get("value", realm_div).parents(".spell-value-row")
         const spell_difficulty = spell_difficulty_inputs.prev()
-        const inline_realms = this.data.find("input[name*=-realm]:checked").length
+        const inline_realms = this.find("input[name*=-realm]:checked").length
         if (realm_div.prop("checked")) { // Show the checked realm-related variables
             spell_difficulty_inputs.removeClass("d-none")
             spell_difficulty.removeClass("d-none")
@@ -193,9 +226,9 @@ class SpellRow extends RollRow {
                 spell_difficulty_inputs.parent().addClass("hide-data-title")
         }
         if (inline_realms > 1) {
-            this.data.find(".spell-realm").removeClass("d-none")
+            this.find(".spell-realm").removeClass("d-none")
         } else {
-            this.data.find(".spell-realm").addClass("d-none")
+            this.find(".spell-realm").addClass("d-none")
         }
 
         // Update adventure points
@@ -203,13 +236,13 @@ class SpellRow extends RollRow {
     }
 
     update_list() {
-        const slider = this.data.find(".spell-difficulty-input")
+        const slider = this.find(".spell-difficulty-input")
         if (slider.length === 0 || slider[0].id.includes("-x-"))
             return
-        const radio_buttons = this.data.find(".formula-elem")
-        const difficulty = this.data.find(".spell-difficulty-value")
-        const hermetic_difficulty = this.data.find(".hermetic-difficulty")
-        const hermetic_mr_difficulty = this.data.find(".hermetic-mr-learning")
+        const radio_buttons = this.find(".formula-elem")
+        const difficulty = this.find(".spell-difficulty-value")
+        const hermetic_difficulty = this.find(".hermetic-difficulty")
+        const hermetic_mr_difficulty = this.find(".hermetic-mr-learning")
         const hermetic_talent = this.get("talent")
         const name = this.get("name")
         const handle = this.get("name-handle")
@@ -281,22 +314,101 @@ class SpellRow extends RollRow {
         // Update adventure points
         compute_remaining_ap()
     }
+
+    formula_changed(e) {
+        e.preventDefault()
+        if (e.target.getAttribute("name").includes("-realm")) {
+            this.update_realm($(e.target))
+            this.update_roll_value(this.get("dice", $(e.target)))
+        } else {
+            this.update_roll_value()
+        }
+    }
+
+    select_changed(e) {
+        super.select_changed(e)
+        compute_remaining_ap()
+    }
+
+    update_level(e) {
+        this.update_roll_value()
+        compute_remaining_ap()
+    }
+
+    update_spell_name() {
+        // Update selections of spells
+        $("select.spell-select").each((i, elem) => {
+            update_spell_select(elem)
+        })
+        compute_remaining_ap()
+    }
+
+    update_difficulty_slider() {
+        this.update_roll_value()
+        // Update selections of spells because they depend on the level
+        $("select.spell-select").each((i, elem) => {
+            update_spell_select(elem)
+        })
+    }
+
+    add_listeners() {
+        super.add_listeners()
+
+        if (!this.is_template()) {
+            this.get("name").on("change", e => this.update_spell_name(e))
+            this.get("details-ap-cost").on("change", compute_remaining_ap)
+
+            // The other fields can appear multiple times by row
+            this.find(".spell-level").on("change", e => this.update_level(e))
+            this.find("select.spell-list").on("changed.bs.select", e => this.update_list(e))
+            this.find(".hermetic-difficulty").on("change", e => this.update_value(e))
+            this.find(".hermetic-mr-learning").on("change", e => this.update_value(e))
+
+            this.find("[id*=\"-difficulty-input\"").each((i, elem) => {
+                activate_slider(elem, e => this.show_difficulty_builder(e), _ => void 0, {},
+                    (e) => this.update_difficulty_slider(e))
+            })
+        }
+    }
+
+    show_difficulty_builder(input) {
+        return value => {
+            const max = slider_max(input)
+            const difficulty_elem = this.get("difficulty", input)
+            difficulty_elem.text(this.constructor.convert_casts_to_difficulty(value))
+            return value + "/" + max
+        }
+    }
 }
 
 class FocusMagicRow extends SpellRow {
+    static radio_groups = {}
+    static independent_checkboxes = is_v7 ? ["details-exploding-effect"] : []
+    static selects_no_sanitize = []
+    static selects = ["equipment"]
+    static numeric_inputs = [...RollRow.numeric_inputs, ...["level"]]
+    static basic_inputs = [...this.numeric_inputs, ...["name", "focus", "time", "distance", "duration", "effect",
+        "details-max", "details-min", "details-black-magic", "details-resistance", "details-ap-cost"]]
+    static sliders = []
+    static duplicated_inputs = {}
+
     static formula = ["mind", "action", "void"]
     static magic_talent = "Art magique"
 
     static magic_talent_level() {
-        const talent = talent_from_name(this.magic_talent)
+        const talent = sheet.get_talent_from_name(this.magic_talent)
         let level = NaN
-        if (talent.length > 0) {
-            level = parseInt(talent_level(talent[0]))
+        if (talent) {
+            level = parseInt(talent.talent_level())
         }
         if (isNaN(level)) {
             return "X"
         }
         return level
+    }
+
+    uses_talent(talent) {
+        return talent.name === this.constructor.magic_talent
     }
 
     is_talent_based_spell() {
@@ -315,7 +427,7 @@ class FocusMagicRow extends SpellRow {
         let value = 0
         const components = SuperpowerRollTable.components()
         for (let i = 0; i < this.constructor.formula.length; i++) {
-            value += parseInt($("#" + this.constructor.formula[i]).val())
+            value += sheet.characteristics[this.constructor.formula[i]]
         }
         // Super heroes have bonuses on all tests based on their component power
         const bonus = (components.includes(this.constructor.formula[0])) ? 4 : 0
@@ -324,14 +436,9 @@ class FocusMagicRow extends SpellRow {
 
     update_roll_value(dice_div = $()) {
         dice_div = $(dice_div)
-        dice_div = (dice_div.length > 0) ? dice_div : this.data.find(".row-roll-trigger")
+        dice_div = (dice_div.length > 0) ? dice_div : this.find(".row-roll-trigger")
         dice_div.filter(this.filter_invisible_dices).each(() => {
-            let sum = 0
-
-            const bonus = this.get("details-bonus")
-            if (bonus.length > 0 && !isNaN(parseInt(bonus.val()))) {
-                sum += parseInt(bonus.val())
-            }
+            let sum = this["details-bonus"]
 
             // Recover component, means and realm
             const formula = this.compute_formula()[0]
@@ -350,7 +457,7 @@ class FocusMagicRow extends SpellRow {
 
             // Unease is applied at the end
             if (!isNaN(sum))
-                sum += get_unease()
+                sum += sheet.status.get_unease()
 
             // Update
             this.get("value").text(sum)
@@ -358,100 +465,25 @@ class FocusMagicRow extends SpellRow {
     }
 
     roll_reason() {
-        return this.get("name").val()
+        return this["name"]
     }
 
     roll(button) {
-        // Find either spell difficulty or talent level to detect critical rolls
-        let spell_distance = this.get("distance").val()
-        let spell_focus = this.get("time").val()
-        let spell_duration = this.get("duration").val()
-        let spell_level = this.get("level").val()
-
-        const exploding_effect = this.get("details-exploding-effect").prop("checked")
-
         // Equipment linked to the roll
-        const equipment_id = this.get("equipment").val()
-        const equipment = (equipment_id && equipment_id.length > 0) ? row_of($("#" + this.get("equipment").val())).get("name").val() : ""
+        const equipment = this["equipment"] ? sheet.get_equipment(this["equipment"]) : null
 
         // Do the actual roll
         const value = parseInt(this.get("value").text())
         let level = this.constructor.magic_talent_level()
         level = !isNaN(level) ? level : 0
-        new FocusMagicRoll(this.roll_reason(), value, level, this.get("effect").val(), spell_distance,
-            spell_focus, spell_duration, spell_level, this.get("details-black-magic", button).val(),
-            this.get("details-resistance", button).val(), equipment, equipment_id,
-            exploding_effect, "").trigger_roll()
+        new FocusMagicRoll(this.roll_reason(), value, level, this["effect"], this["distance"],
+            this["time"], this["duration"], this["level"], this["details-black-magic"], this["details-resistance"],
+            equipment, this["details-exploding-effect"]).trigger_roll()
     }
 }
 
 class SpellRollTable extends TalentRollTable {
     static row_class = SpellRow
-
-    formula_changed(e) {
-        e.preventDefault()
-        const spell = row_of(e.target)
-        if (e.target.getAttribute("name").includes("-realm")) {
-            spell.update_realm($(e.target))
-            spell.update_roll_value(spell.get("dice", $(e.target)))
-        } else {
-            spell.update_roll_value()
-        }
-    }
-
-    select_changed(e) {
-        super.select_changed(e)
-        compute_remaining_ap()
-    }
-
-    update_level(e) {
-        row_of(e.target).update_roll_value()
-        compute_remaining_ap()
-    }
-
-    update_spell_name() {
-        // Update selections of spells
-        $("select.spell-select").each((i, elem) => {
-            update_spell_select(elem)
-        })
-        compute_remaining_ap()
-    }
-
-    update_difficulty_slider(event) {
-        row_of(event.target).update_roll_value()
-        // Update selections of spells because they depend on the level
-        $("select.spell-select").each((i, elem) => {
-            update_spell_select(elem)
-        })
-    }
-
-    update_value(event) {
-        row_of(event.target).update_roll_value()
-    }
-
-    update_list(event) {
-        row_of(event.target).update_list()
-    }
-
-    add_custom_listener_to_row(row) {
-        super.add_custom_listener_to_row(row)
-        row.data.find(".spell-name").uon("change", this.update_spell_name)
-        row.data.find(".spell-level").uon("change", this.update_level)
-        row.data.find("select.spell-list").uon("changed.bs.select", this.update_list)
-        row.data.find(".hermetic-difficulty").uon("change", this.update_value)
-        row.data.find(".hermetic-mr-learning").uon("change", this.update_value)
-        row.get("details-ap-cost").uon("change", compute_remaining_ap)
-
-        row.data.find("[id*=\"-difficulty-input\"").each((i, elem) => {
-            activate_slider(elem, this.show_difficulty_builder, _ => void 0, {},
-                this.update_difficulty_slider)
-        })
-        row.get("talent").selectpicker()
-        row.get("list").selectpicker({sanitize: false})
-
-        // Recompute difficulty and value based on list
-        row.update_list()
-    }
 
     remove_row(event) {
         super.remove_row(event)
@@ -461,40 +493,47 @@ class SpellRollTable extends TalentRollTable {
         })
         compute_remaining_ap()
     }
-
-    show_difficulty_builder(input) {
-        return value => {
-            const spell = row_of(input)
-            const max = slider_max(input)
-            const difficulty_elem = spell.get("difficulty", input)
-            let difficulty // Use the count of the spell casted to compute difficulty
-            if (value < 4)
-                difficulty = -4
-            else if (value <= 6)
-                difficulty = -3
-            else if (value <= 8)
-                difficulty = -2
-            else if (value === 9)
-                difficulty = -1
-            else if (value <= 19)
-                difficulty = 0
-            else if (value <= 29)
-                difficulty = 1
-            else
-                difficulty = 2
-            difficulty_elem.text(difficulty)
-            return value + "/" + max
-        }
-    }
 }
 
 class FocusMagicRollTable extends SpellRollTable {
     static row_class = FocusMagicRow
+}
 
-    add_custom_listener_to_row(row) {
-        super.add_custom_listener_to_row(row)
-        row.update_roll_value()
+class RuneRow extends DataRow {
+    static basic_inputs = ["name", "meaning"]
+
+    add_listeners() {
+        super.add_listeners()
+
+        if (!this.is_template())
+            this.get("name").uon("change", compute_remaining_ap)
     }
+}
+
+class RuneTable extends DataList {
+    static row_class = RuneRow
+    static basic_inputs = ["name", "meaning"]
+
+    add_row(fixed_idx = null) {
+        super.add_row(fixed_idx)
+        compute_remaining_ap() // Each rune cost AP
+    }
+}
+
+class WordRow extends RuneRow {
+    static selects = ["type"]
+    static basic_inputs = ["name"]
+
+    add_listeners() {
+        super.add_listeners()
+
+        if (!this.is_template())
+            this.get("type").uon("changed.bs.select", compute_remaining_ap)
+    }
+}
+
+class WordTable extends RuneTable {
+    static row_class = WordRow
 }
 
 /* Helper functions */

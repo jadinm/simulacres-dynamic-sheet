@@ -1,24 +1,48 @@
 class PsiRow extends SpellRow {
-    level(leveled_div) {
+    static requirements = [
+        "biography", // Some ethnics have formula bonuses
+        "characteristics", // For the formula
+        "status", // The unease is needed in the formula
+        "superpowers", // Superpowers boost the final value of rolls with the same component
+    ]
+
+    static radio_groups = RollRow.radio_groups
+    static independent_checkboxes = RollRow.independent_checkboxes
+    static selects_no_sanitize = []
+    static selects = ["equipment"]
+    static numeric_inputs = RollRow.numeric_inputs
+    static basic_inputs = [...this.numeric_inputs,
+        ...["name", "time", "duration", "distance", "effect", "details-max", "details-min"]]
+    static duplicated_inputs = {
+        "duration": ["1", "2", "3"],
+        "distance": ["1", "2", "3"],
+        "effect": ["1", "2", "3"],
+    }
+
+    get_level(leveled_div) {
         const level_split = $(leveled_div)[0].id.split("-")
         const level = parseInt(level_split[level_split.length - 1])
         return isNaN(level) ? "" : String(level)
     }
 
-    energy() {
+    energy_name() {
         return "psi"
     }
 
     energy_level() {
-        return parseInt($("#psi").val())
+        return sheet.characteristics[this.energy_name()]
     }
 
     get(element_id_suffix, leveled_div = null) {
         let elem = super.get(element_id_suffix)
         if (elem.length === 0 && leveled_div) {
-            elem = super.get(element_id_suffix + "-" + this.level(leveled_div))
+            elem = super.get(element_id_suffix + "-" + this.get_level(leveled_div))
         }
         return elem
+    }
+
+    get_effect(leveled_div) {
+        return this["effect" + "-" + this.get_level(leveled_div)]
     }
 
     is_talent_based_spell() {
@@ -56,30 +80,33 @@ class PsiRow extends SpellRow {
         compute_remaining_ap()
     }
 
+    get_difficulty(realm) {
+        return this["difficulty-input"]
+    }
+
     update_roll_value() {
         super.update_roll_value()
 
         // Don't activate powers if the talent level is at X
-        let level = parseInt(talent_level(talent_from_name(this.get("talent").val())))
+        let level = this["talent"] ? parseInt(sheet.get_talent_from_name(this["talent"]).talent_level()) : 0
 
         if (isNaN(level)) {
-            this.data.find(".row-roll-trigger").filter(this.filter_invisible_dices).each((i, dice_div) => {
+            this.find(".row-roll-trigger").filter(this.filter_invisible_dices).each((i, dice_div) => {
                 dice_div.setAttribute("hidden", "hidden")
             })
+        }
+    }
+
+    show_difficulty_builder(input) {
+        return value => {
+            this.get("difficulty", input).text(value)
+            return "0"
         }
     }
 }
 
 class PsiRollTable extends SpellRollTable {
     static row_class = PsiRow
-
-    show_difficulty_builder(input) {
-        const spell = row_of(input)
-        return value => {
-            spell.get("difficulty", input).text(value)
-            return "0"
-        }
-    }
 }
 
 $("#psi-search").on("change", event => {
@@ -87,12 +114,8 @@ $("#psi-search").on("change", event => {
     search_tables(value, $("#psi-table tr"))
 })
 
-$("#psi").on("change", event => {
+$("#psi").on("change", () => {
     $("#psi-table .row-roll-trigger").each((i, elem) => {
         row_of(elem).update_level()
     })
-})
-
-$(_ => {
-    new PsiRollTable($("#psi-table"))
 })

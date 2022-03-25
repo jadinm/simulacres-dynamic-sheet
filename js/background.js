@@ -1,5 +1,8 @@
-$(_ => {
-    // Recovers the content inside the textarea and build a WYSWYG GUI
-    $('#background').summernote(summernote_cfg)
-    add_summernote_listeners()
-})
+class Background extends Model {
+    static text_areas = ["background"]
+
+    add_listeners() {
+        super.add_listeners()
+        this.get("background").summernote(summernote_cfg)
+    }
+}

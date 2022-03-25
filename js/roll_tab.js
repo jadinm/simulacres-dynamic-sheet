@@ -1,30 +1,75 @@
-realms = /mineral|vegetal|animal|nature|humanoid|mechanical|artificial|void|supernatural/
+const realms = /mineral|vegetal|animal|nature|humanoid|mechanical|artificial|void|supernatural/
 
 class RollRow extends DataRow {
+    static requirements = [
+        "biography", // Some ethnics have formula bonuses
+        "characteristics", // For the formula
+        "status", // The unease is needed in the formula
+        ...TalentLists.talent_tables, // talents are required obviously
+        "superpowers", // Superpowers boost the final value of rolls with the same component
+        ...EquipmentRow.equipment_tables, // some rolls use equipments
+    ]
+
+    static radio_groups = {
+        "component": Characteristics.components,
+        "means": Characteristics.means,
+        "realms": Characteristics.realms,
+    }
+    static independent_checkboxes = is_v7 ? ["details-exploding-effect"] : []
+    static selects = ["talent", "equipment"]
+    static numeric_inputs = ["details-bonus"] // "details-max", "details-min" can be empty and thus, not in numeric inputs
+    static basic_inputs = [...this.numeric_inputs, ...["effect", "details-name", "details-max", "details-min"]]
+
+    // Get a variable in the scope of the div
+    get_var(element_id_suffix, _div_or_prefix) {
+        return this[element_id_suffix]
+    }
+
+    // Get default effect
+    get_effect() {
+        return this["effect"]
+    }
+
+    nbr_realms() {
+        let nbr = 0
+        for (const realm of Characteristics.realms) {
+            if (this[realm]) { // checked
+                nbr += 1
+            }
+        }
+        return nbr
+    }
 
     formula_elem(element, fixed_realm = null) {
-        let checked_elem
+        const formula_part = Characteristics[element[element.length-1] !== "s" ? element + "s" : element]
+
+        // Discover checked realm/component/means (depending on element parameter)
+        let checked_elem = ""
         if (element === "realm" && fixed_realm != null) {
-            checked_elem = this.get(fixed_realm)
-            if (!checked_elem.is(":checked"))
-                checked_elem = $()
+            if (this[fixed_realm])
+                checked_elem = fixed_realm
         } else {
-            checked_elem = this.data.find(".formula-elem-" + element + ":checked")
+            for (let i = 0; i < formula_part.length; i++) {
+                if (this[formula_part[i]]) { // checked
+                    checked_elem = formula_part[i]
+                }
+            }
         }
-        if (checked_elem.length === 0)
-            return [0, $()]  // Allow partial formulas
-        const base_array = checked_elem[0].id.split("-")
-        const formula_base_name = base_array[base_array.length - 1]
+        if (checked_elem === "")
+            return [0, null]  // Allow partial formulas
+
+        // Compute bonus value (due to ethnics or superpowers)
         let bonus = 0
-        if (formula_base_name === "resistance" && is_hobbit()) {
+        if (checked_elem === "resistance" && sheet.biography.is_hobbit()) {
             bonus += 1 // Hobbits have an increased resistance
         }
-        if (!(this instanceof SuperpowerRow)) {
+        if (!(this instanceof SuperpowerRow) && element === "component") {
+            // Super heroes have bonuses on all tests based on their component power
             const components = SuperpowerRollTable.components()
-            if (components.includes(formula_base_name))
-                bonus += 4 // Super heroes have bonuses on all tests based on their component power
+            if (components.includes(checked_elem))
+                bonus += 4
         }
-        return [bonus + parseInt($("#" + formula_base_name).val()), checked_elem]
+        return [bonus + sheet.characteristics[checked_elem], checked_elem]
     }
 
     compute_formula(fixed_realm = null) {
@@ -34,7 +79,7 @@ class RollRow extends DataRow {
         for (let i = 0; i < elements.length; i++) {
             const ret = this.formula_elem(elements[i], fixed_realm)
             sum += ret[0]
-            if (ret[1].length > 0)
+            if (ret[1] !== null)
                 checked_elements.push(ret[1])
         }
         return [sum, checked_elements]
@@ -42,14 +87,14 @@ class RollRow extends DataRow {
 
     cap_roll_value(sum) {
         // Optional min and max
-        const min = parseInt(this.get("details-min").val())
+        const min = parseInt(this["details-min"])
         if (!isNaN(min)) {
             if (isNaN(sum))
                 sum = min
             else
                 sum = Math.max(min, sum)
         }
-        const max = parseInt(this.get("details-max").val())
+        const max = parseInt(this["details-max"])
         if (!isNaN(max) && !isNaN(sum))
             sum = Math.min(max, sum)
         return sum
@@ -61,7 +106,7 @@ class RollRow extends DataRow {
 
     update_roll_value(dice_div = $()) {
         dice_div = $(dice_div)
-        dice_div = (dice_div.length > 0) ? dice_div : this.data.find(".row-roll-trigger")
+        dice_div = (dice_div.length > 0) ? dice_div : this.find(".row-roll-trigger")
         dice_div.each((i, dice_div) => {
             let sum = 0
 
@@ -69,39 +114,18 @@ class RollRow extends DataRow {
             const formula = this.compute_formula()[0]
             sum += formula
 
+            // Hardcoded bonus
+            sum += this["details-bonus"]
+
             // Add talent if any
-            let talent = this.get("talent", dice_div)
-            if (talent.length === 0)
-                return
-            talent = talent.val()
-
-            const bonus = this.get("details-bonus", dice_div)
-            if (bonus.length > 0 && !isNaN(parseInt(bonus.val()))) {
-                sum += parseInt(bonus.val())
-            }
-
-            const talent_div = talent_from_name(talent)
-            if (talent.length !== 0 && talent_div.length !== 0) {
-                const level = talent_level(talent_div[0])
-                if (level === "x")
-                    sum = "X"
-                else
-                    sum += parseInt(level)
-            }
-
-            // Dual wielding: check tap talent level for penalty
-            let tap_talent = this.get("tap-talent", dice_div)
-            tap_talent = tap_talent.val()
-            if (tap_talent) {
-                const tap_talent_div = talent_from_name(tap_talent)
-                if (tap_talent_div.length === 0)
-                    sum = "X"
-                else {
-                    const level = talent_level(tap_talent_div[0])
+            if (this["talent"]) {
+                const talent = sheet.get_talent_from_name(this["talent"])
+                if (talent) {
+                    const level = talent.talent_level()
                     if (level === "x")
                         sum = "X"
-                    else // Fixed penalty of using dual wielding
-                        sum += Math.min(parseInt(level) - 2, 0)
+                    else
+                        sum += parseInt(level)
                 }
             }
 
@@ -112,7 +136,7 @@ class RollRow extends DataRow {
 
             // Unease is applied at the end
             if (!isNaN(sum))
-                sum += get_unease()
+                sum += sheet.status.get_unease()
 
             // Update
             this.get("value", dice_div).text(sum)
@@ -120,17 +144,16 @@ class RollRow extends DataRow {
         })
     }
 
+    uses_talent(talent) {
+        return this["talent"] === talent.name
+    }
+
     roll_reason() {
-        const talent = this.get("talent").find("option:selected").val()
-        const tap_talent_select = this.get("tap-talent")
-        const name = this.get("name").text()
+        const talent = this["talent"]
+        const name = this["details-name"]
         let title = talent
-        if (tap_talent_select.length > 0) {
-            const tap_talent = tap_talent_select.find("option:selected").val()
-            title = "Combat à deux armes: " + talent + " & " + tap_talent
-        }
-        if (name.length > 0) {
-            title = name + ((title.length > 0) ? " (" + title + ")" : "")
+        if (name) {
+            title = name + (title ? " (" + title + ")" : "")
         }
         return title
     }
@@ -138,36 +161,29 @@ class RollRow extends DataRow {
     roll(button) {
         // Find either spell difficulty or talent level to detect critical rolls
         let difficulty
-        let critical_increase = 0
         const formula_elements = this.compute_formula()[1]
         let margin_throttle = NaN
-        const talent_select = this.get("talent", button)
-        const talent = talent_select.find("option:selected").val()
-        difficulty = parseInt(talent_level(talent_from_name(talent)))
-
-        // Dual wielding
-        const tap_talent_select = this.get("tap-talent", button)
-        if (tap_talent_select.length > 0) {
-            critical_increase += 1
-        }
+        if (this["talent"])
+            difficulty = parseInt(sheet.get_talent_from_name(this["talent"]).talent_level())
         difficulty = isNaN(difficulty) ? 0 : difficulty
 
         // Equipment linked to the roll
-        const equipment_id = this.get("equipment").val()
-        const equipment = (equipment_id && equipment_id.length > 0) ? row_of($("#" + this.get("equipment").val())).get("name").val() : ""
-
-        const exploding_effect = this.get("details-exploding-effect").prop("checked")
+        const equipment = this["equipment"] ? sheet.get_equipment(this["equipment"]) : null
 
         // Do the actual roll
         const value = parseInt(this.get("value", button).text())
-        new TalentRoll(this.roll_reason(), value, difficulty, this.get("effect", button).val(),
-            critical_increase, formula_elements, margin_throttle, false, false,
+        new TalentRoll(this.roll_reason(), value, difficulty, this.get_var("effect", button),
+            this.get_critical_increase(button), formula_elements, margin_throttle, false, false,
             "", "", "", 0, "", "",
-            equipment, equipment_id, exploding_effect, "").trigger_roll()
+            equipment, this["details-exploding-effect"], "").trigger_roll()
+    }
+
+    get_critical_increase() {
+        return 0
     }
 
     update_title() {
-        const candidate_title = this.get("details-name").val()
+        const candidate_title = this["details-name"]
         const title_div = this.get("name")
         if (candidate_title != null && title_div.length > 0) {
             title_div.text(candidate_title)
@@ -177,11 +193,126 @@ class RollRow extends DataRow {
                 title_div.addClass("d-none")
         }
     }
+
+    formula_changed(e) {
+        e.preventDefault()
+        this.update_roll_value()
+    }
+
+    select_changed() {
+        this.update_roll_value()
+    }
+
+    update_value() {
+        this.update_roll_value()
+    }
+
+    view_details() {
+        const formula = this.compute_formula()[1]
+        let title = "<h2>" + this.roll_reason() + "</h2>"
+        if (formula.length > 0) {
+            title += "<h4>"
+            for (let i = 0; i < formula.length; i++) {
+                const symbol = Characteristics.build_svg_image(formula[i])
+                if (symbol.length > 0) {
+                    title += symbol
+                    if (i !== formula.length - 1)
+                        title += "&nbsp;+&nbsp;"
+                }
+            }
+            title += "</h4>"
+        }
+        this.get("details-title").html(title)
+        let text = ""
+        if (this["time"])
+            text += "Concentration: " + this["time"] + "<br/>"
+        if (this["distance"])
+            text += "Portée: " + this["distance"] + "<br/>"
+        if (this["duration"])
+            text += "Durée: " + this["duration"] + "<br/>"
+        const effect = this.get_effect()
+        if (effect)
+            text += "Effet: " + effect
+        this.get("details-effect").html(text)
+        this.get("details").modal()
+    }
+
+    add_listeners() {
+        super.add_listeners()
+
+        if (!this.is_template()) {
+            this.find(".row-roll-trigger").on("click", e => this.roll(this.button_from_event(e)))
+            this.find(".formula-elem").on("change", e => this.formula_changed(e)).each((i, elem) => {
+                if (!$(elem).hasClass("invisible"))
+                    $(elem).tooltip()
+            })
+            this.find("select").on("changed.bs.select", e => this.select_changed(e))
+            this.get("show-details").on("click", e => this.view_details(e)).tooltip()
+            this.get("details-bonus").on("change", e => this.update_value(e))
+            this.get("details-min").on("change", e => this.update_value(e))
+            this.get("details-max").on("change", e => this.update_value(e))
+            this.get("details-name").on("change", e => this.update_title(e))
+            this.get("copy").tooltip()
+        }
+    }
 }
 
-ranges = /point_blank|normal|slightly_far|very_far/
+class DualWieldingRow extends RollRow {
+    static selects = ["talent", "tap-talent", "equipment"]
+
+    uses_talent(talent) {
+        return this["talent"] === talent.name || this["tap-talent"] === talent.name
+    }
+
+    get_critical_increase() {
+        // Dual wielding increases critical chance
+        return super.get_critical_increase() + ((this["tap-talent"]) ? 1 : 0)
+    }
+
+    update_roll_value_hook(sum, dice_div) {
+        // Dual wielding: check tap talent level for penalty
+        let tap_talent = this["tap-talent"]
+        if (tap_talent) {
+            const tap_talent = sheet.get_talent_from_name(tap_talent)
+            if (!tap_talent)
+                sum = "X"
+            else {
+                const level = tap_talent.talent_level()
+                if (level === "x")
+                    sum = "X"
+                else // Fixed penalty of using dual wielding
+                    sum += Math.min(parseInt(level) - 2, 0)
+            }
+        }
+        return sum
+    }
+
+    roll_reason() {
+        const talent = this["talent"]
+        const tap_talent = this["tap-talent"]
+        const name = this["details-name"]
+        let title = talent
+        if (tap_talent) {
+            title = "Combat à deux armes: " + talent + " & " + tap_talent
+        }
+        if (name) {
+            title = name + (title ? " (" + title + ")" : "")
+        }
+        return title
+    }
+}
+
+const range_list = ["point_blank", "normal", "slightly_far", "very_far"]
+const ranges = /point_blank|normal|slightly_far|very_far/
 
 class RangeRow extends RollRow {
+    static basic_inputs = [...this.numeric_inputs,
+        ...[...(is_v7 ? ["distance"] : []), "effect", "details-name", "details-max", "details-min"]]
+    static duplicated_inputs = is_v7 ? {
+        "effect": range_list,
+        "distance": range_list,
+    } : {}
+
     static modifier_by_range = {
         point_blank: 0,
         normal: 0,
@@ -207,6 +338,19 @@ class RangeRow extends RollRow {
         if (elem.length === 0 && range_div)
             elem = super.get(element_id_suffix + "-" + this.range(range_div))
         return elem
+    }
+
+    get_var(element_id_suffix, div_or_prefix = null) {
+        if (!is_v7)
+            return super.get_var(element_id_suffix, div_or_prefix)
+        if (typeof div_or_prefix === "string")
+            return this[element_id_suffix + "-" + div_or_prefix]
+        const range = div_or_prefix ? this.range(div_or_prefix) : "normal"
+        return this[element_id_suffix + "-" + range]
+    }
+
+    get_effect() {
+        return is_v7 ? this["effect-normal"] : super.get_effect()
     }
 
     update_roll_value_hook(sum, dice_div) {
@@ -241,11 +385,10 @@ class RangeRow extends RollRow {
     }
 
     update_effects() {
-        const base_effect_div = this.get("effect-normal")
-        if (base_effect_div.length === 0)
-            return // Version 8
-        const base_effect = base_effect_div.val()
-        this.data.find("span.roll-effect").each((i, elem) => {
+        if (!is_v7)
+            return
+        const base_effect = this["effect-normal"]
+        this.find("span.roll-effect").each((i, elem) => {
             if (!base_effect || base_effect.length === 0) {
                 $(elem).html("&nbsp;")
             } else {
@@ -263,117 +406,38 @@ class RangeRow extends RollRow {
             }
         })
     }
+
+    add_listeners() {
+        super.add_listeners()
+
+        if (!this.is_template())
+            this.get(is_v7 ? "effect-normal" : "effect").on("change", () => this.update_effects())
+    }
 }
 
-class TalentRollTable extends DataTable {
+class TalentRollTable extends DataList {
     static row_class = RollRow
 
-    trigger_roll(event) {
-        // Find the real target of the click
-        let button = $(event.target)
-        if (!button.hasClass("row-roll-trigger"))
-            button = $(event.target).parents(".row-roll-trigger")
-        row_of(button).roll(button)
-    }
-
-    formula_changed(e) {
-        e.preventDefault()
-        row_of(e.target).update_roll_value()
-    }
-
-    select_changed(e) {
-        row_of(e.target).update_roll_value()
-    }
-
-    view_details(_) {
-        const row = row_of(this)
-        const formula = row.compute_formula()[1]
-        let title = "<h2>" + row.roll_reason() + "</h2>"
-        if (formula.length > 0) {
-            title += "<h4>"
-            for (let i = 0; i < formula.length; i++) {
-                const symbol = $("label[for='" + formula[i][0].id + "'] svg").first().clone(false, false)
-                if (symbol.length > 0) {
-                    symbol.removeClass("input-prefix")
-                    title += symbol.get(0).outerHTML
-                    if (i !== formula.length - 1)
-                        title += "&nbsp;+&nbsp;"
-                }
-            }
-            title += "</h4>"
-        }
-        row.get("details-title").html(title)
-        let text = ""
-        const focus = row.get("time")
-        if (focus.length > 0)
-            text += "Concentration: " + focus.val() + "<br/>"
-        const distance = row.get("distance")
-        if (distance.length > 0)
-            text += "Portée: " + distance.val() + "<br/>"
-        const duration = row.get("duration")
-        if (duration.length > 0)
-            text += "Durée: " + duration.val() + "<br/>"
-        const effect = row.get("effect")
-        if (effect.length > 0)
-            text += "Effet: " + effect.val()
-        row.get("details-effect").html(text)
-        row.get("details").modal()
-    }
-
-    update_value(e) {
-        row_of(e.target).update_roll_value()
-    }
-
-    update_title(e) {
-        row_of(e.target).update_title()
-    }
-
-    add_custom_listener_to_row(row) {
-        super.add_custom_listener_to_row(row)
-        add_save_to_dom_listeners(row.data)
-        row.data.find(".row-roll-trigger").uon("click", this.trigger_roll)
-        row.data.find(".formula-elem").uon("change", this.formula_changed)
-        if (row.id !== this.template_row)
-            row.data.find(".formula-elem").next().each((i, elem) => {
-                if (!$(elem).hasClass("invisible"))
-                    $(elem).tooltip()
-            })
-        row.data.find("select").uon("changed.bs.select", this.select_changed)
-        row.data.find("select.talent-select,select.equipment-select").each((i, elem) => {
-            $(elem).selectpicker()
-        })
-        row.get("show-details").uon("click", this.view_details).tooltip()
-        row.get("details-bonus").uon("change", this.update_value)
-        row.get("details-min").uon("change", this.update_value)
-        row.get("details-max").uon("change", this.update_value)
-        if (row.get("tap-talent").length > 0) {
-            check_radio(row.get("body")[0])
-            check_radio(row.get("action")[0])
-            check_radio(row.get("mechanical")[0])
-            row.data.find(".formula-elem").attr("disabled", "disabled")
-            row.update_roll_value()
-        }
-        row.get("details-name").uon("change", this.update_title)
-        row.get("copy").tooltip()
-    }
-
     clone_row() {
-        return this.template_row.clone(true, false)
+        // We don't copy listeners because it does not work with select pickers and sliders
+        return this.template_row.data.clone(true, false)
     }
 }
 
 class CloseCombatRollTable extends TalentRollTable {
-
     static checked_radio = ["body", "action"]
+    static disabled_radio = [...Characteristics.means, ...Characteristics.components]
 
     add_custom_listener_to_row(row) {
         super.add_custom_listener_to_row(row)
 
-        check_radio(row.get(this.constructor.checked_radio[0])[0])
-        check_radio(row.get(this.constructor.checked_radio[1])[0])
-        row.data.find(".formula-elem").filter((i, elem) => {
-            return elem.id.search(realms) === -1
-        }).attr("disabled", "disabled")
+        for (let radio of this.constructor.checked_radio) {
+            check_radio(row.get(radio)[0])
+            row[radio] = true
+        }
+        for (let radio of this.constructor.disabled_radio) {
+            row.get(radio).attr("disabled", "disabled")
+        }
         row.update_roll_value()
     }
 }
@@ -381,33 +445,12 @@ class CloseCombatRollTable extends TalentRollTable {
 class RangeCombatRollTable extends CloseCombatRollTable {
     static row_class = RangeRow
     static checked_radio = ["body", "perception"]
-
-    update_effects(e) {
-        row_of($(e.target)).update_effects()
-    }
-
-    add_custom_listener_to_row(row) {
-        super.add_custom_listener_to_row(row)
-        row.data.find("input.roll-effect").uon("change", this.update_effects)
-    }
 }
 
-const talent_list_selector = ".talent input[id*='-name']"
-
-/* Helper functions */
-
-const hobbit_regexes = [/[Hh]obbits?/, /[Tt]inigens?/, /[Pp]etites [Gg]ens/, /[Pp]etites? [Pp]ersonnes?/,
-    /[Tt]omt[eé]s?/]
-
-function is_hobbit() {
-    const race = $("#race").val()
-    if (!race || race.length === 0)
-        return false
-    for (let i in hobbit_regexes) {
-        if (race.match(hobbit_regexes[i]) != null)
-            return true
-    }
-    return false
+class DualWieldingRollTable extends CloseCombatRollTable {
+    static row_class = DualWieldingRow
+    static checked_radio = ["body", "action", (is_v7 ? "mechanical" : "artificial")]
+    static disabled_radio = [...Characteristics.means, ...Characteristics.components, ...Characteristics.realms]
 }
 
 /* Triggers */
@@ -415,11 +458,4 @@ function is_hobbit() {
 $("#roll-search").on("change", event => {
     let value = $(event.target).val().toLowerCase()
     search_tables(value, $("#dual_wielding-table tr,#close_combat-table tr,#range_combat-table tr,#roll-table tr"))
-})
-
-$("#race,.realm,.component,.means," + talent_list_selector).on("change", _ => {
-    // Update all of the spell values
-    $(".row-roll-trigger").each((i, elem) => {
-        row_of(elem).update_roll_value(elem)
-    })
 })

@@ -1,4 +1,4 @@
-<li id="plugin-button-other-world" class="plugin-button nav-item" data-plugin-version="1.0.1"
+<li id="plugin-button-other-world" class="plugin-button nav-item" data-plugin-version="2.0.0"
     data-plugin-id="other-world">
     <a class="nav-link" data-toggle="tab" href="#plugin-tab-other-world" role="tab"
        aria-controls="plugin-tab-other-world" aria-selected="false">
@@ -25,43 +25,23 @@
 </div>
 
 <script id="plugin-js-other-world" class="plugin-js" data-plugin-id="other-world">
-    /* Trigger Adventure Point computation on change of your magic energy level */
-    $("#plugin-other-world-magic").on("change", _ => {
-        $("select.special-energy-select").each((i, elem) => { // Update lists of special energies
-            update_special_energy_select(elem)
-        })
-        compute_remaining_ap()
-    }).trigger("change")
-    /* For version 7, you need to include your new energy in the spell list choice for the spells */
-    $(_ => {
-        $("select.spell-list").each((i, input) => {
-            init_spell_list(input, true)
-        })
-    })
+    {
+        class OtherWorldPlugin extends PluginModel {
+            static id = "other-world"
+            static requirements = ["characteristics", ...TalentLists.talent_tables]
 
-    /* This will add the following talents on the page if they are not already there */
-    default_talents = {
-        x: ["Art magique"],
-        "-4": ["Armes normales"],
-        "-2": ["Armes légères", "Bouclier"],
-        "0": ["Athlétisme", "Bagarre", "Observation"]
-    }
-    $(_ => {
-        add_missing_talents(default_talents)
-    })
+            /* This will add the following energy to the characteristics */
+            static additional_magical_energy = ["magic"]
 
-    /* Before removing this plugin, we need to update the AP computation and spell lists
-     * because we are removing magical energies
-     */
-    function dispose_plugin_other_world() {
-        $("select.spell-list").each((i, input) => {
-            init_spell_list(input, true)
-        })
-        $("select.special-energy-select").each((i, elem) => {
-            update_special_energy_select(elem)
-        })
-        compute_remaining_ap()
+            /* This will add the following talents on the page if they are not already there */
+            static additional_talents = {
+                x: ["Art magique"],
+                "-4": ["Armes normales"],
+                "-2": ["Armes légères", "Bouclier"],
+                "0": ["Athlétisme", "Bagarre", "Observation"]
+            }
+        }
+
+        OtherWorldPlugin.load()
     }
-    // Register the function (avoid typos here or the method won't be called)
-    plugin_dispose_methods["other-world"] = dispose_plugin_other_world
 </script>

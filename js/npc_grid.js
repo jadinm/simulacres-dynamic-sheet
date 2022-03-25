@@ -1,25 +1,21 @@
-class NPC extends DataRow {
+class NPCStatus extends Status {
+    static members = ["head", "trunk", "left-arm", "right-arm", "left-leg", "right-leg", "left-wing", "right-wing", "left-leg-2", "right-leg-2"]
 
-    talent_level_select = {
-        "cavalry": "cavalry-level",
-        "combat": "combat-level",
-        "combat-2": "combat-level"
-    }
+    static hp_sliders = [...this.members.map((e) => "hp-" + e), "hp"]
+    static sliders = ["unease", "breath", "psychic", ...this.hp_sliders]
+    static save_slider_min_max = this.sliders
 
-    effect_input = {
-        "combat": "combat-effect",
-        "combat-2": "combat-2-effect",
-        "run": "movement"
-    }
+    static armors = this.members.map((e) => "armor-" + e)
+    static numeric_inputs = [...this.armors, "full-armor", "temporary-breath", "lost-breath", "lost-psychic"]
 
-    reasons = {
-        "cavalry": "Conduite/Équitation",
-        "combat": "Combat (arme principale)",
-        "combat-2": "Combat (arme secondaire)",
-        "magic": "Résistance magique",
-        "perception": "Perception",
-        "run": "Course"
-    }
+    static hp_details = this.members.map((e) => "details-hp-" + e)
+    static basic_inputs = [
+        ...this.numeric_inputs, ...this.hp_details,
+        "details-hp", "details-breath", "details-psychic", "details-unease",
+    ]
+
+    static independent_checkboxes = ["armor-overwrite"]
+    static selects = []
 
     localized_hp = {
         3: {"head": 3, "trunk": 3, "arm": 3, "leg": 3},
@@ -47,6 +43,10 @@ class NPC extends DataRow {
         25: {"head": 9, "trunk": 23, "arm": 10, "leg": 10},
     }
 
+    unease_value_changed_event() {
+        // No need to update anything here (but the slider)
+    }
+
     armor_overwrite() {
         if (this.get("armor-overwrite")[0].checked) {
             this.find("input.armor").val(this.get("full-armor").val()).trigger("change")
@@ -62,12 +62,110 @@ class NPC extends DataRow {
         }
 
         // Adapt unease with armor penalty
-        const penalty = armor_penalty(armor_sum)
+        const penalty = this.armor_penalty(armor_sum)
         const penalty_number = isNaN(penalty) ? -3 : penalty
 
         const unease = this.get("unease")
         unease.slider("setValue", parseInt(unease.slider("getAttribute", "min")) - penalty_number)
         unease.slider("refresh", {useCurrentValue: true})
+    }
+
+    set_hp(unlocalized_hp, localization = true) {
+        this.set_slider_max(this.get("hp"), unlocalized_hp, true)
+        if (!(unlocalized_hp in this.localized_hp) && localization) {
+            alert("Pas de conversion automatique entre '" + unlocalized_hp + "' PV non-localisés en PV localisés")
+            return
+        }
+        if (!localization)
+            return
+        const conversion = this.localized_hp[unlocalized_hp]
+        this.set_slider_max(this.get("hp-head"), conversion["head"], true)
+        this.set_slider_max(this.get("hp-trunk"), conversion["trunk"], true)
+        this.set_slider_max(this.get("hp-right-arm"), conversion["arm"], true)
+        this.set_slider_max(this.get("hp-left-arm"), conversion["arm"], true)
+        this.set_slider_max(this.get("hp-right-wing"), conversion["arm"], true)
+        this.set_slider_max(this.get("hp-left-wing"), conversion["arm"], true)
+        this.set_slider_max(this.get("hp-right-leg"), conversion["leg"], true)
+        this.set_slider_max(this.get("hp-left-leg"), conversion["leg"], true)
+        this.set_slider_max(this.get("hp-right-leg-2"), conversion["leg"], true)
+        this.set_slider_max(this.get("hp-left-leg-2"), conversion["leg"], true)
+        this.set_slider_max(this.get("unease"), conversion["trunk"] + 1, false, true)
+    }
+
+    is_localized() {
+        return !this.get("localized-status").hasClass("d-none")
+    }
+
+    toggle_localization() {
+        if (this.is_localized()) {
+            this.get("non-localized-status").removeClass("d-none")
+            this.get("localized-status").addClass("d-none")
+            this.get("add-localization").removeAttr("hidden").tooltip()
+            this.get("remove-localization").tooltip("dispose").attr("hidden", "hidden")
+        } else {
+            this.get("non-localized-status").addClass("d-none")
+            this.get("localized-status").removeClass("d-none")
+            this.get("add-localization").tooltip("dispose").attr("hidden", "hidden")
+            this.get("remove-localization").removeAttr("hidden").tooltip()
+        }
+    }
+
+    add_listeners() {
+        if (!this.parent || !this.parent.is_template()) {
+            super.add_listeners()
+
+            /* Localization switch */
+            this.get("add-localization").on("click", () => this.toggle_localization())
+            this.get("remove-localization").on("click", () => this.toggle_localization())
+
+            /* Armor lock */
+            this.get("armor-overwrite").on("change", () => this.armor_overwrite())
+            this.get("full-armor").on("change", () => this.armor_overwrite())
+            this.find(".armor").on("change", () => this.update_armor_penalty())
+        }
+    }
+}
+
+
+class NPC extends DataRow {
+
+    static numeric_inputs = [
+        "power", "speed", "precision",
+        "cavalry", "combat", "combat-2", "run", "perception", "magic",
+        "defense", "attack", "total-attack",
+    ]
+
+    static basic_inputs = [
+        "name",
+        ...this.numeric_inputs,
+        "combat-effect", "combat-2-effect", "movement",
+    ]
+
+    static selects = ["combat-level", "cavalry-level"]
+
+    static model_names = {
+        "status": NPCStatus,
+    }
+
+    talent_level_select = {
+        "cavalry": "cavalry-level",
+        "combat": "combat-level",
+        "combat-2": "combat-level"
+    }
+
+    effect_input = {
+        "combat": "combat-effect",
+        "combat-2": "combat-2-effect",
+        "run": "movement"
+    }
+
+    reasons = {
+        "cavalry": "Conduite/Équitation",
+        "combat": "Combat (arme principale)",
+        "combat-2": "Combat (arme secondaire)",
+        "magic": "Résistance magique",
+        "perception": "Perception",
+        "run": "Course"
     }
 
     save_hidden_fields() {
@@ -101,7 +199,7 @@ class NPC extends DataRow {
         const reason = value_suffix in this.reasons ? this.reasons[value_suffix] + " (" + this.get("name").val() + ")" : ""
 
         // Get the value and apply unease
-        const value = (parseInt(value_input.val()) || 0) + get_unease(this.row_index + "-")
+        const value = (parseInt(value_input.val()) || 0) + this.models.status.get_unease()
 
         // Push hidden fields
         this.push_hidden_fields()
@@ -109,53 +207,24 @@ class NPC extends DataRow {
         new TalentRoll(reason, value, talent_level, effect,
             0, [], NaN, false, false,
             "", "", "", 0, "", "",
-            "", "", false, "",
-            this.row_index + "-").trigger_roll()
+            "", "", false, this.row_index + "-").trigger_roll()
     }
 
-    set_hp(unlocalized_hp, localization = true) {
-        set_slider_max(this.get("hp"), unlocalized_hp, true)
-        if (!(unlocalized_hp in this.localized_hp) && localization) {
-            alert("Pas de conversion automatique entre '" + unlocalized_hp + "' PV non-localisés en PV localisés")
-            return
-        }
-        if (!localization)
-            return
-        const conversion = this.localized_hp[unlocalized_hp]
-        set_slider_max(this.get("hp-head"), conversion["head"], true)
-        set_slider_max(this.get("hp-trunk"), conversion["trunk"], true)
-        set_slider_max(this.get("hp-right-arm"), conversion["arm"], true)
-        set_slider_max(this.get("hp-left-arm"), conversion["arm"], true)
-        set_slider_max(this.get("hp-right-wing"), conversion["arm"], true)
-        set_slider_max(this.get("hp-left-wing"), conversion["arm"], true)
-        set_slider_max(this.get("hp-right-leg"), conversion["leg"], true)
-        set_slider_max(this.get("hp-left-leg"), conversion["leg"], true)
-        set_slider_max(this.get("hp-right-leg-2"), conversion["leg"], true)
-        set_slider_max(this.get("hp-left-leg-2"), conversion["leg"], true)
-        set_slider_max(this.get("unease"), conversion["trunk"] + 1)
-        this.get("unease").slider("setValue", 0).slider("refresh", {useCurrentValue: true}).trigger("change")
-    }
+    add_listeners() {
+        super.add_listeners()
 
-    is_localized() {
-        return !this.get("localized-status").hasClass("d-none")
-    }
+        if (!this.is_template()) {
+            /* Roll triggers */
+            this.find(".row-roll-trigger").on("click", (e) => this.roll(this.button_from_event(e)))
 
-    toggle_localization() {
-        if (this.is_localized()) {
-            this.get("non-localized-status").removeClass("d-none")
-            this.get("localized-status").addClass("d-none")
-            this.get("add-localization").removeAttr("hidden").tooltip()
-            this.get("remove-localization").tooltip("dispose").attr("hidden", "hidden")
-        } else {
-            this.get("non-localized-status").addClass("d-none")
-            this.get("localized-status").removeClass("d-none")
-            this.get("add-localization").tooltip("dispose").attr("hidden", "hidden")
-            this.get("remove-localization").removeAttr("hidden").tooltip()
+            /* Add a default name that depends on the row number */
+            if (!this["name"])
+                this.get("name").val("NPC " + this.row_number).trigger("change")
         }
     }
 }
 
-class NPCGrid extends DataTable {
+class NPCGrid extends DataList {
     static row_class = NPC
 
     bestiary = []
@@ -173,9 +242,9 @@ class NPCGrid extends DataTable {
             changed_page = true
             if (idx == null) {
                 // We are not importing new data and want to take the selection of the base NPC into account
-                const creature_name = $("#npc-table-add-select").val()
-                if (creature_name) {
-                    const creature = $(this.bestiary).filter((_, c) => c.name === creature_name)
+                const creature_name = this.get("npc-table-add-select").val()
+                if (creature_name && creature_name.length > 0) {
+                    const creature = $(this.bestiary).filter((_, c) => c.name === creature_name[0])
                     if (creature.length > 0) {
                         this.load_creature(row, creature.get(0))
                     }
@@ -202,14 +271,13 @@ class NPCGrid extends DataTable {
         })
 
         // Update the field, so that it stays upon saving
-        $("#bestiary").text(JSON5.stringify(this.bestiary))
+        this.get("bestiary").text(JSON5.stringify(this.bestiary))
 
         // Add names to the select
         const creature_list = this.bestiary.map(elem => {
             return {name: elem.name, content: null}
         })
-        creature_list.push({name: "", content: null})
-        update_select($("#npc-table-add-select"), $(creature_list))
+        update_select(this.get("npc-table-add-select"), $(creature_list))
     }
 
     load_creature(row, creature) {
@@ -224,16 +292,19 @@ class NPCGrid extends DataTable {
             else
                 return a[0].localeCompare(b[0])
         })) {
-            const input = row.get(key)
+            let input = row.get(key)
+            if (input.length === 0) {
+                input = row.models.status.get(key)
+            }
             if (input.length === 0 && !this.input_less_keys.includes(key)) {
                 alert("Le champ avec l'id '" + key + "' de '" + creature.name + "' est introuvable")
                 continue
             }
             if (key === "hp") {
-                row.set_hp(value, !("localization" in creature) || creature["localization"])
+                row.models.status.set_hp(value, !("localization" in creature) || creature["localization"])
             } else if (key === "localization") {
                 if (!value)
-                    row.toggle_localization()
+                    row.models.status.toggle_localization()
             } else if (key === "wings") {
                 if (value)
                     row.find(".wing-div").removeClass("invisible")
@@ -250,11 +321,8 @@ class NPCGrid extends DataTable {
                     })
                 }
             } else if (input.hasClass("input-slider")) {
-                // Update the maximum of a slider
-                set_slider_max(input, value, true)
-                if (key === "unease") { // Unease need to be set to 0
-                    input.slider("setValue", 0).slider("refresh", {useCurrentValue: true}).trigger("change")
-                }
+                // Update the maximum of a slider (all in status)
+                row.models.status.set_slider_max(input, value, key !== "unease", key === "unease")
             } else {
                 input.val(value).trigger("change")
                 if (key === "combat") {
@@ -263,77 +331,12 @@ class NPCGrid extends DataTable {
                     row.get("cavalry").val(value).trigger("change")
                     row.get("run").val(value).trigger("change")
                 } else if (key === "full-armor") {
-                    row.armor_overwrite()
+                    row.models.status.armor_overwrite()
                 }
             }
         }
     }
-
-    toggle_localization(event) {
-        let button = $(event.target)
-        if (!button.hasClass("npc-localization")) {
-            button = button.parents(".npc-localization")
-        }
-        row_of(button).toggle_localization()
-    }
-
-    armor_overwrite(event) {
-        row_of(event.target).armor_overwrite()
-    }
-
-    update_armor_penalty(event) {
-        row_of(event.target).update_armor_penalty()
-    }
-
-    trigger_roll(event) {
-        // Find the real target of the click
-        let button = $(event.target)
-        if (!button.hasClass("row-roll-trigger"))
-            button = $(event.target).parents(".row-roll-trigger")
-        row_of(button).roll(button)
-    }
-
-    add_row(fixed_idx = null, from_row = null) {
-        const row = super.add_row(fixed_idx)
-        row.get("name").val("NPC " + row.row_number).trigger("change")
-        return row
-    }
-
-    add_custom_listener_to_row(row) {
-        super.add_custom_listener_to_row(row)
-
-        /* Localization switch */
-        row.get("add-localization").uon("click", this.toggle_localization)
-        row.get("remove-localization").uon("click", this.toggle_localization)
-
-        /* Status part */
-        init_status(row.row_index + "-")
-        row.find("[data-toggle=\"tooltip\"]").tooltip()
-        row.get("increment-unease").uon("click", increment_unease)
-        row.get("decrement-unease").uon("click", decrement_unease)
-        row.get("increment-breath").uon("click", increment_breath)
-        row.get("decrement-breath").uon("click", decrement_breath)
-        row.get("increment-psychic").uon("click", increment_psychic)
-        row.get("decrement-psychic").uon("click", decrement_psychic)
-        row.find("[id*=increment-hp]").uon("click", increment_hp)
-        row.find("[id*=decrement-hp]").uon("click", decrement_hp)
-        row.find("[id*=details-hp]").uon("change", details_hp)
-        row.find(".armor").uon("change", this.update_armor_penalty)
-
-        /* Armor lock */
-        row.get("armor-overwrite").uon("change", this.armor_overwrite)
-        row.get("full-armor").uon("change", this.armor_overwrite)
-
-        /* Roll triggers */
-        row.find(".row-roll-trigger").uon("click", this.trigger_roll)
-
-        /* Selects */
-        row.get("combat-level").selectpicker()
-        row.get("cavalry-level").selectpicker()
-    }
 }
-
-let npc_grid = null
 
 $("#import-bestiary").on("change", event => {
     if (event.target.files.length === 0)
@@ -344,7 +347,7 @@ $("#import-bestiary").on("change", event => {
         // Executed at the completion of the read
         try {
             JSON5.parse(e.target.result)
-            npc_grid.load_bestiary(e.target.result)
+            sheet["npc_grid"].load_bestiary(e.target.result)
         } catch (e) {
             alert("Le document n'est pas un bestiaire. Si vous essayez d'importer une fiche ou un plugin,"
                 + " utilisez un des autres boutons.")
@@ -356,10 +359,4 @@ $("#import-bestiary").on("change", event => {
 
     // Asynchronous read
     reader.readAsText(event.target.files[0])
-})
-
-$(_ => {
-    const npc_table = $("#npc-table")
-    if (npc_table.length > 0)
-        npc_grid = new NPCGrid(npc_table)
 })

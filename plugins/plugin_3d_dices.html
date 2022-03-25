@@ -1582,52 +1582,50 @@ if (typeof define === 'function' && define.amd) {
 
 </script>
 
-<script id="plugin-js-3d-dices" class="plugin-js" data-plugin-version="1.0.0" data-plugin-id="3d-dices">
-    $(_ => {
+<script id="plugin-js-3d-dices" class="plugin-js" data-plugin-version="2.0.0" data-plugin-id="3d-dices">
+    {
         let shininess = 40
+
         class PluginD4 extends DiceD4 {
             create() {
                 this.materialOptions.shininess = shininess
                 return super.create();
             }
         }
+
         class PluginD6 extends DiceD6 {
             create() {
                 this.materialOptions.shininess = shininess
                 return super.create();
             }
         }
+
         class PluginD8 extends DiceD8 {
             create() {
                 this.materialOptions.shininess = shininess
                 return super.create();
             }
         }
+
         class PluginD10 extends DiceD10 {
             create() {
                 this.materialOptions.shininess = shininess
                 return super.create();
             }
         }
+
         class PluginD12 extends DiceD12 {
             create() {
                 this.materialOptions.shininess = shininess
                 return super.create();
             }
         }
+
         class PluginD20 extends DiceD20 {
             create() {
                 this.materialOptions.shininess = shininess
                 return super.create();
             }
-        }
-
-        // When we do not upgrade the plugin, fetch the old functions
-        if (!window.hasOwnProperty('plugin_3d_dices_old_roll_dices')) {
-            window.plugin_3d_dices_old_roll_dices = Roll.prototype.roll_dices
-        }
-        if (!window.hasOwnProperty('plugin_3d_dices_old_show_modal')) {
-            window.plugin_3d_dices_old_show_modal = Roll.prototype.show_modal
         }
 
         // standard global variables
@@ -1642,309 +1640,330 @@ if (typeof define === 'function' && define.amd) {
             20: PluginD20
         }
         let half_types = [2, 3, 5] // by using a type above
+        const color_values = {}
 
-        function is_current_roll_validated() {
-            return !(current_roll
-                && typeof current_roll.energy_investment_validated !== "undefined"
-                && !current_roll.energy_investment_validated)
-        }
+        class ThreeDDicesPlugin extends PluginModel {
+            static id = "3d-dices"
 
-        function roll_3d_dices(number, type, dices = [], reason = null) {
-            if (!dice_types[type] && !half_types.includes(type)) { // Fallback
-                return window.plugin_3d_dices_old_roll_dices.call(this, number, type, dices, reason)
-            }
+            static numeric_inputs = ["shininess"]
+            static basic_inputs = ["text-color", "background-color", ...this.numeric_inputs]
 
-            let existing = commands.length !== 0
-            if (reason) { // Check if it already exists
-                commands.forEach((elem) => {
-                    if (elem[3] === reason)
-                        existing = true
-                })
-            }
+            static old_roll_dices = Roll.prototype.roll_dices
+            static old_show_modal = Roll.prototype.show_modal
 
-            let sum = 0
-            if (!reason || !existing) {
-                // Hide without fading effect (because of spoilers)
-                // Modal may need to be hidden when we move the slider, making the test successful
-                // and triggering the roll of power dices
-                $('#roll-dialog').removeClass("fade").modal("hide").addClass("fade")
-
-                // Do not send anything to a server because it would spoil the player
-                $(document).trigger("stop-roll-broadcast")
-
-                sum = window.plugin_3d_dices_old_roll_dices.call(this, number, type, dices, reason)
-                commands.push([number, type, dices, sum, reason])
-
-                if (!showing) {
-                    show_3d_roll()
-                }
-            }
-            return sum
-        }
-
-        function show_3d_roll() {
-            let scene, camera, renderer, debug = false, world, dice_3d = []
-            let [number, type, dices, result, reason] = commands.pop()
-            showing = true
-
-            if (half_types.includes(type)) {
-                // This type of dice does not exists so we show twice the result
-                type = type * 2
-                dices = dices.map((elem) => 2 * elem - Math.floor(Math.random() * 2))
-            }
-
-            if (!reason)
-                reason = "Lancer"
-
-            let toast = $("<div id=\"plugin-3d-dices-toast\" class=\"toast\" data-autohide=\"false\"" +
-                " style='position: fixed; left: 50%; transform: translateX(-50%); top: 0; z-index: 9; background-color: white;'>" +
-                "<div class=\"toast-header\"><h2>" + reason + "</h2></div>" +
-                "<div class=\"toast-body\"><h6>Cliquez n'importe où sur l'écran pour continuer</h6></div></div>")
-            main_container.append(toast)
-            toast = main_container.children().last()
-            toast.toast("show")
-
-            // Example adapted from https://github.com/byWulf/threejs-dice/blob/master/examples/rolling.html
-
-            // Helpers
-            function animate() {
-                updatePhysics()
-                renderer.render(scene, camera)
-
-                requestAnimationFrame(animate)
-            }
-
-            function updatePhysics() {
-                world.step(1.0 / 60.0)
-
-                for (let i in dice_3d) {
-                    dice_3d[i].updateMeshFromBody()
-                }
-            }
-
-            // Scene
-            scene = new THREE.Scene()
-            scene.background = null
-
-            // Camera
-            let SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight
-            let VIEW_ANGLE = 17, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 20000
-            camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR)
-            scene.add(camera)
-            camera.position.set(0, 100, 30)
-
-            // Renderer
-            renderer = new THREE.WebGLRenderer({antialias: true, alpha: true})
-            renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT)
-            renderer.shadowMap.enabled = true
-            renderer.shadowMap.type = THREE.PCFSoftShadowMap
-            renderer.setClearColor(0xFFFFFFFF, 0)
-
-            // Canvas positioning
-            let container = $("<div style='position: fixed; left: 0; top: 0; z-index: 10'></div>")
-            main_container.append(container)
-            container = main_container.children().last()
-            container.append(renderer.domElement)
-
-            // Lights
-            let ambient = new THREE.AmbientLight('#ffffff', 0.3)
-            scene.add(ambient)
-
-            let directionalLight = new THREE.DirectionalLight('#ffffff', 0.5)
-            directionalLight.position.x = -1000
-            directionalLight.position.y = 1000
-            directionalLight.position.z = 1000
-            scene.add(directionalLight)
-
-            let light = new THREE.SpotLight(0xefdfd5, 0.5)
-            light.position.y = 100
-            light.target.position.set(0, 0, 0)
-            light.castShadow = true
-            light.shadow.camera.near = 50
-            light.shadow.camera.far = 110
-            light.shadow.mapSize.width = 1024
-            light.shadow.mapSize.height = 1024
-            scene.add(light)
-
-            // Floor
-            let floor_height = 30
-            let floor_width = 30 / SCREEN_HEIGHT * SCREEN_WIDTH
-            let floorMaterial = new THREE.MeshPhongMaterial({color: '#00aa00', side: THREE.DoubleSide})
-            let floorGeometry = new THREE.PlaneGeometry(floor_width, floor_height, 10, 10)
-            let floor = new THREE.Mesh(floorGeometry, floorMaterial)
-            floor.receiveShadow = true
-            floor.rotation.x = Math.PI / 2
-            if (debug)
-                scene.add(floor)
-            camera.lookAt(floor.position)
-
-            // walls
-            let wallMaterial = new THREE.MeshPhongMaterial({color: '#0000aa', side: THREE.DoubleSide})
-            let wallGeometry = new THREE.PlaneGeometry(floor_width, floor_height, 10, 10)
-            let wall = new THREE.Mesh(wallGeometry, wallMaterial)
-            wall.rotation.y = Math.PI / 2
-            wall.position.x = floor_width / 2
-            if (debug)
-                scene.add(wall)
-
-            let wallMaterial2 = new THREE.MeshPhongMaterial({color: '#aa00aa', side: THREE.DoubleSide})
-            let wallGeometry2 = new THREE.PlaneGeometry(floor_width, floor_height, 10, 10)
-            let wall2 = new THREE.Mesh(wallGeometry2, wallMaterial2)
-            wall2.rotation.z = Math.PI
-            wall2.position.z = floor_height / 2
-            if (debug)
-                scene.add(wall2)
-
-            // Cannon setup
-            world = new CANNON.World()
-            world.gravity.set(0, -9.82 * 10, 0)
-            world.broadphase = new CANNON.NaiveBroadphase()
-            world.solver.iterations = 16
-            DiceManager.setWorld(world)
-
-            // Floor collisions
-            let floorBody = new CANNON.Body({
-                mass: 0,
-                shape: new CANNON.Plane(),
-                material: DiceManager.floorBodyMaterial
-            })
-            floorBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)
-            world.add(floorBody)
-
-            // Walls collisions
-            let barrierBody = new CANNON.Body({
-                mass: 0,
-                shape: new CANNON.Plane(),
-                material: DiceManager.barrierBodyMaterial
-            })
-            barrierBody.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), -Math.PI / 2)
-            barrierBody.position.set(wall.position.x, wall.position.y, wall.position.z)
-            world.add(barrierBody)
-
-            let barrierBody2 = new CANNON.Body({
-                mass: 0,
-                shape: new CANNON.Plane(),
-                material: DiceManager.barrierBodyMaterial
-            })
-            barrierBody2.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), -Math.PI)
-            barrierBody2.position.set(wall2.position.x, wall2.position.y, wall2.position.z)
-            world.add(barrierBody2)
-
-            // Dices
-            for (let i = 0; i < number; i++) {
-                let die = new dice_types[type]({
-                    size: 2,
-                    backColor: color_values["plugin-3d-dices-background-color"],
-                    fontColor: color_values["plugin-3d-dices-text-color"]
-                })
-                die.materialOptions.shininess = 200.0
-                scene.add(die.getObject())
-                dice_3d.push(die)
-            }
-
-            function randomDiceThrow() {
-                let diceValues = []
-
-                for (let i = 0; i < dice_3d.length; i++) {
-                    let yRand = Math.random() * 20
-                    dice_3d[i].getObject().position.x = -floor_width / 2 - (i % 3) * 1.5
-                    dice_3d[i].getObject().position.y = 2 + Math.floor(i / 3) * 1.5
-                    dice_3d[i].getObject().position.z = -floor_height / 2 + (i % 3) * 1.5
-                    dice_3d[i].getObject().quaternion.x = (Math.random() * 90 - 45) * Math.PI / 180
-                    dice_3d[i].getObject().quaternion.z = (Math.random() * 90 - 45) * Math.PI / 180
-                    dice_3d[i].updateBodyFromMesh()
-                    let rand = Math.random() * 5
-                    dice_3d[i].getObject().body.velocity.set(25 + rand, 40 + yRand, 15 + rand)
-                    dice_3d[i].getObject().body.angularVelocity.set(20 * Math.random() - 10, 20 * Math.random() - 10, 20 * Math.random() - 10)
-
-                    diceValues.push({dice: dice_3d[i], value: dices[i]})
-                }
-
-                DiceManager.prepareValues(diceValues)
-            }
-
-            randomDiceThrow()
-
-            requestAnimationFrame(animate)
-
-            // Remove on click
-            container.on("click", _ => {
-                container.remove()
-                toast.remove()
-                if (commands.length === 0) {
-                    // Show the summary of the roll
-                    current_roll.show_roll()
-                    if (commands.length === 0) {
-                        // No new roll was triggered, stop recursion
-                        showing = false
+            static load() {
+                Roll.prototype.roll_dices = this.roll_3d_dices
+                Roll.prototype.show_modal = () => {
+                    // Do not show modal until all rolls are resolved
+                    if (!this.is_current_roll_validated())
                         $('#roll-dialog').modal()
-                        // Resume the communication to the server because it the player knows the result
-                        $(document).trigger("resume-roll-broadcast")
-                        return
+                    else // Hide without fading effect (because of spoilers)
+                        $('#roll-dialog').removeClass("fade").modal("hide").addClass("fade")
+                }
+                super.load()
+            }
+
+            add_listeners() {
+                super.add_listeners()
+
+                /* Color pickers */
+                this.find("#plugin-3d-dices-text-color,#plugin-3d-dices-background-color").each((_, elem) => {
+                    $(elem).colorpicker({
+                        useAlpha: true,
+                        format: "hex"
+                    }).on("colorpickerCreate", e => {
+                        color_values[e.target.id] = $(e.target).val()
+                    }).on("change", e => {
+                        if (e.color && !e.color.isValid()) {
+                            return
+                        }
+                        color_values[e.target.id] = $(e.target).val()
+                    })
+                })
+
+                this.get("shininess").on("change", e => {
+                    const val = parseInt($(e.target).val())
+                    if (!isNaN(val))
+                        shininess = val
+                })
+            }
+
+            remove() {
+                Roll.prototype.roll_dices = this.constructor.old_roll_dices
+                Roll.prototype.show_modal = this.constructor.old_show_modal
+                $("#roll-dialog-redo").off("click").on("click", roll_dialog_reroll)
+                $("#roll-dialog-validate").off("click").on("click", roll_dialog_validate)
+                $('#roll-dialog').addClass("fade")
+
+                super.remove()
+            }
+
+            static is_current_roll_validated() {
+                return !(current_roll
+                    && typeof current_roll.energy_investment_validated !== "undefined"
+                    && !current_roll.energy_investment_validated)
+            }
+
+            static roll_3d_dices(number, type, dices = [], reason = null) {
+                if (!dice_types[type] && !half_types.includes(type)) { // Fallback
+                    return ThreeDDicesPlugin.old_roll_dices.call(this, number, type, dices, reason)
+                }
+
+                let existing = commands.length !== 0
+                if (reason) { // Check if it already exists
+                    commands.forEach((elem) => {
+                        if (elem[3] === reason)
+                            existing = true
+                    })
+                }
+
+                let sum = 0
+                if (!reason || !existing) {
+                    // Hide without fading effect (because of spoilers)
+                    // Modal may need to be hidden when we move the slider, making the test successful
+                    // and triggering the roll of power dices
+                    $('#roll-dialog').removeClass("fade").modal("hide").addClass("fade")
+
+                    // Do not send anything to a server because it would spoil the player
+                    $(document).trigger("stop-roll-broadcast")
+
+                    sum = ThreeDDicesPlugin.old_roll_dices.call(this, number, type, dices, reason)
+                    commands.push([number, type, dices, sum, reason])
+
+                    if (!showing) {
+                        ThreeDDicesPlugin.show_3d_roll()
                     }
                 }
-                // Go to next 3D roll
-                show_3d_roll()
-            })
+                return sum
+            }
 
-            return result
-        }
+            static show_3d_roll() {
+                let scene, camera, renderer, debug = false, world, dice_3d = []
+                let [number, type, dices, result, reason] = commands.pop()
+                showing = true
 
-        Roll.prototype.roll_dices = roll_3d_dices // Trigger 3D roll
-        Roll.prototype.show_modal = () => {
-            // Do not show modal until all rolls are resolved
-            if (!is_current_roll_validated())
-                $('#roll-dialog').modal()
-            else // Hide without fading effect (because of spoilers)
-                $('#roll-dialog').removeClass("fade").modal("hide").addClass("fade")
-        }
-        $("#roll-dialog-redo").off("click").on("click", _ => {
-            // Close modal before rerolling
-            $('#roll-dialog').one("hidden.bs.modal", _ => {
-                roll_dialog_reroll()
-                if (!is_current_roll_validated())
-                    $('#roll-dialog').modal() // Show modal to validate the energy investment
-            }).modal("hide")
-        })
-        $("#roll-dialog-validate").off("click").on("click", _ => {
-            // Close modal before validating because new rolls will be triggered
-            $('#roll-dialog').one("hidden.bs.modal", roll_dialog_validate).modal("hide")
-        })
-
-        /* Color pickers */
-        const color_values = {}
-        $("#plugin-3d-dices-text-color,#plugin-3d-dices-background-color").each((_, elem) => {
-            $(elem).colorpicker({
-                useAlpha: true,
-                format: "hex"
-            }).on("colorpickerCreate", e => {
-                color_values[e.target.id] = $(e.target).val()
-            }).on("change", e => {
-                if (e.color && !e.color.isValid()) {
-                    return
+                if (half_types.includes(type)) {
+                    // This type of dice does not exists so we show twice the result
+                    type = type * 2
+                    dices = dices.map((elem) => 2 * elem - Math.floor(Math.random() * 2))
                 }
-                color_values[e.target.id] = $(e.target).val()
+
+                if (!reason)
+                    reason = "Lancer"
+
+                let toast = $("<div id=\"plugin-3d-dices-toast\" class=\"toast\" data-autohide=\"false\"" +
+                    " style='position: fixed; left: 50%; transform: translateX(-50%); top: 0; z-index: 9; background-color: white;'>" +
+                    "<div class=\"toast-header\"><h2>" + reason + "</h2></div>" +
+                    "<div class=\"toast-body\"><h6>Cliquez n'importe où sur l'écran pour continuer</h6></div></div>")
+                main_container.append(toast)
+                toast = main_container.children().last()
+                toast.toast("show")
+
+                // Example adapted from https://github.com/byWulf/threejs-dice/blob/master/examples/rolling.html
+
+                // Helpers
+                function animate() {
+                    updatePhysics()
+                    renderer.render(scene, camera)
+
+                    requestAnimationFrame(animate)
+                }
+
+                function updatePhysics() {
+                    world.step(1.0 / 60.0)
+
+                    for (let i in dice_3d) {
+                        dice_3d[i].updateMeshFromBody()
+                    }
+                }
+
+                // Scene
+                scene = new THREE.Scene()
+                scene.background = null
+
+                // Camera
+                let SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight
+                let VIEW_ANGLE = 17, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 20000
+                camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR)
+                scene.add(camera)
+                camera.position.set(0, 100, 30)
+
+                // Renderer
+                renderer = new THREE.WebGLRenderer({antialias: true, alpha: true})
+                renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT)
+                renderer.shadowMap.enabled = true
+                renderer.shadowMap.type = THREE.PCFSoftShadowMap
+                renderer.setClearColor(0xFFFFFFFF, 0)
+
+                // Canvas positioning
+                let container = $("<div style='position: fixed; left: 0; top: 0; z-index: 10'></div>")
+                main_container.append(container)
+                container = main_container.children().last()
+                container.append(renderer.domElement)
+
+                // Lights
+                let ambient = new THREE.AmbientLight('#ffffff', 0.3)
+                scene.add(ambient)
+
+                let directionalLight = new THREE.DirectionalLight('#ffffff', 0.5)
+                directionalLight.position.x = -1000
+                directionalLight.position.y = 1000
+                directionalLight.position.z = 1000
+                scene.add(directionalLight)
+
+                let light = new THREE.SpotLight(0xefdfd5, 0.5)
+                light.position.y = 100
+                light.target.position.set(0, 0, 0)
+                light.castShadow = true
+                light.shadow.camera.near = 50
+                light.shadow.camera.far = 110
+                light.shadow.mapSize.width = 1024
+                light.shadow.mapSize.height = 1024
+                scene.add(light)
+
+                // Floor
+                let floor_height = 30
+                let floor_width = 30 / SCREEN_HEIGHT * SCREEN_WIDTH
+                let floorMaterial = new THREE.MeshPhongMaterial({color: '#00aa00', side: THREE.DoubleSide})
+                let floorGeometry = new THREE.PlaneGeometry(floor_width, floor_height, 10, 10)
+                let floor = new THREE.Mesh(floorGeometry, floorMaterial)
+                floor.receiveShadow = true
+                floor.rotation.x = Math.PI / 2
+                if (debug)
+                    scene.add(floor)
+                camera.lookAt(floor.position)
+
+                // walls
+                let wallMaterial = new THREE.MeshPhongMaterial({color: '#0000aa', side: THREE.DoubleSide})
+                let wallGeometry = new THREE.PlaneGeometry(floor_width, floor_height, 10, 10)
+                let wall = new THREE.Mesh(wallGeometry, wallMaterial)
+                wall.rotation.y = Math.PI / 2
+                wall.position.x = floor_width / 2
+                if (debug)
+                    scene.add(wall)
+
+                let wallMaterial2 = new THREE.MeshPhongMaterial({color: '#aa00aa', side: THREE.DoubleSide})
+                let wallGeometry2 = new THREE.PlaneGeometry(floor_width, floor_height, 10, 10)
+                let wall2 = new THREE.Mesh(wallGeometry2, wallMaterial2)
+                wall2.rotation.z = Math.PI
+                wall2.position.z = floor_height / 2
+                if (debug)
+                    scene.add(wall2)
+
+                // Cannon setup
+                world = new CANNON.World()
+                world.gravity.set(0, -9.82 * 10, 0)
+                world.broadphase = new CANNON.NaiveBroadphase()
+                world.solver.iterations = 16
+                DiceManager.setWorld(world)
+
+                // Floor collisions
+                let floorBody = new CANNON.Body({
+                    mass: 0,
+                    shape: new CANNON.Plane(),
+                    material: DiceManager.floorBodyMaterial
+                })
+                floorBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)
+                world.add(floorBody)
+
+                // Walls collisions
+                let barrierBody = new CANNON.Body({
+                    mass: 0,
+                    shape: new CANNON.Plane(),
+                    material: DiceManager.barrierBodyMaterial
+                })
+                barrierBody.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), -Math.PI / 2)
+                barrierBody.position.set(wall.position.x, wall.position.y, wall.position.z)
+                world.add(barrierBody)
+
+                let barrierBody2 = new CANNON.Body({
+                    mass: 0,
+                    shape: new CANNON.Plane(),
+                    material: DiceManager.barrierBodyMaterial
+                })
+                barrierBody2.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), -Math.PI)
+                barrierBody2.position.set(wall2.position.x, wall2.position.y, wall2.position.z)
+                world.add(barrierBody2)
+
+                // Dices
+                for (let i = 0; i < number; i++) {
+                    let die = new dice_types[type]({
+                        size: 2,
+                        backColor: color_values["plugin-3d-dices-background-color"],
+                        fontColor: color_values["plugin-3d-dices-text-color"]
+                    })
+                    die.materialOptions.shininess = 200.0
+                    scene.add(die.getObject())
+                    dice_3d.push(die)
+                }
+
+                function randomDiceThrow() {
+                    let diceValues = []
+
+                    for (let i = 0; i < dice_3d.length; i++) {
+                        let yRand = Math.random() * 20
+                        dice_3d[i].getObject().position.x = -floor_width / 2 - (i % 3) * 1.5
+                        dice_3d[i].getObject().position.y = 2 + Math.floor(i / 3) * 1.5
+                        dice_3d[i].getObject().position.z = -floor_height / 2 + (i % 3) * 1.5
+                        dice_3d[i].getObject().quaternion.x = (Math.random() * 90 - 45) * Math.PI / 180
+                        dice_3d[i].getObject().quaternion.z = (Math.random() * 90 - 45) * Math.PI / 180
+                        dice_3d[i].updateBodyFromMesh()
+                        let rand = Math.random() * 5
+                        dice_3d[i].getObject().body.velocity.set(25 + rand, 40 + yRand, 15 + rand)
+                        dice_3d[i].getObject().body.angularVelocity.set(20 * Math.random() - 10, 20 * Math.random() - 10, 20 * Math.random() - 10)
+
+                        diceValues.push({dice: dice_3d[i], value: dices[i]})
+                    }
+
+                    DiceManager.prepareValues(diceValues)
+                }
+
+                randomDiceThrow()
+
+                requestAnimationFrame(animate)
+
+                // Remove on click
+                container.on("click", _ => {
+                    container.remove()
+                    toast.remove()
+                    if (commands.length === 0) {
+                        // Show the summary of the roll
+                        current_roll.show_roll()
+                        if (commands.length === 0) {
+                            // No new roll was triggered, stop recursion
+                            showing = false
+                            $('#roll-dialog').modal()
+                            // Resume the communication to the server because it the player knows the result
+                            $(document).trigger("resume-roll-broadcast")
+                            return
+                        }
+                    }
+                    // Go to next 3D roll
+                    ThreeDDicesPlugin.show_3d_roll()
+                })
+
+                return result
+            }
+        }
+
+        ThreeDDicesPlugin.load()
+
+
+        $(() => {
+            $("#roll-dialog-redo").off("click").on("click", _ => {
+                // Close modal before rerolling
+                $('#roll-dialog').one("hidden.bs.modal", _ => {
+                    roll_dialog_reroll()
+                    if (!ThreeDDicesPlugin.is_current_roll_validated())
+                        $('#roll-dialog').modal() // Show modal to validate the energy investment
+                }).modal("hide")
+            })
+            $("#roll-dialog-validate").off("click").on("click", _ => {
+                // Close modal before validating because new rolls will be triggered
+                $('#roll-dialog').one("hidden.bs.modal", roll_dialog_validate).modal("hide")
             })
         })
-        $("#plugin-3d-dices-shininess").on("change", e => {
-            const val = parseInt($(e.target).val())
-            if (!isNaN(val))
-                shininess = val
-        })
-    })
-
-    function dispose_plugin_3d_dices() {
-        Roll.prototype.roll_dices = window.plugin_3d_dices_old_roll_dices
-        delete window.plugin_3d_dices_old_roll_dices
-        Roll.prototype.show_modal = window.plugin_3d_dices_old_show_modal
-        delete window.plugin_3d_dices_old_show_modal
-        $("#roll-dialog-redo").off("click").on("click", roll_dialog_reroll)
-        $("#roll-dialog-validate").off("click").on("click", roll_dialog_validate)
-        $('#roll-dialog').addClass("fade")
     }
-
-    // Register the function
-    plugin_dispose_methods["3d-dices"] = dispose_plugin_3d_dices
 </script>
 
 <li id="plugin-button-3d-dices" class="plugin-button nav-item" data-plugin-version="1.1.0" data-plugin-id="3d-dices">
