@@ -1,4 +1,5 @@
 let sheet = null
+let sheet_loaded = false
 
 class Biography extends Model {
     static numeric_inputs = [...(intermediate_discovery ? [] : ["luck-points"]), "age", "height", "weight"]
@@ -118,6 +119,7 @@ class Character {
         this.duplicated_ids = []
         this.unhandled_id = []
         this.dependency_issues = []
+        this.all_errors = {}
 
         this.ignore_ids_regex = new RegExp("(" + this.constructor.ignore_ids_list.join(")|(") + ")")
 
@@ -315,9 +317,11 @@ class Character {
             invalid_values: $("#import-warning-invalid"),
             unsync_values: $("#import-warning-unsync"),
         }
+        this.all_errors = {}
 
         for (const [variable, list] of Object.entries(error_types)) {
             // Extract errors
+            this.all_errors[variable] = []
             let list_errors = {}
             if (variable in this)
                 list_errors["fiche"] = this[variable]
@@ -338,13 +342,17 @@ class Character {
                 if (Array.isArray(errors)) {
                     for (const error of errors) {
                         const elem = base_elem.clone(false, false)
-                        elem.text("[" + scope + "] " + error)
+                        const error_text = "[" + scope + "] " + error
+                        this.all_errors[variable].push(error_text)
+                        elem.text(error_text)
                         list.append(elem)
                     }
                 } else {
                     for (const [error_var, [actual, expected]] of Object.entries(errors)) {
                         const elem = base_elem.clone(false, false)
-                        elem.text("[" + scope + "] " + error_var + " has value " + JSON5.stringify(actual) + " instead of " + JSON5.stringify(expected))
+                        const error_text = "[" + scope + "] " + error_var + " has value " + JSON5.stringify(actual) + " instead of " + JSON5.stringify(expected)
+                        this.all_errors[variable].push(error_text)
+                        elem.text(error_text)
                         list.append(elem)
                     }
                 }
@@ -563,4 +571,5 @@ $(() => {
 
     if (sheet.has_errors())
         sheet.build_loading_error_summary()
+    sheet_loaded = true
 })

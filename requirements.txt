@@ -6,3 +6,5 @@ rst2pdf
 svglib
 reportlab
 pyjson5
+selenium
+webdriver-manager

@@ -1,7 +1,8 @@
 name: Produce character sheet
 on: [ push, pull_request ]
 env:
-  PYTHON_SCRIPT: compile.py
+  BUILD_SCRIPT: compile.py
+  CHECKER_SCRIPT: checker.py
   DOC_V7: manuel_feuille_perso_simv7
 
 jobs:
@@ -112,13 +113,30 @@ jobs:
       - name: Checkout the event commit
         uses: actions/checkout@v2
 
-      - name: Compile Jinja template
+      - name: Install dependencies
         run: |
+          # Needed to fetch tags
           git fetch --prune --unshallow --tags
+
+          # Prepare build
           mkdir -p target
+
+          # Install python requirements
           python3 -m pip install --upgrade pip
           python3 -m pip install -r requirements.txt
-          python3 ${{ env.PYTHON_SCRIPT }} target/${{ matrix.name }} ${{ matrix.build_parameters }}
+
+          # Install google chrome
+          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo apt install ./google-chrome-stable_current_amd64.deb
+
+      - name: Compile Jinja template
+        run: |
+          python3 ${{ env.BUILD_SCRIPT }} target/${{ matrix.name }} ${{ matrix.build_parameters }}
+
+      - name: Check sheet validity
+        run: python3 ${{ env.CHECKER_SCRIPT }} target/${{ matrix.name }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload '${{ matrix.name }}'
         uses: actions/upload-artifact@v2
