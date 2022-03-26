@@ -113,7 +113,7 @@ class Character {
         if (saved_data.length === 0)
             this.opts = {}
         else
-            this.opts = JSON.parse(saved_data.text().trim())
+            this.opts = JSON5.parse(saved_data.text().trim())
 
         this.duplicated_ids = []
         this.unhandled_id = []
@@ -344,7 +344,7 @@ class Character {
                 } else {
                     for (const [error_var, [actual, expected]] of Object.entries(errors)) {
                         const elem = base_elem.clone(false, false)
-                        elem.text("[" + scope + "] " + error_var + " has value " + JSON.stringify(actual) + " instead of " + JSON.stringify(expected))
+                        elem.text("[" + scope + "] " + error_var + " has value " + JSON5.stringify(actual) + " instead of " + JSON5.stringify(expected))
                         list.append(elem)
                     }
                 }
@@ -381,7 +381,7 @@ class Character {
         const storage = localStorage.getItem(this.storage_id)
         if (!storage)
             return
-        const data = JSON.parse(storage)
+        const data = JSON5.parse(storage)
         // Compare to localStorage version (a new page won't have data imported because it does not have version fields)
         this.import(data)
     }
@@ -436,8 +436,8 @@ class Character {
         const exported_data = this.export()
         const base_version = this.opts.version
         this.opts.version = exported_data.version
-        const data = JSON.stringify(exported_data, null, 4)
-        if (JSON.stringify(this.opts, null, 4) !== data) { // Update
+        const data = JSON5.stringify(exported_data, null, 4)
+        if (JSON5.stringify(this.opts, null, 4) !== data) { // Update
             this.save_local_storage(data)
             this.get("saved-data").text(data)
             this.opts = exported_data

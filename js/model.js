@@ -162,7 +162,7 @@ class Model {
                 // select picker that is not really a multi-select, so this[variable] is transformed
                 const original_variable = this[variable] == null ? [] : [this[variable]]
                 const value = elem.val()
-                if (JSON.stringify(original_variable) !== JSON.stringify(value)) // Normal comparison does not work with objects
+                if (JSON5.stringify(original_variable) !== JSON5.stringify(value)) // Normal comparison does not work with objects
                     this.unsync_values[variable] = [value, original_variable]
             } else if (elem.attr("type") === "checkbox") {
                 if (this[variable] !== elem.prop("checked"))
@@ -177,7 +177,7 @@ class Model {
                     this.unsync_values[variable] = [value, this[variable]]
             } else if (typeof this[variable] === "object") {
                 const value = elem.val()
-                if (JSON.stringify(this[variable]) !== JSON.stringify(value)) // Normal comparison does not work with objects
+                if (JSON5.stringify(this[variable]) !== JSON5.stringify(value)) // Normal comparison does not work with objects
                     this.unsync_values[variable] = [value, this[variable]]
             } else if (elem[0].tagName === "TEXTAREA") {
                 if (this[variable] !== elem.text())
