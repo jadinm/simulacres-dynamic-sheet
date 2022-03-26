@@ -155,7 +155,7 @@ class RollRow extends DataRow {
         if (name) {
             title = name + (title ? " (" + title + ")" : "")
         }
-        return title
+        return title ? title : ""
     }
 
     roll(button) {
@@ -298,7 +298,7 @@ class DualWieldingRow extends RollRow {
         if (name) {
             title = name + (title ? " (" + title + ")" : "")
         }
-        return title
+        return title ? title : ""
     }
 }
 

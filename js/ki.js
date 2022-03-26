@@ -30,7 +30,7 @@ class KiRow extends PsiRow {
         if (name.length > 0) {
             title = name + ((title.length > 0) ? " (" + title + ")" : "")
         }
-        return title
+        return title ? title : ""
     }
 }
 

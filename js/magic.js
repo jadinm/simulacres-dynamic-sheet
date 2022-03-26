@@ -159,7 +159,8 @@ class SpellRow extends RollRow {
         if (!this.is_talent_based_spell()) {
             return this["name"]
         }
-        return this["talent"]
+        const title = this["talent"]
+        return title ? title : ""
     }
 
     energy_name() {
