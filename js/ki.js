@@ -24,11 +24,11 @@ class KiRow extends PsiRow {
     }
 
     roll_reason() {
-        const talent = this.get("talent").find("option:selected").val()
-        const name = this.get("name").text()
+        const talent = this["talent"]
+        const name = this["details-name"]
         let title = talent
         if (name.length > 0) {
-            title = name + ((title.length > 0) ? " (" + title + ")" : "")
+            title = name + (title ? " (" + title + ")" : "")
         }
         return title ? title : ""
     }

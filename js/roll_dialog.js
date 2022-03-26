@@ -259,8 +259,9 @@ class TalentRoll extends Roll {
         new this.constructor(this.reason, this.max_value, this.talent_level, this.effect, this.critical_increase,
             this.formula_elements, this.margin_throttle, this.is_magic, this.is_power, this.distance, this.focus,
             this.duration, this.base_energy_cost, this.black_magic, this.magic_resistance,
-            this.equipment, this.equipment_always_expend, this.equipment_always_expend_quantity, this.exploding_effect,
-            this.power_energy, this.energy_base_id).trigger_roll(false)
+            this.equipment, this.equipment_always_expend, this.equipment_always_expend_quantity,
+            this.armor_penalty_included, this.exploding_effect, this.power_energy,
+            this.energy_base_id).trigger_roll(false)
     }
 
     constructor(reason = "", max_value = NaN, talent_level = 0, effect = "",
@@ -268,8 +269,8 @@ class TalentRoll extends Roll {
                 is_magic = false, is_power = false, distance = "", focus = "",
                 duration = "", base_energy_cost = 0, black_magic = "",
                 magic_resistance = "", equipment = null, equipment_always_expend = false,
-                equipment_always_expend_quantity = 1, exploding_effect = false,
-                power_energy = "", energy_base_id = "") {
+                equipment_always_expend_quantity = 1, armor_penalty_included = false,
+                exploding_effect = false, power_energy = "", energy_base_id = "") {
         super()
         this.reason = reason ? reason : ""
         this.formula_elements = formula_elements
@@ -320,7 +321,8 @@ class TalentRoll extends Roll {
 
         const status = sheet.get_status(this.energy_base_id)
         this.unease = status.get_unease()
-        this.armor_penalty = status.get_armor_penalty()
+        this.armor_penalty = status.get_armor_penalty_text()
+        this.armor_penalty_included = armor_penalty_included
         this.timestamp = new Date()
 
         this.margin_modifier = 0
@@ -703,7 +705,12 @@ class TalentRoll extends Roll {
             penalty_text += "\nMalaise courant: " + this.unease + " (déjà appliqué)\n"
         }
         if (parseInt(this.armor_penalty) !== 0) {
-            penalty_text += "\nMalaise d'armure: " + this.armor_penalty + " (à appliquer manuellement sur les actions physiques)\n"
+            penalty_text += "\nMalaise d'armure: " + this.armor_penalty
+            if (this.armor_penalty_included) {
+                penalty_text += " (déjà appliqué)\n"
+            } else {
+                penalty_text += " (à appliquer manuellement sur les actions physiques)\n"
+            }
         }
         $("#roll-dialog-penalties").text(penalty_text)
 
@@ -1117,7 +1124,7 @@ class FocusMagicRoll extends TalentRoll {
                 exploding_effect = false) {
         super(reason, max_value, level, effect, 0, [], NaN, true, true, distance, focus, duration, base_energy_cost,
             black_magic, magic_resistance, equipment, equipment_always_expend, equipment_always_expend_quantity,
-            exploding_effect, "", "")
+            false, exploding_effect, "", "")
         this.margin_dices = []
     }
 
@@ -1291,7 +1298,7 @@ class GoodNatureEvilMagicRoll extends TalentRoll {
                 power_energy = "") {
         super(reason, NaN, 0, effect, 0, [], NaN, true, true, distance, focus, duration, base_energy_cost,
             black_magic, magic_resistance, equipment, equipment_always_expend, equipment_always_expend_quantity,
-            exploding_effect, power_energy, "")
+            false, exploding_effect, power_energy, "")
         this.margin_dices = []
         this.precision_dices = []
         this.type = 3

@@ -8,7 +8,7 @@ class SpellRow extends RollRow {
         "component": Characteristics.components,
         "means": Characteristics.means,
     }
-    static independent_checkboxes = is_v7 ? [...Characteristics.realms, "details-exploding-effect", "details-equipment-always-expend"] : [...Characteristics.realms, "details-equipment-always-expend"]
+    static independent_checkboxes = [...Characteristics.realms, ...this.v7_checkboxes, "details-equipment-always-expend"]
     static selects_no_sanitize = ["list"]
     static selects = [...super.selects, ...["list"]]
     static sliders = ["difficulty-input"]
@@ -207,7 +207,7 @@ class SpellRow extends RollRow {
                 true, spell_distance, spell_focus, spell_duration, spell_level,
                 this["details-black-magic"], this["details-resistance"], equipment,
                 this["details-equipment-always-expend"], this["details-equipment-always-expend-quantity"],
-                this["details-exploding-effect"], this.energy_name()).trigger_roll()
+                false, this["details-exploding-effect"], this.energy_name()).trigger_roll()
         }
     }
 
@@ -386,7 +386,7 @@ class SpellRow extends RollRow {
 
 class FocusMagicRow extends SpellRow {
     static radio_groups = {}
-    static independent_checkboxes = is_v7 ? ["details-exploding-effect", "details-equipment-always-expend"] : ["details-equipment-always-expend"]
+    static independent_checkboxes = [...this.v7_checkboxes, "details-equipment-always-expend"]
     static selects_no_sanitize = []
     static selects = ["equipment"]
     static numeric_inputs = [...RollRow.numeric_inputs, "level", "details-equipment-always-expend-quantity"]

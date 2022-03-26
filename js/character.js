@@ -497,6 +497,13 @@ class Character {
     }
 
     /**
+     * @returns rolls that are marked as physical
+     */
+    get_physical_rolls() {
+        return this.constructor.all_roll_tables.filter((elem) => this[elem]).map((elem) => this[elem].get_rows().filter((row) => row["details-include-armor-penalty"])).flat()
+    }
+
+    /**
      * Get the list of all rolls
      */
     get_all_rolls() {

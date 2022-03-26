@@ -62,7 +62,7 @@ class NPCStatus extends Status {
         }
 
         // Adapt unease with armor penalty
-        const penalty = this.armor_penalty(armor_sum)
+        const penalty = this.armor_penalty(armor_sum)[0]
         const penalty_number = isNaN(penalty) ? -3 : penalty
 
         const unease = this.get("unease")

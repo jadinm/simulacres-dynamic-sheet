@@ -15,7 +15,9 @@ class RollRow extends DataRow {
         "means": Characteristics.means,
         "realms": Characteristics.realms,
     }
-    static independent_checkboxes = is_v7 ? ["details-exploding-effect", "details-equipment-always-expend"] : ["details-equipment-always-expend"]
+    static v7_checkboxes = is_v7 ? ["details-exploding-effect"] : []
+    static non_discovery_checkboxes = intermediate_discovery ? [] : ["details-include-armor-penalty"]
+    static independent_checkboxes = [...this.v7_checkboxes, "details-equipment-always-expend", ...this.non_discovery_checkboxes]
     static selects = ["talent", "equipment"]
     static numeric_inputs = ["details-bonus", "details-equipment-always-expend-quantity"] // "details-max", "details-min" can be empty and thus, not in numeric inputs
     static basic_inputs = [...this.numeric_inputs, ...["effect", "details-name", "details-max", "details-min"]]
@@ -117,6 +119,10 @@ class RollRow extends DataRow {
             // Hardcoded bonus
             sum += this["details-bonus"]
 
+            // Armor penalty if this is a physical action
+            if (this["details-include-armor-penalty"])
+                sum += sheet.status.get_armor_penalty()[0]
+
             // Add talent if any
             if (this["talent"]) {
                 const talent = sheet.get_talent_from_name(this["talent"])
@@ -176,7 +182,7 @@ class RollRow extends DataRow {
             this.get_critical_increase(button), formula_elements, margin_throttle, false, false,
             "", "", "", 0, "", "",
             equipment, this["details-equipment-always-expend"], this["details-equipment-always-expend-quantity"],
-            this["details-exploding-effect"], "").trigger_roll()
+            this["details-include-armor-penalty"], this["details-exploding-effect"], "").trigger_roll()
     }
 
     get_critical_increase() {
@@ -184,7 +190,11 @@ class RollRow extends DataRow {
     }
 
     update_title() {
-        const candidate_title = this["details-name"]
+        let candidate_title = this["details-name"]
+        candidate_title = candidate_title ? candidate_title : ""
+        if (this["details-include-armor-penalty"])
+            candidate_title += " (action physique)"
+
         const title_div = this.get("name")
         if (candidate_title != null && title_div.length > 0) {
             title_div.text(candidate_title)
@@ -253,6 +263,9 @@ class RollRow extends DataRow {
             this.get("details-min").on("change", e => this.update_value(e))
             this.get("details-max").on("change", e => this.update_value(e))
             this.get("details-name").on("change", e => this.update_title(e))
+            this.get("details-include-armor-penalty").on("click", e => this.update_title(e))
+            if (this["details-include-armor-penalty"])
+                this.update_title()
             this.get("copy").tooltip()
         }
     }

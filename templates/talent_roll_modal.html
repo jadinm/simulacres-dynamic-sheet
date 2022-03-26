@@ -10,4 +10,21 @@
         <input class="form-control py-0 my-0" type="text" value=""
                id="{{ row_type }}-x-details-name">
     </div>
+    {% if not intermediate_discovery and not is_never_physical %}
+        {% if default_is_physical %}
+            {% set checked = "checked" %}
+        {% else %}
+            {% set checked = "" %}
+        {% endif %}
+        <div class="row col-12 mx-4 form-inline">
+            <div class="custom-control custom-checkbox custom-control-inline col-12 text-left p-0 m-0">
+                <input type="checkbox" class="custom-control-input"
+                       id="{{ row_type }}-x-details-include-armor-penalty"
+                       name="{{ row_type }}-x-details-include-armor-penalty" {{ checked }}>
+                <label class="custom-control-label p-0 m-0 mt-3"
+                       for="{{ row_type }}-x-details-include-armor-penalty"></label>
+            </div>
+            Test physique (cela inclut le malus d'armure directement dans le test)
+        </div>
+    {% endif %}
 {% endblock %}

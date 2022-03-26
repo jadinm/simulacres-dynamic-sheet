@@ -7,7 +7,7 @@ class PsiRow extends SpellRow {
     ]
 
     static radio_groups = RollRow.radio_groups
-    static independent_checkboxes = [...RollRow.independent_checkboxes, "details-equipment-always-expend"]
+    static independent_checkboxes = [...RollRow.v7_checkboxes, "details-equipment-always-expend"]
     static selects_no_sanitize = []
     static selects = ["equipment"]
     static numeric_inputs = RollRow.numeric_inputs

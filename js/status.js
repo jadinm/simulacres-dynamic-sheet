@@ -46,14 +46,18 @@ class Status extends Model {
             this.unease_value_changed_event()
     }
 
+    /**
+     * @param armor_sum The sum of armors
+     * @returns {number[]} the penalty for physical actions and the one for intellectual ones
+     */
     armor_penalty(armor_sum) {
-        let penalty = 0
+        let penalty = [0, 0]
         if (armor_sum >= 12 && armor_sum <= 23) {
-            penalty = -1
+            penalty = [-1, 0]
         } else if (armor_sum >= 24 && armor_sum <= 30) {
-            penalty = -2
+            penalty = [-2, 0]
         } else if (armor_sum >= 31) {
-            penalty = "-3 (actions physiques) et -1 (autres actions)"
+            penalty = [-3, -1] // "-3 (actions physiques) et -1 (autres actions)"
         }
         return penalty
     }
@@ -62,7 +66,7 @@ class Status extends Model {
         // If no localized HP, this is a user encoded value
         if (!localized_hp) {
             const penalty = this.get("armor-penalty-input").val()
-            return penalty != null ? penalty : 0
+            return penalty != null ? [penalty, 0] : [0, 0]
         }
 
         const armors = $.map(this.find(".armor"), element => (parseInt(element.value) || 0))
@@ -80,8 +84,14 @@ class Status extends Model {
         return this.armor_penalty(armor_sum)
     }
 
+    get_armor_penalty_text() {
+        const penalties = this.get_armor_penalty()
+        return penalties[1] !== 0 ? penalties[0] + " (actions physiques) " + penalties[1] + " (autres actions)" : penalties[0]
+    }
+
     recompute_armor_penalty() {
-        this.get("armor-penalty").text(this.get_armor_penalty())
+        this.get("armor-penalty").text(this.get_armor_penalty_text())
+        sheet.get_physical_rolls().forEach((roll) => roll.update_roll_value())
     }
 
     get_unease() {
