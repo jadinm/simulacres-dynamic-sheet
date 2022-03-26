@@ -273,7 +273,7 @@ class DualWieldingRow extends RollRow {
         // Dual wielding: check tap talent level for penalty
         let tap_talent = this["tap-talent"]
         if (tap_talent) {
-            const tap_talent = sheet.get_talent_from_name(tap_talent)
+            tap_talent = sheet.get_talent_from_name(tap_talent)
             if (!tap_talent)
                 sum = "X"
             else {
