@@ -42,6 +42,11 @@ class PsiRow extends SpellRow {
     }
 
     get_effect(leveled_div) {
+        if (leveled_div === undefined) { // Output all the effects
+            return this.constructor.duplicated_inputs.effect.map((elem) => {
+                return "<br/>Niveau " + elem + ": " + this["effect-" + elem]
+            }).join("")
+        }
         return this["effect" + "-" + this.get_level(leveled_div)]
     }
 
