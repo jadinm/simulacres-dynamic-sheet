@@ -152,8 +152,8 @@ class Model {
             let candidate_base_id = this.full_id(variable)
             let elem = all_inputs[candidate_base_id]
             if (!elem) {
-                if (!this.missing_inputs.includes(candidate_base_id))
-                    this.missing_inputs.push(candidate_base_id)
+                if (!this.missing_inputs.includes(variable))
+                    this.missing_inputs.push(variable)
                 continue
             }
 
