@@ -360,7 +360,7 @@ class Status extends Model {
         this.constructor.hp_sliders.forEach((hp) => {
             this.get("increment-" + hp).on("click", (e) => this.increment_hp(e))
             this.get("decrement-" + hp).on("click", (e) => this.decrement_hp(e))
-            this.get("details-" + hp).on("click", (e) => this.details_hp(e))
+            this.get("details-" + hp).on("change", (e) => this.details_hp(e))
         })
         this.get("increment-unease").on("click", (e) => this.increment_unease(e))
         this.get("decrement-unease").on("click", (e) => this.decrement_unease(e))
