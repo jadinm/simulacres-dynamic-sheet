@@ -245,7 +245,7 @@ class RollRow extends DataRow {
             this.find(".row-roll-trigger").on("click", e => this.roll(this.button_from_event(e)))
             this.find(".formula-elem").on("change", e => this.formula_changed(e)).each((i, elem) => {
                 if (!$(elem).hasClass("invisible"))
-                    $(elem).tooltip()
+                    $(elem).next().tooltip() // add the tooltip for the label
             })
             this.find("select").on("changed.bs.select", e => this.select_changed(e))
             this.get("show-details").on("click", e => this.view_details(e)).tooltip()
