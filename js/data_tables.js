@@ -65,6 +65,31 @@ class DataRow extends Model {
         })
         return found
     }
+
+    import(opts) {
+        if (opts && opts.row_number !== undefined && opts.row_number !== this.row_number) {
+            // Update the row number in all the ids of the DOM and in the internal state of this row
+            this.constructor.replace_id(this.row_number, opts.row_number, this.data)
+            this.prepare(this.data)
+        }
+        super.import(opts)
+    }
+
+    export() {
+        const data = super.export()
+        data.row_number = this.row_number // to keep the same id for the same row
+        return data
+    }
+
+    static replace_id(old_row_number, new_row_number, new_elem) {
+        // Replace all '-x-' (or any other old row number) in the attributes of the new row
+        $.each(["id", "name", "for", "data-slider-id", "aria-labelledby", "data-target", "aria-controls"], (i, attr) => {
+            new_elem.find("*[" + attr + "*=-" + old_row_number + "-]").each((i, elem) => {
+                elem.setAttribute(attr, elem.getAttribute(attr).replace("-" + old_row_number + "-", "-" + new_row_number + "-"))
+            })
+        })
+        new_elem[0].id = new_elem[0].id.replace("-" + old_row_number, "-" + new_row_number)
+    }
 }
 
 class DataList {
@@ -192,7 +217,8 @@ class DataList {
         })
         if (opts && opts.rows) {
             for (let i = next_i; i < opts.rows.length; i++) {
-                this.add_row(null, {}).import(opts.rows[i])
+                const row_number = opts.rows[i].row_number !== undefined ? opts.rows[i].row_number : null
+                this.add_row(row_number, {}).import(opts.rows[i])
             }
             // too many rows in the sheet: delete them (can happen if rows were removed in the local storage)
             if (this.rows.length > opts.rows.length) {
@@ -262,13 +288,7 @@ class DataList {
             new_id = fixed_idx
         }
 
-        // Replace all '-x-' in the attributes of the new row
-        $.each(["id", "name", "for", "data-slider-id", "aria-labelledby", "data-target", "aria-controls"], (i, attr) => {
-            new_elem.find("*[" + attr + "*=-x-]").each((i, elem) => {
-                elem.setAttribute(attr, elem.getAttribute(attr).replace("-x-", "-" + new_id + "-"))
-            })
-        })
-        new_elem[0].id = new_elem[0].id.replace("-x", "-" + new_id)
+        this.constructor.row_class.replace_id("x", new_id, new_elem)
         new_elem.removeAttr("hidden")
         this.table.append(new_elem)
 
