@@ -259,16 +259,17 @@ class TalentRoll extends Roll {
         new this.constructor(this.reason, this.max_value, this.talent_level, this.effect, this.critical_increase,
             this.formula_elements, this.margin_throttle, this.is_magic, this.is_power, this.distance, this.focus,
             this.duration, this.base_energy_cost, this.black_magic, this.magic_resistance,
-            this.equipment, this.exploding_effect, this.power_energy,
-            this.energy_base_id).trigger_roll(false)
+            this.equipment, this.equipment_always_expend, this.equipment_always_expend_quantity, this.exploding_effect,
+            this.power_energy, this.energy_base_id).trigger_roll(false)
     }
 
     constructor(reason = "", max_value = NaN, talent_level = 0, effect = "",
                 critical_increase = 0, formula_elements = [], margin_throttle = NaN,
                 is_magic = false, is_power = false, distance = "", focus = "",
                 duration = "", base_energy_cost = 0, black_magic = "",
-                magic_resistance = "", equipment = null,
-                exploding_effect = false, power_energy = "", energy_base_id = "") {
+                magic_resistance = "", equipment = null, equipment_always_expend = false,
+                equipment_always_expend_quantity = 1, exploding_effect = false,
+                power_energy = "", energy_base_id = "") {
         super()
         this.reason = reason ? reason : ""
         this.formula_elements = formula_elements
@@ -294,6 +295,8 @@ class TalentRoll extends Roll {
 
         // Equipment-dependent roll
         this.equipment = equipment
+        this.equipment_always_expend = equipment_always_expend
+        this.equipment_always_expend_quantity = equipment_always_expend_quantity
         this.expended_charge = NaN
 
         this.invested_energies = []
@@ -727,12 +730,27 @@ class TalentRoll extends Roll {
         let charges = NaN
         if (this.equipment) {
             charges = this.equipment.current_charges()
-            equipment_remaining.text("il en reste " + charges)
-            if (charges === 0) {
-                equipment_remaining.addClass("text-warning")
+
+            if (this.energy_investment_validated && this.equipment_always_expend && isNaN(this.expended_charge)) {
+                // Need to spend the charges
+                if (charges >= this.equipment_always_expend_quantity) {
+                    this.expended_charge = this.equipment_always_expend_quantity
+                    this.equipment.expend_charges(this.equipment_always_expend_quantity)
+                    charges -= this.equipment_always_expend_quantity
+                }
             } else {
-                equipment_remaining.removeClass("text-warning")
+                if (charges === 0 || this.equipment_always_expend && this.equipment_always_expend_quantity > charges ) {
+                    equipment_remaining.addClass("text-warning")
+                } else {
+                    equipment_remaining.removeClass("text-warning")
+                }
             }
+
+            let charges_text = "il en reste " + charges
+            if (this.equipment_always_expend && !this.energy_investment_validated) { // Add warning before validation
+                charges_text += " et il en coûtera " + this.equipment_always_expend_quantity
+            }
+            equipment_remaining.text(charges_text)
 
             const charges_div = $("#roll-dialog-expended-charges")
             if (charges === 0 && isNaN(this.expended_charge)) {
@@ -768,8 +786,8 @@ class TalentRoll extends Roll {
             tooltip_div.find("label").html(this.labels[key])
         })
 
+        const validate_button = $("#roll-dialog-validate")
         if (this.energy_investment_validated) {
-            const validate_button = $("#roll-dialog-validate")
             validate_button.addClass("d-none")
             const heroism = $("#heroism")
             component_inputs.attr("disabled", "disabled")
@@ -792,6 +810,14 @@ class TalentRoll extends Roll {
             result.html("")
             energy_inputs.removeAttr("disabled", "disabled")
             component_inputs.removeAttr("disabled", "disabled")
+            if (this.equipment_always_expend && charges < this.equipment_always_expend_quantity) {
+                // Block validation for rolls with insufficient equipment
+                validate_button.addClass("disabled")
+                validate_button.children().first().addClass("disabled")
+            } else {
+                validate_button.removeClass("disabled")
+                validate_button.children().first().removeClass("disabled")
+            }
         }
 
         $(".energy[id^=\"" + this.energy_base_id + "\"]").each((i, elem) => {
@@ -915,7 +941,7 @@ class SuperpowerRoll extends TalentRoll {
     constructor(reason = "", nbr_dices = 0, under_value = 0, formula_elements = [],
                 distance = "", focus = "", duration = "", effect = "") {
         super(reason, NaN, 0, effect, 0, formula_elements, NaN, false, true, distance, focus, duration, 0, "", "",
-            null, false, "", "")
+            null, false, 1, false, "", "")
         this.number = nbr_dices
         this.under_value = under_value
         this.superpower_modifier = 0
@@ -1080,15 +1106,18 @@ class FocusMagicRoll extends TalentRoll {
     reroll() {
         new this.constructor(this.reason, this.max_value, this.level, this.effect, this.distance,
             this.focus, this.duration, this.base_energy_cost, this.black_magic, this.magic_resistance, this.equipment,
+            this.equipment_always_expend, this.equipment_always_expend_quantity,
             this.exploding_effect).trigger_roll(false)
     }
 
     constructor(reason = "", max_value = NaN, level = 0, effect = "",
                 distance = "", focus = "", duration = "", base_energy_cost = 0,
                 black_magic = "", magic_resistance = "", equipment = null,
+                equipment_always_expend = false, equipment_always_expend_quantity = 1,
                 exploding_effect = false) {
         super(reason, max_value, level, effect, 0, [], NaN, true, true, distance, focus, duration, base_energy_cost,
-            black_magic, magic_resistance, equipment, exploding_effect, "", "")
+            black_magic, magic_resistance, equipment, equipment_always_expend, equipment_always_expend_quantity,
+            exploding_effect, "", "")
         this.margin_dices = []
     }
 
@@ -1250,16 +1279,19 @@ class GoodNatureEvilMagicRoll extends TalentRoll {
 
     reroll() {
         new this.constructor(this.reason, this.effect, this.distance, this.focus, this.duration, this.base_energy_cost,
-            this.black_magic, this.magic_resistance, this.equipment,
-            this.exploding_effect, this.power_energy).trigger_roll(false)
+            this.black_magic, this.magic_resistance, this.equipment, this.equipment_always_expend,
+            this.equipment_always_expend_quantity, this.exploding_effect,
+            this.power_energy).trigger_roll(false)
     }
 
     constructor(reason = "", effect = "", distance = "", focus = "", duration = "",
                 base_energy_cost = 0, black_magic = "", magic_resistance = "",
-                equipment = null, exploding_effect = false,
+                equipment = null, equipment_always_expend = false,
+                equipment_always_expend_quantity = 1, exploding_effect = false,
                 power_energy = "") {
         super(reason, NaN, 0, effect, 0, [], NaN, true, true, distance, focus, duration, base_energy_cost,
-            black_magic, magic_resistance, equipment, exploding_effect, power_energy, "")
+            black_magic, magic_resistance, equipment, equipment_always_expend, equipment_always_expend_quantity,
+            exploding_effect, power_energy, "")
         this.margin_dices = []
         this.precision_dices = []
         this.type = 3

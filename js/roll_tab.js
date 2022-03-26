@@ -15,9 +15,9 @@ class RollRow extends DataRow {
         "means": Characteristics.means,
         "realms": Characteristics.realms,
     }
-    static independent_checkboxes = is_v7 ? ["details-exploding-effect"] : []
+    static independent_checkboxes = is_v7 ? ["details-exploding-effect", "details-equipment-always-expend"] : ["details-equipment-always-expend"]
     static selects = ["talent", "equipment"]
-    static numeric_inputs = ["details-bonus"] // "details-max", "details-min" can be empty and thus, not in numeric inputs
+    static numeric_inputs = ["details-bonus", "details-equipment-always-expend-quantity"] // "details-max", "details-min" can be empty and thus, not in numeric inputs
     static basic_inputs = [...this.numeric_inputs, ...["effect", "details-name", "details-max", "details-min"]]
 
     // Get a variable in the scope of the div
@@ -64,7 +64,7 @@ class RollRow extends DataRow {
             bonus += 1 // Hobbits have an increased resistance
         }
         if (!(this instanceof SuperpowerRow) && element === "component") {
-            // Super heroes have bonuses on all tests based on their component power
+            // Superheroes have bonuses on all tests based on their component power
             const components = SuperpowerRollTable.components()
             if (components.includes(checked_elem))
                 bonus += 4
@@ -175,7 +175,8 @@ class RollRow extends DataRow {
         new TalentRoll(this.roll_reason(), value, difficulty, this.get_var("effect", button),
             this.get_critical_increase(button), formula_elements, margin_throttle, false, false,
             "", "", "", 0, "", "",
-            equipment, this["details-exploding-effect"], "").trigger_roll()
+            equipment, this["details-equipment-always-expend"], this["details-equipment-always-expend-quantity"],
+            this["details-exploding-effect"], "").trigger_roll()
     }
 
     get_critical_increase() {

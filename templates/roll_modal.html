@@ -52,8 +52,21 @@
                                 data-max-options="1" multiple>
                         </select>
                     </div>
+                    <div class="row col-12 mx-4 form-inline">
+                        <div class="custom-control custom-checkbox custom-control-inline col-12 text-left p-0 m-0">
+                            <input type="checkbox" class="custom-control-input"
+                                   id="{{ row_type }}-x-details-equipment-always-expend"
+                                   name="{{ row_type }}-x-details-equipment-always-expend">
+                            <label class="custom-control-label p-0 m-0 mt-3"
+                                   for="{{ row_type }}-x-details-equipment-always-expend"></label>
+                        </div>
+                        Toujours dépenser
+                        <input class="form-control py-0 my-0 text-center col-1 pr-1" type="number" aria-label=""
+                               value="1" min="1" id="{{ row_type }}-x-details-equipment-always-expend-quantity">
+                        unité quand on roll sans cliquer sur le bouton "Dépenser"
+                    </div>
                     {% if version == V7 %}
-                        <div class="row col-12 mx-1">
+                        <div class="row col-12 mx-1 pt-4">
                             Dés d'effet explosifs (sur un 6, on lance un dé supplémentaire à l'infini)
                         </div>
                         <div class="row col-12 mx-4">

@@ -8,11 +8,11 @@ class SpellRow extends RollRow {
         "component": Characteristics.components,
         "means": Characteristics.means,
     }
-    static independent_checkboxes = is_v7 ? [...Characteristics.realms, ...["details-exploding-effect"]] : Characteristics.realms
+    static independent_checkboxes = is_v7 ? [...Characteristics.realms, "details-exploding-effect", "details-equipment-always-expend"] : [...Characteristics.realms, "details-equipment-always-expend"]
     static selects_no_sanitize = ["list"]
     static selects = [...super.selects, ...["list"]]
     static sliders = ["difficulty-input"]
-    static numeric_inputs = [...super.numeric_inputs, ...["level", "hermetic-mr-learning", "hermetic-difficulty"]]
+    static numeric_inputs = [...super.numeric_inputs, "level", "hermetic-mr-learning", "hermetic-difficulty", "details-equipment-always-expend-quantity"]
     static basic_inputs = [...this.numeric_inputs, ...["name", "time", "distance", "duration", "effect",
         "details-max", "details-min", "details-black-magic", "details-resistance", "details-ap-cost"]]
     static duplicated_inputs = {
@@ -195,7 +195,8 @@ class SpellRow extends RollRow {
             new GoodNatureEvilMagicRoll(this.roll_reason(), this.get_var("effect", button),
                 spell_distance, spell_focus, spell_duration, spell_level,
                 this["details-black-magic"],
-                this["details-resistance"], equipment,
+                this["details-resistance"], equipment, this["details-equipment-always-expend"],
+                this["details-equipment-always-expend-quantity"],
                 this["details-exploding-effect"], this.energy_name()).trigger_roll()
         } else {
             const value = parseInt(this.get("value", button).text())
@@ -205,6 +206,7 @@ class SpellRow extends RollRow {
                 critical_increase, formula_elements, margin_throttle, this.data.hasClass("spell"),
                 true, spell_distance, spell_focus, spell_duration, spell_level,
                 this["details-black-magic"], this["details-resistance"], equipment,
+                this["details-equipment-always-expend"], this["details-equipment-always-expend-quantity"],
                 this["details-exploding-effect"], this.energy_name()).trigger_roll()
         }
     }
@@ -384,10 +386,10 @@ class SpellRow extends RollRow {
 
 class FocusMagicRow extends SpellRow {
     static radio_groups = {}
-    static independent_checkboxes = is_v7 ? ["details-exploding-effect"] : []
+    static independent_checkboxes = is_v7 ? ["details-exploding-effect", "details-equipment-always-expend"] : ["details-equipment-always-expend"]
     static selects_no_sanitize = []
     static selects = ["equipment"]
-    static numeric_inputs = [...RollRow.numeric_inputs, ...["level"]]
+    static numeric_inputs = [...RollRow.numeric_inputs, "level", "details-equipment-always-expend-quantity"]
     static basic_inputs = [...this.numeric_inputs, ...["name", "focus", "time", "distance", "duration", "effect",
         "details-max", "details-min", "details-black-magic", "details-resistance", "details-ap-cost"]]
     static sliders = []
@@ -479,7 +481,8 @@ class FocusMagicRow extends SpellRow {
         level = !isNaN(level) ? level : 0
         new FocusMagicRoll(this.roll_reason(), value, level, this["effect"], this["distance"],
             this["time"], this["duration"], this["level"], this["details-black-magic"], this["details-resistance"],
-            equipment, this["details-exploding-effect"]).trigger_roll()
+            equipment, this["details-equipment-always-expend"], this["details-equipment-always-expend-quantity"],
+            this["details-exploding-effect"]).trigger_roll()
     }
 }
 
