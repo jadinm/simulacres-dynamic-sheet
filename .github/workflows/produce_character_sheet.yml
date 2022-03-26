@@ -3,137 +3,15 @@ on: [ push, pull_request ]
 env:
   PYTHON_SCRIPT: compile.py
   DOC_V7: manuel_feuille_perso_simv7
-  V7_NPC_GRID_FILENAME: simulacres_npc_grid.html
-  V7_BASE_FINAL_FILENAME: simulacres_v7_fiche_perso.html
-  V7_LOCALISATION_FINAL_FILENAME: simulacres_v7_localisation_fiche_perso.html
-  V7_LOCALISATION_DUAL_FINAL_FILENAME: simulacres_v7_localisation_deux_armes_fiche_perso.html
-  V8_BASE_FINAL_FILENAME: simulacres_v8_fiche_perso.html
-  V8_BASE_4x4_FINAL_FILENAME: simulacres_v8_fiche_perso_4x4.html
-  V8_MINIMAL_FINAL_FILENAME: simulacres_v8_fiche_perso_minimale.html
-  V8_MINIMAL_4x4_FINAL_FILENAME: simulacres_v8_fiche_perso_minimale_4x4.html
-  V8_CAPTAIN_VOODOO_FINAL_FILENAME: simulacres_v8_fiche_perso_capitaine_vaudou.html
-  V8_CAPTAIN_4x4_VOODOO_FINAL_FILENAME: simulacres_v8_fiche_perso_capitaine_vaudou_4x4.html
-  V8_INTERMEDIATE_DISCOVERY_FINAL_FILENAME: simulacres_v8_fiche_perso_minimale_decouverte_intermediaire.html
-  V8_INTERMEDIATE_DISCOVERY_4x4_FINAL_FILENAME: simulacres_v8_fiche_perso_minimale_intermediate_decouverte_4x4.html
-  V8_DISCOVERY_FINAL_FILENAME: simulacres_v8_fiche_perso_minimale_decouverte.html
-  V8_DISCOVERY_4x4_FINAL_FILENAME: simulacres_v8_fiche_perso_minimale_decouverte_4x4.html
 
 jobs:
-  produce_character_sheet:
-    name: Produce character sheet
+  create_release:
+    name: Create a release if needed
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the event commit
         uses: actions/checkout@v2
-      - name: Compile Jinja template
-        run: |
-          git fetch --prune --unshallow --tags
-          mkdir -p target
-          python3 -m pip install --upgrade pip
-          python3 -m pip install -r requirements.txt
-          python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V7_NPC_GRID_FILENAME }} --localisation --base-template "base_npc_grid.html" --plugin plugins/plugin_export_to_server.html
-          python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V7_BASE_FINAL_FILENAME }}
-          python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V7_LOCALISATION_FINAL_FILENAME }} --localisation
-          python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V7_LOCALISATION_DUAL_FINAL_FILENAME }} --localisation --dual-wielding --tomte-magic --warrior-powers
-          python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V8_BASE_FINAL_FILENAME }} --version 8
-          python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V8_MINIMAL_FINAL_FILENAME }} --version 8 --universe "Autre"
-          python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V8_DISCOVERY_FINAL_FILENAME }} --version 8 --universe "Autre" --discovery --plugin plugins/plugin_generic_world.html
-          python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V8_INTERMEDIATE_DISCOVERY_FINAL_FILENAME }} --version 8 --universe "Autre" --intermediate-discovery --plugin plugins/plugin_generic_world.html
-          python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V8_CAPTAIN_VOODOO_FINAL_FILENAME }} --version 8 --universe "Capitaine Vaudou"
-          python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V8_BASE_4x4_FINAL_FILENAME }} --version 8 --matrix-4x4
-          python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V8_MINIMAL_4x4_FINAL_FILENAME }} --version 8 --matrix-4x4 --universe "Autre"
-          python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V8_DISCOVERY_4x4_FINAL_FILENAME }} --version 8 --matrix-4x4 --universe "Autre" --discovery --plugin plugins/plugin_generic_world.html
-          python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V8_INTERMEDIATE_DISCOVERY_4x4_FINAL_FILENAME }} --version 8 --matrix-4x4 --universe "Autre" --intermediate-discovery --plugin plugins/plugin_generic_world.html
-          python3 ${{ env.PYTHON_SCRIPT }} target/${{ env.V8_CAPTAIN_4x4_VOODOO_FINAL_FILENAME }} --version 8 --matrix-4x4 --universe "Capitaine Vaudou"
-      - name: Compile documentation
-        run: |
-          mkdir -p ~/.local/share
-          mv doc/fonts/ ~/.local/share/fonts/
-          fc-cache -f -v
-          cd doc/images && python3 create_pictos.py && cd -
-          cd doc && python3 -m rst2pdf.createpdf ${{ env.DOC_V7 }}.txt -v -s sim_styles.txt -e preprocess --use-floating-images --real-footnotes -o ${{ env.DOC_V7 }}.pdf && cd -
-
-      - name: Upload the v7 NPC grid
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ env.V7_NPC_GRID_FILENAME }}
-          path: target/${{ env.V7_NPC_GRID_FILENAME }}
-      - name: Upload the base v7 sheet
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ env.V7_BASE_FINAL_FILENAME }}
-          path: target/${{ env.V7_BASE_FINAL_FILENAME }}
-      - name: Upload the v7 sheet with localisation
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ env.V7_LOCALISATION_FINAL_FILENAME }}
-          path: target/${{ env.V7_LOCALISATION_FINAL_FILENAME }}
-      - name: Upload the v7 sheet with localisation and dual wielding
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ env.V7_LOCALISATION_DUAL_FINAL_FILENAME }}
-          path: target/${{ env.V7_LOCALISATION_DUAL_FINAL_FILENAME }}
-
-      - name: Upload the base v8 sheet
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ env.V8_BASE_FINAL_FILENAME }}
-          path: target/${{ env.V8_BASE_FINAL_FILENAME }}
-      - name: Upload the minimal v8 sheet
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ env.V8_MINIMAL_FINAL_FILENAME }}
-          path: target/${{ env.V8_MINIMAL_FINAL_FILENAME }}
-      - name: Upload the Captain Voodoo sheet
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ env.V8_CAPTAIN_VOODOO_FINAL_FILENAME }}
-          path: target/${{ env.V8_CAPTAIN_VOODOO_FINAL_FILENAME }}
-      - name: Upload the minimal v8 sheet in discovery mode
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ env.V8_DISCOVERY_FINAL_FILENAME }}
-          path: target/${{ env.V8_DISCOVERY_FINAL_FILENAME }}
-      - name: Upload the minimal v8 sheet in intermediate discovery mode
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ env.V8_INTERMEDIATE_DISCOVERY_FINAL_FILENAME }}
-          path: target/${{ env.V8_INTERMEDIATE_DISCOVERY_FINAL_FILENAME }}
-
-      - name: Upload the base v8 sheet with 4x4 matrix
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ env.V8_BASE_4x4_FINAL_FILENAME }}
-          path: target/${{ env.V8_BASE_4x4_FINAL_FILENAME }}
-      - name: Upload the minimal v8 sheet with 4x4 matrix
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ env.V8_MINIMAL_4x4_FINAL_FILENAME }}
-          path: target/${{ env.V8_MINIMAL_4x4_FINAL_FILENAME }}
-      - name: Upload the Captain Voodoo sheet with 4x4 matrix
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ env.V8_CAPTAIN_4x4_VOODOO_FINAL_FILENAME }}
-          path: target/${{ env.V8_CAPTAIN_4x4_VOODOO_FINAL_FILENAME }}
-      - name: Upload the minimal v8 sheet in discovery mode with 4x4 matrix
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ env.V8_DISCOVERY_4x4_FINAL_FILENAME }}
-          path: target/${{ env.V8_DISCOVERY_4x4_FINAL_FILENAME }}
-      - name: Upload the minimal v8 sheet in intermediate discovery mode with 4x4 matrix
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ env.V8_INTERMEDIATE_DISCOVERY_4x4_FINAL_FILENAME }}
-          path: target/${{ env.V8_INTERMEDIATE_DISCOVERY_4x4_FINAL_FILENAME }}
-
-      - name: Upload v7 documentation
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ env.DOC_V7 }}.pdf
-          path: doc/${{ env.DOC_V7 }}.pdf
-
       - name: Create release
-        id: create_release
         if: contains(github.ref, '/tags/')
         uses: actions/create-release@v1
         env:
@@ -145,157 +23,122 @@ jobs:
           prerelease: false
           body_path: next_release_description.md
 
-      - name: Upload the v7 NPC grid in release assets
-        if: contains(github.ref, '/tags/')
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_content_type: text/html
-          asset_name: ${{ env.V7_NPC_GRID_FILENAME }}
-          asset_path: target/${{ env.V7_NPC_GRID_FILENAME }}
+  produce_doc:
+    needs: create_release
+    name: Compile and upload documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the event commit
+        uses: actions/checkout@v2
 
-      - name: Upload the base v7 sheet in release assets
-        if: contains(github.ref, '/tags/')
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_content_type: text/html
-          asset_name: ${{ env.V7_BASE_FINAL_FILENAME }}
-          asset_path: target/${{ env.V7_BASE_FINAL_FILENAME }}
-      - name: Upload the v7 sheet with localisation in release assets
-        if: contains(github.ref, '/tags/')
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_content_type: text/html
-          asset_name: ${{ env.V7_LOCALISATION_FINAL_FILENAME }}
-          asset_path: target/${{ env.V7_LOCALISATION_FINAL_FILENAME }}
-      - name: Upload the v7 sheet with localisation and dual wielding in release assets
-        if: contains(github.ref, '/tags/')
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_content_type: text/html
-          asset_name: ${{ env.V7_LOCALISATION_DUAL_FINAL_FILENAME }}
-          asset_path: target/${{ env.V7_LOCALISATION_DUAL_FINAL_FILENAME }}
+      - name: Compile documentation
+        run: |
+          git fetch --prune --unshallow --tags
+          python3 -m pip install --upgrade pip
+          python3 -m pip install -r requirements.txt
+          mkdir -p ~/.local/share
+          mv doc/fonts/ ~/.local/share/fonts/
+          fc-cache -f -v
+          cd doc/images && python3 create_pictos.py && cd -
+          cd doc && python3 -m rst2pdf.createpdf ${{ env.DOC_V7 }}.txt -v -s sim_styles.txt -e preprocess --use-floating-images --real-footnotes -o ${{ env.DOC_V7 }}.pdf && cd -
 
-      - name: Upload the base v8 sheet in release assets
-        if: contains(github.ref, '/tags/')
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload v7 documentation
+        uses: actions/upload-artifact@v2
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_content_type: text/html
-          asset_name: ${{ env.V8_BASE_FINAL_FILENAME }}
-          asset_path: target/${{ env.V8_BASE_FINAL_FILENAME }}
-      - name: Upload the minimal v8 sheet in release assets
-        if: contains(github.ref, '/tags/')
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_content_type: text/html
-          asset_name: ${{ env.V8_MINIMAL_FINAL_FILENAME }}
-          asset_path: target/${{ env.V8_MINIMAL_FINAL_FILENAME }}
-      - name: Upload the Captain Voodoo sheet in release assets
-        if: contains(github.ref, '/tags/')
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_content_type: text/html
-          asset_name: ${{ env.V8_CAPTAIN_VOODOO_FINAL_FILENAME }}
-          asset_path: target/${{ env.V8_CAPTAIN_VOODOO_FINAL_FILENAME }}
-      - name: Upload the minimal v8 sheet in discovery mode in release assets
-        if: contains(github.ref, '/tags/')
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_content_type: text/html
-          asset_name: ${{ env.V8_DISCOVERY_FINAL_FILENAME }}
-          asset_path: target/${{ env.V8_DISCOVERY_FINAL_FILENAME }}
-      - name: Upload the minimal v8 sheet in intermediate discovery mode in release assets
-        if: contains(github.ref, '/tags/')
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_content_type: text/html
-          asset_name: ${{ env.V8_INTERMEDIATE_DISCOVERY_FINAL_FILENAME }}
-          asset_path: target/${{ env.V8_INTERMEDIATE_DISCOVERY_FINAL_FILENAME }}
+          name: ${{ env.DOC_V7 }}.pdf
+          path: doc/${{ env.DOC_V7 }}.pdf
 
-      - name: Upload the base v8 sheet with 4x4 matrix in release assets
+      - name: Get release
         if: contains(github.ref, '/tags/')
-        uses: actions/upload-release-asset@v1
+        id: get_release
+        uses: bruceadams/get-release@v1.2.3
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_content_type: text/html
-          asset_name: ${{ env.V8_BASE_4x4_FINAL_FILENAME }}
-          asset_path: target/${{ env.V8_BASE_4x4_FINAL_FILENAME }}
-      - name: Upload the minimal v8 sheet with 4x4 matrix in release assets
-        if: contains(github.ref, '/tags/')
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_content_type: text/html
-          asset_name: ${{ env.V8_MINIMAL_4x4_FINAL_FILENAME }}
-          asset_path: target/${{ env.V8_MINIMAL_4x4_FINAL_FILENAME }}
-      - name: Upload the Captain Voodoo sheet with 4x4 matrix in release assets
-        if: contains(github.ref, '/tags/')
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_content_type: text/html
-          asset_name: ${{ env.V8_CAPTAIN_4x4_VOODOO_FINAL_FILENAME }}
-          asset_path: target/${{ env.V8_CAPTAIN_4x4_VOODOO_FINAL_FILENAME }}
-      - name: Upload the minimal v8 sheet in discovery mode with 4x4 matrix in release assets
-        if: contains(github.ref, '/tags/')
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_content_type: text/html
-          asset_name: ${{ env.V8_DISCOVERY_4x4_FINAL_FILENAME }}
-          asset_path: target/${{ env.V8_DISCOVERY_4x4_FINAL_FILENAME }}
-      - name: Upload the minimal v8 sheet in intermediate discovery mode with 4x4 matrix in release assets
-        if: contains(github.ref, '/tags/')
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_content_type: text/html
-          asset_name: ${{ env.V8_INTERMEDIATE_DISCOVERY_4x4_FINAL_FILENAME }}
-          asset_path: target/${{ env.V8_INTERMEDIATE_DISCOVERY_4x4_FINAL_FILENAME }}
-
+          GITHUB_TOKEN: ${{ github.token }}
       - name: Upload v7 documentation in release assets
         if: contains(github.ref, '/tags/')
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          upload_url: ${{ steps.get_release.outputs.upload_url }}
           asset_content_type: application/pdf
           asset_name: ${{ env.DOC_V7 }}.pdf
           asset_path: doc/${{ env.DOC_V7 }}.pdf
+
+  produce_character_sheet:
+    needs: create_release
+    name: Produce character sheet
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:  # To build a new sheet, only need to add them in this list
+          # NPC grid
+          - name: simulacres_npc_grid.html
+            build_parameters: --localisation --base-template "base_npc_grid.html" --plugin plugins/plugin_export_to_server.html
+
+          # Version 7
+          - name: simulacres_v7_fiche_perso.html
+            build_parameters: ""
+          - name: simulacres_v7_localisation_fiche_perso.html
+            build_parameters: --localisation
+          - name: simulacres_v7_localisation_deux_armes_fiche_perso.html
+            build_parameters: --localisation --dual-wielding --tomte-magic --warrior-powers
+
+          # Version 8
+          - name: simulacres_v8_fiche_perso.html
+            build_parameters: --version 8
+          - name: simulacres_v8_fiche_perso_minimale.html
+            build_parameters: --version 8 --universe "Autre"
+          - name: simulacres_v8_fiche_perso_minimale_decouverte.html
+            build_parameters: --version 8 --universe "Autre" --discovery --plugin plugins/plugin_generic_world.html
+          - name: simulacres_v8_fiche_perso_minimale_decouverte_intermediaire.html
+            build_parameters: --version 8 --universe "Autre" --intermediate-discovery --plugin plugins/plugin_generic_world.html
+          - name: simulacres_v8_fiche_perso_capitaine_vaudou.html
+            build_parameters: --version 8 --universe "Capitaine Vaudou"
+
+          # Version 8 with 4x4 matrices
+          - name: simulacres_v8_fiche_perso_4x4.html
+            build_parameters: --version 8 --matrix-4x4
+          - name: simulacres_v8_fiche_perso_minimale_4x4.html
+            build_parameters: --version 8 --matrix-4x4 --universe "Autre"
+          - name: simulacres_v8_fiche_perso_minimale_decouverte_4x4.html
+            build_parameters: --version 8 --matrix-4x4 --universe "Autre" --discovery --plugin plugins/plugin_generic_world.html
+          - name: simulacres_v8_fiche_perso_minimale_decouverte_intermediaire_4x4.html
+            build_parameters: --version 8 --matrix-4x4 --universe "Autre" --intermediate-discovery --plugin plugins/plugin_generic_world.html
+          - name: simulacres_v8_fiche_perso_capitaine_vaudou_4x4.html
+            build_parameters: --version 8 --matrix-4x4 --universe "Capitaine Vaudou"
+
+    steps:
+      - name: Checkout the event commit
+        uses: actions/checkout@v2
+
+      - name: Compile Jinja template
+        run: |
+          git fetch --prune --unshallow --tags
+          mkdir -p target
+          python3 -m pip install --upgrade pip
+          python3 -m pip install -r requirements.txt
+          python3 ${{ env.PYTHON_SCRIPT }} target/${{ matrix.name }} ${{ matrix.build_parameters }}
+
+      - name: Upload '${{ matrix.name }}'
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.name }}
+          path: target/${{ matrix.name }}
+
+      - name: Get release
+        if: contains(github.ref, '/tags/')
+        id: get_release
+        uses: bruceadams/get-release@v1.2.3
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: Upload '${{ matrix.name }}' in release assets
+        if: contains(github.ref, '/tags/')
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.get_release.outputs.upload_url }}
+          asset_content_type: text/html
+          asset_name: ${{ matrix.name }}
+          asset_path: target/${{ matrix.name }}
