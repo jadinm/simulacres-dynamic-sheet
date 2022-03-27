@@ -65,18 +65,18 @@ class Status extends Model {
     get_armor_penalty() {
         // If no localized HP, this is a user encoded value
         if (!localized_hp) {
-            const penalty = this.get("armor-penalty-input").val()
+            const penalty = this["armor-penalty-input"]
             return penalty != null ? [penalty, 0] : [0, 0]
         }
 
-        const armors = $.map(this.find(".armor"), element => (parseInt(element.value) || 0))
+        const armors = this.constructor.armors.map((armor) => this[armor])
         let armor_sum = 0
         for (let i = 0; i < armors.length; i++) {
             armor_sum += armors[i]
         }
 
         // Take shield into account
-        const shield = parseInt(this.get("shield").val()) || 0
+        const shield = parseInt(this["shield"]) || 0
         if (!isNaN(shield) && shield > 0) {
             return this.armor_penalty(armor_sum + shield * 6)
         }
@@ -95,7 +95,7 @@ class Status extends Model {
     }
 
     get_unease() {
-        const unease = parseInt(this.get("unease-value").text())
+        const unease = this["unease-value"]
         return isNaN(unease) ? 0 : unease
     }
 
@@ -300,6 +300,7 @@ class Status extends Model {
                     }
                     this.get("unease-text").text(text)
                     this.get("unease-value").text(unease)
+                    this["unease-value"] = unease
                     return text
                 }
             }, _ => void 0, {}, () => this.unease_value_changed_event())
