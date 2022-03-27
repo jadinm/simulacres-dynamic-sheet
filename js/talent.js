@@ -4,8 +4,8 @@ class Talent extends DataRow {
     static row_id_regex = /(?:talent_)?((x|-4|-2|0|1)(\d*))-?(.*)/
     static basic_inputs = ["name"]
 
-    constructor(current_list, data, opts = {}, other_html = null) {
-        super(data, opts, other_html)
+    constructor(current_list, data, opts = {}, other_html = null, created = true) {
+        super(data, opts, other_html, created)
         this.current_list = current_list
     }
 
@@ -155,7 +155,7 @@ class TalentLists extends DataList {
         this.name = this.id
         this.list_level = this.id.split("_")[1]
         const template_div = this.get(this.name.replace("talents", "talent"))
-        this.template_row = template_div.length > 0 ? new this.constructor.row_class(this, template_div, {}, this.other_html) : null
+        this.template_row = template_div.length > 0 ? this.construct_row(template_div, {}, false) : null
         this.add_button = this.get("add-talent-" + this.list_level)
         this.remove_button = this.table.parent().find(".remove-talent")
     }
@@ -212,8 +212,8 @@ class TalentLists extends DataList {
         return sheet.get_talent_from_id(base_id)
     }
 
-    construct_row(elem, opts) { // (this, new_talent, opts, this.other_html)
-        return new this.constructor.row_class(this, elem, opts, this.other_html)
+    construct_row(elem, opts, just_added) { // (this, new_talent, opts, this.other_html)
+        return new this.constructor.row_class(this, elem, opts, this.other_html, just_added)
     }
 
     remove_row(event) {
@@ -257,7 +257,7 @@ class TalentLists extends DataList {
 
         this.children().last().before(new_talent)
 
-        const row = this.construct_row(new_talent, opts)
+        const row = this.construct_row(new_talent, opts, true)
         row.update_talent_tooltip()
         this.rows.push(row)
 

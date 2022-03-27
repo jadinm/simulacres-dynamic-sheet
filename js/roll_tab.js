@@ -253,20 +253,23 @@ class RollRow extends DataRow {
 
         if (!this.is_template()) {
             this.find(".row-roll-trigger").on("click", e => this.roll(this.button_from_event(e)))
-            this.find(".formula-elem").on("change", e => this.formula_changed(e)).each((i, elem) => {
-                if (!$(elem).hasClass("invisible"))
-                    $(elem).next().tooltip() // add the tooltip for the label
-            })
-            this.find("select").on("changed.bs.select", e => this.select_changed(e))
-            this.get("show-details").on("click", e => this.view_details(e)).tooltip()
-            this.get("details-bonus").on("change", e => this.update_value(e))
-            this.get("details-min").on("change", e => this.update_value(e))
-            this.get("details-max").on("change", e => this.update_value(e))
-            this.get("details-name").on("change", e => this.update_title(e))
-            this.get("details-include-armor-penalty").on("click", e => this.update_title(e))
-            if (this["details-include-armor-penalty"])
+            const formulas = this.find(".formula-elem").on("change", e => this.formula_changed(e))
+            this.find("select").on("changed.bs.select", () => this.select_changed())
+            const show_details = this.get("show-details").on("click", () => this.view_details())
+            this.get("details-bonus").on("change", () => this.update_value())
+            this.get("details-min").on("change", () => this.update_value())
+            this.get("details-max").on("change", () => this.update_value())
+            this.get("details-name").on("change", () => this.update_title())
+            this.get("details-include-armor-penalty").on("click", () => {
+                this.update_roll_value()
                 this.update_title()
-            this.get("copy").tooltip()
+            })
+            if (this.dom_created) { // Only executed when the row is freshly created because tooltips are initialized on load
+                formulas.next().tooltip() // add the tooltip for the label
+                this.get("copy").tooltip()
+                show_details.tooltip()
+                this.update_title()
+            }
         }
     }
 }

@@ -2,8 +2,8 @@ class Note extends DataRow {
     static basic_inputs = ["name"]
     static text_areas = ["input"]
 
-    constructor(data, opts = {}, other_html = null) {
-        super(data, opts, other_html)
+    constructor(data, opts = {}, other_html = null, created = true) {
+        super(data, opts, other_html, created)
         this.broadcast_channel = new BroadcastChannel('note_channel_' + this.id)
         this.broadcast_channel.onmessage = (ev) => {
             const textarea = this.get("input")

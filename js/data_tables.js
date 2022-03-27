@@ -3,17 +3,18 @@ table_instance_by_prefix = {}
 class DataRow extends Model {
     static row_id_regex = /((\w+|limitedUse-equipment|magical-equipment)-(x|\d+))-?(.*)/
 
-    constructor(data, opts = {}, other_html = null) {
-        super(opts, other_html, data)
+    constructor(data, opts = {}, other_html = null, created = true) {
+        super(opts, other_html, {data: data, created: created})
     }
 
     prepare(data) {
         super.prepare(data)
-        this.data = $(data)
+        this.data = $(data.data)
         this.id = this.data[0].id
         const match = this.id.match(this.constructor.row_id_regex)
         this.row_index = match[1]
         this.row_number = match[3]
+        this.dom_created = data.created // whether the DOM element was created right before this model
     }
 
     add_listeners() {
@@ -122,7 +123,7 @@ class DataList {
 
     setup_table_ids() {
         this.name = this.id.replace("-table", "")
-        this.template_row = this.construct_row(this.get(this.name + "-x"), {}, this.other_html)
+        this.template_row = this.construct_row(this.get(this.name + "-x"), {}, false)
         this.add_button = this.get("add-" + this.name)
         this.remove_button = this.get(this.id + "-remove")
     }
@@ -173,8 +174,8 @@ class DataList {
         table_instance_by_prefix[this.name] = this
     }
 
-    construct_row(elem, opts) {
-        return new this.constructor.row_class(elem, opts, this.other_html)
+    construct_row(elem, opts, just_added) {
+        return new this.constructor.row_class(elem, opts, this.other_html, just_added)
     }
 
     update_rows(opts) {
@@ -182,7 +183,7 @@ class DataList {
         this.children().each((_, elem) => { // Sync existing children
             if (this.template_row && elem.id === this.template_row.id)
                 return
-            const row = this.construct_row(elem, opts && opts.rows ? opts.rows[next_i] : {})
+            const row = this.construct_row(elem, opts && opts.rows ? opts.rows[next_i] : {}, false)
             if (this.other_html === null) {
                 this.add_custom_listener_to_row(row)
             }
@@ -293,7 +294,7 @@ class DataList {
         this.table.append(new_elem)
 
         // Copy data from one row to the other
-        const row = this.construct_row(new_elem, from_row_opts, this.other_html)
+        const row = this.construct_row(new_elem, from_row_opts, true)
         this.rows.push(row)
         if (Object.keys(from_row_opts).length > 0)
             row.write() // Overwrite DOM

@@ -248,11 +248,7 @@ function number_filter(value, min, max) {
 
 $(_ => {
     /* Tooltip initializations */
-    $('[data-toggle="tooltip"]').each((i, elem) => {
-        if (!elem.getAttribute("hidden") && !$(elem).hasClass("d-none"))
-            $(elem).tooltip()
-    })
-    $('.absorption').parent().tooltip()
+    $('[data-toggle="tooltip"]').tooltip("dispose").tooltip()
 
     // Dark mode initialization
     if (is_dark_mode()) {
