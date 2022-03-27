@@ -20,8 +20,8 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
-          draft: true
-          prerelease: false
+          draft: false
+          prerelease: true
           body_path: next_release_description.md
 
   produce_doc:
@@ -54,7 +54,7 @@ jobs:
         id: get_release
         uses: bruceadams/get-release@v1.2.3
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload v7 documentation in release assets
         if: contains(github.ref, '/tags/')
         uses: actions/upload-release-asset@v1
@@ -149,7 +149,7 @@ jobs:
         id: get_release
         uses: bruceadams/get-release@v1.2.3
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload '${{ matrix.name }}' in release assets
         if: contains(github.ref, '/tags/')
         uses: actions/upload-release-asset@v1
