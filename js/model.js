@@ -370,7 +370,6 @@ class Model {
 
         this.clean_errors() // Only follow import errors from this point
         this.update_data(opts, true)
-        this.write()
     }
 
     update_data(opts, updating_opts = false) {
