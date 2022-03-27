@@ -411,7 +411,8 @@ class Character {
         // Update AP model last because it might select spells or talents not existing in the middle
         this["ap"].import(opts["ap"], opts)
 
-        this.sanity_check()
+        if (debug)
+            this.sanity_check()
     }
 
     export() {
