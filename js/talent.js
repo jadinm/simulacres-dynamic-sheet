@@ -138,6 +138,8 @@ class TalentLists extends DataList {
         "talents_x", "talents_-4", "talents_-2", "talents_0", "talents_1", "talents_2", "talents_3"
     ]
 
+    static talent_table_updated = false
+
     static row_class = Talent
 
     constructor(table, opts, other_html = null) {
@@ -306,6 +308,7 @@ class TalentLists extends DataList {
                 if (talent_desc["base_level"] === this.list_level && !sheet.get_talent_from_name(talent_desc["name"])) {
                     // This talent needs to be created here (it will be moved later)
                     this.add_row(null, {}).import(talent_desc)
+                    this.constructor.talent_table_updated = true
                 }
             }
         })
@@ -319,15 +322,17 @@ class TalentLists extends DataList {
                 talent.update_talent_tooltip() // potentially updating the tooltip if the it was moved
             } else {
                 talent.update_talent(this)
+                this.constructor.talent_table_updated = true
             }
             this.table.append(talent.data) // Moves the element to the end of the list
         }
 
-        if (sheet[this.constructor.talent_tables[this.constructor.talent_tables.length - 1]] === this) {
+        if (sheet[this.constructor.talent_tables[this.constructor.talent_tables.length - 1]] === this && this.constructor.talent_table_updated) {
             // This was the last talent list to update: this is time to update all the talent select pickers
             $("select.talent-select").each((i, elem) => {
                 update_talent_select($(elem))
             })
+            this.constructor.talent_table_updated = false
         }
     }
 
