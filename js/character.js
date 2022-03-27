@@ -176,10 +176,12 @@ class Character {
         const opts = this.opts
         this.resolve_dependencies()
 
-        // Initialize spell lists
-        $("select.spell-list").each((i, input) => {
-            init_spell_list(input)
-        })
+        // Initialize spell lists on the first load
+        if (Object.keys(opts).length === 0) {
+            $("select.spell-list").each((i, input) => {
+                init_spell_list(input)
+            })
+        }
 
         // Resolve dependencies and build all the models and tables
         this.bfs_dependencies().forEach((descriptor) => {
