@@ -196,7 +196,7 @@ class RollRow extends DataRow {
             candidate_title += " (action physique)"
 
         const title_div = this.get("name")
-        if (candidate_title != null && title_div.length > 0) {
+        if (candidate_title != null && title_div.length > 0 && title_div.prop("tagName") !== "INPUT") {
             title_div.text(candidate_title)
             if (candidate_title.length > 0)
                 title_div.removeClass("d-none")
