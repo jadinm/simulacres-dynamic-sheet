@@ -1,11 +1,11 @@
 <div class="card shadow-none border border-heavy rounded-lg my-1 mt-2 pt-2 pb-1 px-4 col-lg-12">
     <div class="row form-row my-0 md-form">
         <div class="col-sm-5">
-            <input class="form-control" id="character-name" name="character-name" type="text" value="">
+            <input class="form-control" id="character-name" type="text" value="">
             <label for="character-name">Nom du personnage</label>
         </div>
         <div class="col-sm-3">
-            <input class="form-control" id="race" name="race" type="text" value="">
+            <input class="form-control" id="race" type="text" value="">
             <label for="race">Nation/Ethnie</label>
         </div>
         {% if not intermediate_discovery %}
@@ -13,7 +13,7 @@
                 PA non dépensés: <span id="remaining-adventure-points"></span>
             </div>
             <div class="col-sm-2">
-                <input class="form-control" id="luck-points" name="character-name" type="number" value="0" min="0"
+                <input class="form-control" id="luck-points" type="number" value="0" min="0"
                        max="1">
                 <label for="luck-points">PC</label>
             </div>
@@ -22,27 +22,27 @@
     <div class="row form-row mb-0 mt-1 md-form">
         <div class="col-sm-2">
             <label for="age">Âge</label>
-            <input class="form-control" id="age" name="age" type="number" value="" min="0">
+            <input class="form-control" id="age" type="number" value="" min="0">
         </div>
 
         <div class="col-sm-2">
             <label for="gender">Sexe</label>
-            <input class="form-control" id="gender" name="gender" type="text" value="">
+            <input class="form-control" id="gender" type="text" value="">
         </div>
 
         <div class="col-sm-2">
             <label for="height">Taille (cm)</label>
-            <input class="form-control" id="height" name="height" type="number" value="" min="1">
+            <input class="form-control" id="height" type="number" value="" min="1">
         </div>
 
         <div class="col-sm-2">
             <label for="weight">Poids (kg)</label>
-            <input class="form-control" id="weight" name="weight" type="number" value="" min="1">
+            <input class="form-control" id="weight" type="number" value="" min="1">
         </div>
 
         <div class="col-sm-4">
             <label for="work">Métier</label>
-            <input class="form-control" id="work" name="work" type="text" value="">
+            <input class="form-control" id="work" type="text" value="">
         </div>
     </div>
 </div>
