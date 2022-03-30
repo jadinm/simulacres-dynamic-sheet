@@ -574,6 +574,7 @@ $(() => {
     }
     sheet.build()
     sheet.import_local_storage()
+    resize() // Initial sizing
 
     // Initialize AP computation
     if (!npc_grid) {
