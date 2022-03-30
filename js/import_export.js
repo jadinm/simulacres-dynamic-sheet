@@ -295,6 +295,11 @@ $("#import-page").on("change", function (event) {
         if (old_html.find("#import-page").length === 0)
             alert("Le document n'est pas une fiche de personnage. Si vous essayez d'importer un plugin, utilisez l'autre bouton.")
         else {
+            // When importing and enabling a tooltip, they stick around in the saved page and are impossible to remove
+            // without using the HTML inspector. So we remove them during the import process
+            const tooltips = $('[data-toggle="tooltip"]')
+            tooltips.tooltip("dispose")
+
             // We insert new plugins from the old character sheet
             // but we keep the current version of existing plugins
             insert_or_replace_plugins($(e.target.result), false)
@@ -313,6 +318,7 @@ $("#import-page").on("change", function (event) {
                 logger.info("Saving page")
                 $("#save-page").click()
             }
+            tooltips.tooltip()
         }
     }
 
