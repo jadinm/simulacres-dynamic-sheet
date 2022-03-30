@@ -207,7 +207,9 @@ class NPC extends DataRow {
         new TalentRoll(reason, value, talent_level, effect,
             0, [], NaN, false, false,
             "", "", "", 0, "", "",
-            "", "", false, this.row_index + "-").trigger_roll()
+            "", "", false,
+            false, false, false,
+            this.row_index + "-").trigger_roll()
     }
 
     add_listeners() {
