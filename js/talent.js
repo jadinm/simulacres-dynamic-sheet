@@ -340,19 +340,22 @@ class TalentLists extends DataList {
         if (!sheet)
             return
         // We need template rows so that new elements are built correctly
-        sheet.talents(true).forEach((elem) => {
-            if (size === "xs" || size === "sm" || size === "md") {
-                // Only triggered when clicking on the input
-                // Otherwise, the tooltip hides the handler, making it impossible to move around
-                elem.data.attr("data-trigger", "focus")
-                if (!elem.is_template())
-                    elem.data.tooltip('dispose').tooltip({trigger: "focus"})
-            } else {
-                elem.data.attr("data-trigger", "hover focus")
-                if (!elem.is_template())
-                    elem.data.tooltip('dispose').tooltip({trigger: "hover focus"})
-            }
-        })
+        const small_sizes = ["xs", "sm", "md"]
+        if (small_sizes.includes(bootstrap_previous_size) ^ small_sizes.includes(size) || !bootstrap_previous_size) { // There is a switch to do
+            sheet.talents(true).forEach((elem) => {
+                if (small_sizes.includes(size)) {
+                    // Only triggered when clicking on the input
+                    // Otherwise, the tooltip hides the handler, making it impossible to move around
+                    elem.data.attr("data-trigger", "focus")
+                    if (!elem.is_template())
+                        elem.data.tooltip('dispose').tooltip({trigger: "focus"})
+                } else {
+                    elem.data.attr("data-trigger", "hover focus")
+                    if (!elem.is_template())
+                        elem.data.tooltip('dispose').tooltip({trigger: "hover focus"})
+                }
+            })
+        }
     }
 }
 

@@ -1,3 +1,4 @@
+let bootstrap_previous_size = null
 
 /**
  * @returns {string} the size of the screen according to bootstrap ("xs", "sm", "md", "lg" or "xl")
@@ -39,20 +40,22 @@ function characteristics_tab_to_head() {
 
 function resize() {
     const size = bootstrap_screen_size()
-    if (size === "xs" || size === "sm") {
+    const small_sizes = ["xs", "sm"]
+    if (small_sizes.includes(size) && (!small_sizes.includes(bootstrap_previous_size) || !bootstrap_previous_size)) { // small and not the same size range
         navbar_collapsing()
         collapse_table()
         characteristics_head_to_tab()
-    } else {
+    } else if (!small_sizes.includes(size) && (small_sizes.includes(bootstrap_previous_size) || !bootstrap_previous_size)) { // large and not the same size range
         uncollapse_table()
         characteristics_tab_to_head()
     }
     TalentLists.update_talent_tooltip_resize(size)
+    bootstrap_previous_size = size
 }
 
 $(() => {
-    resize()
     $(window).resize(_ => {
         resize()
     })
+    resize() // Initial sizing
 })

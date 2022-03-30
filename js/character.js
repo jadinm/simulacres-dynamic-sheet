@@ -570,16 +570,16 @@ $(() => {
     }
     sheet.build()
     sheet.import_local_storage()
-    resize() // Because it might change after initialization
 
     // Initialize AP computation
     if (!npc_grid) {
         compute_remaining_ap()
     }
-    const endTime = performance.now()
-    logger.info(`Loading the page took ${endTime - startTime} milliseconds`)
 
     if (sheet.has_errors())
         sheet.build_loading_error_summary()
     sheet_loaded = true
+
+    const endTime = performance.now()
+    logger.info(`Loading the page took ${endTime - startTime} milliseconds`)
 })
