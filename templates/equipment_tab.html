@@ -1,25 +1,25 @@
 <div id="equipment-tab" class="tab-pane fade row container-fluid m-0">
     <div class="row col-12 justify-content-center mb-2">
         <div class="btn btn-light rounded-lg py-2 hide-section" data-hide-row="#money-row">
-            Fortune&nbsp;<i class="far fa-eye"></i>
+            Fortune&nbsp;<i class="fa-solid fa-eye"></i>
         </div>
         {% if universe == med_fantasy %}
             <div class="btn btn-light rounded-lg py-2 hide-section" data-hide-table="#focus-table">
-                Focus&nbsp;<i class="far fa-eye"></i>
+                Focus&nbsp;<i class="fa-solid fa-eye"></i>
             </div>
             <div class="btn btn-light rounded-lg py-2 hide-section" data-hide-table="#magical-equipment-table">
-                Équipement à charge&nbsp;<i class="far fa-eye"></i>
+                Équipement à charge&nbsp;<i class="fa-solid fa-eye"></i>
             </div>
         {% endif %}
         <div class="btn btn-light rounded-lg py-2 hide-section" data-hide-table="#equipment-table">
-            Équipement&nbsp;<i class="far fa-eye"></i>
+            Équipement&nbsp;<i class="fa-solid fa-eye"></i>
         </div>
         <div class="btn btn-light rounded-lg py-2 hide-section" data-hide-table="#limitedUse-equipment-table">
-            Équipement à solidité/usage limité(e)&nbsp;<i class="far fa-eye"></i>
+            Équipement à solidité/usage limité(e)&nbsp;<i class="fa-solid fa-eye"></i>
         </div>
     </div>
     <div class="row form-inline md-form col-12 m-0 p-0 justify-content-center">
-        <i class="fas fa-search" aria-hidden="true"></i>
+        <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
         <input id="equipment-search" class="form-control ml-3 w-75" type="text"
                placeholder="Rechercher dans l'équipement" aria-label="Search">
     </div>
@@ -86,7 +86,7 @@
                 <tbody id="focus-table" class="sortable-list">
                 <tr id="focus-x" hidden>
                     <td data-title="Aspect" class="md-form my-0 py-0 align-middle">
-                        <i class="fas fa-arrows-alt prefix h-100 d-none d-md-inline" style="font-size: 1.5em;"></i>
+                        <i class="fa-solid fa-up-down-left-right prefix h-100 d-none d-md-inline" style="font-size: 1.5em;"></i>
                         <label for="focus-x-name"></label>
                         <input id="focus-x-name" class="focus-name form-control" type="text" value="">
                     </td>
@@ -102,7 +102,7 @@
                     </td>
                     <td class="md-form m-0 p-0 d-md-none align-middle">
                         <div class="btn btn-link rounded-lg mx-0 my-0 py-2 px-2">
-                            <i class="fas fa-arrows-alt d-md-none"></i>
+                            <i class="fa-solid fa-up-down-left-right d-md-none"></i>
                         </div>
                     </td>
                 </tr>
@@ -113,7 +113,7 @@
             <div class="col-lg-2 col-md-4 row">
                 <div class="col-6 px-0 mx-0">
                     <button id="add-focus" class="btn btn-success btn-block">
-                        <i class="fas fa-plus"></i>
+                        <i class="fa-solid fa-plus"></i>
                     </button>
                 </div>
                 <div class="col-6 px-0 mx-0">
@@ -121,7 +121,7 @@
                         <button class="btn-block btn btn-danger" style="cursor:default;" data-toggle="tooltip"
                                 data-html="true" data-placement="bottom"
                                 title="Déplacez un élément ici pour le supprimer">
-                            <i class="fas fa-trash-alt fa-1x"></i>
+                            <i class="fa-solid fa-trash-can fa-1x"></i>
                         </button>
                     </div>
                 </div>
@@ -145,7 +145,7 @@
                 <tbody id="magical-equipment-table" class="sortable-list">
                 <tr id="magical-equipment-x" hidden>
                     <td data-title="Nom" class="md-form my-0 py-0 align-middle">
-                        <i class="fas fa-arrows-alt prefix h-100 d-none d-md-inline" style="font-size: 1.5em;"></i>
+                        <i class="fa-solid fa-up-down-left-right prefix h-100 d-none d-md-inline" style="font-size: 1.5em;"></i>
                         <label for="magical-equipment-x-name"></label>
                         <input id="magical-equipment-x-name" class="magical-equipment-name form-control"
                                type="text"
@@ -163,7 +163,7 @@
                     </td>
                     <td class="md-form m-0 p-0 d-md-none align-middle">
                         <div class="btn btn-link rounded-lg mx-0 my-0 py-2 px-2">
-                            <i class="fas fa-arrows-alt d-md-none"></i>
+                            <i class="fa-solid fa-up-down-left-right d-md-none"></i>
                         </div>
                     </td>
                 </tr>
@@ -174,7 +174,7 @@
             <div class="col-lg-2 col-md-4 row">
                 <div class="col-6 px-0 mx-0">
                     <button id="add-magical-equipment" class="btn btn-success btn-block">
-                        <i class="fas fa-plus"></i>
+                        <i class="fa-solid fa-plus"></i>
                     </button>
                 </div>
                 <div class="col-6 px-0 mx-0">
@@ -183,7 +183,7 @@
                         <button class="btn-block btn btn-danger" style="cursor:default;" data-toggle="tooltip"
                                 data-html="true" data-placement="bottom"
                                 title="Déplacez un élément ici pour le supprimer">
-                            <i class="fas fa-trash-alt fa-1x"></i>
+                            <i class="fa-solid fa-trash-can fa-1x"></i>
                         </button>
                     </div>
                 </div>
@@ -210,7 +210,7 @@
             <tbody id="equipment-table" class="sortable-list">
             <tr id="equipment-x" hidden>
                 <td data-title="Quantité" class="md-form my-0 py-0 align-middle">
-                    <i class="fas fa-arrows-alt prefix h-100 d-none d-md-inline" style="font-size: 1.5em;"></i>
+                    <i class="fa-solid fa-up-down-left-right prefix h-100 d-none d-md-inline" style="font-size: 1.5em;"></i>
                     <input id="equipment-x-quantity" class="equipment quantity form-control text-center"
                            type="number" value="0" min="0">
                     <label for="equipment-x-quantity"></label>
@@ -226,7 +226,7 @@
                 </td>
                 <td class="md-form m-0 p-0 d-md-none align-middle">
                     <div class="btn btn-link rounded-lg mx-0 my-0 py-2 px-2">
-                        <i class="fas fa-arrows-alt d-md-none"></i>
+                        <i class="fa-solid fa-up-down-left-right d-md-none"></i>
                     </div>
                 </td>
             </tr>
@@ -237,7 +237,7 @@
         <div class="col-lg-2 col-md-4 row">
             <div class="col-6 px-0 mx-0">
                 <button id="add-equipment" class="btn btn-success btn-block">
-                    <i class="fas fa-plus"></i>
+                    <i class="fa-solid fa-plus"></i>
                 </button>
             </div>
             <div class="col-6 px-0 mx-0">
@@ -245,7 +245,7 @@
                     <button class="btn-block btn btn-danger" style="cursor:default;" data-toggle="tooltip"
                             data-html="true" data-placement="bottom"
                             title="Déplacez un élément ici pour le supprimer">
-                        <i class="fas fa-trash-alt fa-1x"></i>
+                        <i class="fa-solid fa-trash-can fa-1x"></i>
                     </button>
                 </div>
             </div>
@@ -269,7 +269,7 @@
             <tbody id="limitedUse-equipment-table" class="sortable-list">
             <tr id="limitedUse-equipment-x" hidden>
                 <td data-title="Nom" class="md-form my-0 py-0 align-middle">
-                    <i class="fas fa-arrows-alt prefix h-100 d-none d-md-inline" style="font-size: 1.5em;"></i>
+                    <i class="fa-solid fa-up-down-left-right prefix h-100 d-none d-md-inline" style="font-size: 1.5em;"></i>
                     <label for="limitedUse-equipment-x-name"></label>
                     <input id="limitedUse-equipment-x-name" class="magical-equipment-name form-control"
                            type="text"
@@ -287,7 +287,7 @@
                 </td>
                 <td class="md-form m-0 p-0 d-md-none align-middle">
                     <div class="btn btn-link rounded-lg mx-0 my-0 py-2 px-2">
-                        <i class="fas fa-arrows-alt d-md-none"></i>
+                        <i class="fa-solid fa-up-down-left-right d-md-none"></i>
                     </div>
                 </td>
             </tr>
@@ -298,7 +298,7 @@
         <div class="col-lg-2 col-md-4 row">
             <div class="col-6 px-0 mx-0">
                 <button id="add-limitedUse-equipment" class="btn btn-success btn-block">
-                    <i class="fas fa-plus"></i>
+                    <i class="fa-solid fa-plus"></i>
                 </button>
             </div>
             <div class="col-6 px-0 mx-0">
@@ -307,7 +307,7 @@
                     <button class="btn-block btn btn-danger" style="cursor:default;" data-toggle="tooltip"
                             data-html="true" data-placement="bottom"
                             title="Déplacez un élément ici pour le supprimer">
-                        <i class="fas fa-trash-alt fa-1x"></i>
+                        <i class="fa-solid fa-trash-can fa-1x"></i>
                     </button>
                 </div>
             </div>

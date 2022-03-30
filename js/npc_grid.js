@@ -97,16 +97,20 @@ class NPCStatus extends Status {
     }
 
     toggle_localization() {
+        const add_localization = this.get("add-localization")
+        const remove_localization = this.get("remove-localization")
         if (this.is_localized()) {
             this.get("non-localized-status").removeClass("d-none")
             this.get("localized-status").addClass("d-none")
-            this.get("add-localization").removeAttr("hidden").tooltip()
-            this.get("remove-localization").tooltip("dispose").attr("hidden", "hidden")
+            add_localization.parent().removeAttr("hidden")
+            add_localization.tooltip()
+            remove_localization.tooltip("dispose").parent().attr("hidden", "hidden")
         } else {
             this.get("non-localized-status").addClass("d-none")
             this.get("localized-status").removeClass("d-none")
-            this.get("add-localization").tooltip("dispose").attr("hidden", "hidden")
-            this.get("remove-localization").removeAttr("hidden").tooltip()
+            add_localization.tooltip("dispose").parent().attr("hidden", "hidden")
+            remove_localization.parent().removeAttr("hidden")
+            remove_localization.tooltip()
         }
     }
 

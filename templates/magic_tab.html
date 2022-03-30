@@ -1,30 +1,30 @@
 <div id="magic-tab" class="tab-pane fade row container-fluid m-0 pt-2">
     <div class="row col-12 justify-content-center mb-2">
         <div class="btn btn-light rounded-lg py-2 hide-section" data-hide-row="#magic-tab .magical-energy-row">
-            Énergies magiques&nbsp;<i class="far fa-eye"></i>
+            Énergies magiques&nbsp;<i class="fa-solid fa-eye"></i>
         </div>
         {% if universe == med_fantasy %}
             <div class="btn btn-light rounded-lg py-2 hide-section" data-hide-row="#magical-counters">
-                Compteurs&nbsp;<i class="far fa-eye"></i>
+                Compteurs&nbsp;<i class="fa-solid fa-eye"></i>
             </div>
         {% endif %}
         {% if version == V7 %}
             <div class="btn btn-light rounded-lg py-2 hide-section" data-hide-table="#spell-table">
-                Sorts&nbsp;<i class="far fa-eye"></i>
+                Sorts&nbsp;<i class="fa-solid fa-eye"></i>
             </div>
             <div class="btn btn-light rounded-lg py-2 hide-section" data-hide-table="#focusMagic-table">
-                Sorts liés à un objets à focus&nbsp;<i class="far fa-eye"></i>
+                Sorts liés à un objets à focus&nbsp;<i class="fa-solid fa-eye"></i>
             </div>
             <div class="btn btn-dark rounded-lg py-2 hide-section d-none" data-hide-table="#rune-table">
-                Runes apprises&nbsp;<i class="far fa-eye-slash"></i>
+                Runes apprises&nbsp;<i class="fa-solid fa-eye-slash"></i>
             </div>
             <div class="btn btn-dark rounded-lg py-2 hide-section d-none" data-hide-table="#word-table">
-                Mots appris&nbsp;<i class="far fa-eye-slash"></i>
+                Mots appris&nbsp;<i class="fa-solid fa-eye-slash"></i>
             </div>
         {% endif %}
     </div>
     <div class="row form-inline md-form col-12 m-0 p-0 justify-content-center">
-        <i class="fas fa-search" aria-hidden="true"></i>
+        <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
         <input id="magic-search" class="form-control ml-3 w-75" type="text"
                placeholder="Rechercher les noms de sorts, leurs effets, leurs durées, leurs concentrations ou leurs portées"
                aria-label="Search">
@@ -390,8 +390,8 @@
                 <tr id="spell-x" class="spell" hidden>
                     <td data-title="Nom" class="md-form  my-0 py-0 align-middle"
                         data-toggle="tooltip" data-placement="bottom" title="">
-                        <i id="spell-x-name-handle" class="fas fa-arrows-alt prefix h-100 d-none d-md-inline"
-                           style="font-size: 1.5em;"></i>
+                        <i id="spell-x-name-handle" class="fa-solid fa-up-down-left-right prefix h-100 d-none d-md-inline"
+                           style="width: 1em;"></i>
                         <label for="spell-x-name"></label>
                         <input id="spell-x-name" class="spell-name form-control" type="text" value="">
 
@@ -403,7 +403,7 @@
                                     data-style="col-10 ml-md-5 mx-0 px-3 align-middle" data-container="body"
                                     data-max-options="1" multiple>
                             </select>
-                            <i class="fas fa-arrows-alt prefix h-100 d-none d-md-inline" style="font-size: 1.5em;"></i>
+                            <i class="fa-solid fa-up-down-left-right prefix h-100 d-none d-md-inline" style="width: 1em;"></i>
                         </div>
                     </td>
                     <td data-title="Liste" class="align-middle">
@@ -477,12 +477,12 @@
                                 </span>
                                 <span id="spell-x-value-{{ realm }}" class="spell-value"></span>
                                 <span id="spell-x-dice-{{ realm }}" class="clickable row-roll-trigger" hidden>
-                                    <i class="fas fa-dice"></i>
+                                    <i class="fa-solid fa-dice"></i>
                                 </span>
                             </div>
                         {% endfor %}
                         <span id="spell-x-dice-evil-nature-good" class="clickable row-roll-trigger d-none">
-                            <i class="fas fa-dice"></i>
+                            <i class="fa-solid fa-dice"></i>
                         </span>
                     </td>
                     <td data-title="Concentration" class="md-form my-0 py-0 align-middle">
@@ -505,10 +505,10 @@
                         <div id="spell-x-show-details" data-toggle="tooltip" data-placement="top"
                              title="Voir les détails du test"
                              class="btn btn-link rounded-lg mx-0 my-0 py-2 px-2">
-                            <i class="fas fa-cogs"></i>
+                            <i class="fa-solid fa-gear"></i>
                         </div>
                         <div class="btn btn-link rounded-lg mx-0 my-0 py-2 px-2">
-                            <i class="fas fa-arrows-alt d-md-none"></i>
+                            <i class="fa-solid fa-up-down-left-right d-md-none"></i>
                         </div>
                         {% with row_type = "spell" %}
                             {% include "spell_modal.html" %}
@@ -522,7 +522,7 @@
             <div class="col-lg-2 col-md-4 row">
                 <div class="col-6 px-0 mx-0">
                     <button id="add-spell" class="btn btn-success btn-block">
-                        <i class="fas fa-plus"></i>
+                        <i class="fa-solid fa-plus"></i>
                     </button>
                 </div>
                 <div class="col-6 px-0 mx-0">
@@ -530,7 +530,7 @@
                         <button class="btn-block btn btn-danger" style="cursor:default;" data-toggle="tooltip"
                                 data-html="true" data-placement="bottom"
                                 title="Déplacez un élément ici pour le supprimer">
-                            <i class="fas fa-trash-alt fa-1x"></i>
+                            <i class="fa-solid fa-trash-can fa-1x"></i>
                         </button>
                     </div>
                 </div>
@@ -561,8 +561,8 @@
                 <tr id="focusMagic-x" class="focusMagic" hidden>
                     <td data-title="Nom" class="md-form my-0 py-0 align-middle"
                         data-toggle="tooltip" data-placement="bottom" title="">
-                        <i id="focusMagic-x-name-handle" class="fas fa-arrows-alt prefix h-100 d-none d-md-inline"
-                           style="font-size: 1.5em;"></i>
+                        <i id="focusMagic-x-name-handle" class="fa-solid fa-up-down-left-right prefix h-100 d-none d-md-inline"
+                           style="width: 1em;"></i>
                         <label for="focusMagic-x-name"></label>
                         <input id="focusMagic-x-name" class="focusMagic-name form-control" type="text" value="">
                     </td>
@@ -579,7 +579,7 @@
                         <div class="m-0 p-0 focusMagic-value-row">
                             <span id="focusMagic-x-value" class="spell-value"></span>
                             <span id="focusMagic-x-dice" class="clickable row-roll-trigger">
-                            <i class="fas fa-dice"></i>
+                            <i class="fa-solid fa-dice"></i>
                         </span>
                         </div>
                     </td>
@@ -606,10 +606,10 @@
                         <div id="focusMagic-x-show-details" data-toggle="tooltip" data-placement="top"
                              title="Voir les détails du test"
                              class="btn btn-link rounded-lg mx-0 my-0 py-2 px-2">
-                            <i class="fas fa-cogs"></i>
+                            <i class="fa-solid fa-gear"></i>
                         </div>
                         <div class="btn btn-link rounded-lg mx-0 my-0 py-2 px-2">
-                            <i class="fas fa-arrows-alt d-md-none"></i>
+                            <i class="fa-solid fa-up-down-left-right d-md-none"></i>
                         </div>
                         {% with row_type = "focusMagic" %}
                             {% include "spell_modal.html" %}
@@ -623,7 +623,7 @@
             <div class="col-lg-2 col-md-4 row">
                 <div class="col-6 px-0 mx-0">
                     <button id="add-focusMagic" class="btn btn-success btn-block">
-                        <i class="fas fa-plus"></i>
+                        <i class="fa-solid fa-plus"></i>
                     </button>
                 </div>
                 <div class="col-6 px-0 mx-0">
@@ -631,7 +631,7 @@
                         <button class="btn-block btn btn-danger" style="cursor:default;" data-toggle="tooltip"
                                 data-html="true" data-placement="bottom"
                                 title="Déplacez un élément ici pour le supprimer">
-                            <i class="fas fa-trash-alt fa-1x"></i>
+                            <i class="fa-solid fa-trash-can fa-1x"></i>
                         </button>
                     </div>
                 </div>
@@ -654,7 +654,7 @@
                 <tbody id="rune-table" class="sortable-list">
                 <tr id="rune-x" class="rune" hidden>
                     <td class="md-form align-middle" data-toggle="tooltip" data-placement="bottom" title="">
-                        <i class="fas fa-arrows-alt prefix h-100" style="font-size: 1.5em;"></i>
+                        <i class="fa-solid fa-up-down-left-right prefix h-100" style="width: 1em;"></i>
                         <label for="rune-x-name"></label>
                         <input id="rune-x-name" class="spell-name form-control" type="text" value="">
                     </td>
@@ -670,7 +670,7 @@
             <div class="col-lg-2 col-md-4 row">
                 <div class="col-6 px-0 mx-0">
                     <button id="add-rune" class="btn btn-success btn-block">
-                        <i class="fas fa-plus"></i>
+                        <i class="fa-solid fa-plus"></i>
                     </button>
                 </div>
                 <div class="col-6 px-0 mx-0">
@@ -678,7 +678,7 @@
                         <button class="btn-block btn btn-danger" style="cursor:default;" data-toggle="tooltip"
                                 data-html="true" data-placement="bottom"
                                 title="Déplacez un élément ici pour le supprimer">
-                            <i class="fas fa-trash-alt fa-1x"></i>
+                            <i class="fa-solid fa-trash-can fa-1x"></i>
                         </button>
                     </div>
                 </div>
@@ -711,7 +711,7 @@
                             <option value="individual-name">Nom d'individu</option>
                             <option value="creation-destruction-verb">Verbe de création/destruction</option>
                         </select>
-                        <i class="fas fa-arrows-alt prefix h-100" style="font-size: 1.5em;"></i>
+                        <i class="fa-solid fa-up-down-left-right prefix h-100" style="width: 1em;"></i>
                     </td>
                     <td class="md-form align-middle">
                         <label for="word-x-name"></label>
@@ -725,7 +725,7 @@
             <div class="col-lg-2 col-md-4 row">
                 <div class="col-6 px-0 mx-0">
                     <button id="add-word" class="btn btn-success btn-block">
-                        <i class="fas fa-plus"></i>
+                        <i class="fa-solid fa-plus"></i>
                     </button>
                 </div>
                 <div class="col-6 px-0 mx-0">
@@ -733,7 +733,7 @@
                         <button class="btn-block btn btn-danger" style="cursor:default;" data-toggle="tooltip"
                                 data-html="true" data-placement="bottom"
                                 title="Déplacez un élément ici pour le supprimer">
-                            <i class="fas fa-trash-alt fa-1x"></i>
+                            <i class="fa-solid fa-trash-can fa-1x"></i>
                         </button>
                     </div>
                 </div>

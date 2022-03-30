@@ -130,7 +130,7 @@ class DataList {
 
     setup_sortable() {
         this.table.sortable({
-            handle: '.fa-arrows-alt',
+            handle: '.fa-up-down-left-right',
             dragoverBubble: true,
             group: this.id,
             onEnd: _ => {
@@ -144,7 +144,7 @@ class DataList {
         this.remove_button.sortable({
             group: this.id, // So that it can delete the appropriate table items
             ghostClass: "remove-drop",
-            handle: '.fa-arrows-alt', // So that the button itself cannot be moved
+            handle: '.fa-up-down-left-right', // So that the button itself cannot be moved
             onAdd: e => this.remove_row(e)
         })
     }

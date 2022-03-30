@@ -1,22 +1,22 @@
 <div id="roll-tab" class="tab-pane fade row my-1 container-fluid m-0">
     <div class="row col-12 justify-content-center mb-2">
         <div class="btn btn-light rounded-lg py-2 hide-section" data-hide-table="#close_combat-table">
-            Combat au contact&nbsp;<i class="far fa-eye"></i>
+            Combat au contact&nbsp;<i class="fa-solid fa-eye"></i>
         </div>
         <div class="btn btn-light rounded-lg py-2 hide-section" data-hide-table="#range_combat-table">
-            Combat à distance&nbsp;<i class="far fa-eye"></i>
+            Combat à distance&nbsp;<i class="fa-solid fa-eye"></i>
         </div>
         {% if dual_wielding %}
             <div class="btn btn-light rounded-lg py-2 hide-section" data-hide-table="#dual_wielding-table">
-                Combat à deux armes&nbsp;<i class="far fa-eye"></i>
+                Combat à deux armes&nbsp;<i class="fa-solid fa-eye"></i>
             </div>
         {% endif %}
         <div class="btn btn-light rounded-lg py-2 hide-section" data-hide-table="#roll-table">
-            Tests courants&nbsp;<i class="far fa-eye"></i>
+            Tests courants&nbsp;<i class="fa-solid fa-eye"></i>
         </div>
     </div>
     <div class="row form-inline md-form col-12 justify-content-center m-0 p-0">
-        <i class="fas fa-search" aria-hidden="true"></i>
+        <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
         <input id="roll-search" class="form-control ml-3 w-75" type="text"
                placeholder="Rechercher les talents utilisés ou les effets" aria-label="Search">
     </div>
@@ -50,7 +50,7 @@
                                 </select>
                             </div>
                         </div>
-                        <i class="fas fa-arrows-alt prefix h-100 d-none d-md-inline" style="font-size: 1.5em;"></i>
+                        <i class="fa-solid fa-up-down-left-right prefix h-100 d-none d-md-inline" style="width: 1em; vertical-align: middle;"></i>
                     </div>
                 </td>
                 <td data-title="Formule" class="my-0 py-0 roll-formula align-middle">
@@ -62,7 +62,7 @@
                     <div>
                         <span id="close_combat-x-value" class="roll-value"></span>
                         <span id="close_combat-x-dice" class="clickable row-roll-trigger" hidden>
-                            <i class="fas fa-dice"></i>
+                            <i class="fa-solid fa-dice"></i>
                         </span>
                     </div>
                 </td>
@@ -74,15 +74,15 @@
                     <div id="close_combat-x-show-details" data-toggle="tooltip" data-placement="top"
                          title="Voir les détails du test"
                          class="btn btn-link rounded-lg mx-0 my-0 py-2 px-2">
-                        <i class="fas fa-cogs"></i>
+                        <i class="fa-solid fa-gear"></i>
                     </div>
                     <div id="close_combat-x-copy" data-toggle="tooltip" data-placement="top"
                          title="Copier le test"
                          class="btn btn-link rounded-lg mx-0 my-0 py-2 px-2 row-copy">
-                        <i class="fas fa-copy"></i>
+                        <i class="fa-solid fa-copy"></i>
                     </div>
                     <div class="btn btn-link rounded-lg mx-0 my-0 py-2 px-2">
-                        <i class="fas fa-arrows-alt d-md-none"></i>
+                        <i class="fa-solid fa-up-down-left-right d-md-none"></i>
                     </div>
                     {% with row_type = "close_combat", default_is_physical = True %}
                         {% include "talent_roll_modal.html" %}
@@ -96,7 +96,7 @@
         <div class="col-lg-2 col-md-4 row">
             <div class="col-6 px-0 mx-0">
                 <button id="add-close_combat" class="btn btn-success btn-block">
-                    <i class="fas fa-plus"></i>
+                    <i class="fa-solid fa-plus"></i>
                 </button>
             </div>
             <div class="col-6 px-0 mx-0">
@@ -104,7 +104,7 @@
                     <button class="btn-block btn btn-danger" style="cursor:default;" data-toggle="tooltip"
                             data-html="true" data-placement="bottom"
                             title="Déplacez un élément ici pour le supprimer">
-                        <i class="fas fa-trash-alt fa-1x"></i>
+                        <i class="fa-solid fa-trash-can fa-1x"></i>
                     </button>
                 </div>
             </div>
@@ -144,7 +144,7 @@
                                 </select>
                             </div>
                         </div>
-                        <i class="fas fa-arrows-alt prefix h-100 d-none d-md-inline" style="font-size: 1.5em;"></i>
+                        <i class="fa-solid fa-up-down-left-right prefix h-100 d-none d-md-inline" style="width: 1em;"></i>
                     </div>
                 </td>
                 <td data-title="Formule" class="my-0 py-0 roll-formula align-middle">
@@ -163,7 +163,7 @@
                             <span class="d-md-none col-6 text-right">{{ ranges[range] }}</span>
                             <span id="range_combat-x-value{{ range }}" class="roll-value"></span>
                             <span id="range_combat-x-dice{{ range }}" class="clickable row-roll-trigger" hidden>
-                                <i class="fas fa-dice"></i>
+                                <i class="fa-solid fa-dice"></i>
                             </span>
                         </div>
                     {% endfor %}
@@ -202,15 +202,15 @@
                     <div id="range_combat-x-show-details" data-toggle="tooltip" data-placement="top"
                          title="Voir les détails du test"
                          class="btn btn-link rounded-lg mx-0 my-0 py-2 px-2">
-                        <i class="fas fa-cogs"></i>
+                        <i class="fa-solid fa-gear"></i>
                     </div>
                     <div id="range_combat-x-copy" data-toggle="tooltip" data-placement="top"
                          title="Copier le test"
                          class="btn btn-link rounded-lg mx-0 my-0 py-2 px-2 row-copy">
-                        <i class="fas fa-copy"></i>
+                        <i class="fa-solid fa-copy"></i>
                     </div>
                     <div class="btn btn-link rounded-lg mx-0 my-0 py-2 px-2">
-                        <i class="fas fa-arrows-alt d-md-none"></i>
+                        <i class="fa-solid fa-up-down-left-right d-md-none"></i>
                     </div>
                     {% with row_type = "range_combat", default_is_physical = True %}
                         {% include "talent_roll_modal.html" %}
@@ -224,7 +224,7 @@
         <div class="col-lg-2 col-md-4 row">
             <div class="col-6 px-0 mx-0">
                 <button id="add-range_combat" class="btn btn-success btn-block">
-                    <i class="fas fa-plus"></i>
+                    <i class="fa-solid fa-plus"></i>
                 </button>
             </div>
             <div class="col-6 px-0 mx-0">
@@ -232,7 +232,7 @@
                     <button class="btn-block btn btn-danger" style="cursor:default;" data-toggle="tooltip"
                             data-html="true" data-placement="bottom"
                             title="Déplacez un élément ici pour le supprimer">
-                        <i class="fas fa-trash-alt fa-1x"></i>
+                        <i class="fa-solid fa-trash-can fa-1x"></i>
                     </button>
                 </div>
             </div>
@@ -271,7 +271,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <i class="fas fa-arrows-alt prefix h-100 d-none d-md-inline" style="font-size: 1.5em;"></i>
+                            <i class="fa-solid fa-up-down-left-right prefix h-100 d-none d-md-inline" style="width: 1em;"></i>
                         </div>
                     </td>
                     <td data-title="Arme secondaire" class="align-middle my-0 mr-0 pr-0 py-0">
@@ -293,7 +293,7 @@
                         <div>
                             <span id="dual_wielding-x-value" class="dual_wielding-value"></span>
                             <span id="dual_wielding-x-dice" class="clickable row-roll-trigger" hidden>
-                                    <i class="fas fa-dice"></i>
+                                    <i class="fa-solid fa-dice"></i>
                                 </span>
                         </div>
                     </td>
@@ -305,15 +305,15 @@
                         <div id="dual_wielding-x-show-details" data-toggle="tooltip" data-placement="top"
                              title="Voir les détails du test"
                              class="btn btn-link rounded-lg mx-0 my-0 py-2 px-2">
-                            <i class="fas fa-cogs"></i>
+                            <i class="fa-solid fa-gear"></i>
                         </div>
                         <div id="dual_wielding-x-copy" data-toggle="tooltip" data-placement="top"
                              title="Copier le test"
                              class="btn btn-link rounded-lg mx-0 my-0 py-2 px-2 row-copy">
-                            <i class="fas fa-copy"></i>
+                            <i class="fa-solid fa-copy"></i>
                         </div>
                         <div class="btn btn-link rounded-lg mx-0 my-0 py-2 px-2">
-                            <i class="fas fa-arrows-alt d-md-none"></i>
+                            <i class="fa-solid fa-up-down-left-right d-md-none"></i>
                         </div>
                         {% with row_type = "dual_wielding", default_is_physical = True %}
                             {% include "talent_roll_modal.html" %}
@@ -327,7 +327,7 @@
             <div class="col-lg-2 col-md-4 row">
                 <div class="col-6 px-0 mx-0">
                     <button id="add-dual_wielding" class="btn btn-success btn-block">
-                        <i class="fas fa-plus"></i>
+                        <i class="fa-solid fa-plus"></i>
                     </button>
                 </div>
                 <div class="col-6 px-0 mx-0">
@@ -335,7 +335,7 @@
                         <button class="btn-block btn btn-danger" style="cursor:default;" data-toggle="tooltip"
                                 data-html="true" data-placement="bottom"
                                 title="Déplacez un élément ici pour le supprimer">
-                            <i class="fas fa-trash-alt fa-1x"></i>
+                            <i class="fa-solid fa-trash-can fa-1x"></i>
                         </button>
                     </div>
                 </div>
@@ -372,7 +372,7 @@
                                 </select>
                             </div>
                         </div>
-                        <i class="fas fa-arrows-alt prefix h-100 d-none d-md-inline" style="font-size: 1.5em;"></i>
+                        <i class="fa-solid fa-up-down-left-right prefix h-100 d-none d-md-inline" style="width: 1em;"></i>
                     </div>
                 </td>
                 <td data-title="Formule" class="my-0 py-0 roll-formula align-middle">
@@ -384,7 +384,7 @@
                     <div>
                         <span id="roll-x-value" class="roll-value"></span>
                         <span id="roll-x-dice" class="clickable row-roll-trigger" hidden>
-                            <i class="fas fa-dice"></i>
+                            <i class="fa-solid fa-dice"></i>
                         </span>
                     </div>
                 </td>
@@ -396,15 +396,15 @@
                     <div id="roll-x-show-details" data-toggle="tooltip" data-placement="top"
                          title="Voir les détails du test"
                          class="btn btn-link rounded-lg mx-0 my-0 py-2 px-2">
-                        <i class="fas fa-cogs"></i>
+                        <i class="fa-solid fa-gear"></i>
                     </div>
                     <div id="roll-x-copy" data-toggle="tooltip" data-placement="top"
                          title="Copier le test"
                          class="btn btn-link rounded-lg mx-0 my-0 py-2 px-2 row-copy">
-                        <i class="fas fa-copy"></i>
+                        <i class="fa-solid fa-copy"></i>
                     </div>
                     <div class="btn btn-link rounded-lg mx-0 my-0 py-2 px-2">
-                        <i class="fas fa-arrows-alt d-md-none"></i>
+                        <i class="fa-solid fa-up-down-left-right d-md-none"></i>
                     </div>
                     {% with row_type = "roll" %}
                         {% include "talent_roll_modal.html" %}
@@ -418,7 +418,7 @@
         <div class="col-lg-2 col-md-4 row">
             <div class="col-6 px-0 mx-0">
                 <button id="add-roll" class="btn btn-success btn-block">
-                    <i class="fas fa-plus"></i>
+                    <i class="fa-solid fa-plus"></i>
                 </button>
             </div>
             <div class="col-6 px-0 mx-0">
@@ -426,7 +426,7 @@
                     <button class="btn-block btn btn-danger" style="cursor:default;" data-toggle="tooltip"
                             data-html="true" data-placement="bottom"
                             title="Déplacez un élément ici pour le supprimer">
-                        <i class="fas fa-trash-alt fa-1x"></i>
+                        <i class="fa-solid fa-trash-can fa-1x"></i>
                     </button>
                 </div>
             </div>
@@ -438,8 +438,8 @@
         <div class="col-12">Lancers de dés libre</div>
     </div>
     <div class="row col-12">
-        <div id="roll-1d6" class="btn btn-info text-center"><i class="fas fa-dice-six"></i></div>
-        <div id="roll-2d6" class="btn btn-info text-center"><i class="fas fa-dice"></i></div>
+        <div id="roll-1d6" class="btn btn-info text-center"><i class="fa-solid fa-dice-six"></i></div>
+        <div id="roll-2d6" class="btn btn-info text-center"><i class="fa-solid fa-dice"></i></div>
     </div>
     <div class="row col-12 form-row mt-1 md-form p-0 m-0 align-middle">
         <div class="col-lg-1 col-md-2 col-6 mt-2">

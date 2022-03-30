@@ -16,12 +16,12 @@
             <li class="nav-item d-none" data-toggle="tooltip" data-html="true" data-placement="top"
                 title="Voir l'historique des tests">
                 <a id="roll-history" class="nav-link">
-                    <i class="fas fa-history"></i>
+                    <i class="fa-solid fa-clock-rotate-left"></i>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" data-toggle="modal" data-target="#hide-tabs">
-                    <i class="fas fa-cogs"></i>
+                    <i class="fa-solid fa-gear"></i>
                 </a>
             </li>
         </ul>
@@ -32,26 +32,34 @@
                     <div id="npc-x" class="col-xl-4 col-lg-6 col-12 card shadow-none border border-heavy rounded-lg"
                          hidden>
                         <div class="row my-0">
-                            <i class="fas fa-arrows-alt prefix h-100 col-1" style="font-size: 1.5em;"></i>
+                            <div class="col-1">
+                                <i class="fa-solid fa-up-down-left-right prefix h-100" style="width: 1.5em;"></i>
+                            </div>
                             <div class="align-middle md-form col-9 m-0" data-toggle="tooltip" data-placement="top"
                                  title="Name">
                                 <label for="npc-x-name" hidden></label>
                                 <input class="form-control text-center" id="npc-x-name" type="text" value="">
                             </div>
-                            <i id="npc-x-add-localization"
-                               class="fas fa-search-plus h-100 col-1 clickable npc-localization"
-                               data-toggle="tooltip" data-placement="top" title="Localiser les PV"
-                               style="font-size: 1.5em;" hidden>
-                            </i>
-                            <i id="npc-x-remove-localization"
-                               class="fas fa-search-minus h-100 col-1 clickable npc-localization"
-                               data-toggle="tooltip" data-placement="top" title="Enlever la localisation des PV"
-                               style="font-size: 1.5em;">
-                            </i>
-                            <i id="npc-x-copy" class="fas fa-copy prefix h-100 col-1 clickable row-copy"
-                               data-toggle="tooltip"
-                               data-placement="top" title="Copier PNJ" style="font-size: 1.5em;">
-                            </i>
+                            <div class="col-1" hidden>
+                                <i id="npc-x-add-localization"
+                                   class="fa-solid fa-magnifying-glass-plus h-100 clickable npc-localization"
+                                   data-toggle="tooltip" data-placement="top" title="Localiser les PV"
+                                   style="width: 1.5em;">
+                                </i>
+                            </div>
+                            <div class="col-1">
+                                <i id="npc-x-remove-localization"
+                                   class="fa-solid fa-magnifying-glass-minus h-100 clickable npc-localization"
+                                   data-toggle="tooltip" data-placement="top" title="Enlever la localisation des PV"
+                                   style="width: 1.5em;">
+                                </i>
+                            </div>
+                            <div class="col-1">
+                                <i id="npc-x-copy" class="fa-solid fa-copy prefix h-100 clickable row-copy"
+                                   data-toggle="tooltip"
+                                   data-placement="top" title="Copier PNJ" style="width: 1.5em;">
+                                </i>
+                            </div>
                         </div>
                         {% include "localized_status_npc.html" %}
                         {% with base_id = "npc-x-" %}
@@ -65,7 +73,7 @@
                     <div class="col-lg-2 col-md-4 row">
                         <div class="col-6 px-0 mx-0">
                             <button id="add-npc" class="btn btn-success btn-block">
-                                <i class="fas fa-plus"></i>
+                                <i class="fa-solid fa-plus"></i>
                             </button>
                         </div>
                         <div class="col-6 px-0 mx-0">
@@ -73,7 +81,7 @@
                                 <button class="btn-block btn btn-danger" style="cursor:default;" data-toggle="tooltip"
                                         data-html="true" data-placement="bottom"
                                         title="Déplacez un élément ici pour le supprimer">
-                                    <i class="fas fa-trash-alt fa-1x"></i>
+                                    <i class="fa-solid fa-trash-can fa-1x"></i>
                                 </button>
                             </div>
                         </div>

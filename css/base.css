@@ -40,7 +40,7 @@ input {
 /* Change thickness of bootstrap borders */
 
 /* Make handles clickable on every pixel */
-.fa-arrows-alt {
+.fa-up-down-left-right {
     display: block;
 }
 

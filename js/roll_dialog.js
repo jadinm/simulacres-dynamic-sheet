@@ -108,11 +108,11 @@ class Roll {
                 text += '<span class="clickable btn-link roll-link" data-dice-group="' + dice_group
                     + '" data-dice-type="' + type + '" data-dice-idx="' + i
                     + '" data-toggle="tooltip" data-placement="bottom" title="Relancer le dé">' +
-                    '<i class="fas fa-lg fa-dice-' + digits[dices[i]] + '"></i></span>'
+                    '<i class="fa-solid fa-lg fa-dice-' + digits[dices[i]] + '"></i></span>'
             else
                 text += dices[i]
             if (parseInt(i) !== dices.length - 1)
-                text += "&nbsp;<i class=\"fas fa-sm fa-plus mt-1\"></i>&nbsp;"
+                text += "&nbsp;<i class=\"fa-solid fa-sm fa-plus mt-1\"></i>&nbsp;"
         }
         return text + "&nbsp;"
     }

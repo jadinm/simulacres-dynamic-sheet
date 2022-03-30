@@ -164,7 +164,7 @@ class TalentLists extends DataList {
 
     setup_sortable() {
         this.table.sortable({
-            handle: '.fa-arrows-alt',
+            handle: '.fa-up-down-left-right',
             group: 'talent-lists', // So we can move the talent around
             dragoverBubble: true,
             onEnd: (e) => {
@@ -193,7 +193,7 @@ class TalentLists extends DataList {
         this.remove_button.sortable({
             group: 'talent-lists', // So that it can delete those items
             ghostClass: "remove-drop",
-            handle: '.fa-arrows-alt', // So that the button itself cannot be moved
+            handle: '.fa-up-down-left-right', // So that the button itself cannot be moved
             onAdd: event => this.remove_row(event)
         })
     }

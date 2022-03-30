@@ -14,14 +14,14 @@ function navbar_collapsing() {
 
 function collapse_table() {
     // Remove blank space before input due to prefix class
-    $(".collapsible-table .fa-arrows-alt.d-none.prefix").removeClass("prefix")
+    $(".collapsible-table .fa-up-down-left-right.d-none.prefix").removeClass("prefix")
     // Remove horizontal scroll
     $(".collapsible-table").removeClass("table-responsive").css("overflow-y", "")
 }
 
 function uncollapse_table() {
     // Re-add the handler
-    $(".collapsible-table .fa-arrows-alt.d-none").addClass("prefix")
+    $(".collapsible-table .fa-up-down-left-right.d-none").addClass("prefix")
     // Add horizontal scroll
     $(".collapsible-table").addClass("table-responsive").css("overflow-y", "hidden !important")
 }

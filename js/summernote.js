@@ -50,7 +50,7 @@ function EmojiButton(context) {
     const buttonGroup = ui.buttonGroup([
         ui.button({
             className: 'dropdown-toggle',
-            contents: '<i class="far fa-smile"/>',
+            contents: '<i class="fa-regular fa-face-smile"/>',
             tooltip: 'Insérer un emoji',
             data: {
                 toggle: 'dropdown'
