@@ -239,7 +239,6 @@ class NPCGrid extends DataList {
         this.load_bestiary(bestiary.val())
         this.add_button.off("click").on("click", (event, idx = null) => { // Add parameter for forced index
             const row = this.add_row(idx)
-            changed_page = true
             if (idx == null) {
                 // We are not importing new data and want to take the selection of the base NPC into account
                 const creature_name = this.get("npc-table-add-select").val()
@@ -250,6 +249,7 @@ class NPCGrid extends DataList {
                     }
                 }
             }
+            mark_page_changed()
         })
     }
 

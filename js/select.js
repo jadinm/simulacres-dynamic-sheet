@@ -123,7 +123,7 @@ function update_select(select, elements, new_value, old_value) {
     if (!is_template) {// Ignore template lines
         select.selectpicker("refresh")
     }
-    changed_page = true
+    mark_page_changed()
 }
 
 /**
@@ -158,6 +158,6 @@ function select_change(e) {
             $(e.target).children()[i].setAttribute('selected', 'selected')
         }
     })
-    changed_page = true
+    mark_page_changed()
     return value
 }

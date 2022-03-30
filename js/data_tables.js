@@ -134,12 +134,12 @@ class DataList {
             dragoverBubble: true,
             group: this.id,
             onEnd: _ => {
-                changed_page = true
+                mark_page_changed()
             }
         })
         this.add_button.on("click", (event, idx = null) => { // Add parameter for forced index
             this.add_row(idx)
-            changed_page = true
+            mark_page_changed()
         })
         this.remove_button.sortable({
             group: this.id, // So that it can delete the appropriate table items
@@ -267,7 +267,7 @@ class DataList {
             button = button.parents(".row-copy")
         }
         this.add_row(null, this.get_row(button[0].id).export())
-        changed_page = true
+        mark_page_changed()
     }
 
     add_row(fixed_idx = null, from_row_opts = {}) {
@@ -314,7 +314,7 @@ class DataList {
 
         this.rows = this.rows.filter(item => item.id !== event.item.id)
         $(event.item).remove()
-        changed_page = true
+        mark_page_changed()
     }
 }
 

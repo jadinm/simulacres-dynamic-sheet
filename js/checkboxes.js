@@ -22,6 +22,6 @@ function checkbox_click(event) {
     } else {
         uncheck_checkbox(event.target)
     }
-    changed_page = true
+    mark_page_changed()
     return already_present
 }

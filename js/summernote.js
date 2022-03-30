@@ -42,7 +42,7 @@ const summernote_cfg = {
 function summer_note_listener(we, contents) {
     // Copy to textarea
     $(we.target).html(contents)
-    changed_page = true
+    mark_page_changed()
 }
 
 function EmojiButton(context) {

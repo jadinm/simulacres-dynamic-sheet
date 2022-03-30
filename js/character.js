@@ -426,6 +426,9 @@ class Character {
     }
 
     save_local_storage(data = null) {
+        if (!changed_page || exported2LocalStorage)
+            return // Do not update local storage if not needed
+
         const current_storage_id = this.local_storage_id()
         if (current_storage_id == null)
             return
@@ -439,6 +442,7 @@ class Character {
 
         // Save data
         localStorage.setItem(current_storage_id, data)
+        exported2LocalStorage = true
     }
 
     // Save metadata to html page for quick load

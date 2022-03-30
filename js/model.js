@@ -234,7 +234,7 @@ class Model {
                 this[variable] = event.target.value
                 if (numeric_inputs.includes(variable))
                     this[variable] = parseInt(this[variable]) || 0
-                changed_page = true
+                mark_page_changed()
             })
             // Install input filters on number inputs
             if (numeric_inputs.includes(variable))
@@ -277,7 +277,7 @@ class Model {
                 event.target.setAttribute("value", event.target.value)
                 event.target.setAttribute("data-value", event.target.value)
                 event.target.setAttribute("data-slider-value", event.target.value)
-                changed_page = true
+                mark_page_changed()
             })
         }
 

@@ -103,7 +103,7 @@ class Talent extends DataRow {
         // Update Adventure points
         compute_remaining_ap()
 
-        changed_page = true
+        mark_page_changed()
     }
 
     add_listeners() {
@@ -173,7 +173,7 @@ class TalentLists extends DataList {
                     const talent = this.get_row(e.item.id)
                     talent.update_talent(new_list)
                 }
-                changed_page = true
+                mark_page_changed()
             },
             onMove: (e, _) => {
                 // Prevent moves that have an invalid PA cost
@@ -187,7 +187,7 @@ class TalentLists extends DataList {
         })
         this.add_button.on("click", (event, idx = null) => { // Add parameter for forced index
             this.add_row(idx)
-            changed_page = true
+            mark_page_changed()
         })
 
         this.remove_button.sortable({

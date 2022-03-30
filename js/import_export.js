@@ -3,6 +3,12 @@
  */
 
 let changed_page = false
+let exported2LocalStorage = false
+
+function mark_page_changed() {
+    changed_page = true
+    exported2LocalStorage = false
+}
 
 /* Remind the user that they need to save the page if they changed anything */
 window.onbeforeunload = function () {
