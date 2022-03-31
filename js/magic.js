@@ -54,7 +54,8 @@ class SpellRow extends RollRow {
     }
 
     get_var(element_id_suffix, realm) {
-        return this[element_id_suffix + "-" + (typeof realm === "string" ? realm : this.realm(realm))]
+        const sub_id = element_id_suffix + "-" + (typeof realm === "string" ? realm : this.realm(realm))
+        return this[sub_id] !== undefined ? this[sub_id] : this[element_id_suffix]
     }
 
     uses_talent(talent) {
