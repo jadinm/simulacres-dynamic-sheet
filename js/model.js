@@ -259,13 +259,17 @@ class Model {
 
         // Initialize all select pickers (since they get destroyed at every load)
         const selects = this.constructor.suffix_inputs(this.constructor.selects)
+        const sanitize = this.constructor.suffix_inputs(this.constructor.selects_no_sanitize)
         for (const variable of selects) {
-            const ops = this.constructor.suffix_inputs(this.constructor.selects_no_sanitize).includes(variable) ? {sanitize: false} : {}
-            this.get(variable).on("changed.bs.select", (event) => {
+            const ops = sanitize.includes(variable) ? {sanitize: false} : {}
+            const elem = this.get(variable)
+            elem.on("changed.bs.select", (event) => {
                 this[variable] = select_change(event)
                 if ($(event.target).attr("data-max-options") === "1") // multiple but not really
                     this[variable] = this[variable] && this[variable].length > 0 ? this[variable][0] : null
             }).selectpicker(ops)
+            if (sanitize.includes(variable)) // Needed because images are sanitized
+                elem.selectpicker('val', this[variable])
         }
 
         // Sliders will be initialize by subclasses since they are complicated
