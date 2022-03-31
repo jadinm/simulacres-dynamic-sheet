@@ -53,8 +53,12 @@ class SpellRow extends RollRow {
         return elem
     }
 
-    get_var(element_id_suffix, realm) {
-        const sub_id = element_id_suffix + "-" + (typeof realm === "string" ? realm : this.realm(realm))
+    get_group(group_div) {
+        return this.realm(group_div)
+    }
+
+    get_var(element_id_suffix, group_div) {
+        const sub_id = element_id_suffix + "-" + (typeof group_div === "string" ? group_div : this.get_group(group_div))
         return this[sub_id] !== undefined ? this[sub_id] : this[element_id_suffix]
     }
 
@@ -173,7 +177,7 @@ class SpellRow extends RollRow {
         let difficulty
         let critical_increase = 0
         const realm = this.realm(button)
-        const spell_difficulty = this.get_var("difficulty", button)
+        const spell_difficulty = this.get_difficulty(button)
         const formula_elements = this.compute_formula(realm)[1]
         let margin_throttle = NaN
         if (!this.is_talent_based_spell()) { // Spell

@@ -25,6 +25,10 @@ class PsiRow extends SpellRow {
         return isNaN(level) ? "" : String(level)
     }
 
+    get_group(group_div) {
+        return this.get_level(group_div)
+    }
+
     energy_name() {
         return "psi"
     }
@@ -117,10 +121,4 @@ class PsiRollTable extends SpellRollTable {
 $("#psi-search").on("change", event => {
     let value = $(event.target).val().toLowerCase()
     search_tables(value, $("#psi-table tr"))
-})
-
-$("#psi").on("change", () => {
-    $("#psi-table .row-roll-trigger").each((i, elem) => {
-        row_of(elem).update_level()
-    })
 })
