@@ -129,10 +129,13 @@ function import_data(src_html) {
         $("#nav-tabs a[role=\"tab\"][href=\"" + old_tab.getAttribute("href") + "\"]").addClass("d-none")
     })
 
-    // Have the same name for all of the tabs
+    // Have the same name for all the tabs
     src_html.find("#nav-tabs a[role=\"tab\"]").each((i, old_tab) => {
         $("#nav-tabs a[role=\"tab\"][href=\"" + old_tab.getAttribute("href") + "\"]").text($(old_tab).text().trim())
     })
+
+    // Update list of tabs
+    build_tab_hide_list()
 }
 
 const plugin_selectors = [".plugin-tab", ".plugin-button", ".plugin-css", ".plugin-js"]
