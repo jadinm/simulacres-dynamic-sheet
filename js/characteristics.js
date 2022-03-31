@@ -103,11 +103,26 @@ class Characteristics extends Model {
                     }
                 } else if (this.constructor.special_energies.includes(variable)) {
                     this.update_special_energy_select()
+                    if (variable === "psi") {
+                        sheet["psi_powers"].rows.forEach((row) => {
+                            row.update_level()
+                        })
+                    } else if (variable === "ki") {
+                        sheet["ki_powers"].rows.forEach((row) => {
+                            row.update_level()
+                        })
+                    }
                 } else if (this.constructor.components.includes(variable)) {
                     this.update_component_select()
                 }
                 // Update AP consumption
                 compute_remaining_ap()
+            })
+        }
+
+        if (Object.keys(sheet.opts).length === 0) {
+            $("select.energy-select").each((i, elem) => {
+                this.update_energy_select(elem)
             })
         }
     }
