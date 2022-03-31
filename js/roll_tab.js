@@ -166,23 +166,32 @@ class RollRow extends DataRow {
 
     roll(button) {
         // Find either spell difficulty or talent level to detect critical rolls
-        let difficulty
+        let talent_level
         const formula_elements = this.compute_formula()[1]
         let margin_throttle = NaN
         if (this["talent"])
-            difficulty = parseInt(sheet.get_talent_from_name(this["talent"]).talent_level())
-        difficulty = isNaN(difficulty) ? 0 : difficulty
+            talent_level = parseInt(sheet.get_talent_from_name(this["talent"]).talent_level())
+        talent_level = isNaN(talent_level) ? 0 : talent_level
 
         // Equipment linked to the roll
         const equipment = this["equipment"] ? sheet.get_equipment(this["equipment"]) : null
 
         // Do the actual roll
-        const value = parseInt(this.get("value", button).text())
-        new TalentRoll(this.roll_reason(), value, difficulty, this.get_var("effect", button),
-            this.get_critical_increase(button), formula_elements, margin_throttle, false, false,
-            "", "", "", 0, "", "",
-            equipment, this["details-equipment-always-expend"], this["details-equipment-always-expend-quantity"],
-            this["details-include-armor-penalty"], this["details-exploding-effect"], "").trigger_roll()
+        const max_value = parseInt(this.get("value", button).text())
+        new TalentRoll({
+            reason: this.roll_reason(),
+            max_value,
+            talent_level,
+            effect: this.get_var("effect", button),
+            critical_increase: this.get_critical_increase(button),
+            formula_elements,
+            margin_throttle,
+            equipment,
+            equipment_always_expend: this["details-equipment-always-expend"],
+            equipment_always_expend_quantity: this["details-equipment-always-expend-quantity"],
+            armor_penalty_included: this["details-include-armor-penalty"],
+            exploding_effect: this["details-exploding-effect"],
+        }).trigger_roll()
     }
 
     get_critical_increase() {

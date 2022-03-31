@@ -203,17 +203,16 @@ class NPC extends DataRow {
         const reason = value_suffix in this.reasons ? this.reasons[value_suffix] + " (" + this.get("name").val() + ")" : ""
 
         // Get the value and apply unease
-        const value = (parseInt(value_input.val()) || 0) + this.models.status.get_unease()
+        const max_value = (parseInt(value_input.val()) || 0) + this.models.status.get_unease()
 
         // Push hidden fields
         this.push_hidden_fields()
 
-        new TalentRoll(reason, value, talent_level, effect,
-            0, [], NaN, false, false,
-            "", "", "", 0, "", "",
-            "", "", false,
-            false, false, false,
-            this.row_index + "-").trigger_roll()
+        new TalentRoll(
+            {
+                reason, max_value, talent_level, effect,
+                energy_base_id: this.row_index + "-"
+            }).trigger_roll()
     }
 
     add_listeners() {

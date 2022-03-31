@@ -254,23 +254,61 @@ class TalentRoll extends Roll {
         "magic-power": "Puissance investie pour augmenter la portée ou la zone d'effet d'une capacité"
     }
 
-    /* Trigger the same roll */
-    reroll() {
-        new this.constructor(this.reason, this.max_value, this.talent_level, this.effect, this.critical_increase,
-            this.formula_elements, this.margin_throttle, this.is_magic, this.is_power, this.distance, this.focus,
-            this.duration, this.base_energy_cost, this.black_magic, this.magic_resistance,
-            this.equipment, this.equipment_always_expend, this.equipment_always_expend_quantity,
-            this.armor_penalty_included, this.exploding_effect, this.power_energy,
-            this.energy_base_id).trigger_roll(false)
+    /**
+     * Export the needed parameters to rebuild the exact same roll
+     */
+    export_params() {
+        return {
+            reason: this.reason,
+            max_value: this.max_value,
+            talent_level: this.talent_level,
+            effect: this.effect,
+            critical_increase: this.critical_increase,
+            formula_elements: this.formula_elements,
+            margin_throttle: this.margin_throttle,
+
+            is_magic: this.is_magic,
+            is_power: this.is_power,
+
+            distance: this.distance,
+            focus: this.focus,
+            duration: this.duration,
+            base_energy_cost: this.base_energy_cost,
+            black_magic: this.black_magic,
+            magic_resistance: this.magic_resistance,
+
+            equipment: this.equipment,
+            equipment_always_expend: this.equipment_always_expend,
+            equipment_always_expend_quantity: this.equipment_always_expend_quantity,
+
+            armor_penalty_included: this.armor_penalty_included,
+
+            exploding_effect: this.exploding_effect,
+
+            power_energy: this.power_energy,
+            energy_base_id: this.energy_base_id,
+        }
     }
 
-    constructor(reason = "", max_value = NaN, talent_level = 0, effect = "",
-                critical_increase = 0, formula_elements = [], margin_throttle = NaN,
-                is_magic = false, is_power = false, distance = "", focus = "",
-                duration = "", base_energy_cost = 0, black_magic = "",
-                magic_resistance = "", equipment = null, equipment_always_expend = false,
-                equipment_always_expend_quantity = 1, armor_penalty_included = false,
-                exploding_effect = false, power_energy = "", energy_base_id = "") {
+    /* Trigger the same roll */
+    reroll() {
+        new this.constructor(this.export_params()).trigger_roll(false)
+    }
+
+    constructor(
+        {
+            reason = "", max_value = NaN, talent_level = 0, effect = "",
+            critical_increase = 0, formula_elements = [], margin_throttle = NaN,
+            is_magic = false, is_power = false,
+            distance = "", focus = "", duration = "",
+            base_energy_cost = "0",
+            black_magic = "", magic_resistance = "",
+            equipment = null, equipment_always_expend = false, equipment_always_expend_quantity = 1,
+            armor_penalty_included = false,
+            exploding_effect = false,
+            power_energy = "", energy_base_id = ""
+        } = {}
+    ) {
         super()
         this.reason = reason ? reason : ""
         this.formula_elements = formula_elements
@@ -746,7 +784,7 @@ class TalentRoll extends Roll {
                     charges -= this.equipment_always_expend_quantity
                 }
             } else {
-                if (charges === 0 || this.equipment_always_expend && this.equipment_always_expend_quantity > charges ) {
+                if (charges === 0 || this.equipment_always_expend && this.equipment_always_expend_quantity > charges) {
                     equipment_remaining.addClass("text-warning")
                 } else {
                     equipment_remaining.removeClass("text-warning")
@@ -939,16 +977,24 @@ class TalentRoll extends Roll {
 
 class SuperpowerRoll extends TalentRoll {
 
-    /* Trigger the same roll */
-    reroll() {
-        new this.constructor(this.reason, this.number, this.under_value, this.formula_elements, this.distance,
-            this.focus, this.duration, this.effect).trigger_roll(false)
+    export_params() {
+        const params = super.export_params()
+        params.nbr_dices = this.number
+        params.under_value = this.under_value
+        return params
     }
 
-    constructor(reason = "", nbr_dices = 0, under_value = 0, formula_elements = [],
-                distance = "", focus = "", duration = "", effect = "") {
-        super(reason, NaN, 0, effect, 0, formula_elements, NaN, false, true, distance, focus, duration, 0, "", "",
-            null, false, 1, false, "", "")
+    constructor(
+        {
+            reason = "", nbr_dices = 0, under_value = 0, formula_elements = [],
+            distance = "", focus = "", duration = "", effect = ""
+        }) {
+        super({
+            reason, effect, formula_elements,
+            is_magic: false,
+            is_power: true,
+            distance, focus, duration,
+        })
         this.number = nbr_dices
         this.under_value = under_value
         this.superpower_modifier = 0
@@ -1110,21 +1156,10 @@ class SuperpowerRoll extends TalentRoll {
 
 class FocusMagicRoll extends TalentRoll {
 
-    reroll() {
-        new this.constructor(this.reason, this.max_value, this.level, this.effect, this.distance,
-            this.focus, this.duration, this.base_energy_cost, this.black_magic, this.magic_resistance, this.equipment,
-            this.equipment_always_expend, this.equipment_always_expend_quantity,
-            this.exploding_effect).trigger_roll(false)
-    }
-
-    constructor(reason = "", max_value = NaN, level = 0, effect = "",
-                distance = "", focus = "", duration = "", base_energy_cost = 0,
-                black_magic = "", magic_resistance = "", equipment = null,
-                equipment_always_expend = false, equipment_always_expend_quantity = 1,
-                exploding_effect = false) {
-        super(reason, max_value, level, effect, 0, [], NaN, true, true, distance, focus, duration, base_energy_cost,
-            black_magic, magic_resistance, equipment, equipment_always_expend, equipment_always_expend_quantity,
-            false, exploding_effect, "", "")
+    constructor(params = {}) {
+        params.is_power = true // Default value
+        params.is_magic = true
+        super(params)
         this.margin_dices = []
     }
 
@@ -1252,9 +1287,10 @@ class PsiRoll extends TalentRoll {
 
 class WarriorRoll extends TalentRoll {
 
-    constructor(...params) {
-        super(...params)
-        this.is_magic = false
+    constructor(params = {}) {
+        params.is_power = true
+        params.is_magic = false
+        super(params)
     }
 
     modify_dialog(ignore_sliders) {
@@ -1284,21 +1320,11 @@ class WarriorRoll extends TalentRoll {
 
 class GoodNatureEvilMagicRoll extends TalentRoll {
 
-    reroll() {
-        new this.constructor(this.reason, this.effect, this.distance, this.focus, this.duration, this.base_energy_cost,
-            this.black_magic, this.magic_resistance, this.equipment, this.equipment_always_expend,
-            this.equipment_always_expend_quantity, this.exploding_effect,
-            this.power_energy).trigger_roll(false)
-    }
+    constructor(params = {}) {
+        params.is_power = true // Default value
+        params.is_magic = true
+        super(params)
 
-    constructor(reason = "", effect = "", distance = "", focus = "", duration = "",
-                base_energy_cost = 0, black_magic = "", magic_resistance = "",
-                equipment = null, equipment_always_expend = false,
-                equipment_always_expend_quantity = 1, exploding_effect = false,
-                power_energy = "") {
-        super(reason, NaN, 0, effect, 0, [], NaN, true, true, distance, focus, duration, base_energy_cost,
-            black_magic, magic_resistance, equipment, equipment_always_expend, equipment_always_expend_quantity,
-            false, exploding_effect, power_energy, "")
         this.margin_dices = []
         this.precision_dices = []
         this.type = 3
@@ -1489,7 +1515,11 @@ $("#roll-free").on("click", _ => {
         if (isNaN(threshold)) {
             new Roll(number).trigger_roll()
         } else {
-            new TalentRoll("", threshold).trigger_roll()
+            new TalentRoll(
+                {
+                    reason: "",
+                    max_value: threshold
+                }).trigger_roll()
         }
     }
 })

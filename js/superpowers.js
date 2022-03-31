@@ -57,8 +57,16 @@ class SuperpowerRow extends RollRow {
         }
 
         // Do the actual roll
-        new SuperpowerRoll(this.roll_reason(), nbr_dices, under_value, formula_elements, this["distance"], this["time"],
-            this["duration"], this.get("effect").val()).trigger_roll()
+        new SuperpowerRoll({
+            reason: this.roll_reason(),
+            nbr_dices,
+            under_value,
+            formula_elements,
+            distance: this["distance"],
+            time: this["time"],
+            duration: this["duration"],
+            effect: this.get("effect").val(),
+        }).trigger_roll()
     }
 
     formula_changed(e) {

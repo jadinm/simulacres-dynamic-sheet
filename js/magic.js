@@ -174,45 +174,70 @@ class SpellRow extends RollRow {
 
     roll(button) {
         // Find either spell difficulty or talent level to detect critical rolls
-        let difficulty
+        let talent_level
         let critical_increase = 0
         const realm = this.realm(button)
         const spell_difficulty = this.get_difficulty(button)
         const formula_elements = this.compute_formula(realm)[1]
         let margin_throttle = NaN
         if (!this.is_talent_based_spell()) { // Spell
-            difficulty = spell_difficulty
+            talent_level = spell_difficulty
             margin_throttle = this.is_instinctive_magic() ? 1 : NaN
         } else { // Talent
-            difficulty = this["talent"] ? parseInt(sheet.get_talent_from_name(this["talent"]).talent_level()) : 0
+            talent_level = this["talent"] ? parseInt(sheet.get_talent_from_name(this["talent"]).talent_level()) : 0
         }
-        let spell_distance = this.get_var("distance", button)
-        let spell_focus = this.get_var("time", button)
-        let spell_duration = this.get_var("duration", button)
-        let spell_level = this.get_level(button)
-        difficulty = isNaN(difficulty) ? 0 : difficulty
+        let distance = this.get_var("distance", button)
+        let focus = this.get_var("time", button)
+        let duration = this.get_var("duration", button)
+        let base_energy_cost = this.get_level(button)
+        talent_level = isNaN(talent_level) ? 0 : talent_level
 
         // Equipment linked to the roll
         const equipment = this["equipment"] ? sheet.get_equipment(this["equipment"]) : null
 
         // Do the actual roll
         if (this.is_evil_nature_good()) {
-            new GoodNatureEvilMagicRoll(this.roll_reason(), this.get_var("effect", button),
-                spell_distance, spell_focus, spell_duration, spell_level,
-                this["details-black-magic"],
-                this["details-resistance"], equipment, this["details-equipment-always-expend"],
-                this["details-equipment-always-expend-quantity"],
-                this["details-exploding-effect"], this.energy_name()).trigger_roll()
+            new GoodNatureEvilMagicRoll({
+                reason: this.roll_reason(),
+                effect: this.get_var("effect", button),
+                distance,
+                focus,
+                duration,
+                base_energy_cost,
+                black_magic: this["details-black-magic"],
+                magic_resistance: this["details-resistance"],
+                equipment,
+                equipment_always_expend: this["details-equipment-always-expend"],
+                equipment_always_expend_quantity: this["details-equipment-always-expend-quantity"],
+                exploding_effect: this["details-exploding-effect"],
+                power_energy: this.energy_name()
+            }).trigger_roll()
         } else {
-            const value = parseInt(this.get("value", button).text())
+            const max_value = parseInt(this.get("value", button).text())
             const type = this.data[0].id.includes("psi-") ? PsiRoll
                 : (this.data[0].id.includes("warrior-") ? WarriorRoll : TalentRoll)
-            new type(this.roll_reason(), value, difficulty, this.get_var("effect", button),
-                critical_increase, formula_elements, margin_throttle, this.data.hasClass("spell"),
-                true, spell_distance, spell_focus, spell_duration, spell_level,
-                this["details-black-magic"], this["details-resistance"], equipment,
-                this["details-equipment-always-expend"], this["details-equipment-always-expend-quantity"],
-                false, this["details-exploding-effect"], this.energy_name()).trigger_roll()
+            new type({
+                reason: this.roll_reason(),
+                max_value,
+                talent_level,
+                effect: this.get_var("effect", button),
+                critical_increase,
+                formula_elements,
+                margin_throttle,
+                is_magic: this.data.hasClass("spell"),
+                is_power: true,
+                distance,
+                focus,
+                duration,
+                base_energy_cost,
+                black_magic: this["details-black-magic"],
+                magic_resistance: this["details-resistance"],
+                equipment,
+                equipment_always_expend: this["details-equipment-always-expend"],
+                equipment_always_expend_quantity: this["details-equipment-always-expend-quantity"],
+                exploding_effect: this["details-exploding-effect"],
+                power_energy: this.energy_name()
+            }).trigger_roll()
         }
     }
 
@@ -481,13 +506,26 @@ class FocusMagicRow extends SpellRow {
         const equipment = this["equipment"] ? sheet.get_equipment(this["equipment"]) : null
 
         // Do the actual roll
-        const value = parseInt(this.get("value").text())
-        let level = this.constructor.magic_talent_level()
-        level = !isNaN(level) ? level : 0
-        new FocusMagicRoll(this.roll_reason(), value, level, this["effect"], this["distance"],
-            this["time"], this["duration"], this["level"], this["details-black-magic"], this["details-resistance"],
-            equipment, this["details-equipment-always-expend"], this["details-equipment-always-expend-quantity"],
-            this["details-exploding-effect"]).trigger_roll()
+        const max_value = parseInt(this.get("value").text())
+        let talent_level = this.constructor.magic_talent_level()
+        talent_level = !isNaN(talent_level) ? talent_level : 0
+        new FocusMagicRoll(
+            {
+                reason: this.roll_reason(),
+                max_value,
+                talent_level,
+                effect: this["effect"],
+                distance: this["distance"],
+                focus: this["time"],
+                duration: this["duration"],
+                level: this["level"],
+                black_magic: this["details-black-magic"],
+                magic_resistance: this["details-resistance"],
+                equipment,
+                equipment_always_expend: this["details-equipment-always-expend"],
+                equipment_always_expend_quantity: this["details-equipment-always-expend-quantity"],
+                exploding_effect: this["details-exploding-effect"],
+            }).trigger_roll()
     }
 }
 
