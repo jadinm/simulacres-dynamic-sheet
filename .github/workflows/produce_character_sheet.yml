@@ -14,15 +14,15 @@ jobs:
         uses: actions/checkout@v2
       - name: Create release
         if: contains(github.ref, '/tags/')
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
           draft: false
           prerelease: true
           body_path: next_release_description.md
+          generate_release_notes: true  # Auto-generate changelog based on commits and PRs
+          token: ${{ secrets.GITHUB_TOKEN }}
 
   produce_doc:
     needs: create_release
