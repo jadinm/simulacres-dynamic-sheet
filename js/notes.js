@@ -7,8 +7,7 @@ class Note extends DataRow {
         this.broadcast_channel = new BroadcastChannel('note_channel_' + this.id)
         this.broadcast_channel.onmessage = (ev) => {
             const textarea = this.get("input")
-            textarea.val(ev.data).trigger("change")
-
+            textarea.val(ev.data).trigger("summernote.change", ev.data)
             if (this.find("button.note-show-button svg").hasClass("fa-angle-up")) {
                 // If the note is opened, update the summernote field
                 textarea.summernote("code", textarea.val())
