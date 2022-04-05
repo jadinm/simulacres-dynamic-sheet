@@ -31,7 +31,9 @@ class PluginModel extends Model {
      */
     static get_plugin_version(plugin_html) {
         let version = null
-        $(plugin_html).children().each((i, elem) => {
+        $(plugin_html).each((i, elem) => {
+            if (elem.nodeType === 3) // Ignore text nodes
+                return
             const attr = elem.getAttribute("data-plugin-version")
             if (attr)
                 version = attr

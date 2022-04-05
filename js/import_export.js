@@ -192,25 +192,18 @@ function build_plugin_list() {
             if (PluginModel.is_older_than(plugin_versions[plugins[i]], remote_version)) {
                 // Have a candidate for upgrade
                 upgrade.removeClass("invisible")
+                logger.debug("Plugin", plugins[i], "is at the version", plugin_versions[plugins[i]], "which is older than the latest one", remote_version, ":", url)
             } else {
                 upgrade.addClass("invisible")
+                logger.debug("Plugin", plugins[i], "is at the version", plugin_versions[plugins[i]], "which is newer or equal to the latest one", remote_version, ":", url)
             }
         }, () => { // No matching plugin
             upgrade.addClass("invisible")
+            logger.debug("Plugin", plugins[i], "is not found in the latest release", ":", url)
         })
         upgrade.on("click", _ => {
             query_raw_plugin(url, (data) => {
                 const plugin = $(data)
-                let tab = plugin.find(".plugin-tab")
-                if (tab.length === 0)
-                    tab = plugin.filter(".plugin-tab")
-                if (tab.length > 0) {
-                    const current_plugin_version = $("#" + tab[0].id)
-                    if (current_plugin_version.length > 0) {
-                        import_data(current_plugin_version, tab, false)
-                    }
-                }
-
                 insert_or_replace_plugins(plugin) // Upgrade plugin
                 upgrade.removeClass("invisible")
             }, () => {
