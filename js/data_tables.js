@@ -71,7 +71,7 @@ class DataRow extends Model {
         if (opts && opts.row_number !== undefined && opts.row_number !== this.row_number) {
             // Update the row number in all the ids of the DOM and in the internal state of this row
             this.constructor.replace_id(this.row_number, opts.row_number, this.data)
-            this.prepare(this.data)
+            this.prepare({data: this.data, created: false})
         }
         super.import(opts)
     }
