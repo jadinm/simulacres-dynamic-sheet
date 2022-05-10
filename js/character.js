@@ -543,6 +543,10 @@ class Character {
     get_status() {
         return this["status"]
     }
+
+    is_hobbit() {
+        return this["biography"].is_hobbit()
+    }
 }
 
 class NPCGridSheet extends Character {
