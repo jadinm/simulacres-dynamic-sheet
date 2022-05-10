@@ -1,0 +1,57 @@
+<div class="container">
+    <div class="modal fade bd-modal-lg" id="hide-tabs" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="font-family: 'Linux Libertine', serif">
+                <div class="modal-header justify-content-between">
+                    <button type="button" class="hidden close" data-dismiss="modal" aria-label="Close">
+                    </button>
+                    <h4 class="modal-title text-center">Renommer/Cacher/Montrer les onglets</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="modal-body align-middle">
+                    <!-- List of tabs -->
+                    <ul id="hide-tabs-tabs" class="list-group-flush col-12">
+                        <li class="list-group-item align-items-center py-1 my-0 d-none">
+                            <div class="d-flex align-items-center my-0 py-0 md-form">
+                                <input class="form-control" type="text" aria-label="">
+                            </div>
+                            <button class="btn btn-dark ml-auto my-0 py-2 px-4 hide-tab" style="white-space: nowrap">
+                                Cacher&nbsp;<i class="fa-solid fa-eye-slash"></i>
+                            </button>
+                            <button class="btn btn-light ml-auto my-0 py-2 px-4 show-tab d-none"
+                                    style="white-space: nowrap">
+                                Montrer&nbsp;<i class="fa-solid fa-eye"></i>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="modal fade bd-modal-sm" id="select-tabs" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header justify-content-between">
+                    <button type="button" class="hidden close" data-dismiss="modal" aria-label="Close">
+                    </button>
+                    <h4 class="modal-title text-center">Choisir un onglets</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="modal-body align-middle d-flex justify-content-center col-12 px-0">
+                    <!-- List of tabs -->
+                    <ul id="select-tabs-tabs" class="list-group-flush row col-12 d-flex justify-content-center px-0">
+                        <li class="list-group-item text-center px-0 py-1 my-1 mx-1 btn btn-light col-5 d-none">
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,62 @@
+<div class="container">
+    <div class="modal fade bd-modal-lg" id="import-warning" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="font-family: 'Linux Libertine', serif">
+                <div class="modal-header justify-content-between">
+                    <button type="button" class="hidden close" data-dismiss="modal" aria-label="Close">
+                    </button>
+                    <h4 class="modal-title text-center">
+                        <i class="fa-solid fa-exclamation-triangle"></i>
+                        <span id="import-warning-title">Problème à l'importation</span>
+                        <i class="fa-solid fa-exclamation-triangle"></i>
+                    </h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="modal-body align-middle">
+                    <p class="mx-1">
+                        Les données de votre fiche n'ont pas pu être toutes chargées.
+                        Vérifiez que vous avez pris la bonne version de la fiche.
+                    </p>
+                    <p class="mx-1">
+                        Si jamais vous rencontrez ce problème, n'hésitez pas à en parler en
+                        <a href="https://github.com/jadinm/simulacres-dynamic-sheet/issues/new">créant une "issue"</a>
+                        et en y fournissant la capture d'écran de ce pop-up
+                    </p>
+                    <hr/>
+                    <div class="row mx-1 align-middle">
+                        <h5>Liste des problèmes de dépendances</h5>
+                    </div>
+                    <ul id="import-warning-dependencies" class="list-group-flush col-12">
+                    </ul>
+                    <div class="row mx-1 align-middle">
+                        <h5>Liste des valeurs manquantes</h5>
+                    </div>
+                    <ul id="import-warning-missing" class="list-group-flush col-12">
+                    </ul>
+                    <div class="row mx-1 align-middle">
+                        <h5>Liste des champs non gérés par la fiche</h5>
+                    </div>
+                    <ul id="import-warning-unhandled" class="list-group-flush col-12">
+                    </ul>
+                    <div class="row mx-1 align-middle">
+                        <h5>Liste des champs avec le même identifiant (seule une version va fonctionner)</h5>
+                    </div>
+                    <ul id="import-warning-duplicated" class="list-group-flush col-12">
+                    </ul>
+                    <div class="row mx-1 align-middle">
+                        <h5>Liste des champs avec une valeur invalide</h5>
+                    </div>
+                    <ul id="import-warning-invalid" class="list-group-flush col-12">
+                    </ul>
+                    <div class="row mx-1 align-middle">
+                        <h5>Liste des champs qui ne sont pas correctement synchonisés</h5>
+                    </div>
+                    <ul id="import-warning-unsync" class="list-group-flush col-12">
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
