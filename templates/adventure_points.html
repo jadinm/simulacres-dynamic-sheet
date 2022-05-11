@@ -283,7 +283,16 @@
         </div>
 
         <div class="row col-12 mt-2 px-0 mx-0">
-            <h3>Paramètres pour la dépense de PAs</h3>
+            <h3>
+                Paramètres pour la dépense de PAs&nbsp;
+            </h3>
+            {% if version == V7 %}
+                <button id="show-ap-cost-details"  class="btn btn-outline-info m-0 p-0 rounded-circle"
+                        style="min-width: 3em" data-toggle="tooltip" data-placement="top"
+                        title="Table des dépenses de PAs">
+                    <i class="fa-solid fa-info fa-sm"></i>
+                </button>
+            {% endif %}
         </div>
         {% if version == V7 %}
             <div class="row col-12 mt-2 px-0 mx-0">

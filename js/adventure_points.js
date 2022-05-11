@@ -59,6 +59,10 @@ class AdventurePoints extends Model {
             else
                 elem.on("changed.bs.select", compute_remaining_ap)
         }
+
+        this.get("show-ap-cost-details").tooltip("dispose").tooltip().on("click", _ => {
+            $("#ap-cost-details").modal()
+        })
     }
 
     main_work_talents() {

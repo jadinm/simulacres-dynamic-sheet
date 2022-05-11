@@ -1,0 +1,470 @@
+<div class="container">
+    <div class="modal fade bd-modal-lg" id="ap-cost-details" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="font-family: 'Linux Libertine', serif">
+                <div class="modal-header justify-content-between">
+                    <button type="button" class="hidden close" data-dismiss="modal" aria-label="Close">
+                    </button>
+                    <h4 class="modal-title text-center">Coûts en PA</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="modal-body align-middle my-0 py-0">
+                    <div class="row justify-content-center">
+                        <div id="investment-table" style="overflow-y: hidden !important;"
+                             class="table-responsive card shadow-none border border-heavy no-image-border rounded-lg row col-12 m-0 p-0">
+                            <table class="table table-hover m-0 p-0">
+                                <thead class="thead-dark">
+                                <tr class="my-0 py-0 align-middle">
+                                    <th scope="col" class="my-0 py-0 align-middle" style="width: 45%">
+                                        <h5 class="m-0 p-0"><b>Augmentation</b></h5>
+                                    </th>
+                                    <th scope="col" class="text-center my-0 py-0 align-middle" style="width: 15%">
+                                        <h5 class="m-0 p-0"><b>PA</b></h5>
+                                    </th>
+                                    <th scope="col" class="text-center my-0 py-0 align-middle" style="width: 40%">
+                                        <h5 class="m-0 p-0"><b>Max ou autre limitation</b></h5>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="table-primary">
+                                    <td class="my-0 py-0 align-middle" colspan=3>
+                                        <h5 class="m-0 p-0">Talents</h5>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="md-form my-0 py-0 align-middle">
+                                        X&nbsp;<i class="fa-solid fa-long-arrow-alt-right fa-sm"></i>&nbsp;0
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        5
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        -
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="md-form my-0 py-0 align-middle">
+                                        X&nbsp;<i class="fa-solid fa-long-arrow-alt-right fa-sm"></i>&nbsp;-2
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        3
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        -
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="md-form my-0 py-0 align-middle">
+                                        X&nbsp;<i class="fa-solid fa-long-arrow-alt-right fa-sm"></i>&nbsp;-4
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        2
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        -
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="md-form my-0 py-0 align-middle">
+                                        X&nbsp;<i class="fa-solid fa-long-arrow-alt-right fa-sm"></i>&nbsp;-2
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        3
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        -
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="md-form my-0 py-0 align-middle">
+                                        -4&nbsp;<i class="fa-solid fa-long-arrow-alt-right fa-sm"></i>&nbsp;0
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        4
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        -
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="md-form my-0 py-0 align-middle">
+                                        -4&nbsp;<i class="fa-solid fa-long-arrow-alt-right fa-sm"></i>&nbsp;-2
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        1
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        -
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="md-form my-0 py-0 align-middle">
+                                        -2&nbsp;<i class="fa-solid fa-long-arrow-alt-right fa-sm"></i>&nbsp;0
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        3
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        -
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="md-form my-0 py-0 align-middle">
+                                        0&nbsp;<i class="fa-solid fa-long-arrow-alt-right fa-sm"></i>&nbsp;+1
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        5
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        -
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="md-form my-0 py-0 align-middle">
+                                        +1&nbsp;<i class="fa-solid fa-long-arrow-alt-right fa-sm"></i>&nbsp;+2
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        20
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        Avis de la MJ
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="md-form my-0 py-0 align-middle">
+                                        +2&nbsp;<i class="fa-solid fa-long-arrow-alt-right fa-sm"></i>&nbsp;+3
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        40
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        Avis de la MJ
+                                    </td>
+                                </tr>
+                                <tr class="table-primary">
+                                    <td class="my-0 py-0 align-middle" colspan=3>
+                                        <h5 class="m-0 p-0">Caractéristiques</h5>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="md-form my-0 py-0 align-middle">
+                                        Composante +1
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        20
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center" data-toggle="tooltip"
+                                        data-placement="right"
+                                        title="La dépense est plus importante pour passer une Composante de 5 à 6 que de 3 à 4 ou de 4 à 5.">
+                                        7
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="md-form my-0 py-0 align-middle">
+                                        Moyen +1
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        10
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        5
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="md-form my-0 py-0 align-middle">
+                                        Souffle +1
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        30
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        8
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="md-form my-0 py-0 align-middle">
+                                        Équilibre psychique +1
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        30
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        8
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="md-form my-0 py-0 align-middle">
+                                        Racheter test de miracle dépensé
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        30
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        -
+                                    </td>
+                                </tr>
+                                <tr class="table-primary">
+                                    <td class="my-0 py-0 align-middle" colspan=3>
+                                        <h5 class="m-0 p-0">Règnes et Énergies</h5>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="md-form my-0 py-0 align-middle">
+                                        0&nbsp;<i class="fa-solid fa-long-arrow-alt-right fa-sm"></i>&nbsp;1
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        5
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        -
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="md-form my-0 py-0 align-middle">
+                                        1&nbsp;<i class="fa-solid fa-long-arrow-alt-right fa-sm"></i>&nbsp;2
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        10
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        -
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="md-form my-0 py-0 align-middle">
+                                        2&nbsp;<i class="fa-solid fa-long-arrow-alt-right fa-sm"></i>&nbsp;3
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        20
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        Avis de la MJ
+                                    </td>
+                                </tr>
+                                <tr class="table-primary">
+                                    <td class="my-0 py-0 align-middle" colspan=3>
+                                        <h5 class="m-0 p-0">Magie</h5>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="md-form my-0 py-0 align-middle">
+                                        Sort en énergie magique classique à -4
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        2
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-left">
+                                        <ul class="my-0 py-0">
+                                            <li>AM+1 (ou AM+0 et un maître)</li>
+                                            <li>Énergie ≥ niveau du sort</li>
+                                            <li>Le lancer sans échec</li>
+                                            <li>Aucun échec critique</li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="md-form my-0 py-0 align-middle">
+                                        Sort en énergie divine à 0
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        5
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-left">
+                                        <ul class="my-0 py-0">
+                                            <li>AM+0</li>
+                                            <li>Énergie divine ≥ niveau du sort</li>
+                                            <li>Invocation du dieu</li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="md-form my-0 py-0 align-middle">
+                                        Sort en énergie magique hermétique à 0
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        5 ou plus
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-left">
+                                        <ul class="my-0 py-0">
+                                            <li>AM+1 (ou AM+0 et un maître)</li>
+                                            <li>Énergie hermérique ≥ niveau du sort</li>
+                                            <li>Test d'apprentissage sans échec critique</li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="md-form my-0 py-0 align-middle">
+                                        Sort de niveau 0 en énergie du bien/mal/nature
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        1
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-left">
+                                        <ul class="my-0 py-0">
+                                            <li>AM+1 (ou AM+0 et un maître)</li>
+                                            <li>Énergie bien/mal/nature ≥ 1</li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="md-form my-0 py-0 align-middle">
+                                        Sort de niveau 1, 2 ou 3 en énergie du bien/mal/nature
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        3 * Niveau du sort
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-left">
+                                        <ul class="my-0 py-0">
+                                            <li>AM+1 (ou AM+0 et un maître)</li>
+                                            <li>Énergie bien/mal/nature ≥ niveau du sort</li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <tr class="table-primary">
+                                    <td class="my-0 py-0 align-middle" colspan=3>
+                                        <h5 class="m-0 p-0">Niveau des pouvoirs de Shaolins</h5>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="md-form my-0 py-0 align-middle">
+                                        Nouveau pouvoir
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        0
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        Énergie ≥ 1, Méditation ≥ 1 et Talent X&nbsp;<i class="fa-solid fa-long-arrow-alt-right fa-sm"></i>&nbsp;0
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="md-form my-0 py-0 align-middle">
+                                        1&nbsp;<i class="fa-solid fa-long-arrow-alt-right fa-sm"></i>&nbsp;2
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        5
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        Énergie ≥ 2, Méditation ≥ 2
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="md-form my-0 py-0 align-middle">
+                                        2&nbsp;<i class="fa-solid fa-long-arrow-alt-right fa-sm"></i>&nbsp;3
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        5
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        Énergie = 3, Méditation = 3
+                                    </td>
+                                </tr>
+                                <tr class="table-primary">
+                                    <td class="my-0 py-0 align-middle" colspan=3>
+                                        <h5 class="m-0 p-0">Psi et voies de la guerre</h5>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="md-form my-0 py-0 align-middle">
+                                        Pouvoir au niveau -4
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        2
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        Énergie ≥ 1
+                                    </td>
+                                </tr>
+                                <tr class="table-primary">
+                                    <td class="my-0 py-0 align-middle" colspan=3>
+                                        <h5 class="m-0 p-0">Magies des runes et des noms</h5>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="md-form my-0 py-0 align-middle">
+                                        Rune
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        2
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        -
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="md-form my-0 py-0 align-middle">
+                                        Nom d'espèce
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        1
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        -
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="md-form my-0 py-0 align-middle">
+                                        Verbe simple
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        2
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        -
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="md-form my-0 py-0 align-middle">
+                                        Nom de race
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        2
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        -
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="md-form my-0 py-0 align-middle">
+                                        Verbe de transformation
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        3
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        -
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="md-form my-0 py-0 align-middle">
+                                        Nom d'individu
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        5
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        -
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="md-form my-0 py-0 align-middle">
+                                        Verbe de destruction
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        5
+                                    </td>
+                                    <td class="md-form my-0 py-0 align-middle text-center">
+                                        -
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

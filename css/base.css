@@ -73,6 +73,11 @@ footer {
     border-image: var(--lightModeBorder) 15% fill / 65px 65px / 0.05rem round !important;
 }
 
+.card.border-heavy.no-image-border {
+    border-image: unset !important;
+    border: 3px solid #ced4da !important;
+}
+
 .modal {
     font-size: 1rem;
 }
