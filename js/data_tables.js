@@ -184,9 +184,6 @@ class DataList {
             if (this.template_row && elem.id === this.template_row.id)
                 return
             const row = this.construct_row(elem, opts && opts.rows ? opts.rows[next_i] : {}, false)
-            if (this.other_html === null) {
-                this.add_custom_listener_to_row(row)
-            }
             this.rows.push(row)
             next_i += 1
         })
