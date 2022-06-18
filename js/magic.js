@@ -23,21 +23,30 @@ class SpellRow extends RollRow {
 
     static convert_casts_to_difficulty(value) {
         let difficulty // Use the count of the spell casted to compute difficulty
-        if (value < 4)
+        let next_level_value
+        if (value < 4) {
             difficulty = -4
-        else if (value <= 6)
+            next_level_value = 4
+        } else if (value <= 6) {
             difficulty = -3
-        else if (value <= 8)
+            next_level_value = 7
+        } else if (value <= 8) {
             difficulty = -2
-        else if (value === 9)
+            next_level_value = 9
+        } else if (value === 9) {
             difficulty = -1
-        else if (value <= 19)
+            next_level_value = 10
+        } else if (value <= 19) {
             difficulty = 0
-        else if (value <= 29)
+            next_level_value = 20
+        } else if (value <= 29) {
             difficulty = 1
-        else
+            next_level_value = 30
+        } else {
             difficulty = 2
-        return difficulty
+            next_level_value = 30
+        }
+        return [difficulty, next_level_value]
     }
 
     realm(realm_based_div) {
@@ -91,7 +100,7 @@ class SpellRow extends RollRow {
     }
 
     get_difficulty(realm) {
-        return this.constructor.convert_casts_to_difficulty(this.get_var("difficulty-input", realm))
+        return this.constructor.convert_casts_to_difficulty(this.get_var("difficulty-input", realm))[0]
     }
 
     update_roll_value(dive_div) {
@@ -408,7 +417,11 @@ class SpellRow extends RollRow {
         return value => {
             const max = slider_max(input)
             const difficulty_elem = this.get("difficulty", input)
-            difficulty_elem.text(this.constructor.convert_casts_to_difficulty(value))
+            let [difficulty, next_difficulty_value] = this.constructor.convert_casts_to_difficulty(value)
+            difficulty = difficulty.toString()
+            if (!this.is_priest_magic() && !this.is_evil_nature_good() && !this.is_hermetic_spell() && !this.is_instinctive_magic() && !this.is_talent_based_spell())
+                difficulty += " (" + value + " sur " + next_difficulty_value + " succès)"
+            difficulty_elem.text(difficulty)
             return value + "/" + max
         }
     }
