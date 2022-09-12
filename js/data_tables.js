@@ -57,12 +57,23 @@ class DataRow extends Model {
     }
 
     search(value) {
+        value = value.toLowerCase()
         let found = false
         this.find("input, select").each((i, elem) => {
             const val = $(elem).val()
-            if (val && typeof val === "string" && val.toLowerCase().includes(value)) {
-                found = true
+            if (val) {
+              if (Array.isArray(val)) {
+                val.forEach(el => {
+                  if (typeof el === "string" && el.toLowerCase().includes(value)) {
+                      found = true
+                  }
+                })
+              }
+              else if (typeof val === "string" && val.toLowerCase().includes(value)) {
+                  found = true
+              }
             }
+
         })
         return found
     }
