@@ -306,12 +306,14 @@ class SpellRow extends RollRow {
             slider.each((i, elem) => {
                 $(elem).val(10).slider("setValue", 10).slider("refresh", {useCurrentValue: true}).slider("disable")
                 $($(elem).slider("getElement")).parent().addClass("d-none")
+                $(elem).trigger("change") // update model state
             })
         } else if (this.is_hermetic_spell()) {
             // Show control specific to hermetic energy
             slider.each((i, elem) => {
                 $(elem).val(10).slider("setValue", 10).slider("refresh", {useCurrentValue: true}).slider("disable")
                 $($(elem).slider("getElement")).parent().addClass("d-none")
+                $(elem).trigger("change") // update model state
             })
             hermetic_difficulty.parent().removeClass("d-none")
             hermetic_mr_difficulty.parent().removeClass("d-none")
