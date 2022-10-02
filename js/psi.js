@@ -69,10 +69,12 @@ class PsiRow extends SpellRow {
     update_list() {
     }
 
-    update_level() {
+    update_level(level_max = 3) {
+        // Limit the accessible dices to the energy level
         let power_level = this.energy_level()
         if (isNaN(power_level) || power_level === 0)
             power_level = 1
+        power_level = Math.min(power_level, level_max)
         for (let i = 2; i <= power_level; i++) {
             const dice = this.get("dice-" + i)
             dice.parent().removeClass("invisible")
@@ -103,6 +105,7 @@ class PsiRow extends SpellRow {
             this.find(".row-roll-trigger").filter(this.filter_invisible_dices).each((i, dice_div) => {
                 dice_div.setAttribute("hidden", "hidden")
             })
+            this.update_level()
         }
     }
 

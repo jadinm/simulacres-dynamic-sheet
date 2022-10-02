@@ -19,6 +19,11 @@ class KiRow extends PsiRow {
         return true
     }
 
+    update_level() {
+        // Limit the accessible dices to the max power level
+        super.update_level(this["level"])
+    }
+
     get_difficulty(realm) {
         return 0 // The difficulty depends on the talent level, not a difficulty slider
     }
