@@ -48,10 +48,11 @@ function set_result_label(margin) {
     }
 }
 
-const effect_column_regex = /(^|[^\w"]?)(")?\[ *([ABCDEFGHIJK]) *([+-] *\d+)? *](")?([^\w"]?|$)/gi
-const effect_margin_regex = /(^|[^\w"]?)(MR)([^\w"]?|$)/g
-const effect_dss_regex = /(^|[^\w"]?)(DSS)([^\w"]?|$)/g
-const effect_des_regex = /(^|[^\w"]?)(DES)([^\w"]?|$)/g
+const effect_column_regex = /(^|[^<\w">]?)(")?\[ *([ABCDEFGHIJK]) *([+-] *\d+)? *](")?([^<\w">]?|$)/gi
+const effect_margin_regex = /(^|[^<\w">]?)(MR)([^<\w">]?|$)/g
+const effect_dss_regex = /(^|[^<\w">]?)(DSS)([^<\w">]?|$)/g
+const effect_des_regex = /(^|[^<\w">]?)(DES)([^<\w">]?|$)/g
+const math_regex = /(\(?[-+]?(\s|&nbsp;)*\d+(?:(\s|&nbsp;)*[-+/*](\s|&nbsp;)*\(?(\s|&nbsp;)*[-+]?(\s|&nbsp;)*\d+(?:\.\d+)?(\s|&nbsp;)*\)?(\s|&nbsp;)*)*\)?)/g
 
 let critical_failure = false
 let critical_success = false
@@ -715,6 +716,51 @@ class TalentRoll extends Roll {
         return title
     }
 
+    parse_effect(effect) {
+        if (this.energy_investment_validated) {
+            if (is_v7) {
+                // Show the actual effect instead of [A] or [B+2]
+                effect = effect.replaceAll(effect_column_regex, (match, prefix, escape, column, modifier, escape2, suffix) => {
+                    modifier = typeof modifier === "undefined" ? 0 : parseInt(modifier.replaceAll(" ", ""))
+                    if (escape && escape2) {
+                        return match.replaceAll(" ", "&nbsp;")
+                    }
+                    escape = typeof escape === "undefined" ? "" : escape
+                    escape2 = typeof escape2 === "undefined" ? "" : escape2
+                    const effect_value = this.is_success() ? this.column_effect(column, modifier) : 0
+                    return prefix.replaceAll(" ", "&nbsp;") + escape + effect_value + escape2
+                        + suffix.replaceAll(" ", "&nbsp;")
+                })
+            } else {
+                // Update with the DSS if "DSS" is in the text
+                effect = effect.replaceAll(effect_dss_regex, (match, prefix, _, suffix) => {
+                    return prefix.replaceAll(" ", "&nbsp;") + this.dss() + suffix.replaceAll(" ", "&nbsp;")
+                })
+                effect = effect.replaceAll(effect_des_regex, (match, prefix, _, suffix) => {
+                    return prefix.replaceAll(" ", "&nbsp;") + this.des() + suffix.replaceAll(" ", "&nbsp;")
+                })
+            }
+            effect = effect.replaceAll(effect_margin_regex, (match, prefix, _, suffix) => {
+                return prefix.replaceAll(" ", "&nbsp;") + this.post_test_margin() + suffix.replaceAll(" ", "&nbsp;")
+            });
+
+            effect = effect.replaceAll(math_regex, (match, formula) => {
+                try {
+                    // Replace by the result value
+                    formula = formula.replaceAll("&nbsp;", " ")
+                    let add_space_after = formula.length > 0 && formula[formula.length - 1] === " "
+                    let add_space_before = formula.length > 0 && formula[0] === " "
+                    return (add_space_before ? "&nbsp;" : "") + String(eval(formula)) + (add_space_after ? "&nbsp;" : "")
+                } catch (e) {
+                    // Do not replace if there is any issue
+                    logger.error("String", match, "cannot be evaluated:", e)
+                    return match
+                }
+            })
+        }
+        return effect
+    }
+
     modify_dialog(ignore_sliders) {
 
         // Reset text
@@ -895,57 +941,28 @@ class TalentRoll extends Roll {
 
         let effect = ""
         if (this.is_power && this.duration.length > 0) {
-            effect += "<div class='row mx-1 align-middle'>Durée de l'effet: " + this.duration + "</div>" + effect
+            effect += "<div class='row mx-1 align-middle'>Durée de l'effet: " + this.parse_effect(this.duration) + "</div>"
         }
-        effect += "<div class='row mx-1 align-middle'>Effet:</div><div class='row mx-1 align-middle'>" + this.effect
-
-        if (this.energy_investment_validated) {
-            if (is_v7) {
-                // Show the actual effect instead of [A] or [B+2]
-                effect = effect.replaceAll(effect_column_regex, (match, prefix, escape, column, modifier, escape2, suffix) => {
-                    modifier = typeof modifier === "undefined" ? 0 : parseInt(modifier.replaceAll(" ", ""))
-                    if (escape && escape2) {
-                        return match.replace(" ", "&nbsp;")
-                    }
-                    escape = typeof escape === "undefined" ? "" : escape
-                    escape2 = typeof escape2 === "undefined" ? "" : escape2
-                    const effect_value = this.is_success() ? this.column_effect(column, modifier) : 0
-                    return prefix.replace(" ", "&nbsp;") + escape + effect_value + escape2
-                        + suffix.replace(" ", "&nbsp;")
-                })
-            } else {
-                // Update with the DSS if "DSS" is in the text
-                effect = effect.replaceAll(effect_dss_regex, (match, prefix, _, suffix) => {
-                    return prefix.replace(" ", "&nbsp;") + this.dss() + suffix.replace(" ", "&nbsp;")
-                })
-                effect = effect.replaceAll(effect_des_regex, (match, prefix, _, suffix) => {
-                    return prefix.replace(" ", "&nbsp;") + this.des() + suffix.replace(" ", "&nbsp;")
-                })
-            }
-            effect = effect.replaceAll(effect_margin_regex, (match, prefix, _, suffix) => {
-                return prefix.replace(" ", "&nbsp;") + this.post_test_margin() + suffix.replace(" ", "&nbsp;")
-            });
-        }
-        effect += "</div>"
+        effect += "<div class='row mx-1 align-middle'>Effet:</div><div class='row mx-1 align-middle'>" + this.parse_effect(this.effect) + "</div>"
 
         if (this.is_power && this.distance.length > 0) {
             const distance = this.distance.replaceAll(/\d+/gi, (match) => {
                 return String(parseInt(match) * Math.pow(2, this.magic_power))
             })
-            effect = "<div class='row mx-1 align-middle'>Portée: " + distance + "</div>" + effect
+            effect = "<div class='row mx-1 align-middle'>Portée: " + this.parse_effect(distance) + "</div>" + effect
         }
         if (this.is_power && this.focus.length > 0) {
             const components = this.is_magic ? this.incantation + this.somatic_component + this.material_component : 0
             const focus = this.focus.replaceAll(/\d+/gi, (match) => {
                 return String((1 + components) * parseInt(match) / Math.pow(2, this.optional_speed))
             })
-            effect = "<div class='row mx-1 align-middle'>Durée de concentration: " + focus + "</div>" + effect
+            effect = "<div class='row mx-1 align-middle'>Durée de concentration: " + this.parse_effect(focus) + "</div>" + effect
         }
         if (this.magic_resistance.length > 0) {
-            effect = "<div class='row mx-1 align-middle'>Résistance: " + this.magic_resistance + "</div>" + effect
+            effect = "<div class='row mx-1 align-middle'>Résistance: " + this.parse_effect(this.magic_resistance) + "</div>" + effect
         }
         if (this.black_magic.length > 0) {
-            effect = "<div class='row mx-1 align-middle'>Magie noire: " + this.black_magic + "</div>" + effect
+            effect = "<div class='row mx-1 align-middle'>Magie noire: " + this.parse_effect(this.black_magic) + "</div>" + effect
         }
 
         // Update with the MR if "MR" is in the text
