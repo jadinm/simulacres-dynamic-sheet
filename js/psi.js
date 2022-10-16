@@ -19,6 +19,11 @@ class PsiRow extends SpellRow {
         "effect": ["1", "2", "3"],
     }
 
+    // There is no specific field per realm
+    realm(realm_based_div) {
+        return null
+    }
+
     get_level(leveled_div) {
         const level_split = $(leveled_div)[0].id.split("-")
         const level = parseInt(level_split[level_split.length - 1])
