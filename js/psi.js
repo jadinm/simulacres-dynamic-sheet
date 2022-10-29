@@ -110,7 +110,6 @@ class PsiRow extends SpellRow {
             this.find(".row-roll-trigger").filter(this.filter_invisible_dices).each((i, dice_div) => {
                 dice_div.setAttribute("hidden", "hidden")
             })
-            this.update_level()
         }
     }
 
