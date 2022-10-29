@@ -52,6 +52,7 @@ const effect_column_regex = /(^|[^<\w">]?)(")?\[ *([ABCDEFGHIJK]) *([+-] *\d+)? 
 const effect_margin_regex = /(^|[^<\w">]?)(MR)([^<\w">]?|$)/g
 const effect_dss_regex = /(^|[^<\w">]?)(DSS)([^<\w">]?|$)/g
 const effect_des_regex = /(^|[^<\w">]?)(DES)([^<\w">]?|$)/g
+const extra_dices_regex = /(^|[^<\w">]?)(\d+)d(\d+)([^<\w">]?|$)/g
 const math_regex = /(\(?[-+]?(\s|&nbsp;)*\d+(?:(\s|&nbsp;)*[-+/*](\s|&nbsp;)*\(?(\s|&nbsp;)*[-+]?(\s|&nbsp;)*\d+(?:\.\d+)?(\s|&nbsp;)*\)?(\s|&nbsp;)*)*\)?)/g
 
 let critical_failure = false
@@ -743,6 +744,10 @@ class TalentRoll extends Roll {
             effect = effect.replaceAll(effect_margin_regex, (match, prefix, _, suffix) => {
                 return prefix.replaceAll(" ", "&nbsp;") + this.post_test_margin() + suffix.replaceAll(" ", "&nbsp;")
             });
+            effect = effect.replaceAll(extra_dices_regex, (match, prefix, number, type, suffix) => {
+                let result = this.roll_dices(parseInt(number), parseInt(type), null, "Effect roll '" + number + "d" + type + "'")
+                return prefix.replaceAll(" ", "&nbsp;") + result + suffix.replaceAll(" ", "&nbsp;")
+            })
 
             effect = effect.replaceAll(math_regex, (match, formula) => {
                 try {
