@@ -13,7 +13,8 @@ class SuperpowerRow extends RollRow {
     }
     static independent_checkboxes = []
     static numeric_inputs = ["component-modifier", "means-modifier"]
-    static basic_inputs = [...this.numeric_inputs, ...["name", "time", "distance", "duration", "effect"]]
+    static basic_inputs = [...this.numeric_inputs, ...["name", "time", "distance", "duration"]]
+    static text_areas = ["effect"]
 
     component_value() {
         return this.formula_elem("component")[0]

@@ -81,3 +81,8 @@ footer {
 .modal {
     font-size: 1rem;
 }
+
+.md-textarea {
+    overflow-y: scroll !important; /* re-add scrollbar */
+    resize: none; /* prevent resizing from user */
+}

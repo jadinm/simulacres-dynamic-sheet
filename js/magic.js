@@ -13,8 +13,9 @@ class SpellRow extends RollRow {
     static selects = [...super.selects, ...["list"]]
     static sliders = ["difficulty-input"]
     static numeric_inputs = [...super.numeric_inputs, "level", "hermetic-mr-learning", "hermetic-difficulty", "details-equipment-always-expend-quantity"]
-    static basic_inputs = [...this.numeric_inputs, ...["name", "time", "distance", "duration", "effect",
+    static basic_inputs = [...this.numeric_inputs, ...["name", "time", "distance", "duration",
         "details-max", "details-min", "details-black-magic", "details-resistance", "details-ap-cost"]]
+    static text_areas = ["effect"]
     static duplicated_inputs = {
         "hermetic-mr-learning": Characteristics.realms,
         "hermetic-difficulty": Characteristics.realms,
@@ -208,7 +209,7 @@ class SpellRow extends RollRow {
         if (this.is_evil_nature_good()) {
             new GoodNatureEvilMagicRoll({
                 reason: this.roll_reason(),
-                effect: this.get_var("effect", button),
+                effect: this.get_var("effect", button).trim(),
                 distance,
                 focus,
                 duration,
@@ -229,7 +230,7 @@ class SpellRow extends RollRow {
                 reason: this.roll_reason(),
                 max_value,
                 talent_level,
-                effect: this.get_var("effect", button),
+                effect: this.get_var("effect", button).trim(),
                 critical_increase,
                 formula_elements,
                 margin_throttle,
@@ -435,7 +436,7 @@ class FocusMagicRow extends SpellRow {
     static selects_no_sanitize = []
     static selects = ["equipment"]
     static numeric_inputs = [...RollRow.numeric_inputs, "level", "details-equipment-always-expend-quantity"]
-    static basic_inputs = [...this.numeric_inputs, ...["name", "focus", "time", "distance", "duration", "effect",
+    static basic_inputs = [...this.numeric_inputs, ...["name", "focus", "time", "distance", "duration",
         "details-max", "details-min", "details-black-magic", "details-resistance", "details-ap-cost"]]
     static sliders = []
     static duplicated_inputs = {}
@@ -529,7 +530,7 @@ class FocusMagicRow extends SpellRow {
                 reason: this.roll_reason(),
                 max_value,
                 talent_level,
-                effect: this["effect"],
+                effect: this["effect"].trim(),
                 distance: this["distance"],
                 focus: this["time"],
                 duration: this["duration"],

@@ -5,7 +5,7 @@ class KiRow extends PsiRow {
     static selects = RollRow.selects
     static numeric_inputs = [...RollRow.numeric_inputs, ...["level"]]
     static basic_inputs = [...this.numeric_inputs,
-        ...["talent", "time", "duration", "effect", "details-name", "details-max", "details-min"]]
+        ...["talent", "time", "duration", "details-name", "details-max", "details-min"]]
     static sliders = []
 
     update_realm(realm_div) {

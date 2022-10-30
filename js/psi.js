@@ -12,7 +12,7 @@ class PsiRow extends SpellRow {
     static selects = ["equipment"]
     static numeric_inputs = RollRow.numeric_inputs
     static basic_inputs = [...this.numeric_inputs,
-        ...["name", "time", "duration", "distance", "effect", "details-max", "details-min"]]
+        ...["name", "time", "duration", "distance", "details-max", "details-min"]]
     static duplicated_inputs = {
         "duration": ["1", "2", "3"],
         "distance": ["1", "2", "3"],

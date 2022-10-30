@@ -41,7 +41,8 @@ class FocusTable extends DataList {
 
 class MagicalEquipmentRow extends FocusRow {
     static numeric_inputs = ["charge"]
-    static basic_inputs = [...this.numeric_inputs, ...["name", "details"]]
+    static basic_inputs = [...this.numeric_inputs, ...["name"]]
+    static text_areas = ["details"]
 }
 
 class MagicalEquipmentTable extends DataList {

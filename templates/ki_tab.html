@@ -105,7 +105,7 @@
                 <td data-title="Effets&#xa;  Niv. 1 &#xa;&#xa;  Niv. 2&#xa;&#xa;  Niv. 3"
                     class="md-form my-0 py-0 align-middle">
                     {% for level in range(1, 4) %}
-                        <input id="ki-x-effect-{{ level }}" class="spell-effect form-control" type="text">
+                        <textarea class="md-textarea spell-effect form-control" id="ki-x-effect-{{ level }}" rows="2"></textarea>
                         <label for="ki-x-effect-{{ level }}"></label>
                     {% endfor %}
                 </td>
