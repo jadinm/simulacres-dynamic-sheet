@@ -180,8 +180,10 @@ class Model {
                 if (JSON5.stringify(this[variable]) !== JSON5.stringify(value)) // Normal comparison does not work with objects
                     this.unsync_values[variable] = [value, this[variable]]
             } else if (elem[0].tagName === "TEXTAREA") {
-                if (this[variable] !== elem.text())
+                if (elem.hasClass("summernote") && this[variable] !== elem.text())
                     this.unsync_values[variable] = [elem.text(), this[variable]]
+                else if (!elem.hasClass("summernote") && this[variable] !== elem.val())
+                    this.unsync_values[variable] = [elem.val(), this[variable]]
             } else if (this[variable] !== elem.val()) {
                 this.unsync_values[variable] = [elem.val(), this[variable]]
             }
