@@ -1,5 +1,6 @@
 let sheet = null
 let sheet_loaded = false
+let testing_sheet = false  // Set only by automated tests
 
 class Biography extends Model {
     static numeric_inputs = [...(intermediate_discovery ? [] : ["luck-points"]), "age", "height", "weight"]
@@ -296,12 +297,54 @@ class Character {
         return this.duplicated_ids.length > 0 || this.unhandled_id.length > 0 || this.dependency_issues.length > 0
     }
 
-    get_missing_inputs() {
-        const errors = {}
-        for (const [model_id, model] of this.list_models(true)) {
-            errors[model_id] = model.missing_inputs
+    default_error_print(error_name, list_errors, div_error_list, base_div, all_errors) {
+        for (const [scope, errors] of Object.entries(list_errors)) {
+            if (Array.isArray(errors)) {
+                for (const error of errors) {
+                    const elem = base_div.clone(false, false)
+                    const error_text = "[" + scope + "] " + error
+                    all_errors[error_name].push(error_text)
+                    elem.text(error_text)
+                    div_error_list.append(elem)
+                }
+            }
         }
-        return errors
+    }
+
+    expected_value_print(error_name, list_errors, div_error_list, base_div, all_errors) {
+        for (const [scope, error] of Object.entries(list_errors)) {
+            for (const [error_var, [actual, expected]] of Object.entries(error)) {
+                const elem = base_div.clone(false, false)
+                const error_text = "[" + scope + "] " + error_var + " has value " + JSON5.stringify(actual) + " instead of " + JSON5.stringify(expected)
+                all_errors[error_name].push(error_text)
+                elem.text(error_text)
+                div_error_list.append(elem)
+            }
+        }
+    }
+
+    invalid_value_print(error_name, list_errors, div_error_list, base_div, all_errors) {
+        for (const [scope, error] of Object.entries(list_errors)) {
+            for (const [variable, value] of Object.entries(error)) {
+                const elem = base_div.clone(false, false)
+                const error_text = "[" + scope + "] " + variable + " has the invalid value " + JSON5.stringify(value)
+                all_errors[error_name].push(error_text)
+                elem.text(error_text)
+                div_error_list.append(elem)
+            }
+        }
+    }
+
+    unused_data_print(error_name, list_errors, div_error_list, base_div, all_errors) {
+        for (const [scope, error] of Object.entries(list_errors)) {
+            for (const [variable, value] of Object.entries(error)) {
+                const elem = base_div.clone(false, false)
+                const error_text = "[" + scope + "] " + variable + " with value " + JSON5.stringify(value) + " is never used"
+                all_errors[error_name].push(error_text)
+                elem.text(error_text)
+                div_error_list.append(elem)
+            }
+        }
     }
 
     /**
@@ -312,16 +355,21 @@ class Character {
 
         // Recover lists of errors inputs
         const error_types = {
-            dependency_issues: $("#import-warning-dependencies"),
-            duplicated_ids: $("#import-warning-duplicated"),
-            unhandled_id: $("#import-warning-unhandled"),
-            missing_inputs: $("#import-warning-missing"),
-            invalid_values: $("#import-warning-invalid"),
-            unsync_values: $("#import-warning-unsync"),
+            dependency_issues: [$("#import-warning-dependencies"), this.default_error_print],
+            duplicated_ids: [$("#import-warning-duplicated"), this.default_error_print],
+            unhandled_id: [$("#import-warning-unhandled"), this.default_error_print],
+            missing_inputs: [$("#import-warning-missing"), this.default_error_print],
+            invalid_values: [$("#import-warning-invalid"), this.invalid_value_print],
+            unsync_values: [$("#import-warning-unsync"), this.expected_value_print],
+            unused_data: [$("#import-unused-data"), this.unused_data_print],
         }
+        // Having fields that have no imported value is quite expected for users (but useful to test)
+        // This makes the tests more robust since we are reminded to keep the examples up-to-date
+        if (testing_sheet)
+            error_types.missing_data = [$(), this.default_error_print]
         this.all_errors = {}
 
-        for (const [variable, list] of Object.entries(error_types)) {
+        for (const [variable, [list, format_error_fn]] of Object.entries(error_types)) {
             // Extract errors
             this.all_errors[variable] = []
             let list_errors = {}
@@ -340,25 +388,7 @@ class Character {
             // Overwrite the dialog
             list.empty()
             const base_elem = $("<li class=\"list-group-item align-items-center py-1 my-0\"></li>")
-            for (const [scope, errors] of Object.entries(list_errors)) {
-                if (Array.isArray(errors)) {
-                    for (const error of errors) {
-                        const elem = base_elem.clone(false, false)
-                        const error_text = "[" + scope + "] " + error
-                        this.all_errors[variable].push(error_text)
-                        elem.text(error_text)
-                        list.append(elem)
-                    }
-                } else {
-                    for (const [error_var, [actual, expected]] of Object.entries(errors)) {
-                        const elem = base_elem.clone(false, false)
-                        const error_text = "[" + scope + "] " + error_var + " has value " + JSON5.stringify(actual) + " instead of " + JSON5.stringify(expected)
-                        this.all_errors[variable].push(error_text)
-                        elem.text(error_text)
-                        list.append(elem)
-                    }
-                }
-            }
+            format_error_fn(variable, list_errors, list, base_elem, this.all_errors)
         }
 
         // Show the modal
@@ -407,13 +437,13 @@ class Character {
         }
         for (let [model_var, model] of this.list_variables(true)) {
             if (model_var !== "ap") // Update AP model last
-                model.import(opts[model_var], opts)
+                model.import(model_var in opts ? opts[model_var] : {}, opts)
         }
 
         // Update AP model last because it might select spells or talents not existing in the middle
         this["ap"].import(opts["ap"], opts)
 
-        if (debug)
+        if (debug || testing_sheet)
             this.sanity_check()
     }
 

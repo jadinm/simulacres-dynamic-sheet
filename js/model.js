@@ -67,6 +67,8 @@ class Model {
         this.missing_inputs = []
         this.invalid_values = {}
         this.unsync_values = {}
+        this.unused_data = []
+        this.missing_data = []
         this.id = null // No id by default
         this.parent = parent
 
@@ -93,6 +95,8 @@ class Model {
         this.missing_inputs = []
         this.invalid_values = {}
         this.unsync_values = {}
+        this.unused_data = {}
+        this.missing_data = []
     }
 
     has_errors() {
@@ -100,7 +104,7 @@ class Model {
             if (model.has_errors())
                 return true
         }
-        return this.missing_inputs.length > 0 || Object.keys(this.invalid_values).length > 0 || Object.keys(this.unsync_values).length > 0
+        return this.missing_inputs.length > 0 || Object.keys(this.invalid_values).length > 0 || Object.keys(this.unsync_values).length > 0 || Object.keys(this.unused_data).length > 0 || (testing_sheet && this.missing_data.length > 0)
     }
 
     prepare() {
@@ -387,12 +391,14 @@ class Model {
         const numeric_inputs = this.constructor.suffix_inputs(this.constructor.numeric_inputs)
         const save_slider_min_max = this.constructor.suffix_inputs(this.constructor.save_slider_min_max)
         const save_input_classes = this.constructor.suffix_inputs(this.constructor.save_input_classes)
+
+        const used_vars = []
         for (const variable of all_inputs) {
             let element
-
             if (save_slider_min_max.includes(variable)) {
                 for (const minmax of ["min", "max"]) {
                     const minmax_var = variable + "." + minmax
+                    used_vars.push(minmax_var)
                     if (typeof opts === 'object' && opts !== null
                         && minmax_var in opts) {
                         if (updating_opts && this[minmax_var] !== opts[minmax_var]) {
@@ -414,12 +420,16 @@ class Model {
                             }
                         }
                     }
+                    if (testing_sheet && updating_opts && opts && !(minmax_var in opts)) {
+                        this.missing_data.push(minmax_var)
+                    }
                 }
             }
 
             if (variable in save_input_classes) {
                 for (const class_name of save_input_classes[variable]) {
                     const class_var = variable + "." + class_name
+                    used_vars.push(class_var)
                     if (typeof opts === 'object' && opts !== null
                         && class_var in opts) {
                         if (updating_opts && this[class_var] !== opts[class_var]) {
@@ -439,10 +449,14 @@ class Model {
                             this[class_var] = element.hasClass(class_name)
                         }
                     }
+                    if (testing_sheet && updating_opts && opts && !(class_var in opts)) {
+                        this.missing_data.push(class_var)
+                    }
                 }
             }
 
             // Default to saved data
+            used_vars.push(variable)
             if (typeof opts === 'object' && opts !== null
                 && variable in opts && opts[variable] !== undefined) {
 
@@ -474,13 +488,20 @@ class Model {
                             element.val(opts[variable]).trigger("change")
                         }
                     } else {
-                        element.val(opts[variable])
-                        element.trigger("change")
+                        if (numeric_inputs.includes(variable) && isNaN(parseInt(opts[variable]))) {
+                            this.invalid_values[variable] = opts[variable]
+                        } else {
+                            element.val(opts[variable])
+                            element.trigger("change")
+                        }
                     }
                 } else {
                     this[variable] = opts[variable]
                 }
                 continue
+            }
+            if (testing_sheet && updating_opts && opts && !(variable in opts)) {
+                this.missing_data.push(variable)
             }
             if (updating_opts)
                 continue // No need to fetch elements that were already fetched on page load
@@ -510,6 +531,15 @@ class Model {
                 }
                 if (element.attr("data-max-options") === "1") // selectpicker multiple but not really
                     this[variable] = this[variable] && this[variable].length > 0 ? this[variable][0] : null
+            }
+        }
+
+        // Check that all keys of opts were used
+        if (updating_opts && typeof opts === 'object' && opts !== null) {
+            for (const [key, value] of Object.entries(opts)) {
+                if (!used_vars.includes(key) && !(["base_level", "row_number", "current_level"].includes(key))) {
+                    this.unused_data[key] = value
+                }
             }
         }
     }

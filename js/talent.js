@@ -304,27 +304,31 @@ class TalentLists extends DataList {
     import(table_opts, full_opts) {
         // Creating talents that originate from this talent list, even if they were moved to another list
         this.constructor.talent_tables.forEach((name) => {
-            for (const talent_desc of full_opts[name].rows) {
-                if (talent_desc["base_level"] === this.list_level && !sheet.get_talent_from_name(talent_desc["name"])) {
-                    // This talent needs to be created here (it will be moved later)
-                    this.add_row(null, {}).import(talent_desc)
-                    this.constructor.talent_table_updated = true
+            if (name in full_opts) {
+                for (const talent_desc of full_opts[name].rows) {
+                    if (talent_desc["base_level"] === this.list_level && !sheet.get_talent_from_name(talent_desc["name"])) {
+                        // This talent needs to be created here (it will be moved later)
+                        this.add_row(null, {}).import(talent_desc)
+                        this.constructor.talent_table_updated = true
+                    }
                 }
             }
         })
 
         // Since talent lists are imported in increasing order of level, we know that talents that should be moved
         // in this list are already created (because moves to the lower levels are forbidden)
-        for (const talent_desc of table_opts.rows) {
-            const talent = sheet.get_talent_from_name(talent_desc["name"])
-            // Move the talent on the other list (or don't move if not needed)
-            if (this === talent.current_list) {
-                talent.update_talent_tooltip() // potentially updating the tooltip if the it was moved
-            } else {
-                talent.update_talent(this)
-                this.constructor.talent_table_updated = true
+        if (table_opts && table_opts.rows) {
+            for (const talent_desc of table_opts.rows) {
+                const talent = sheet.get_talent_from_name(talent_desc["name"])
+                // Move the talent on the other list (or don't move if not needed)
+                if (this === talent.current_list) {
+                    talent.update_talent_tooltip() // potentially updating the tooltip if it was moved
+                } else {
+                    talent.update_talent(this)
+                    this.constructor.talent_table_updated = true
+                }
+                this.table.append(talent.data) // Moves the element to the end of the list
             }
-            this.table.append(talent.data) // Moves the element to the end of the list
         }
 
         if (sheet[this.constructor.talent_tables[this.constructor.talent_tables.length - 1]] === this && this.constructor.talent_table_updated) {

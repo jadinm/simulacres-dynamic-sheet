@@ -1,0 +1,1198 @@
+{
+  "version": 1667292080,
+  "ap": {
+    "adventure-points": 90,
+    "adventure-points-discount": 6,
+    "adventure-points-survive-paid": 0,
+    "energies-started-level-2": [
+      "humanoid",
+      "mechanical"
+    ],
+    "work-main-talent": "Discrétion",
+    "work-talents": [
+      "Armes légères (Dagues)",
+      "Serrurerie",
+      "Vol à la tire"
+    ],
+    "talents-inefficient-raise": [],
+    "advised-talents": [
+      "Déguisement",
+      "Escalade",
+      "Maçonnerie"
+    ],
+    "spells-started-level-2": [],
+    "spells-started-level-0": [],
+    "spells-free-good-nature-evil": []
+  },
+  "background": {
+    "background": ""
+  },
+  "biography": {
+    "luck-points": 0,
+    "age": 23,
+    "height": 177,
+    "weight": 73,
+    "character-name": "Raven",
+    "race": "Humain",
+    "gender": "M",
+    "work": "Voleur"
+  },
+  "characteristics": {
+    "body": 5,
+    "instincts": 5,
+    "heart": 4,
+    "mind": 4,
+    "perception": 3,
+    "action": 5,
+    "desire": 2,
+    "resistance": 3,
+    "mineral": 1,
+    "vegetal": 0,
+    "animal": 0,
+    "humanoid": 2,
+    "mechanical": 2,
+    "void": -1,
+    "power": 1,
+    "speed": 2,
+    "precision": 1,
+    "water": 0,
+    "earth": 0,
+    "fire": 0,
+    "air": 0,
+    "fog": 0,
+    "mud": 0,
+    "lightning": 0,
+    "metal": 0,
+    "healing": 0,
+    "necromancy": 0,
+    "invocation": 0,
+    "protection": 0,
+    "divination": 0,
+    "enchantment": 0,
+    "charm": 0,
+    "voodoo": 0,
+    "spiritualism": 0,
+    "metamorphosis": 0,
+    "witchcraft": 0,
+    "time": 0,
+    "shamanism": 0,
+    "runes": 0,
+    "name-magic": 0,
+    "hermetic": 0,
+    "meta-magic": 0,
+    "good-magic": 0,
+    "natural-magic": 0,
+    "evil-magic": 0,
+    "sil-pipe": 0,
+    "divine": 0,
+    "universal-magic": 0,
+    "ki": 0,
+    "psi": 0,
+    "black-magic": 0,
+    "malemagite": 0,
+    "ki-label": "Shaolin",
+    "psi-label": "Psionique",
+    "resistance.light-bonus-applied": false,
+    "resistance.heavy-bonus-applied": true,
+    "instincts.bonus-applied": true,
+    "heart.bonus-applied": false,
+    "mind.bonus-applied": false
+  },
+  "status": {
+    "details-breath": "",
+    "details-psychic": "",
+    "details-unease": "",
+    "details-hp-trunk": "",
+    "details-hp-head": "",
+    "details-hp-left-arm": "",
+    "details-hp-left-leg": "",
+    "details-hp-right-arm": "",
+    "details-hp-right-leg": "",
+    "temporary-breath": 0,
+    "lost-breath": 0,
+    "lost-psychic": 0,
+    "absorption-trunk": 0,
+    "absorption-head": 0,
+    "absorption-left-arm": 0,
+    "absorption-left-leg": 0,
+    "absorption-right-arm": 0,
+    "absorption-right-leg": 0,
+    "armor-trunk": 3,
+    "armor-head": 0,
+    "armor-left-arm": 2,
+    "armor-left-leg": 2,
+    "armor-right-arm": 2,
+    "armor-right-leg": 2,
+    "shield": "0",
+    "survival-available": true,
+    "breath": 5,
+    "psychic": 2,
+    "unease": 0,
+    "rest": 2,
+    "hp-trunk": 5,
+    "hp-head": 3,
+    "hp-left-arm": 3,
+    "hp-left-leg": 3,
+    "hp-right-arm": 3,
+    "hp-right-leg": 4,
+    "breath.min": 0,
+    "breath.max": 5,
+    "psychic.min": 0,
+    "psychic.max": 4,
+    "unease.min": 0,
+    "unease.max": 6,
+    "rest.min": 0,
+    "rest.max": 7,
+    "hp-trunk.min": 0,
+    "hp-trunk.max": 5,
+    "hp-head.min": 0,
+    "hp-head.max": 3,
+    "hp-left-arm.min": 0,
+    "hp-left-arm.max": 3,
+    "hp-left-leg.min": 0,
+    "hp-left-leg.max": 4,
+    "hp-right-arm.min": 0,
+    "hp-right-arm.max": 3,
+    "hp-right-leg.min": 0,
+    "hp-right-leg.max": 4
+  },
+  "money": {
+    "copper-coins": 2,
+    "silver-coins": 4,
+    "gold-coins": 0,
+    "copper-currency": "Besins",
+    "silver-currency": "Lunes",
+    "gold-currency": "Soleils"
+  },
+  "focuses": {
+    "rows": []
+  },
+  "magical_equipment": {
+    "rows": []
+  },
+  "equipment": {
+    "rows": [
+      {
+        "quantity": 1,
+        "name": "Matériel de déguisement",
+        "price": "0",
+        "row_number": "0"
+      },
+      {
+        "quantity": 0,
+        "name": "Matériel de crochetage",
+        "price": "0",
+        "row_number": "1"
+      },
+      {
+        "quantity": 0,
+        "name": "Epée courte [E]",
+        "price": "0",
+        "row_number": "2"
+      },
+      {
+        "quantity": 1,
+        "name": "Fronde (Distance 25m max:45), Caillou [B]/[C] (PV/PS), Acier [B]/[E] (PV/PS)",
+        "price": "0",
+        "row_number": "10"
+      },
+      {
+        "quantity": 2,
+        "name": "Dague [D]",
+        "price": "0",
+        "row_number": "3"
+      },
+      {
+        "quantity": 1,
+        "name": "Dague Anak [D+1]",
+        "price": "0",
+        "row_number": "4"
+      },
+      {
+        "quantity": 2,
+        "name": "Dague de jet",
+        "price": "0",
+        "row_number": "5"
+      },
+      {
+        "quantity": 1,
+        "name": "Longue Vue",
+        "price": "0",
+        "row_number": "6"
+      },
+      {
+        "quantity": 1,
+        "name": "Vetêments chauds (cape, manteau)",
+        "price": "0",
+        "row_number": "8"
+      },
+      {
+        "quantity": 1,
+        "name": "Corde de 20m",
+        "price": "0",
+        "row_number": "9"
+      },
+      {
+        "quantity": 1,
+        "name": "Grapin",
+        "price": "0",
+        "row_number": "14"
+      },
+      {
+        "quantity": 1,
+        "name": "Bille de la hache de Caldur",
+        "price": "0",
+        "row_number": "11"
+      },
+      {
+        "quantity": 1,
+        "name": "Corne de Auroc (récupérer sur les bandits)",
+        "price": "0",
+        "row_number": "12"
+      },
+      {
+        "quantity": 0,
+        "name": "Pansement",
+        "price": "0",
+        "row_number": "13"
+      },
+      {
+        "quantity": 1,
+        "name": "Habit de serviteur de la ville haute de la famille Dablo",
+        "price": "0",
+        "row_number": "15"
+      },
+      {
+        "quantity": 1,
+        "name": "Armure (Gilet de cuir clouté sur veste de cuir et pantalon de cuir)",
+        "price": "0",
+        "row_number": "16"
+      },
+      {
+        "quantity": 1,
+        "name": "Smut(Tusk Love)",
+        "price": "0",
+        "row_number": "17"
+      },
+      {
+        "quantity": 1,
+        "name": "Masque de fête",
+        "price": "0",
+        "row_number": "18"
+      },
+      {
+        "quantity": 2,
+        "name": "2,5 fioles de poison Corne de démons",
+        "price": "0",
+        "row_number": "19"
+      },
+      {
+        "quantity": 2,
+        "name": "Potion de Soin de chez Azhaf",
+        "price": "0",
+        "row_number": "20"
+      },
+      {
+        "quantity": 1,
+        "name": "tente 2pl.",
+        "price": "0",
+        "row_number": "21"
+      },
+      {
+        "quantity": 1,
+        "name": "braie+chemise",
+        "price": "0",
+        "row_number": "22"
+      },
+      {
+        "quantity": 1,
+        "name": "Set manteau + bottes de montagne",
+        "price": "0",
+        "row_number": "23"
+      },
+      {
+        "quantity": 1,
+        "name": "Dague de bronze enchantée (7 soleils) [D]",
+        "price": "0",
+        "row_number": "24"
+      },
+      {
+        "quantity": 3,
+        "name": "Rations",
+        "price": "0",
+        "row_number": "25"
+      },
+      {
+        "quantity": 1,
+        "name": "plume de griffon",
+        "price": "0",
+        "row_number": "26"
+      }
+    ]
+  },
+  "limited_equipment": {
+    "rows": [
+      {
+        "charge": 2,
+        "name": "Dague sanglante",
+        "details": "",
+        "row_number": "0"
+      }
+    ]
+  },
+  "notes": {
+    "rows": [
+      {
+        "name": "Guidle des Voleurs: La Mante Noire",
+        "input": "<p></p>",
+        "row_number": "0"
+      },
+      {
+        "name": "Entrainement Dagues",
+        "input": "",
+        "row_number": "3"
+      },
+      {
+        "name": "Dague Maudite",
+        "input": "<p><span style=\"color: rgb(220, 221, 222); --darkreader-inline-color:#d3cfc9;\" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" font-size:=\"\" 16px;=\"\" font-style:=\"\" normal;=\"\" font-variant-ligatures:=\"\" font-variant-caps:=\"\" font-weight:=\"\" 400;=\"\" letter-spacing:=\"\" text-align:=\"\" start;=\"\" text-indent:=\"\" 0px;=\"\" text-transform:=\"\" none;=\"\" white-space:=\"\" break-spaces;=\"\" word-spacing:=\"\" -webkit-text-stroke-width:=\"\" background-color:=\"\" rgba(4,=\"\" 4,=\"\" 5,=\"\" 0.07);=\"\" text-decoration-style:=\"\" initial;=\"\" text-decoration-color:=\"\" display:=\"\" inline=\"\" !important;=\"\" float:=\"\" --darkreader-inline-color:#d3cfc9;=\"\" --darkreader-inline-bgcolor:rgba(3,=\"\" 0.07);\"=\"\" data-darkreader-inline-color=\"\">La lame est un rubis très pur, peut-être un peu pâle\n\nCette dague à la lame de rubis est maudite. Bien qu'elle soit relativement efficace elle oblige néanmoins son possesseur à la tremper dans du sang tous les jours.\n\nDans le cas où cette clause ne serait pas respectée la lame de rubis pâlirait et deviendrait terne pour devenir une lame ordinaire au bout de quelques jours (ld6 à relancer après un jour sans sang). En revanche, lorsqu'elle est correctement abreuvée, cette dague semble animée d'une volonté propre et aide son utilisateur\nà frapper les points vitaux de l'adversaire. Ensuite elle reste figé dans son corps tant qu'elle n'a pas été arrachée ou que la victime n'est pas entièrement vidée de son sang. Dague +1 au Test de Combat.\nEn cas de coup porté, cause [D]PV (1d3+2d6) supplémentaires par passe d'arme en contact avec la victime. S'en débarrasser demande un jet réussi de Corps + Action + Humain - 4\n,\n-2PV pour la nourrir</span></p><p><span style=\"color: rgb(220, 221, 222); --darkreader-inline-color:#d3cfc9;\" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" font-size:=\"\" 16px;=\"\" font-style:=\"\" normal;=\"\" font-variant-ligatures:=\"\" font-variant-caps:=\"\" font-weight:=\"\" 400;=\"\" letter-spacing:=\"\" text-align:=\"\" start;=\"\" text-indent:=\"\" 0px;=\"\" text-transform:=\"\" none;=\"\" white-space:=\"\" break-spaces;=\"\" word-spacing:=\"\" -webkit-text-stroke-width:=\"\" background-color:=\"\" rgba(4,=\"\" 4,=\"\" 5,=\"\" 0.07);=\"\" text-decoration-style:=\"\" initial;=\"\" text-decoration-color:=\"\" display:=\"\" inline=\"\" !important;=\"\" float:=\"\" --darkreader-inline-color:#d3cfc9;=\"\" --darkreader-inline-bgcolor:rgba(3,=\"\" 0.07);\"=\"\" data-darkreader-inline-color=\"\"><br></span></p>",
+        "row_number": "4"
+      }
+    ]
+  },
+  "runes": {
+    "rows": []
+  },
+  "words": {
+    "rows": []
+  },
+  "talents_x": {
+    "rows": [
+      {
+        "name": "Histoire",
+        "row_number": "5",
+        "current_level": "x",
+        "base_level": "x"
+      },
+      {
+        "name": "Agriculture",
+        "row_number": "0",
+        "current_level": "x",
+        "base_level": "x"
+      },
+      {
+        "name": "Alchimie",
+        "row_number": "1",
+        "current_level": "x",
+        "base_level": "x"
+      },
+      {
+        "name": "Art de la guerre",
+        "row_number": "2",
+        "current_level": "x",
+        "base_level": "x"
+      },
+      {
+        "name": "Botanique",
+        "row_number": "4",
+        "current_level": "x",
+        "base_level": "x"
+      },
+      {
+        "name": "Histoire d'Heldor",
+        "row_number": "16",
+        "current_level": "x",
+        "base_level": "x"
+      },
+      {
+        "name": "Langue étrangère éloignée",
+        "row_number": "6",
+        "current_level": "x",
+        "base_level": "x"
+      },
+      {
+        "name": "Mathématiques",
+        "row_number": "9",
+        "current_level": "x",
+        "base_level": "x"
+      },
+      {
+        "name": "Navigation",
+        "row_number": "10",
+        "current_level": "x",
+        "base_level": "x"
+      },
+      {
+        "name": "Menuiserie/Ébénisterie",
+        "row_number": "11",
+        "current_level": "x",
+        "base_level": "x"
+      },
+      {
+        "name": "Minéralogie/Joaillerie",
+        "row_number": "12",
+        "current_level": "x",
+        "base_level": "x"
+      },
+      {
+        "name": "Poisons",
+        "row_number": "13",
+        "current_level": "x",
+        "base_level": "x"
+      },
+      {
+        "name": "Zoologie",
+        "row_number": "15",
+        "current_level": "x",
+        "base_level": "x"
+      }
+    ]
+  },
+  "talents_-4": {
+    "rows": [
+      {
+        "name": "Géographie",
+        "row_number": "8",
+        "current_level": "-4",
+        "base_level": "-4"
+      },
+      {
+        "name": "Méditation",
+        "row_number": "13",
+        "current_level": "-4",
+        "base_level": "-4"
+      },
+      {
+        "name": "Lire sur les lèvres",
+        "row_number": "8",
+        "current_level": "-4",
+        "base_level": "x"
+      },
+      {
+        "name": "Armes normales",
+        "row_number": "0",
+        "current_level": "-4",
+        "base_level": "-4"
+      },
+      {
+        "name": "Arts martiaux/Lutte",
+        "row_number": "1",
+        "current_level": "-4",
+        "base_level": "-4"
+      },
+      {
+        "name": "Commerce/Marchandage",
+        "row_number": "4",
+        "current_level": "-4",
+        "base_level": "-4"
+      },
+      {
+        "name": "Coutumes étrangères",
+        "row_number": "5",
+        "current_level": "-4",
+        "base_level": "-4"
+      },
+      {
+        "name": "Équitation",
+        "row_number": "6",
+        "current_level": "-4",
+        "base_level": "-4"
+      },
+      {
+        "name": "Géographie d'Heldor",
+        "row_number": "18",
+        "current_level": "-4",
+        "base_level": "-4"
+      },
+      {
+        "name": "Langue étrangère proche",
+        "row_number": "9",
+        "current_level": "-4",
+        "base_level": "-4"
+      },
+      {
+        "name": "Jonglage/Acrobaties",
+        "row_number": "10",
+        "current_level": "-4",
+        "base_level": "-4"
+      },
+      {
+        "name": "Médecine",
+        "row_number": "12",
+        "current_level": "-4",
+        "base_level": "-4"
+      },
+      {
+        "name": "Musique",
+        "row_number": "14",
+        "current_level": "-4",
+        "base_level": "-4"
+      },
+      {
+        "name": "Natation",
+        "row_number": "15",
+        "current_level": "-4",
+        "base_level": "-4"
+      },
+      {
+        "name": "Piégeage",
+        "row_number": "16",
+        "current_level": "-4",
+        "base_level": "-4"
+      }
+    ]
+  },
+  "talents_-2": {
+    "rows": [
+      {
+        "name": "Mémoire",
+        "row_number": "11",
+        "current_level": "-2",
+        "base_level": "-2"
+      },
+      {
+        "name": "Maçonnerie",
+        "row_number": "11",
+        "current_level": "-2",
+        "base_level": "-4"
+      },
+      {
+        "name": "Bouclier",
+        "row_number": "1",
+        "current_level": "-2",
+        "base_level": "-2"
+      },
+      {
+        "name": "Étiquette & Héraldique",
+        "row_number": "7",
+        "current_level": "-2",
+        "base_level": "-4"
+      },
+      {
+        "name": "Bricolage",
+        "row_number": "2",
+        "current_level": "-2",
+        "base_level": "-2"
+      },
+      {
+        "name": "Lire & Écrire",
+        "row_number": "7",
+        "current_level": "-2",
+        "base_level": "x"
+      },
+      {
+        "name": "Cartographie",
+        "row_number": "3",
+        "current_level": "-2",
+        "base_level": "-2"
+      },
+      {
+        "name": "Comédie",
+        "row_number": "4",
+        "current_level": "-2",
+        "base_level": "-2"
+      },
+      {
+        "name": "Danse",
+        "row_number": "5",
+        "current_level": "-2",
+        "base_level": "-2"
+      },
+      {
+        "name": "Dessin",
+        "row_number": "7",
+        "current_level": "-2",
+        "base_level": "-2"
+      },
+      {
+        "name": "Dressage",
+        "row_number": "8",
+        "current_level": "-2",
+        "base_level": "-2"
+      },
+      {
+        "name": "Orientation",
+        "row_number": "10",
+        "current_level": "-2",
+        "base_level": "-2"
+      },
+      {
+        "name": "Poésie/Contes & Légendes",
+        "row_number": "12",
+        "current_level": "-2",
+        "base_level": "-2"
+      },
+      {
+        "name": "Pistage/Chasse/Pêche",
+        "row_number": "13",
+        "current_level": "-2",
+        "base_level": "-2"
+      },
+      {
+        "name": "Premiers soins",
+        "row_number": "14",
+        "current_level": "-2",
+        "base_level": "-2"
+      },
+      {
+        "name": "Recherches en bibliothèque",
+        "row_number": "15",
+        "current_level": "-2",
+        "base_level": "-2"
+      },
+      {
+        "name": "Religion",
+        "row_number": "16",
+        "current_level": "-2",
+        "base_level": "-2"
+      },
+      {
+        "name": "Sculpture",
+        "row_number": "17",
+        "current_level": "-2",
+        "base_level": "-2"
+      },
+      {
+        "name": "Armes légères",
+        "row_number": "0",
+        "current_level": "-2",
+        "base_level": "-2"
+      },
+      {
+        "name": "Armes légères (épée courte)",
+        "row_number": "18",
+        "current_level": "-2",
+        "base_level": "-2"
+      }
+    ]
+  },
+  "talents_0": {
+    "rows": [
+      {
+        "name": "Déguisement",
+        "row_number": "6",
+        "current_level": "0",
+        "base_level": "-2"
+      },
+      {
+        "name": "Camouflage",
+        "row_number": "2",
+        "current_level": "0",
+        "base_level": "-4"
+      },
+      {
+        "name": "Escalade",
+        "row_number": "9",
+        "current_level": "0",
+        "base_level": "-2"
+      },
+      {
+        "name": "Vol à la tire",
+        "row_number": "17",
+        "current_level": "0",
+        "base_level": "-4"
+      },
+      {
+        "name": "Connaissance de la rue",
+        "row_number": "3",
+        "current_level": "0",
+        "base_level": "-4"
+      },
+      {
+        "name": "Serrurerie",
+        "row_number": "14",
+        "current_level": "0",
+        "base_level": "x"
+      },
+      {
+        "name": "Athlétisme",
+        "row_number": "0",
+        "current_level": "0",
+        "base_level": "0"
+      },
+      {
+        "name": "Bagarre",
+        "row_number": "1",
+        "current_level": "0",
+        "base_level": "0"
+      },
+      {
+        "name": "Chant",
+        "row_number": "2",
+        "current_level": "0",
+        "base_level": "0"
+      },
+      {
+        "name": "Cuisine",
+        "row_number": "3",
+        "current_level": "0",
+        "base_level": "0"
+      },
+      {
+        "name": "Entregent",
+        "row_number": "5",
+        "current_level": "0",
+        "base_level": "0"
+      },
+      {
+        "name": "Langue maternelle",
+        "row_number": "6",
+        "current_level": "0",
+        "base_level": "0"
+      },
+      {
+        "name": "Séduction",
+        "row_number": "7",
+        "current_level": "0",
+        "base_level": "0"
+      },
+      {
+        "name": "Observation",
+        "row_number": "8",
+        "current_level": "0",
+        "base_level": "0"
+      }
+    ]
+  },
+  "talents_1": {
+    "rows": [
+      {
+        "name": "Art magique",
+        "row_number": "3",
+        "current_level": "1",
+        "base_level": "x"
+      },
+      {
+        "name": "Discrétion",
+        "row_number": "4",
+        "current_level": "1",
+        "base_level": "0"
+      }
+    ]
+  },
+  "talents_2": {
+    "rows": [
+      {
+        "name": "Armes légères (Dagues)",
+        "row_number": "19",
+        "current_level": "2",
+        "base_level": "-2"
+      }
+    ]
+  },
+  "talents_3": {
+    "rows": []
+  },
+  "rolls": {
+    "rows": [
+      {
+        "details-bonus": 0,
+        "details-equipment-always-expend-quantity": 1,
+        "effect": "",
+        "details-name": "",
+        "details-max": "",
+        "details-min": "",
+        "talent": "Discrétion",
+        "equipment": null,
+        "details-exploding-effect": false,
+        "details-equipment-always-expend": false,
+        "details-include-armor-penalty": false,
+        "body": false,
+        "instincts": true,
+        "heart": false,
+        "mind": false,
+        "perception": false,
+        "action": true,
+        "desire": false,
+        "resistance": false,
+        "mineral": true,
+        "vegetal": false,
+        "animal": false,
+        "humanoid": false,
+        "mechanical": false,
+        "void": false,
+        "row_number": "0"
+      },
+      {
+        "details-bonus": 0,
+        "details-equipment-always-expend-quantity": 1,
+        "effect": "[D+1]PV",
+        "details-name": "",
+        "details-max": "",
+        "details-min": "",
+        "talent": "Armes légères (Dagues)",
+        "equipment": null,
+        "details-exploding-effect": false,
+        "details-equipment-always-expend": false,
+        "details-include-armor-penalty": false,
+        "body": true,
+        "instincts": false,
+        "heart": false,
+        "mind": false,
+        "perception": false,
+        "action": true,
+        "desire": false,
+        "resistance": false,
+        "mineral": false,
+        "vegetal": false,
+        "animal": false,
+        "humanoid": false,
+        "mechanical": true,
+        "void": false,
+        "row_number": "1"
+      },
+      {
+        "details-bonus": 0,
+        "details-equipment-always-expend-quantity": 1,
+        "effect": "Epee enchante: [E] PV [A] PS",
+        "details-name": "",
+        "details-max": "",
+        "details-min": "",
+        "talent": "Armes légères (épée courte)",
+        "equipment": null,
+        "details-exploding-effect": false,
+        "details-equipment-always-expend": false,
+        "details-include-armor-penalty": false,
+        "body": true,
+        "instincts": false,
+        "heart": false,
+        "mind": false,
+        "perception": false,
+        "action": true,
+        "desire": false,
+        "resistance": false,
+        "mineral": false,
+        "vegetal": false,
+        "animal": false,
+        "humanoid": false,
+        "mechanical": true,
+        "void": false,
+        "row_number": "2"
+      },
+      {
+        "details-bonus": 0,
+        "details-equipment-always-expend-quantity": 1,
+        "effect": "",
+        "details-name": "",
+        "details-max": "",
+        "details-min": "",
+        "talent": "Lire & Écrire",
+        "equipment": null,
+        "details-exploding-effect": false,
+        "details-equipment-always-expend": false,
+        "details-include-armor-penalty": false,
+        "body": false,
+        "instincts": false,
+        "heart": false,
+        "mind": true,
+        "perception": true,
+        "action": false,
+        "desire": false,
+        "resistance": false,
+        "mineral": false,
+        "vegetal": false,
+        "animal": false,
+        "humanoid": false,
+        "mechanical": true,
+        "void": false,
+        "row_number": "3"
+      },
+      {
+        "details-bonus": 0,
+        "details-equipment-always-expend-quantity": 1,
+        "effect": "",
+        "details-name": "",
+        "details-max": "",
+        "details-min": "",
+        "talent": "Serrurerie",
+        "equipment": null,
+        "details-exploding-effect": false,
+        "details-equipment-always-expend": false,
+        "details-include-armor-penalty": false,
+        "body": true,
+        "instincts": false,
+        "heart": false,
+        "mind": false,
+        "perception": true,
+        "action": false,
+        "desire": false,
+        "resistance": false,
+        "mineral": false,
+        "vegetal": false,
+        "animal": false,
+        "humanoid": false,
+        "mechanical": true,
+        "void": false,
+        "row_number": "4"
+      },
+      {
+        "details-bonus": 0,
+        "details-equipment-always-expend-quantity": 1,
+        "effect": "[B]PV[C]PS",
+        "details-name": "",
+        "details-max": "",
+        "details-min": "",
+        "talent": "Armes légères",
+        "equipment": null,
+        "details-exploding-effect": false,
+        "details-equipment-always-expend": false,
+        "details-include-armor-penalty": false,
+        "body": true,
+        "instincts": false,
+        "heart": false,
+        "mind": false,
+        "perception": true,
+        "action": false,
+        "desire": false,
+        "resistance": false,
+        "mineral": false,
+        "vegetal": false,
+        "animal": false,
+        "humanoid": false,
+        "mechanical": true,
+        "void": false,
+        "row_number": "5"
+      },
+      {
+        "details-bonus": 0,
+        "details-equipment-always-expend-quantity": 1,
+        "effect": "",
+        "details-name": "",
+        "details-max": "",
+        "details-min": "",
+        "talent": "Art magique",
+        "equipment": null,
+        "details-exploding-effect": false,
+        "details-equipment-always-expend": false,
+        "details-include-armor-penalty": false,
+        "body": false,
+        "instincts": false,
+        "heart": false,
+        "mind": true,
+        "perception": false,
+        "action": false,
+        "desire": false,
+        "resistance": true,
+        "mineral": false,
+        "vegetal": false,
+        "animal": false,
+        "humanoid": true,
+        "mechanical": false,
+        "void": false,
+        "row_number": "6"
+      },
+      {
+        "details-bonus": 0,
+        "details-equipment-always-expend-quantity": 1,
+        "effect": "",
+        "details-name": "",
+        "details-max": "",
+        "details-min": "",
+        "talent": "Observation",
+        "equipment": null,
+        "details-exploding-effect": false,
+        "details-equipment-always-expend": false,
+        "details-include-armor-penalty": false,
+        "body": false,
+        "instincts": true,
+        "heart": false,
+        "mind": false,
+        "perception": true,
+        "action": false,
+        "desire": false,
+        "resistance": false,
+        "mineral": false,
+        "vegetal": false,
+        "animal": false,
+        "humanoid": false,
+        "mechanical": true,
+        "void": false,
+        "row_number": "7"
+      }
+    ]
+  },
+  "dual_wielding": {
+    "rows": [
+      {
+        "details-bonus": 0,
+        "details-equipment-always-expend-quantity": 1,
+        "effect": "[D+3]PV",
+        "details-name": "",
+        "details-max": "",
+        "details-min": "",
+        "talent": "Armes légères (Dagues)",
+        "tap-talent": "Armes légères (Dagues)",
+        "equipment": null,
+        "details-exploding-effect": false,
+        "details-equipment-always-expend": false,
+        "details-include-armor-penalty": true,
+        "body": true,
+        "instincts": false,
+        "heart": false,
+        "mind": false,
+        "perception": false,
+        "action": true,
+        "desire": false,
+        "resistance": false,
+        "mineral": false,
+        "vegetal": false,
+        "animal": false,
+        "humanoid": false,
+        "mechanical": true,
+        "void": false,
+        "row_number": "0"
+      },
+      {
+        "details-bonus": 0,
+        "details-equipment-always-expend-quantity": 1,
+        "effect": "[D+1]",
+        "details-name": "",
+        "details-max": "",
+        "details-min": "",
+        "talent": "Armes légères (Dagues)",
+        "tap-talent": "Armes légères (Dagues)",
+        "equipment": null,
+        "details-exploding-effect": false,
+        "details-equipment-always-expend": false,
+        "details-include-armor-penalty": true,
+        "body": true,
+        "instincts": false,
+        "heart": false,
+        "mind": false,
+        "perception": false,
+        "action": true,
+        "desire": false,
+        "resistance": false,
+        "mineral": false,
+        "vegetal": false,
+        "animal": false,
+        "humanoid": false,
+        "mechanical": true,
+        "void": false,
+        "row_number": "1"
+      },
+      {
+        "details-bonus": 0,
+        "details-equipment-always-expend-quantity": 1,
+        "effect": "",
+        "details-name": "",
+        "details-max": "",
+        "details-min": "",
+        "talent": "Armes légères (Dagues)",
+        "tap-talent": null,
+        "equipment": null,
+        "details-exploding-effect": false,
+        "details-equipment-always-expend": false,
+        "details-include-armor-penalty": true,
+        "body": true,
+        "instincts": false,
+        "heart": false,
+        "mind": false,
+        "perception": false,
+        "action": true,
+        "desire": false,
+        "resistance": false,
+        "mineral": false,
+        "vegetal": false,
+        "animal": false,
+        "humanoid": false,
+        "mechanical": true,
+        "void": false,
+        "row_number": "2"
+      }
+    ]
+  },
+  "close_combat": {
+    "rows": []
+  },
+  "range_combat": {
+    "rows": [
+      {
+        "details-bonus": 0,
+        "details-equipment-always-expend-quantity": 1,
+        "distance-point_blank": "Entre 0 m et 1 m",
+        "distance-normal": "Entre 25 m et 1 m",
+        "distance-slightly_far": "Entre 45 m et 1 m",
+        "distance-very_far": "Entre 0 m et 1 m",
+        "effect-point_blank": "",
+        "effect-normal": "",
+        "effect-slightly_far": "",
+        "effect-very_far": "",
+        "details-name": "",
+        "details-max": "",
+        "details-min": "",
+        "talent": "Armes légères",
+        "equipment": null,
+        "details-exploding-effect": false,
+        "details-equipment-always-expend": false,
+        "details-include-armor-penalty": true,
+        "body": true,
+        "instincts": false,
+        "heart": false,
+        "mind": false,
+        "perception": true,
+        "action": false,
+        "desire": false,
+        "resistance": false,
+        "mineral": false,
+        "vegetal": false,
+        "animal": false,
+        "humanoid": false,
+        "mechanical": true,
+        "void": false,
+        "row_number": "0"
+      }
+    ]
+  },
+  "spells": {
+    "rows": []
+  },
+  "focus_spells": {
+    "rows": []
+  },
+  "psi_powers": {
+    "rows": []
+  },
+  "ki_powers": {
+    "rows": []
+  },
+  "warrior_way": {
+    "rows": [
+      {
+        "details-bonus": 0,
+        "details-equipment-always-expend-quantity": 1,
+        "name": "Attaque surprise",
+        "duration-1": "",
+        "duration-2": "",
+        "duration-3": "",
+        "effect-1": "",
+        "effect-2": "",
+        "effect-3": "",
+        "details-max": "",
+        "details-min": "",
+        "equipment": null,
+        "energy": "precision",
+        "details-exploding-effect": false,
+        "details-equipment-always-expend": false,
+        "body": false,
+        "instincts": true,
+        "heart": false,
+        "mind": false,
+        "perception": false,
+        "action": true,
+        "desire": false,
+        "resistance": false,
+        "mineral": false,
+        "vegetal": true,
+        "animal": false,
+        "humanoid": false,
+        "mechanical": false,
+        "void": false,
+        "difficulty-input": -4,
+        "row_number": "0"
+      }
+    ]
+  },
+  "superpowers": {
+    "rows": []
+  }
+}

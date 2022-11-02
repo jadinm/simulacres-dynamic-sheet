@@ -134,7 +134,7 @@ jobs:
           python3 ${{ env.BUILD_SCRIPT }} target/${{ matrix.name }} ${{ matrix.build_parameters }}
 
       - name: Check sheet validity
-        run: python3 ${{ env.CHECKER_SCRIPT }} target/${{ matrix.name }}
+        run: python3 ${{ env.CHECKER_SCRIPT }} target/${{ matrix.name }} tests/${{ matrix.name }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

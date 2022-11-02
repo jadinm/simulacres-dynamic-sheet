@@ -5,6 +5,7 @@ html5lib
 rst2pdf
 svglib
 reportlab
+requests>=2.27.1
 pyjson5
 selenium
 webdriver-manager
