@@ -276,7 +276,7 @@ class Model {
                 elem.selectpicker('val', this[variable])
         }
 
-        // Sliders will be initialize by subclasses since they are complicated
+        // Sliders will be initialized by subclasses since they are complicated
         // We only add base listener here
         const sliders = this.constructor.input_sliders()
         for (const slider of sliders) {

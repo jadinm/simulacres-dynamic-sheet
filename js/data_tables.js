@@ -93,14 +93,18 @@ class DataRow extends Model {
         return data
     }
 
+    static format_row_id(match, row_number) {
+        return match[2] + "-" + row_number.toString() + ((match[4].length === 0) ? "" : ("-" + match[4]))
+    }
+
     static replace_id(old_row_number, new_row_number, new_elem) {
         // Replace all '-x-' (or any other old row number) in the attributes of the new row
         $.each(["id", "name", "for", "data-slider-id", "aria-labelledby", "data-target", "aria-controls"], (i, attr) => {
-            new_elem.find("*[" + attr + "*=-" + old_row_number + "-]").each((i, elem) => {
-                elem.setAttribute(attr, elem.getAttribute(attr).replace("-" + old_row_number + "-", "-" + new_row_number + "-"))
+            new_elem.find("*[" + attr + "*=" + old_row_number + "-]").each((i, elem) => {
+                elem.setAttribute(attr, this.format_row_id(elem.getAttribute(attr).match(this.row_id_regex), new_row_number))
             })
         })
-        new_elem[0].id = new_elem[0].id.replace("-" + old_row_number, "-" + new_row_number)
+        new_elem[0].id = this.format_row_id(new_elem[0].id.match(this.row_id_regex), new_row_number)
     }
 }
 
@@ -245,7 +249,7 @@ class DataList {
             rows: []
         }
         // Re-read the DOM to update the ordering
-        // Note: this is also a sanity check to verify that for each children there is a DataRow
+        // Note: this is also a sanity check to verify that for each child there is a DataRow
         this.children().each((i, elem) => {
             const row = this.get_row(elem.id)
             if (!row.is_template())
@@ -352,7 +356,7 @@ $(".hide-section").uon("click", toggle_table)
 
 /**
  * Get a table instance of the row of the element in parameter
- * @param row_element != null and it must be either a jquery object or a html element
+ * @param row_element != null, and it must be either a jquery object or a html element
  * @returns {*} a table object instance
  */
 function table_of(row_element) {
@@ -362,7 +366,7 @@ function table_of(row_element) {
 
 /**
  * Get a row instance of the row of the element in parameter
- * @param row_element != null and it must be either a jquery object or a html element
+ * @param row_element != null, and it must be either a jquery object or a html element
  * @returns {*} a row object instance
  */
 function row_of(row_element) {

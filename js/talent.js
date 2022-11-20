@@ -4,6 +4,13 @@ class Talent extends DataRow {
     static row_id_regex = /(?:talent_)?((x|-4|-2|0|1)(\d*))-?(.*)/
     static basic_inputs = ["name"]
 
+    static format_row_id(match, row_number) {
+        if (match[4].length === 0)
+            return "talent_" + match[2] + row_number.toString()
+        else
+            return match[2] + row_number.toString() + "-" + match[4]
+    }
+
     constructor(current_list, data, opts = {}, other_html = null, created = true) {
         super(data, opts, other_html, created)
         this.current_list = current_list
@@ -248,11 +255,14 @@ class TalentLists extends DataList {
         const new_talent = this.template_row.data.clone(true, true)
         new_talent[0].id = "talent_" + initial_level + new_id_idx
         const input = $(new_talent).find("input")
-        input[0].id = initial_level + new_id_idx + "-name"
+        const name_id = initial_level + new_id_idx + "-name"
+        input[0].id = name_id
+        input[0].setAttribute("id", name_id)
         input[0].value = ""
         input[0].setAttribute("value", "")
         const label = $(new_talent).find("label")[0]
-        label.for = initial_level + new_id_idx + "-name"
+        label.for = name_id
+        label.setAttribute("for", name_id)
         $(new_talent).removeAttr("hidden")
         $(new_talent).attr("data-toggle", "tooltip")
         $(new_talent).tooltip()
