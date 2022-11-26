@@ -4,6 +4,7 @@
 target/
 .idea/
 yarn.lock
+package-lock.json
 node_modules/
 doc/*.pdf
 doc/images/svgs/
