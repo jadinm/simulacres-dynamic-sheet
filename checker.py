@@ -6,7 +6,7 @@ import json
 import os
 import sys
 from typing import Dict, Any
-from urllib.request import pathname2url
+from pathlib import Path
 
 import pyjson5
 from selenium import webdriver
@@ -45,9 +45,9 @@ def print_errors(d: WebDriver, prefix_phrase: str):
         sys.exit(1)
 
 
-def load_sheet(d: WebDriver, input_html: str):
+def load_sheet(d: WebDriver, input_html: Path):
     # Trigger page loading
-    d.get(f"file:{pathname2url(input_html)}")
+    d.get(input_html.as_uri())
 
     # Wait for loading
     wait = WebDriverWait(d, 10)  # seconds
@@ -58,7 +58,7 @@ def load_sheet(d: WebDriver, input_html: str):
     print(f"{input_html} loads without error")
 
 
-def import_data(d: WebDriver, input_html: str, file_path: str, data: Dict[str, Any]):
+def import_data(d: WebDriver, input_html: Path, file_path: Path, data: Dict[str, Any]):
     # Trigger data import
     js_string = pyjson5.dumps(data).replace("\\", "\\\\").replace("'", "\\'")
     d.execute_script(f"testing_sheet = true; sheet.import(JSON.parse('{js_string}'), true);")
@@ -78,8 +78,8 @@ parser.add_argument("--github-token",
                          "to 60 requests per hour for unauthenticated users")
 args = parser.parse_args()
 
-args.input_html = os.path.abspath(args.input_html)
-if not os.path.exists(args.input_html) or not os.path.isfile(args.input_html):
+args.input_html = Path(args.input_html).absolute()
+if not args.input_html.exists() or not args.input_html.is_file():
     print(f"Cannot find {args.input_html}")
     sys.exit(1)
 
@@ -90,26 +90,25 @@ driver_options = Options()
 driver_options.add_argument("--headless")
 
 # Automatically fetches the appropriate driver
+args.test_folder = Path(args.test_folder)
 with webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=driver_options) as driver:
-    if not os.path.exists(args.test_folder):
+    if not args.test_folder.exists():
         load_sheet(driver, args.input_html)
         print("No data sample to test")
         sys.exit(0)
 
-    if not os.path.isdir(args.test_folder):
+    if not args.test_folder.is_dir():
         print(f"{args.test_folder} is not a folder")
         sys.exit(1)
 
     # Load and import data of each example
-    for root, dirs, files in os.walk(args.test_folder):
-        for json_file in files:
-            json_path = os.path.join(root, json_file)
-            print(f"Testing file {json_path}")
-            with open(json_path) as json_file_object:
-                load_sheet(driver, args.input_html)
-                try:
-                    json_data = json.load(json_file_object)
-                except ValueError as e:
-                    print(f"{json_path} is not a valid JSON file: {e}")
-                    sys.exit(1)
-                import_data(driver, args.input_html, json_path, json_data)
+    for json_path in args.test_folder.rglob("*.json"):
+        print(f"Testing file {json_path}")
+        with json_path.open(encoding="utf-8") as json_file_object:
+            load_sheet(driver, args.input_html)
+            try:
+                json_data = json.load(json_file_object)
+            except ValueError as e:
+                print(f"{json_path} is not a valid JSON file: {e}")
+                sys.exit(1)
+            import_data(driver, args.input_html, json_path, json_data)
