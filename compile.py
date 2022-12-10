@@ -2,20 +2,20 @@ import argparse
 import base64
 import logging
 import mimetypes
-import os
 import re
 import shlex
 import subprocess
 import sys
 from typing import List, Dict
+from pathlib import Path
 
 import pyjson5
 from bs4 import BeautifulSoup
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from markupsafe import Markup
 
-SRC_DIR = os.path.dirname(os.path.abspath(__file__))
-TEMPLATE_DIR = os.path.join(SRC_DIR, "templates")
+SRC_DIR = Path(__file__).absolute().parent
+TEMPLATE_DIR = SRC_DIR / "templates"
 
 V7 = "7"
 V8 = "8"
@@ -50,6 +50,8 @@ parser.add_argument("--discovery", help="Discovery mode of SimulacreS (only supp
 parser.add_argument("--plugin", help="Add the plugin at the following path", action='extend', nargs="*", default=[])
 parser.add_argument("--base-template", help="Path of to the html template inside the template folder",
                     default="base_pc.html")
+parser.add_argument("--update-js-command", help="The command line to run to update the javascript dependencies",
+                    default="yarn")
 parser.add_argument("-d", "--debug", help="Build the sheet with debug info such sanity checks on every load",
                     action="store_true")
 parser.add_argument("-v", "--verbose", help="Increase output verbosity", action="store_true")
@@ -58,15 +60,15 @@ if args.verbose:
     logging.basicConfig(level=logging.DEBUG)
 
 # Import libraries if not already done
-subprocess.run("yarn", check=True)
+subprocess.run(args.update_js_command, check=True)
 
 regex_url = re.compile(r"url\(([\w\\./\-_]+)\)")
 
 
 def include_static(name: str) -> Markup:
     def replace_local_urls(match: re.Match) -> str:
-        path = os.path.join(os.path.abspath(os.path.join(TEMPLATE_DIR, os.path.dirname(name))), match.group(1))
-        if not os.path.exists(path):
+        path = TEMPLATE_DIR / Path(name).parent / match.group(1)
+        if not path.exists():
             logging.warning("Path '{}' does not exists".format(path))
             return ""
         logging.debug("Replacing '{}' by its content found at '{}'".format(match.group(0), path))
@@ -76,7 +78,7 @@ def include_static(name: str) -> Markup:
                 .format(mime, ";charset={}".format(encoding) if encoding is not None else "",
                         base64.b64encode(local_file.read()).decode())
 
-    with open(os.path.join(html_dir, name)) as fileobj:
+    with (html_dir / name).open(encoding="utf8") as fileobj:
         lines = []
         for line in fileobj.readlines():
             if "# sourceMappingURL=" in line:
@@ -95,7 +97,7 @@ def process_plugins(plugins: List[str]) -> Dict[str, List[str]]:
     js_blocks = []
     logging.debug("Adding plugins " + ", ".join(plugins))
     for plugin in plugins:
-        with open(plugin) as plugin_obj:
+        with open(plugin, encoding="utf-8") as plugin_obj:
             bs_parser = BeautifulSoup(plugin_obj.read(), features="html5lib")
             for button in bs_parser.find_all(class_="plugin-button"):
                 buttons.append(str(button))
@@ -116,11 +118,10 @@ def process_plugins(plugins: List[str]) -> Dict[str, List[str]]:
 
 # Jinja settings
 
-code_dir = os.path.dirname(os.path.abspath(__file__))
-html_dir = os.path.join(code_dir, "templates")
+html_dir = SRC_DIR / "templates"
 loader = FileSystemLoader(html_dir)
 env = Environment(loader=loader, autoescape=select_autoescape(['html', 'xml']))
-# This add an include option that do not treat the content of the file as a jinja template
+# This adds an include option that do not treat the content of the file as a jinja template
 env.globals['include_static'] = include_static
 # Add {% do <statement> %}
 env.add_extension("jinja2.ext.do")
@@ -128,19 +129,15 @@ env.add_extension("jinja2.ext.do")
 # Parsing fonts, audio and bestiary
 
 params = {}
-for root, dirs, filenames in os.walk(os.path.join(html_dir, "../font")):
-    for filename in filenames:
-        if filename[-4:] == ".ttf":
-            with open(os.path.join(root, filename), "rb") as extern_file:
-                params[filename.split(".")[0] + "_font"] = base64.b64encode(extern_file.read()).decode()
+for file_path in (html_dir / "../font").rglob("*.ttf"):
+    with file_path.open("rb") as extern_file:
+        params[file_path.stem.split(".")[0] + "_font"] = base64.b64encode(extern_file.read()).decode()
 
-for root, dirs, filenames in os.walk(os.path.join(html_dir, "../audio")):
-    for filename in filenames:
-        if filename[-4:] == ".wav":
-            with open(os.path.join(root, filename), "rb") as extern_file:
-                params.setdefault("audios", []).append(base64.b64encode(extern_file.read()).decode())
+for file_path in (html_dir / "../audio").rglob("*.wav"):
+    with file_path.open("rb") as extern_file:
+        params.setdefault("audios", []).append(base64.b64encode(extern_file.read()).decode())
 
-with open(os.path.join(code_dir, "bestiary.json5")) as file:
+with (SRC_DIR / "bestiary.json5").open(encoding="utf-8") as file:
     params["bestiary"] = file.read() if args.universe == MED_FANTASY else "[]"
     pyjson5.loads(params["bestiary"])  # Parse check
 
@@ -174,7 +171,7 @@ params.update({
 # Find release name
 
 params["base_sheet_name"] = ""
-if os.path.basename(args.base_template) == "base_npc_grid.html":
+if Path(args.base_template).name == "base_npc_grid.html":
     params["base_sheet_name"] = "simulacres_v7_npc_grid.html"
     params["npc_grid"] = True
 elif params["version"] == V7:
@@ -205,5 +202,5 @@ compiled_html = template.render(params)
 
 # Replacing external file content
 
-with open(args.output_html, "w") as output_html:
+with Path(args.output_html).open("w", encoding="utf8") as output_html:
     output_html.write(compiled_html)
