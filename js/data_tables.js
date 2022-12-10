@@ -62,29 +62,28 @@ class DataRow extends Model {
         this.find("input, select").each((i, elem) => {
             const val = $(elem).val()
             if (val) {
-              if (Array.isArray(val)) {
-                val.forEach(el => {
-                  if (typeof el === "string" && el.toLowerCase().includes(value)) {
-                      found = true
-                  }
-                })
-              }
-              else if (typeof val === "string" && val.toLowerCase().includes(value)) {
-                  found = true
-              }
+                if (Array.isArray(val)) {
+                    val.forEach(el => {
+                        if (typeof el === "string" && el.toLowerCase().includes(value)) {
+                            found = true
+                        }
+                    })
+                } else if (typeof val === "string" && val.toLowerCase().includes(value)) {
+                    found = true
+                }
             }
 
         })
         return found
     }
 
-    import(opts) {
+    import(opts, full_opts, only_new_data) {
         if (opts && opts.row_number !== undefined && opts.row_number !== this.row_number) {
             // Update the row number in all the ids of the DOM and in the internal state of this row
             this.constructor.replace_id(this.row_number, opts.row_number, this.data)
             this.prepare({data: this.data, created: false})
         }
-        super.import(opts)
+        super.import(opts, full_opts, only_new_data)
     }
 
     export() {
@@ -219,22 +218,26 @@ class DataList {
         return this.table.children()
     }
 
-    import(opts) {
+    import(opts, full_opts, only_new_data) {
         let next_i = 0
-        this.children().each((_, elem) => {
-            const row = this.get_row(elem.id)
-            if (!row.is_template() && opts && opts.rows && opts.rows[next_i]) {
-                row.import(opts.rows[next_i]) // Only update when there is data to change it
-                next_i += 1
-            }
-        })
+        if (!only_new_data) {
+            this.children().each((_, elem) => {
+                const row = this.get_row(elem.id)
+                if (!row.is_template() && opts && opts.rows && opts.rows[next_i]) {
+                    row.import(opts.rows[next_i], full_opts, only_new_data) // Only update when there is data to change it
+                    next_i += 1
+                }
+            })
+        }
         if (opts && opts.rows) {
             for (let i = next_i; i < opts.rows.length; i++) {
+                if (only_new_data && opts.rows[i].row_number) // Otherwise, it will get updated afterwards
+                    delete opts.rows[i].row_number
                 const row_number = opts.rows[i].row_number !== undefined ? opts.rows[i].row_number : null
-                this.add_row(row_number, {}).import(opts.rows[i])
+                this.add_row(row_number, {}).import(opts.rows[i], full_opts, only_new_data)
             }
             // too many rows in the sheet: delete them (can happen if rows were removed in the local storage)
-            if (this.rows.length > opts.rows.length) {
+            if (this.rows.length > opts.rows.length && !only_new_data) {
                 this.children().each((i, elem) => {
                     if (i - 1 >= opts.rows.length) { // i - 1 means that we don't take template row
                         this.remove_row({item: elem})
@@ -245,6 +248,12 @@ class DataList {
     }
 
     export() {
+        return this.export_rows_with((_row) => {
+            return true
+        })
+    }
+
+    export_rows_with(filter_row_fn) {
         const to_export = {
             rows: []
         }
@@ -252,7 +261,7 @@ class DataList {
         // Note: this is also a sanity check to verify that for each child there is a DataRow
         this.children().each((i, elem) => {
             const row = this.get_row(elem.id)
-            if (!row.is_template())
+            if (!row.is_template() && filter_row_fn(row))
                 to_export.rows.push(row.export())
         })
         return to_export

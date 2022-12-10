@@ -311,14 +311,14 @@ class TalentLists extends DataList {
      * table_opts: The part of the data exported by this table
      * full_opts: The complete dictionary given to the sheet
      */
-    import(table_opts, full_opts) {
+    import(table_opts, full_opts, only_new_data) {
         // Creating talents that originate from this talent list, even if they were moved to another list
         this.constructor.talent_tables.forEach((name) => {
             if (name in full_opts) {
                 for (const talent_desc of full_opts[name].rows) {
                     if (talent_desc["base_level"] === this.list_level && !sheet.get_talent_from_name(talent_desc["name"])) {
                         // This talent needs to be created here (it will be moved later)
-                        this.add_row(null, {}).import(talent_desc)
+                        this.add_row(null, {}).import(talent_desc, full_opts, only_new_data)
                         this.constructor.talent_table_updated = true
                     }
                 }
