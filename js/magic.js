@@ -623,7 +623,7 @@ function init_spell_list(input, regenerate = false) {
         spell_list.push({
             name: instinctive_magic,
             content: "<svg height=\"1em\" width=\"1em\">" +
-                "<use xlink:href=\"#svg-instincts\"></use>" +
+                "<use href=\"#svg-instincts\"></use>" +
                 "</svg>&nbsp;" + instinctive_magic
         })
     }
