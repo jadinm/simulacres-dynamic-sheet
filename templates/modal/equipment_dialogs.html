@@ -1,0 +1,80 @@
+<div class="container">
+    <div class="modal fade bd-modal-lg" id="import-equipment" tabindex="-1" role="dialog"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header justify-content-between">
+                    <button type="button" class="hidden close" data-dismiss="modal" aria-label="Close">
+                    </button>
+                    <span class="modal-title text-center">Importer de l'équipement</span>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="modal-body align-middle">
+                    <div class="row col-12 mx-1">
+                        <span>
+                            Copiez les données exportées dans la zone de texte ci-dessous
+                            puis utilisez le bouton 'Recevoir' pour ajouter l'équipement.
+                            Note : le bouton <i class="fa-solid fa-share-nodes" style="display:inline"></i>
+                            dans la ligne de l'équipement, permet de produire le texte à copier ici.
+                        </span>
+                    </div>
+                    <div class="row col-12 mx-1 md-form">
+                        <label for="import-equipment-value"></label>
+                        <textarea class="md-textarea form-control" id="import-equipment-value" rows="3"></textarea>
+                    </div>
+                    <div id="import-equipment-error" class="row col-12 mx-1 text-danger">
+                    </div>
+                    <div id="import-equipment-success" class="row col-12 mx-1 text-success">
+                    </div>
+                    <div class="row justify-content-center">
+                        <button id="import-equipment-start" class="btn btn-success col-md-3 col-12 mx-0 px-0">
+                            Recevoir
+                            <svg height="2em" width="2em" class="input-prefix">
+                                <use href="#svg-treasure-chest"></use>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="modal fade bd-modal-lg" id="export-equipment" tabindex="-1" role="dialog"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header justify-content-between">
+                    <button type="button" class="hidden close" data-dismiss="modal" aria-label="Close">
+                    </button>
+                    <span class="modal-title text-center">Exporter de l'équipement</span>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="modal-body align-middle">
+                    <div class="row col-12 mx-1">
+                        L'équipement et les tests associés ont été copiés dans le presse-papier.
+                        Pour copier cet équipement, la personne qui va recevoir l'équipement doit
+                        cliquer sur "Importer de l'équipement" en bas de l'onglet "Équipement" et
+                        coller le text de votre presse-papier.
+                    </div>
+                    <hr/>
+                    <div class="row col-12 mx-1">
+                        Vous pouvez copier à nouveau dans le presse-papier le même équipement
+                        avec le bouton ci-dessous.
+                    </div>
+                    <div class="row justify-content-center">
+                        <button id="export-equipment-share-again" class="btn btn-success col-md-3 col-12 mx-0 px-0">
+                            Copier à nouveau
+                            <i class="fa-solid fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

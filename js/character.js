@@ -103,7 +103,7 @@ class Character {
 
     static ignore_ids_list = ["roll-dialog-.+", ".+-search", "roll-free-number", "roll-threshold",
         "import-page", "import-plugin", "import-image", "import-background-image",
-        "backColorPicker", "foreColorPicker", "note-dialog-.+"]
+        "backColorPicker", "foreColorPicker", "note-dialog-.+", "import-equipment-value"]
 
     /**
      * @param other_html Another source than the current document
@@ -426,7 +426,7 @@ class Character {
         this.import(data)
     }
 
-    import(opts, allow_downgrade = false) {
+    import(opts, allow_downgrade = false, only_new_data = false) {
         if (opts && opts.version) {
             if (this.version >= opts.version && !allow_downgrade) {
                 logger.info("The data are not imported because the version is the same or it would downgrade the data version")
@@ -437,13 +437,13 @@ class Character {
         }
         for (let [model_var, model] of this.list_variables(true)) {
             if (model_var !== "ap") // Update AP model last
-                model.import(model_var in opts ? opts[model_var] : {}, opts)
+                model.import(model_var in opts ? opts[model_var] : {}, opts, only_new_data)
         }
 
         // Update AP model last because it might select spells or talents not existing in the middle
-        this["ap"].import(opts["ap"], opts)
+        this["ap"].import(opts["ap"], opts, only_new_data)
 
-        if (debug || testing_sheet)
+        if ((debug || testing_sheet) && !only_new_data)
             this.sanity_check()
     }
 
@@ -509,6 +509,31 @@ class Character {
             }
         }
         return null
+    }
+
+    /**
+     * @param {EquipmentRow} equipment_row
+     * @returns only the relevant data related to this equipment row
+     */
+    export_equipment_data(equipment_row) {
+        let export_data = {};
+        for (const table of this.constructor.all_roll_tables) {
+            const table_export = this[table].export_rows_with((row) => {
+                return row.equipment === equipment_row.id
+            })
+            if (table_export.rows.length > 0) {
+                export_data[table] = table_export
+            }
+        }
+        for (const table of EquipmentRow.equipment_tables) {
+            const table_export = this[table].export_rows_with((row) => {
+                return row.id === equipment_row.id
+            })
+            if (table_export.rows.length > 0) {
+                export_data[table] = table_export
+            }
+        }
+        return export_data
     }
 
     get_talent_list(list_id) {

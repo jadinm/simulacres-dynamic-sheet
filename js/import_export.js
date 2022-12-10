@@ -86,7 +86,7 @@ function import_data(src_html) {
     old_sheet.build()
 
     logger.info("Importing data from old sheet")
-    sheet.import(old_sheet.export(), true)
+    sheet.import(old_sheet.export(), true, false)
 
     // Update the image if any
     logger.info("Updating image")

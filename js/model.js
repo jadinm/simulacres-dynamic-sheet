@@ -373,9 +373,9 @@ class Model {
         }
     }
 
-    import(opts) {
+    import(opts, full_opts, only_new_data) {
         for (const [key, model] of Object.entries(this.models)) {
-            model.import(opts ? opts[key] : {})
+            model.import(opts ? opts[key] : {}, full_opts, only_new_data)
         }
 
         this.clean_errors() // Only follow import errors from this point
