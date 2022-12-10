@@ -322,7 +322,7 @@ class NPCGrid extends DataList {
                     const images = ["#svg-right-gauntlet", "#svg-right-hand-base", "#svg-left-gauntlet",
                         "#svg-left-hand-base"]
                     row.find(".wing-div use").each((i, elem) => {
-                        $(elem).attr("xlink:href", images[i])
+                        $(elem).attr("href", images[i])
                     })
                 }
             } else if (input.hasClass("input-slider")) {
