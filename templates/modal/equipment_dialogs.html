@@ -78,3 +78,76 @@
         </div>
     </div>
 </div>
+
+<div class="container">
+    <div class="modal fade bd-modal-lg" id="buy-equipment" tabindex="-1" role="dialog"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header justify-content-between">
+                    <button type="button" class="hidden close" data-dismiss="modal" aria-label="Close">
+                    </button>
+                    <span class="modal-title text-center">Acheter de l'équipement</span>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="modal-body align-middle">
+                    <div class="row col-12 mx-1">
+                        Recherchez l'équipement qui vous intéresse, achetez-le avec votre fortune
+                        ou ajoutez-le gratuitement (vous pouvez corriger le prix au besoin).
+                    </div>
+                    <div class="row form-inline md-form col-12 m-0 p-0 justify-content-center">
+                        <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                        <input id="buy-equipment-search" class="form-control ml-3 w-75" type="text"
+                               placeholder="Rechercher un équipement" aria-label="Search">
+                    </div>
+                    <!-- Errors -->
+                    <div id="buy-equipment-error" class="row col-12 mx-1 text-danger">
+                    </div>
+                    <div id="buy-equipment-success" class="row col-12 mx-1 text-success">
+                    </div>
+                    <!-- List of goods -->
+                    <ul id="buy-equipment-goods" class="list-group-flush col-12">
+                        <li class="list-group-item align-items-center py-1 my-0 mt-1 d-none">
+                            <div class="mr-auto my-0 py-0 pr-1 md-form invisible">
+                                <!-- number invisible and fixed at 1 if not a standard equipment -->
+                                <input class="form-control" type="number" min="1" value="1" aria-label="Unités">
+                            </div>
+                            <div class="d-flex my-0 py-0 w-100">
+                                <!-- name -->
+                            </div>
+                            <div class="d-flex my-0 py-0 md-form ml-auto">
+                                <!-- price -->
+                                <label for="buy-equipment-goods-price-x">
+                                    Prix
+                                    <!-- .price-currency class gets updates when the name changes -->
+                                    {% if universe == med_fantasy %}
+                                        <span class="price-currency">Besins</span>
+                                    {% elif universe == captain_voodoo %}
+                                        <span class="price-currency">Pièces de huit</span>
+                                    {% else %}
+                                        <span class="price-currency"></span>
+                                    {% endif %}
+                                </label>
+                                <input id="buy-equipment-goods-price-x" class="form-control mr-1" type="number" min="0" value="0">
+                            </div>
+                            <button class="btn btn-warning ml-auto my-0 py-2 px-4 pr-5" style="white-space: nowrap">
+                                Payer&nbsp;
+                                <svg height="2em" width="2em" class="input-prefix">
+                                    <use href="#svg-bag"></use>
+                                </svg>
+                            </button>
+                            <button class="btn btn-success ml-auto my-0 py-2 px-4 pr-5" style="white-space: nowrap">
+                                Gratuit&nbsp;
+                                <svg height="2em" width="2em" class="input-prefix">
+                                    <use href="#svg-treasure-chest"></use>
+                                </svg>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

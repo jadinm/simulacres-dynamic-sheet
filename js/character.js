@@ -35,14 +35,6 @@ class Biography extends Model {
     }
 }
 
-class Money extends Model {
-    static numeric_inputs = universe === med_fantasy ? ["copper-coins", "silver-coins", "gold-coins"]
-        : (universe === captain_voodoo ? ["peso-de-ocho"] : [])
-    static text_inputs = universe === med_fantasy ? ["copper-currency", "silver-currency", "gold-currency"]
-        : (universe === captain_voodoo ? ["copper-currency"] : ["money"])
-    static basic_inputs = [...this.numeric_inputs, ...this.text_inputs]
-}
-
 class Character {
 
     static model_names = { // direct sub-models
@@ -103,7 +95,7 @@ class Character {
 
     static ignore_ids_list = ["roll-dialog-.+", ".+-search", "roll-free-number", "roll-threshold",
         "import-page", "import-plugin", "import-image", "import-background-image",
-        "backColorPicker", "foreColorPicker", "note-dialog-.+", "import-equipment-value"]
+        "backColorPicker", "foreColorPicker", "note-dialog-.+", "import-equipment-value", "buy-equipment-goods-price-*"]
 
     /**
      * @param other_html Another source than the current document
@@ -516,15 +508,32 @@ class Character {
      * @returns only the relevant data related to this equipment row
      */
     export_equipment_data(equipment_row) {
-        let export_data = {};
+        let export_data = {}
+        let required_talents = {
+            x: [],
+            "-4": [],
+            "-2": [],
+            "0": [],
+        }
         for (const table of this.constructor.all_roll_tables) {
             const table_export = this[table].export_rows_with((row) => {
-                return row.equipment === equipment_row.id
+                if (row.equipment === equipment_row.id) {
+                    const talent_name = row["talent"]
+                    if (talent_name) {
+                        const talent = sheet.get_talent_from_name(talent_name).export()
+                        if (!required_talents[talent.base_level].includes(talent.name)) {
+                            required_talents[talent.base_level].push(talent.name)
+                        }
+                    }
+                    return true
+                }
+                return false
             })
             if (table_export.rows.length > 0) {
                 export_data[table] = table_export
             }
         }
+        export_data.required_talents = required_talents
         for (const table of EquipmentRow.equipment_tables) {
             const table_export = this[table].export_rows_with((row) => {
                 return row.id === equipment_row.id

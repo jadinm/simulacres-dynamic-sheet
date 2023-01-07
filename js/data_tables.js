@@ -3,6 +3,8 @@ table_instance_by_prefix = {}
 class DataRow extends Model {
     static row_id_regex = /((\w+|limitedUse-equipment|magical-equipment)-(x|\d+))-?(.*)/
 
+    static ignored_equals_keys = ["row_number"]
+
     constructor(data, opts = {}, other_html = null, created = true) {
         super(opts, other_html, {data: data, created: created})
     }
@@ -220,6 +222,7 @@ class DataList {
 
     import(opts, full_opts, only_new_data) {
         let next_i = 0
+        let ignored_rows = []
         if (!only_new_data) {
             this.children().each((_, elem) => {
                 const row = this.get_row(elem.id)
@@ -228,9 +231,22 @@ class DataList {
                     next_i += 1
                 }
             })
+        } else {
+            // If already there, merge both data
+            // Merging can be a noop or incrementing a quantity
+            for (let i = 0; i < opts.rows.length; i++) {
+                for (const row of this.rows) {
+                    if (row.equals(opts.rows[i])) {
+                        row.merge(opts.rows[i])
+                        ignored_rows.push(i)
+                    }
+                }
+            }
         }
         if (opts && opts.rows) {
             for (let i = next_i; i < opts.rows.length; i++) {
+                if (ignored_rows.includes(i))
+                    continue
                 if (only_new_data && opts.rows[i].row_number) // Otherwise, it will get updated afterwards
                     delete opts.rows[i].row_number
                 const row_number = opts.rows[i].row_number !== undefined ? opts.rows[i].row_number : null
