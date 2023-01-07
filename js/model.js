@@ -16,6 +16,8 @@ class Model {
 
     static model_names = {} // sub-model classes of the form {id: model_class}
 
+    static ignored_equals_keys = [] // List of any exported key that do not matter when checking the equality
+
     static suffix_inputs(items) {
         if (Array.isArray(items)) {
             return items.map((input) => {
@@ -336,6 +338,31 @@ class Model {
         set_slider_min(slider, new_min)
     }
 
+    /**
+     * @param import_opts
+     * @returns {boolean} true if import_opts describe this model, and false otherwise
+     */
+    equals(import_opts) {
+        const filtered_import_opts = structuredClone(import_opts)
+        const exported_data = this.export()
+        for (const ignored_key of this.constructor.ignored_equals_keys) {
+            if (exported_data[ignored_key])
+                delete exported_data[ignored_key]
+            if (filtered_import_opts[ignored_key])
+                delete filtered_import_opts[ignored_key]
+        }
+        return deepEqual(exported_data, filtered_import_opts)
+    }
+
+    /**
+     * Merge import_opts into this model
+     * This assumes that imports_opts were already checked by equals method
+     * @param import_opts
+     */
+    merge(import_opts) {
+        // Do nothing by default
+    }
+
     write() {
         const base_input = this.constructor.suffix_inputs(this.constructor.basic_inputs)
         for (const variable of base_input) {
@@ -569,4 +596,17 @@ class Model {
         }
         return to_export
     }
+}
+
+/**
+ * @param x
+ * @param y
+ * @returns {boolean} true if both objects are equal (w.r.t. their content, not their memory location)
+ */
+function deepEqual(x, y) {
+    const ok = Object.keys, tx = typeof x, ty = typeof y;
+    return x && y && tx === 'object' && tx === ty ? (
+        ok(x).length === ok(y).length &&
+        ok(x).every(key => deepEqual(x[key], y[key]))
+    ) : (x === y);
 }
