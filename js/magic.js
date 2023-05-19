@@ -409,7 +409,7 @@ class SpellRow extends RollRow {
             this.find(".hermetic-difficulty").on("change", e => this.update_value(e))
             this.find(".hermetic-mr-learning").on("change", e => this.update_value(e))
 
-            this.find("[id*=\"-difficulty-input\"").each((i, elem) => {
+            this.find("[id*=\"-difficulty-input\"]").each((i, elem) => {
                 activate_slider(elem, e => this.show_difficulty_builder(e), _ => void 0, {},
                     (e) => this.update_difficulty_slider(e))
             })
